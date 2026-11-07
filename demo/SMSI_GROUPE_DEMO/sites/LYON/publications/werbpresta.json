@@ -1,0 +1,129 @@
+{
+ "format": "WERBSMSI-PUBLICATION",
+ "schema": 1,
+ "famille": "WERBSMSI",
+ "meta": {
+  "produit": "WerbPresta",
+  "appVersion": "1.4.0",
+  "auteur": "@WerbHat",
+  "generateur": "WerbPresta v1.4.0 – Développé par @WerbHat",
+  "creeLe": "2026-10-31",
+  "modifieLe": "2026-10-31T14:37:33Z",
+  "modifiePar": "Prénom TEST",
+  "groupeId": "e6a47cd7-77fe-463f-b6ea-b50ff390bfc7",
+  "module": "werbpresta",
+  "portee": "site",
+  "publiePar": "Prénom TEST",
+  "publieLe": "2026-10-31T14:37:33Z",
+  "site": "LYON"
+ },
+ "data": {
+  "evaluationsPrestataires": [
+   {
+    "id": "PR-001",
+    "nom": "Intégrateur fictif",
+    "type": "Intégrateur",
+    "statut": "actif",
+    "criticite": "Très élevée",
+    "criticitePoints": 6,
+    "sis": [
+     "SI-SUPERVISION"
+    ],
+    "zones": [],
+    "actifs": [
+     "HYP_OT01",
+     "API_L2_01",
+     "SRV_SCADA01",
+     "VM_HIST01"
+    ],
+    "distant": "demande",
+    "moyen": "Bastion du client",
+    "privileges": "administrateur",
+    "supports": false,
+    "certifications": [
+     "IEC 62443-2-4"
+    ],
+    "niveauExigence": "renforce",
+    "dateEvaluation": "2026-10-15",
+    "score": 79,
+    "scores": {
+     "ORG": 83,
+     "ASS": null,
+     "ARC": 100,
+     "WIF": null,
+     "SIS": null,
+     "CFG": null,
+     "JRN": null,
+     "CPT": 50,
+     "MAL": null,
+     "COR": null,
+     "SAV": null,
+     "INC": null,
+     "FIN": null
+    },
+    "ecartsOuverts": 2,
+    "ecartsEnRetard": 1,
+    "prochaineRevue": "2027-01-15",
+    "source": "werbpresta",
+    "majLe": "2026-10-31"
+   },
+   {
+    "id": "PR-002",
+    "nom": "Mainteneur automatismes (fictif)",
+    "type": "Mainteneur",
+    "statut": "actif",
+    "criticite": "Élevée",
+    "criticitePoints": 4,
+    "sis": [],
+    "zones": [],
+    "actifs": [
+     "API_L2_01",
+     "PC_ING01"
+    ],
+    "distant": "aucun",
+    "moyen": "",
+    "privileges": "administrateur",
+    "supports": true,
+    "certifications": [],
+    "niveauExigence": "renforce",
+    "dateEvaluation": "",
+    "score": null,
+    "scores": {},
+    "ecartsOuverts": 0,
+    "ecartsEnRetard": 0,
+    "prochaineRevue": "2026-12-01",
+    "source": "werbpresta",
+    "majLe": "2026-10-31"
+   },
+   {
+    "id": "PR-003",
+    "nom": "Télémaintenance pare-feu (fictive)",
+    "type": "Télémaintenance",
+    "statut": "actif",
+    "criticite": "Très élevée",
+    "criticitePoints": 6,
+    "sis": [],
+    "zones": [],
+    "actifs": [
+     "FW_OT01"
+    ],
+    "distant": "permanent",
+    "moyen": "Modem ou routeur 4G",
+    "privileges": "administrateur",
+    "supports": false,
+    "certifications": [
+     "ISO 27001"
+    ],
+    "niveauExigence": "renforce",
+    "dateEvaluation": "",
+    "score": null,
+    "scores": {},
+    "ecartsOuverts": 0,
+    "ecartsEnRetard": 0,
+    "prochaineRevue": "",
+    "source": "werbpresta",
+    "majLe": "2026-10-31"
+   }
+  ]
+ }
+}

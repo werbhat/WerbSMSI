@@ -1,0 +1,113 @@
+{
+  "charte": "1.0",
+  "id": "werbcartosi",
+  "produit": "WerbCartoSI",
+  "version": "1.5.0",
+  "dateVersion": "2026-11",
+  "auteur": "@WerbHat",
+  "signature": "Développé par @WerbHat",
+  "description": "Registre des schémas d'architecture d'un site : exigences couvertes, versions, revues, approbation, liens vers les fichiers",
+  "rubrique": "inventaires",
+  "portees": [
+    "site"
+  ],
+  "entree": "application/WerbCartoSI.html",
+  "empreinte": {
+    "algo": "SHA-256",
+    "valeur": "d318ce2685a8d3d1f1fab7f9b5a0718c15e6082962fcfd166253ce563c75f696"
+  },
+  "donnees": {
+    "format": "WERBCARTOSI",
+    "schema": 1,
+    "extension": ".werbcartosi.json",
+    "formatsLus": []
+  },
+  "echanges": {
+    "publie": [
+      "site:cartographies"
+    ],
+    "consomme": [
+      "groupe:sites",
+      "groupe:listes",
+      "site:si",
+      "site:zones",
+      "site:actifs"
+    ]
+  },
+  "compatPortail": ">=1.1.1",
+  "licence": "MIT",
+  "navigateurs": [
+    "edge",
+    "chrome",
+    "firefox"
+  ],
+  "sources": [
+    "signature.js",
+    "socle.js",
+    "guides.js",
+    "xlsx.js",
+    "visio.js",
+    "app.js"
+  ],
+  "ouvertureParLien": true,
+  "exemple": "exemples/Exemple_LYON.werbcartosi.json",
+  "listes": [
+    {
+      "id": "types",
+      "libelle": "Types de schémas",
+      "forme": "simple",
+      "defaut": [
+        "Architecture générale du SI",
+        "Réseau logique (VLAN, adressage)",
+        "Réseau physique (câblage, baies)",
+        "Zones et conduits",
+        "Flux",
+        "Architecture d'administration",
+        "Accès distants et interconnexions",
+        "Architecture applicative",
+        "Sauvegarde et reprise",
+        "Sûreté (vidéo, contrôle d'accès)",
+        "Autre"
+      ]
+    },
+    {
+      "id": "exigences",
+      "libelle": "Catégories d'exigence (schémas)",
+      "forme": "paires",
+      "defaut": [
+        [
+          "EX-CARTO",
+          "Cartographie du SI"
+        ],
+        [
+          "EX-ZONES",
+          "Zones et conduits"
+        ],
+        [
+          "EX-FLUX",
+          "Flux et cloisonnement"
+        ],
+        [
+          "EX-RESEAU",
+          "Plan d'adressage et réseau physique"
+        ],
+        [
+          "EX-ADMIN",
+          "Architecture d'administration"
+        ],
+        [
+          "EX-ACCES",
+          "Accès distants et interconnexions"
+        ],
+        [
+          "EX-REPRISE",
+          "Sauvegarde et reprise"
+        ],
+        [
+          "EX-LOCAUX",
+          "Locaux techniques et baies"
+        ]
+      ]
+    }
+  ]
+}

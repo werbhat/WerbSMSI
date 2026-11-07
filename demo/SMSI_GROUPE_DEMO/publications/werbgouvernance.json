@@ -1,0 +1,61 @@
+{
+ "format": "WERBSMSI-PUBLICATION",
+ "schema": 1,
+ "famille": "WERBSMSI",
+ "meta": {
+  "produit": "werbgouvernance",
+  "appVersion": "0.0.0",
+  "auteur": "@WerbHat",
+  "generateur": "werbgouvernance (exemple) – Développé par @WerbHat",
+  "creeLe": "2026-10-23",
+  "modifieLe": "2026-10-23T00:00:00Z",
+  "modifiePar": "Exemple",
+  "groupeId": "e6a47cd7-77fe-463f-b6ea-b50ff390bfc7",
+  "module": "werbgouvernance",
+  "portee": "groupe",
+  "publiePar": "Exemple",
+  "publieLe": "2026-10-23T00:00:00Z"
+ },
+ "data": {
+  "mesuresSocle": [
+   {
+    "id": "MS-01",
+    "titre": "Comptes nominatifs sur les postes d'ingénierie",
+    "domaine": "Identification",
+    "obligatoire": true,
+    "references": [
+     "IEC62443-3-3:SR 1.1"
+    ],
+    "source": "werbgouvernance",
+    "majLe": "2026-10-23"
+   },
+   {
+    "id": "MS-02",
+    "titre": "Cloisonnement IT / OT par pare-feu filtrant",
+    "domaine": "Architecture",
+    "obligatoire": true,
+    "references": [
+     "IEC62443-3-3:SR 5.1"
+    ],
+    "source": "werbgouvernance",
+    "majLe": "2026-10-23"
+   }
+  ],
+  "roles": [
+   {
+    "id": "R-RSSI",
+    "nom": "RSSI groupe",
+    "niveau": "groupe",
+    "source": "werbgouvernance",
+    "majLe": "2026-10-23"
+   },
+   {
+    "id": "R-CORR",
+    "nom": "Correspondant cybersécurité de site",
+    "niveau": "site",
+    "source": "werbgouvernance",
+    "majLe": "2026-10-23"
+   }
+  ]
+ }
+}

@@ -1,0 +1,322 @@
+{
+ "format": "WERBPRESTA",
+ "schema": 1,
+ "famille": "WERBSMSI",
+ "meta": {
+  "produit": "WerbPresta",
+  "appVersion": "1.4.0",
+  "auteur": "@WerbHat",
+  "generateur": "WerbPresta v1.4.0 – Développé par @WerbHat",
+  "modifieLe": "2026-10-31T08:00:00Z",
+  "modifiePar": "Exemple",
+  "creeLe": "2026-10-31",
+  "groupeId": "e6a47cd7-77fe-463f-b6ea-b50ff390bfc7",
+  "portee": "site",
+  "site": "LYON"
+ },
+ "verrou": null,
+ "journal": [
+  {
+   "date": "2026-10-31T08:00:00.000Z",
+   "par": "Exemple",
+   "action": "Création",
+   "objet": "Base",
+   "element": "",
+   "champ": "",
+   "avant": "",
+   "apres": "Base d'exemple fictive"
+  }
+ ],
+ "data": {
+  "prestataires": [
+   {
+    "id": "PR-001",
+    "nom": "Intégrateur fictif",
+    "type": "Intégrateur",
+    "statut": "actif",
+    "contrat": "Contrat de maintenance de la supervision (fictif)",
+    "echeance": "2027-06-30",
+    "interlocuteur": "Responsable sécurité de l'intégrateur",
+    "certifications": [
+     "IEC 62443-2-4"
+    ],
+    "certifAutre": "",
+    "origine": "site:prestataires — CYB-EXG-001/P01 (Intégrateur (62443-2-4))",
+    "perimetre": {
+     "sis": [
+      "SI-SUPERVISION"
+     ],
+     "zones": [],
+     "actifs": [
+      "HYP_OT01"
+     ],
+     "interventions": [
+      "Installation",
+      "Maintenance"
+     ],
+     "description": "Supervision de la ligne 2 : serveur SCADA, historisation, hyperviseur qui les héberge."
+    },
+    "acces": {
+     "surSite": true,
+     "distant": "demande",
+     "moyen": "Bastion du client",
+     "privileges": "administrateur",
+     "comptes": "adm-integ1, adm-integ2 (SRV_SCADA01, VM_HIST01) — nominatifs, inventoriés dans WerbExploitation",
+     "supports": false
+    },
+    "donnees": [
+     "Configurations",
+     "Plans et schémas"
+    ],
+    "prochaineRevue": "2027-01-15",
+    "commentaire": "",
+    "evaluation": {
+     "date": "2026-10-15",
+     "evaluateur": "Correspondant cybersécurité du site (fictif)",
+     "reponses": {
+      "ORG-01": {
+       "rep": "oui",
+       "commentaire": "Référent désigné dans le plan d'assurance sécurité"
+      },
+      "ORG-02": {
+       "rep": "oui",
+       "commentaire": "Attestations de formation fournies"
+      },
+      "ORG-03": {
+       "rep": "partiel",
+       "commentaire": "Départs signalés, arrivées non",
+       "action": "Prévenir aussi des arrivées d'intervenants",
+       "echeance": "2026-12-31",
+       "statut": "ouvert"
+      },
+      "ARC-02": {
+       "rep": "oui",
+       "commentaire": "Accès par le bastion du client uniquement"
+      },
+      "ARC-04": {
+       "rep": "oui",
+       "commentaire": "Double authentification sur le bastion"
+      },
+      "CPT-01": {
+       "rep": "non",
+       "commentaire": "Mot de passe d'usine encore présent sur l'hyperviseur",
+       "action": "Changer le mot de passe d'usine de HYP_OT01",
+       "echeance": "2026-09-30",
+       "statut": "ouvert"
+      },
+      "CPT-02": {
+       "rep": "oui",
+       "commentaire": "Comptes adm-integ1 et adm-integ2"
+      },
+      "WIF-01": {
+       "rep": "so",
+       "commentaire": "Aucune liaison sans fil dans le périmètre"
+      }
+     }
+    },
+    "documents": [
+     {
+      "id": "d1",
+      "type": "Plan d'assurance sécurité",
+      "libelle": "PAS de l'intégrateur, version 2 (fictif)",
+      "date": "2026-09-01",
+      "validite": "2027-08-31"
+     }
+    ],
+    "incidents": []
+   },
+   {
+    "id": "PR-002",
+    "nom": "Mainteneur automatismes (fictif)",
+    "type": "Mainteneur",
+    "statut": "actif",
+    "contrat": "Commande annuelle de maintenance (fictive)",
+    "echeance": "2026-12-31",
+    "interlocuteur": "Chef de projet du mainteneur",
+    "certifications": [],
+    "certifAutre": "",
+    "origine": "",
+    "perimetre": {
+     "sis": [],
+     "zones": [],
+     "actifs": [
+      "API_L2_01",
+      "PC_ING01"
+     ],
+     "interventions": [
+      "Maintenance"
+     ],
+     "description": "Programmes de l'automate de la ligne 2, depuis le poste d'ingénierie."
+    },
+    "acces": {
+     "surSite": true,
+     "distant": "aucun",
+     "moyen": "",
+     "privileges": "administrateur",
+     "comptes": "Compte de programmation de l'automate (local)",
+     "supports": true
+    },
+    "donnees": [
+     "Code source ou programmes"
+    ],
+    "prochaineRevue": "2026-12-01",
+    "commentaire": "Clés USB contrôlées à la station de décontamination avant chaque intervention."
+   },
+   {
+    "id": "PR-003",
+    "nom": "Télémaintenance pare-feu (fictive)",
+    "type": "Télémaintenance",
+    "statut": "actif",
+    "contrat": "Support du constructeur (fictif)",
+    "echeance": "2027-03-31",
+    "interlocuteur": "Support du constructeur",
+    "certifications": [
+     "ISO 27001"
+    ],
+    "certifAutre": "",
+    "origine": "",
+    "perimetre": {
+     "sis": [],
+     "zones": [],
+     "actifs": [
+      "FW_OT01"
+     ],
+     "interventions": [
+      "Support"
+     ],
+     "description": "Mises à jour et diagnostic du pare-feu IT / OT."
+    },
+    "acces": {
+     "surSite": false,
+     "distant": "permanent",
+     "moyen": "Modem ou routeur 4G",
+     "privileges": "administrateur",
+     "comptes": "Compte de support du constructeur",
+     "supports": false
+    },
+    "donnees": [
+     "Configurations"
+    ],
+    "prochaineRevue": "",
+    "commentaire": "Exemple d'accès à revoir : modem permanent posé dans l'armoire."
+   }
+  ],
+  "recus": {
+   "si": {
+    "items": [
+     {
+      "id": "SI-SUPERVISION",
+      "nom": "Supervision ligne 2",
+      "fonction": "Conduite et historisation de la ligne 2",
+      "actifs": [
+       "API_L2_01",
+       "SRV_SCADA01",
+       "VM_HIST01"
+      ]
+     }
+    ],
+    "majLe": "2026-10-31T08:00:00.000Z",
+    "source": "site:si"
+   },
+   "zones": {
+    "items": [
+     {
+      "id": "Z-PROC",
+      "nom": "Réseaux process",
+      "slt": 3,
+      "criticite": "process"
+     },
+     {
+      "id": "Z-SUP",
+      "nom": "Supervision",
+      "slt": 2,
+      "criticite": "metier-critique"
+     }
+    ],
+    "majLe": "2026-10-31T08:00:00.000Z",
+    "source": "site:zones"
+   },
+   "actifs": {
+    "items": [
+     {
+      "id": "API_L2_01",
+      "type": "Automate",
+      "libelle": "Automate ligne 2",
+      "zone": "Z-PROC",
+      "criticite": "process"
+     },
+     {
+      "id": "SW_CORE01",
+      "type": "Switch",
+      "libelle": "Commutateur de cœur OT",
+      "zone": "Z-SUP",
+      "criticite": ""
+     },
+     {
+      "id": "FW_OT01",
+      "type": "Pare-feu",
+      "libelle": "Pare-feu IT / OT",
+      "zone": "Z-SUP",
+      "criticite": "critique"
+     },
+     {
+      "id": "SRV_SCADA01",
+      "type": "Serveur",
+      "libelle": "Serveur de supervision",
+      "zone": "Z-SUP",
+      "criticite": "metier-critique"
+     },
+     {
+      "id": "HYP_OT01",
+      "type": "Hyperviseur",
+      "libelle": "Hyperviseur OT",
+      "zone": "Z-SUP",
+      "criticite": ""
+     },
+     {
+      "id": "NAS_BCK01",
+      "type": "Serveur",
+      "libelle": "NAS de sauvegarde",
+      "zone": "Z-SUP",
+      "criticite": ""
+     },
+     {
+      "id": "PC_ING01",
+      "type": "Station de travail",
+      "libelle": "Poste d'ingénierie automatisme",
+      "zone": "Z-SUP",
+      "criticite": ""
+     },
+     {
+      "id": "VM_HIST01",
+      "type": "Machine virtuelle",
+      "libelle": "Historian",
+      "zone": "Z-SUP",
+      "criticite": ""
+     },
+     {
+      "id": "VM_AD01",
+      "type": "Machine virtuelle",
+      "libelle": "Contrôleur de domaine OT",
+      "zone": "Z-SUP",
+      "criticite": ""
+     }
+    ],
+    "majLe": "2026-10-31T08:00:00.000Z",
+    "source": "site:actifs"
+   },
+   "prestatairesSite": {
+    "items": [
+     {
+      "id": "CYB-EXG-001/P01",
+      "nom": "Intégrateur fictif",
+      "role": "Intégrateur (62443-2-4)"
+     }
+    ],
+    "majLe": "2026-10-31T08:00:00.000Z",
+    "source": "site:prestataires"
+   }
+  },
+  "largeurs": {}
+ }
+}

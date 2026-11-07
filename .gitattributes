@@ -1,0 +1,13 @@
+# WerbSMSI – Développé par @WerbHat
+# Fins de ligne LF dans le dépôt et la copie de travail : les empreintes SHA-256 publiées restent valables sur tout clone
+* text=auto eol=lf
+*.ps1 text eol=crlf
+*.bas text eol=crlf working-tree-encoding=CP1252
+*.cls text eol=crlf working-tree-encoding=CP1252
+*.xlsx binary
+*.xlsm binary
+*.docx binary
+*.vsdx binary
+*.vsdm binary
+*.png binary
+*.pdf binary

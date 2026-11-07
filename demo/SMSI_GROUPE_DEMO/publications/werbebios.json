@@ -1,0 +1,147 @@
+{
+ "format": "WERBSMSI-PUBLICATION",
+ "schema": 1,
+ "famille": "WERBSMSI",
+ "meta": {
+  "produit": "WerbEBIOS",
+  "appVersion": "1.0.0",
+  "auteur": "@WerbHat",
+  "generateur": "WerbEBIOS v1.0.0 – Développé par @WerbHat",
+  "creeLe": "2026-10-23",
+  "modifieLe": "2026-10-23T00:00:00Z",
+  "modifiePar": "Exemple",
+  "groupeId": "e6a47cd7-77fe-463f-b6ea-b50ff390bfc7",
+  "module": "werbebios",
+  "portee": "groupe",
+  "publiePar": "Exemple",
+  "publieLe": "2026-10-23T00:00:00Z"
+ },
+ "data": {
+  "echelles": {
+   "gravite": [
+    {
+     "niveau": 1,
+     "libelle": "Mineure"
+    },
+    {
+     "niveau": 2,
+     "libelle": "Significative"
+    },
+    {
+     "niveau": 3,
+     "libelle": "Grave"
+    },
+    {
+     "niveau": 4,
+     "libelle": "Critique"
+    }
+   ],
+   "vraisemblance": [
+    {
+     "niveau": 1,
+     "libelle": "Peu vraisemblable"
+    },
+    {
+     "niveau": 2,
+     "libelle": "Vraisemblable"
+    },
+    {
+     "niveau": 3,
+     "libelle": "Très vraisemblable"
+    },
+    {
+     "niveau": 4,
+     "libelle": "Quasi certain"
+    }
+   ],
+   "niveauxRisque": [
+    {
+     "niveau": 1,
+     "libelle": "Faible"
+    },
+    {
+     "niveau": 2,
+     "libelle": "Modéré"
+    },
+    {
+     "niveau": 3,
+     "libelle": "Élevé"
+    },
+    {
+     "niveau": 4,
+     "libelle": "Très élevé"
+    }
+   ],
+   "source": "werbebios",
+   "majLe": "2026-10-23",
+   "besoins": [
+    {
+     "niveau": 1,
+     "libelle": "Faible"
+    },
+    {
+     "niveau": 2,
+     "libelle": "Modéré"
+    },
+    {
+     "niveau": 3,
+     "libelle": "Fort"
+    },
+    {
+     "niveau": 4,
+     "libelle": "Très fort"
+    }
+   ]
+  },
+  "valeursMetier": [
+   {
+    "id": "VM-01",
+    "nom": "Production des lignes industrielles",
+    "source": "werbebios",
+    "majLe": "2026-10-23"
+   },
+   {
+    "id": "VM-02",
+    "nom": "Sûreté des installations et des personnes",
+    "source": "werbebios",
+    "majLe": "2026-10-23"
+   }
+  ],
+  "evenementsRedoutes": [
+   {
+    "id": "ER-01",
+    "nom": "Arrêt prolongé d'une ligne de production",
+    "valeurMetier": "VM-01",
+    "gravite": 3,
+    "source": "werbebios",
+    "majLe": "2026-10-23",
+    "criteres": [
+     "D"
+    ],
+    "besoin": 3
+   },
+   {
+    "id": "ER-02",
+    "nom": "Altération d'une fonction de sûreté",
+    "valeurMetier": "VM-02",
+    "gravite": 4,
+    "source": "werbebios",
+    "majLe": "2026-10-23",
+    "criteres": [
+     "I"
+    ],
+    "besoin": 4
+   }
+  ],
+  "sourcesRisque": [
+   {
+    "id": "SROV-01",
+    "sourceRisque": "Cybercriminel",
+    "objectif": "Rançon par arrêt de production",
+    "pertinence": 3,
+    "source": "werbebios",
+    "majLe": "2026-10-23"
+   }
+  ]
+ }
+}

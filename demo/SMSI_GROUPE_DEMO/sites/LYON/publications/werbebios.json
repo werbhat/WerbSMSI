@@ -1,0 +1,131 @@
+{
+ "format": "WERBSMSI-PUBLICATION",
+ "schema": 1,
+ "famille": "WERBSMSI",
+ "meta": {
+  "produit": "WerbEBIOS",
+  "appVersion": "1.0.0",
+  "auteur": "@WerbHat",
+  "generateur": "WerbEBIOS v1.0.0 – Développé par @WerbHat",
+  "creeLe": "2026-10-23",
+  "modifieLe": "2026-10-23T00:00:00Z",
+  "modifiePar": "Exemple",
+  "groupeId": "e6a47cd7-77fe-463f-b6ea-b50ff390bfc7",
+  "module": "werbebios",
+  "portee": "site",
+  "publiePar": "Exemple",
+  "publieLe": "2026-10-23T00:00:00Z",
+  "site": "LYON"
+ },
+ "data": {
+  "biensSupports": [
+   {
+    "id": "BS-SCADA",
+    "nom": "Système de supervision",
+    "actifs": [
+     "SRV_SCADA01"
+    ],
+    "source": "werbebios",
+    "majLe": "2026-10-23",
+    "valeursMetier": [
+     "LYON-L2/VM-01",
+     "LYON-L2/VM-03"
+    ]
+   }
+  ],
+  "syntheseRisques": [
+   {
+    "id": "R-LYON-01",
+    "libelle": "Rançongiciel sur la supervision",
+    "evenementRedoute": "ER-01",
+    "gravite": 3,
+    "vraisemblance": 3,
+    "niveauBrut": 3,
+    "niveauResiduel": 2,
+    "traitement": "reduire",
+    "etude": "EBIOS_LYON_L2",
+    "source": "werbebios",
+    "majLe": "2026-10-23",
+    "biensSupports": [
+     "BS-SCADA"
+    ],
+    "actifs": [
+     "SRV_SCADA01"
+    ]
+   }
+  ],
+  "evenementsRedoutes": [
+   {
+    "id": "LYON-L2/ER-01",
+    "description": "Arrêt prolongé d'une ligne de production",
+    "criteres": [
+     "D"
+    ],
+    "impacts": "Impacts sur les missions et services, Impacts financiers",
+    "valeurMetier": "LYON-L2/VM-01",
+    "valeurMetierNom": "Production des lignes industrielles",
+    "besoin": 3,
+    "gravite": 3,
+    "evenementGroupe": "ER-01",
+    "source": "werbebios",
+    "majLe": "2026-10-31"
+   },
+   {
+    "id": "LYON-L2/ER-02",
+    "description": "Vol ou divulgation des recettes de fabrication",
+    "criteres": [
+     "C"
+    ],
+    "impacts": "Impacts financiers, Impacts sur l'image et la confiance",
+    "valeurMetier": "LYON-L2/VM-02",
+    "valeurMetierNom": "Recettes et paramètres de fabrication",
+    "besoin": 4,
+    "gravite": 3,
+    "evenementGroupe": "ER-02",
+    "source": "werbebios",
+    "majLe": "2026-10-31"
+   },
+   {
+    "id": "LYON-L2/ER-03",
+    "description": "Perte de l'historique de production d'un lot",
+    "criteres": [
+     "I",
+     "T"
+    ],
+    "impacts": "Impacts juridiques",
+    "valeurMetier": "LYON-L2/VM-03",
+    "valeurMetierNom": "Historique de production (traçabilité)",
+    "besoin": 3,
+    "gravite": 2,
+    "source": "werbebios",
+    "majLe": "2026-10-31"
+   }
+  ],
+  "valeursMetier": [
+   {
+    "id": "LYON-L2/VM-01",
+    "nom": "Production des lignes industrielles",
+    "nature": "Processus métier",
+    "description": "",
+    "source": "werbebios",
+    "majLe": "2026-11-01"
+   },
+   {
+    "id": "LYON-L2/VM-02",
+    "nom": "Recettes et paramètres de fabrication",
+    "nature": "Propriété intellectuelle",
+    "description": "",
+    "source": "werbebios",
+    "majLe": "2026-11-01"
+   },
+   {
+    "id": "LYON-L2/VM-03",
+    "nom": "Historique de production (traçabilité)",
+    "nature": "Information opérationnelle",
+    "description": "Exigence réglementaire de traçabilité des lots.",
+    "source": "werbebios",
+    "majLe": "2026-11-01"
+   }
+  ]
+ }
+}

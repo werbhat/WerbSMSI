@@ -1,0 +1,554 @@
+{
+ "format": "WERBRGPD",
+ "schema": 1,
+ "famille": "WERBSMSI",
+ "meta": {
+  "produit": "WerbRGPD",
+  "appVersion": "1.0.0",
+  "auteur": "@WerbHat",
+  "generateur": "WerbRGPD v1.0.0 – Développé par @WerbHat",
+  "creeLe": "2026-01-15",
+  "modifieLe": "2026-01-15T08:00:00Z",
+  "modifiePar": "Exemple",
+  "groupeId": "e6a47cd7-77fe-463f-b6ea-b50ff390bfc7",
+  "portee": "site",
+  "site": "LYON"
+ },
+ "verrou": null,
+ "journal": [
+  {
+   "date": "2026-01-15T08:00:00Z",
+   "par": "Exemple",
+   "action": "Création",
+   "objet": "Base",
+   "element": "",
+   "champ": "",
+   "avant": "",
+   "apres": "Base RGPD d'exemple fictive"
+  }
+ ],
+ "data": {
+  "site": {
+   "nom": "LYON – Usine de Lyon (fictive)"
+  },
+  "organisme": {
+   "responsable": "Groupe Démo Industrie (fictif)",
+   "dpo": "DPO du groupe (fictif)",
+   "referent": "Correspondant cybersécurité de site",
+   "contact": "rgpd@exemple.fr"
+  },
+  "traitements": [
+   {
+    "nom": "Contrôle d'accès par badge",
+    "finalite": "Contrôler l'accès au site et aux zones de production, sécurité des personnes et des biens.",
+    "base": "interet",
+    "interet": "Sécurité du site industriel ; impact limité : pas de biométrie, passages consultés par le seul service sécurité, conservation courte.",
+    "personnes": [
+     "Salariés",
+     "Intérimaires",
+     "Prestataires sur site",
+     "Visiteurs"
+    ],
+    "donnees": [
+     "Identité, état civil",
+     "Numéro de badge, identifiant",
+     "Photo"
+    ],
+    "sensibles": [],
+    "justifSensibles": "",
+    "destinataires": "Service sécurité ; ressources humaines en cas d'enquête ; société de gardiennage",
+    "sousTraitants": [
+     "ST-001"
+    ],
+    "horsUE": false,
+    "pays": "",
+    "garantie": "",
+    "conservation": "Badge : durée de l'habilitation ; passages : 3 mois",
+    "mesures": "Accès nominatifs au logiciel, journalisation, serveur en zone protégée, sauvegarde quotidienne",
+    "sis": [],
+    "actifs": [],
+    "criteres": [],
+    "aipd": "",
+    "aipdLe": "",
+    "responsable": "Responsable sûreté du site (fictif)",
+    "statut": "actif",
+    "majLe": "2026-01-15",
+    "commentaire": "",
+    "id": "TRT-001"
+   },
+   {
+    "nom": "Vidéosurveillance du site",
+    "finalite": "Sécurité des biens et des personnes ; sûreté des accès et des zones de stockage.",
+    "base": "interet",
+    "interet": "Prévention des vols et intrusions ; pas de caméra sur les postes de travail ni en salle de pause ; information par panneaux.",
+    "personnes": [
+     "Salariés",
+     "Intérimaires",
+     "Prestataires sur site",
+     "Visiteurs",
+     "Public, riverains"
+    ],
+    "donnees": [
+     "Images, vidéo"
+    ],
+    "sensibles": [],
+    "justifSensibles": "",
+    "destinataires": "Service sécurité ; forces de l'ordre sur réquisition",
+    "sousTraitants": [
+     "ST-001"
+    ],
+    "horsUE": false,
+    "pays": "",
+    "garantie": "",
+    "conservation": "30 jours, sauf extraction pour un incident",
+    "mesures": "Enregistreur en local technique fermé, accès nominatif aux images, journal des consultations",
+    "sis": [],
+    "actifs": [],
+    "criteres": [
+     "surveillance",
+     "vulnerables"
+    ],
+    "aipd": "faite",
+    "aipdLe": "2025-09-15",
+    "responsable": "Responsable sûreté du site (fictif)",
+    "statut": "actif",
+    "majLe": "2026-01-15",
+    "commentaire": "CSE informé et consulté en septembre 2025.",
+    "id": "TRT-002"
+   },
+   {
+    "nom": "Journaux des opérateurs de la supervision",
+    "finalite": "Traçabilité des commandes passées sur le procédé et cybersécurité de la supervision de la ligne 2.",
+    "base": "interet",
+    "interet": "Sécurité du procédé et des systèmes ; pas d'usage pour l'évaluation individuelle des opérateurs.",
+    "personnes": [
+     "Salariés",
+     "Intérimaires",
+     "Prestataires sur site"
+    ],
+    "donnees": [
+     "Numéro de badge, identifiant",
+     "Données de connexion, journaux"
+    ],
+    "sensibles": [],
+    "justifSensibles": "",
+    "destinataires": "Responsable de production, correspondant cybersécurité, intégrateur de la supervision (maintenance)",
+    "sousTraitants": [
+     "ST-002"
+    ],
+    "horsUE": false,
+    "pays": "",
+    "garantie": "",
+    "conservation": "12 mois",
+    "mesures": "Comptes nominatifs, journaux sur l'historien, accès en lecture limité",
+    "sis": [
+     "SI-SUPERVISION"
+    ],
+    "actifs": [
+     "SRV_SCADA01",
+     "VM_HIST01"
+    ],
+    "criteres": [],
+    "aipd": "",
+    "aipdLe": "",
+    "responsable": "Responsable de production (fictif)",
+    "statut": "actif",
+    "majLe": "2026-01-15",
+    "commentaire": "",
+    "id": "TRT-003"
+   },
+   {
+    "nom": "Gestion administrative du personnel du site",
+    "finalite": "Gestion des contrats, des absences, des habilitations et de la paie du personnel du site.",
+    "base": "contrat",
+    "interet": "",
+    "personnes": [
+     "Salariés",
+     "Intérimaires"
+    ],
+    "donnees": [
+     "Identité, état civil",
+     "Coordonnées",
+     "Vie professionnelle",
+     "Données économiques et financières"
+    ],
+    "sensibles": [
+     "Santé"
+    ],
+    "justifSensibles": "Obligations en droit du travail : aptitudes, accidents du travail (article 9.2 b) ; diagnostic réservé à la médecine du travail.",
+    "destinataires": "Ressources humaines du site et du groupe ; organismes sociaux ; éditeur du logiciel de paie",
+    "sousTraitants": [
+     "ST-003"
+    ],
+    "horsUE": false,
+    "pays": "",
+    "garantie": "",
+    "conservation": "Durée du contrat, puis archivage selon les délais de prescription (5 ans pour la paie)",
+    "mesures": "Logiciel RH en SaaS, authentification forte, droits par profil",
+    "sis": [],
+    "actifs": [],
+    "criteres": [],
+    "aipd": "",
+    "aipdLe": "",
+    "responsable": "Responsable RH du site (fictif)",
+    "statut": "actif",
+    "majLe": "2026-01-15",
+    "commentaire": "",
+    "id": "TRT-004"
+   },
+   {
+    "nom": "Registre des visiteurs",
+    "finalite": "Accueil et sécurité des visiteurs, plan de prévention.",
+    "base": "obligation",
+    "interet": "",
+    "personnes": [
+     "Visiteurs",
+     "Prestataires sur site"
+    ],
+    "donnees": [
+     "Identité, état civil",
+     "Coordonnées"
+    ],
+    "sensibles": [],
+    "justifSensibles": "",
+    "destinataires": "Accueil, service sécurité",
+    "sousTraitants": [],
+    "horsUE": false,
+    "pays": "",
+    "garantie": "",
+    "conservation": "",
+    "mesures": "Registre papier rangé à l'accueil",
+    "sis": [],
+    "actifs": [],
+    "criteres": [],
+    "aipd": "",
+    "aipdLe": "",
+    "responsable": "Accueil du site",
+    "statut": "actif",
+    "majLe": "2026-01-15",
+    "commentaire": "",
+    "id": "TRT-005"
+   },
+   {
+    "nom": "Géolocalisation des véhicules de maintenance",
+    "finalite": "Optimiser les interventions sur les sites distants et assurer la sécurité des techniciens isolés.",
+    "base": "interet",
+    "interet": "",
+    "personnes": [
+     "Salariés"
+    ],
+    "donnees": [
+     "Localisation",
+     "Identité, état civil"
+    ],
+    "sensibles": [],
+    "justifSensibles": "",
+    "destinataires": "Responsable maintenance",
+    "sousTraitants": [],
+    "horsUE": false,
+    "pays": "",
+    "garantie": "",
+    "conservation": "2 mois",
+    "mesures": "",
+    "sis": [],
+    "actifs": [],
+    "criteres": [
+     "surveillance",
+     "vulnerables"
+    ],
+    "aipd": "afaire",
+    "aipdLe": "",
+    "responsable": "Responsable maintenance (fictif)",
+    "statut": "projet",
+    "majLe": "2026-01-15",
+    "commentaire": "",
+    "id": "TRT-006"
+   }
+  ],
+  "violations": [
+   {
+    "id": "VIO-001",
+    "titre": "Export RH envoyé au mauvais destinataire",
+    "decouverteLe": "2026-03-10T10:15",
+    "description": "Fichier Excel des absences du mois envoyé par erreur à un fournisseur ; destinataire contacté, suppression confirmée par écrit.",
+    "natures": [
+     "confidentialite"
+    ],
+    "traitements": [
+     "TRT-004"
+    ],
+    "personnesNb": "42",
+    "risque": "risque",
+    "cnil": true,
+    "cnilLe": "2026-03-12T16:40",
+    "cnilRef": "(référence fictive)",
+    "retard": "",
+    "informees": false,
+    "informeesLe": "",
+    "motifNonInfo": "",
+    "nis2": false,
+    "mesures": "Suppression confirmée ; rappel des consignes d'envoi ; chiffrement des pièces jointes RH.",
+    "close": true,
+    "closeLe": "2026-04-02"
+   },
+   {
+    "id": "VIO-002",
+    "titre": "Perte d'une clé USB chiffrée",
+    "decouverteLe": "2026-06-03T08:30",
+    "description": "Clé USB chiffrée contenant des plannings d'équipe perdue lors d'un déplacement.",
+    "natures": [
+     "disponibilite",
+     "confidentialite"
+    ],
+    "traitements": [
+     "TRT-004"
+    ],
+    "personnesNb": "25",
+    "risque": "aucun",
+    "cnil": false,
+    "cnilLe": "",
+    "cnilRef": "",
+    "retard": "",
+    "informees": false,
+    "informeesLe": "",
+    "motifNonInfo": "",
+    "nis2": false,
+    "mesures": "Chiffrement intégral : données inexploitables ; copie disponible sur le serveur. Documentée sans notification.",
+    "close": true,
+    "closeLe": "2026-06-03"
+   },
+   {
+    "id": "VIO-003",
+    "titre": "Accès non autorisé à l'enregistreur vidéo",
+    "decouverteLe": "2026-11-02T09:00",
+    "description": "Compte par défaut de l'enregistreur vidéo resté actif ; connexion depuis un poste non autorisé constatée dans les journaux.",
+    "natures": [
+     "confidentialite"
+    ],
+    "traitements": [
+     "TRT-002"
+    ],
+    "personnesNb": "estimation : 150",
+    "risque": "risque",
+    "cnil": false,
+    "cnilLe": "",
+    "cnilRef": "",
+    "retard": "",
+    "informees": false,
+    "informeesLe": "",
+    "motifNonInfo": "",
+    "nis2": false,
+    "mesures": "Compte désactivé, mot de passe changé, enregistreur isolé du réseau bureautique.",
+    "close": false,
+    "closeLe": ""
+   }
+  ],
+  "demandes": [
+   {
+    "id": "DRT-001",
+    "recueLe": "2026-04-07",
+    "demandeur": "Salarié, atelier 2",
+    "droit": "acces",
+    "traitements": [
+     "TRT-001"
+    ],
+    "identite": true,
+    "prolongee": false,
+    "motifProlongation": "",
+    "statut": "repondue",
+    "reponduLe": "2026-04-21",
+    "reponse": "Extraction des passages des trois derniers mois transmise en main propre."
+   },
+   {
+    "id": "DRT-002",
+    "recueLe": "2026-06-15",
+    "demandeur": "Ancien intérimaire",
+    "droit": "effacement",
+    "traitements": [
+     "TRT-004",
+     "TRT-001"
+    ],
+    "identite": true,
+    "prolongee": false,
+    "motifProlongation": "",
+    "statut": "repondue",
+    "reponduLe": "2026-07-02",
+    "reponse": "Badge et passages supprimés ; dossier de paie conservé (obligation légale), motif expliqué."
+   },
+   {
+    "id": "DRT-003",
+    "recueLe": "2026-10-01",
+    "demandeur": "Salarié, maintenance",
+    "droit": "acces",
+    "traitements": [
+     "TRT-003"
+    ],
+    "identite": false,
+    "prolongee": false,
+    "motifProlongation": "",
+    "statut": "encours",
+    "reponduLe": "",
+    "reponse": ""
+   }
+  ],
+  "sousTraitants": [
+   {
+    "id": "ST-001",
+    "nom": "Société de gardiennage (fictive)",
+    "presta": "",
+    "service": "Gardiennage, levée de doute vidéo",
+    "contrat": "signe",
+    "contratLe": "2025-02-01",
+    "horsUE": false,
+    "pays": "",
+    "garantie": "",
+    "delaiH": "24",
+    "commentaire": ""
+   },
+   {
+    "id": "ST-002",
+    "nom": "Intégrateur fictif",
+    "presta": "PR-001",
+    "service": "Maintenance de la supervision (télémaintenance)",
+    "contrat": "encours",
+    "contratLe": "",
+    "horsUE": false,
+    "pays": "",
+    "garantie": "",
+    "delaiH": "",
+    "commentaire": "Avenant RGPD envoyé en octobre 2026."
+   },
+   {
+    "id": "ST-003",
+    "nom": "Éditeur du logiciel de paie (fictif)",
+    "presta": "",
+    "service": "Logiciel RH et paie en SaaS",
+    "contrat": "signe",
+    "contratLe": "2024-11-12",
+    "horsUE": true,
+    "pays": "États-Unis (support)",
+    "garantie": "Clauses contractuelles types",
+    "delaiH": "48",
+    "commentaire": ""
+   }
+  ],
+  "archives": {
+   "traitements": []
+  },
+  "refs": {
+   "personnes": [
+    "Salariés",
+    "Intérimaires",
+    "Prestataires sur site",
+    "Visiteurs",
+    "Candidats",
+    "Clients",
+    "Contacts fournisseurs",
+    "Public, riverains"
+   ],
+   "donnees": [
+    "Identité, état civil",
+    "Coordonnées",
+    "Vie professionnelle",
+    "Numéro de badge, identifiant",
+    "Données de connexion, journaux",
+    "Images, vidéo",
+    "Localisation",
+    "Photo",
+    "Données économiques et financières"
+   ]
+  },
+  "listesGroupe": {},
+  "recus": {
+   "si": {
+    "items": [
+     {
+      "id": "SI-SUPERVISION",
+      "nom": "Supervision ligne 2"
+     }
+    ],
+    "majLe": "2026-01-15T08:00:00Z"
+   },
+   "actifs": {
+    "items": [
+     {
+      "id": "API_L2_01",
+      "type": "Automate",
+      "libelle": "Automate ligne 2",
+      "zone": "Z-PROC"
+     },
+     {
+      "id": "SW_CORE01",
+      "type": "Switch",
+      "libelle": "Commutateur de cœur OT",
+      "zone": "Z-SUP"
+     },
+     {
+      "id": "FW_OT01",
+      "type": "Pare-feu",
+      "libelle": "Pare-feu IT / OT",
+      "zone": "Z-SUP"
+     },
+     {
+      "id": "SRV_SCADA01",
+      "type": "Serveur",
+      "libelle": "Serveur de supervision",
+      "zone": "Z-SUP"
+     },
+     {
+      "id": "HYP_OT01",
+      "type": "Hyperviseur",
+      "libelle": "Hyperviseur OT",
+      "zone": "Z-SUP"
+     },
+     {
+      "id": "NAS_BCK01",
+      "type": "Serveur",
+      "libelle": "NAS de sauvegarde",
+      "zone": "Z-SUP"
+     },
+     {
+      "id": "PC_ING01",
+      "type": "Station de travail",
+      "libelle": "Poste d'ingénierie automatisme",
+      "zone": "Z-SUP"
+     },
+     {
+      "id": "VM_HIST01",
+      "type": "Machine virtuelle",
+      "libelle": "Historian",
+      "zone": "Z-SUP"
+     },
+     {
+      "id": "VM_AD01",
+      "type": "Machine virtuelle",
+      "libelle": "Contrôleur de domaine OT",
+      "zone": "Z-SUP"
+     }
+    ],
+    "majLe": "2026-01-15T08:00:00Z"
+   },
+   "prestataires": {
+    "items": [
+     {
+      "id": "PR-001",
+      "nom": "Intégrateur fictif",
+      "type": "Intégrateur"
+     },
+     {
+      "id": "PR-002",
+      "nom": "Mainteneur automatismes (fictif)",
+      "type": "Mainteneur"
+     },
+     {
+      "id": "PR-003",
+      "nom": "Télémaintenance pare-feu (fictive)",
+      "type": "Télémaintenance"
+     }
+    ],
+    "majLe": "2026-01-15T08:00:00Z"
+   }
+  },
+  "largeurs": {}
+ }
+}

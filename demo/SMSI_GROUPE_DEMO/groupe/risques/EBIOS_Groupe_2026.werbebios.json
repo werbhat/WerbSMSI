@@ -1,0 +1,320 @@
+{
+ "format": "WERBEBIOS",
+ "schema": 1,
+ "famille": "WERBSMSI",
+ "meta": {
+  "produit": "WerbEBIOS",
+  "appVersion": "1.0.0",
+  "auteur": "@WerbHat",
+  "generateur": "WerbEBIOS v1.0.0 – Développé par @WerbHat",
+  "creeLe": "2026-10-24",
+  "modifieLe": "2026-10-24T08:00:00Z",
+  "modifiePar": "Exemple",
+  "groupeId": "e6a47cd7-77fe-463f-b6ea-b50ff390bfc7",
+  "portee": "groupe"
+ },
+ "verrou": null,
+ "journal": [
+  {
+   "date": "2026-10-24T08:00:00.000Z",
+   "par": "Exemple",
+   "action": "Création",
+   "objet": "Analyse",
+   "element": "",
+   "champ": "",
+   "avant": "",
+   "apres": "Analyse d'exemple fictive"
+  }
+ ],
+ "data": {
+  "missions": [
+   {
+    "id": "MI-01",
+    "nom": "Produire et livrer les commandes",
+    "description": "Fabrication et expédition des produits des sites."
+   },
+   {
+    "id": "MI-02",
+    "nom": "Garantir la sécurité des personnes et de l'environnement",
+    "description": "Sûreté des installations industrielles."
+   }
+  ],
+  "vm": [
+   {
+    "id": "VM-01",
+    "nom": "Production des lignes industrielles",
+    "nature": "Processus métier",
+    "missions": [
+     "MI-01"
+    ],
+    "responsable": "Directeur des opérations",
+    "description": "Pilotage et conduite des lignes."
+   },
+   {
+    "id": "VM-02",
+    "nom": "Recettes et paramètres de fabrication",
+    "nature": "Propriété intellectuelle",
+    "missions": [
+     "MI-01"
+    ],
+    "responsable": "Responsable méthodes",
+    "description": "Savoir-faire du groupe."
+   },
+   {
+    "id": "VM-03",
+    "nom": "Sûreté des installations",
+    "nature": "Processus métier",
+    "missions": [
+     "MI-02"
+    ],
+    "responsable": "Responsable HSE",
+    "description": "Fonctions de sécurité du procédé."
+   }
+  ],
+  "bs": [],
+  "er": [
+   {
+    "id": "ER-01",
+    "vm": "VM-01",
+    "description": "Arrêt prolongé d'une ligne de production",
+    "impacts": [
+     "Impacts sur les missions et services",
+     "Impacts financiers"
+    ],
+    "gravite": "3",
+    "justification": "Plusieurs jours de production perdus, pénalités clients.",
+    "criteres": [
+     "D"
+    ],
+    "besoin": "3"
+   },
+   {
+    "id": "ER-02",
+    "vm": "VM-02",
+    "description": "Vol ou divulgation des recettes de fabrication",
+    "impacts": [
+     "Impacts financiers",
+     "Impacts sur l'image et la confiance"
+    ],
+    "gravite": "3",
+    "justification": "Perte d'avantage concurrentiel.",
+    "criteres": [
+     "C"
+    ],
+    "besoin": "4"
+   },
+   {
+    "id": "ER-03",
+    "vm": "VM-03",
+    "description": "Altération des paramètres de sûreté du procédé",
+    "impacts": [
+     "Impacts humains, matériels ou environnementaux",
+     "Impacts juridiques"
+    ],
+    "gravite": "4",
+    "justification": "Risque d'accident industriel.",
+    "criteres": [
+     "I"
+    ],
+    "besoin": "4"
+   }
+  ],
+  "socle": [
+   {
+    "id": "SOC-01",
+    "referentiel": "Guide d'hygiène informatique (ANSSI)",
+    "exigence": "Cloisonner le système d'information industriel",
+    "etat": "Partiel",
+    "ecart": "Flux directs subsistant sur un site.",
+    "justification": ""
+   },
+   {
+    "id": "SOC-02",
+    "referentiel": "IEC 62443-3-3",
+    "exigence": "SR 1.1 – Identification et authentification des utilisateurs humains",
+    "etat": "Non appliqué",
+    "ecart": "Comptes génériques sur les postes d'ingénierie.",
+    "justification": ""
+   }
+  ],
+  "srov": [
+   {
+    "id": "SROV-01",
+    "source": "Crime organisé",
+    "objectif": "Lucratif (rançon, fraude, revente)",
+    "motivation": "4",
+    "ressources": "4",
+    "activite": "4",
+    "retenu": true,
+    "justification": "Rançongiciels visant l'industrie en forte hausse.",
+    "er": [
+     "ER-01",
+     "ER-03"
+    ]
+   },
+   {
+    "id": "SROV-02",
+    "source": "État étranger",
+    "objectif": "Espionnage",
+    "motivation": "3",
+    "ressources": "4",
+    "activite": "2",
+    "retenu": true,
+    "justification": "Recettes à forte valeur.",
+    "er": [
+     "ER-02"
+    ]
+   },
+   {
+    "id": "SROV-03",
+    "source": "Activiste idéologique (hacktiviste)",
+    "objectif": "Entrave au fonctionnement",
+    "motivation": "2",
+    "ressources": "2",
+    "activite": "2",
+    "retenu": false,
+    "justification": "Faible exposition médiatique."
+   }
+  ],
+  "pp": [],
+  "ss": [],
+  "so": [],
+  "mesures": [],
+  "etude": {
+   "nom": "Analyse de risques d'entreprise 2026 (exemple fictif)",
+   "reference": "GDI-EBIOS-2026",
+   "organisation": "Groupe Démo Industrie (fictif)",
+   "perimetre": "Activités industrielles du groupe : production, maintenance, logistique des sites de Lyon et de Nantes.",
+   "objectifs": "Établir les valeurs métier, les événements redoutés et les sources de risque communs, déclinés ensuite par chaque site.",
+   "commanditaire": "Direction générale (fictive)",
+   "animateur": "RSSI groupe (fictif)",
+   "participants": "Direction des opérations, RSSI, correspondants de site",
+   "date": "2026-03-15",
+   "version": "1.0",
+   "classification": "Diffusion restreinte"
+  },
+  "echelles": {
+   "gravite": [
+    {
+     "niveau": 1,
+     "libelle": "Mineure",
+     "description": "Sans impact opérationnel ni sur la performance ; contournement aisé."
+    },
+    {
+     "niveau": 2,
+     "libelle": "Significative",
+     "description": "Dégradation des missions ou de la performance, surmontable avec des moyens ordinaires."
+    },
+    {
+     "niveau": 3,
+     "libelle": "Grave",
+     "description": "Forte dégradation des missions, conséquences sérieuses et durables, surmontables avec difficulté."
+    },
+    {
+     "niveau": 4,
+     "libelle": "Critique",
+     "description": "Incapacité à assurer tout ou partie des missions ; conséquences dramatiques, voire irréversibles."
+    }
+   ],
+   "vraisemblance": [
+    {
+     "niveau": 1,
+     "libelle": "Peu vraisemblable",
+     "description": "Peu de chances de réussite pour la source de risque."
+    },
+    {
+     "niveau": 2,
+     "libelle": "Vraisemblable",
+     "description": "Chances significatives de réussite."
+    },
+    {
+     "niveau": 3,
+     "libelle": "Très vraisemblable",
+     "description": "Fortes chances de réussite."
+    },
+    {
+     "niveau": 4,
+     "libelle": "Quasi certain",
+     "description": "Réussite quasi certaine ou déjà constatée."
+    }
+   ],
+   "niveauxRisque": [
+    {
+     "niveau": 1,
+     "libelle": "Faible",
+     "couleur": "#2e7d32"
+    },
+    {
+     "niveau": 2,
+     "libelle": "Modéré",
+     "couleur": "#b88a00"
+    },
+    {
+     "niveau": 3,
+     "libelle": "Élevé",
+     "couleur": "#d9640a"
+    },
+    {
+     "niveau": 4,
+     "libelle": "Très élevé",
+     "couleur": "#b3261e"
+    }
+   ],
+   "matrice": [
+    [
+     1,
+     1,
+     2,
+     3
+    ],
+    [
+     1,
+     2,
+     3,
+     3
+    ],
+    [
+     2,
+     3,
+     3,
+     4
+    ],
+    [
+     3,
+     3,
+     4,
+     4
+    ]
+   ],
+   "seuilDanger": 2.5,
+   "seuilControle": 0.9,
+   "besoins": [
+    {
+     "niveau": 1,
+     "libelle": "Faible",
+     "description": "Atteinte tolérable : interruption de plusieurs jours, erreur ou divulgation sans conséquence notable."
+    },
+    {
+     "niveau": 2,
+     "libelle": "Modéré",
+     "description": "Atteinte gênante : service à rétablir dans la journée, données internes, erreurs à corriger rapidement."
+    },
+    {
+     "niveau": 3,
+     "libelle": "Fort",
+     "description": "Atteinte grave : service à rétablir en quelques heures, données sensibles, intégrité et traces vérifiées."
+    },
+    {
+     "niveau": 4,
+     "libelle": "Très fort",
+     "description": "Atteinte inacceptable : continuité exigée, données critiques ou réglementées, traçabilité complète."
+    }
+   ]
+  },
+  "inventaire": {
+   "site": "",
+   "chargeLe": "",
+   "actifs": []
+  }
+ }
+}

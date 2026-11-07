@@ -1,0 +1,609 @@
+{
+ "format": "WERBCARTOSI",
+ "schema": 1,
+ "famille": "WERBSMSI",
+ "meta": {
+  "produit": "WerbCartoSI",
+  "appVersion": "1.5.0",
+  "auteur": "@WerbHat",
+  "generateur": "WerbCartoSI v1.5.0 – Développé par @WerbHat",
+  "creeLe": "2026-01-15",
+  "modifieLe": "2026-01-15T08:00:00Z",
+  "modifiePar": "Exemple",
+  "groupeId": "e6a47cd7-77fe-463f-b6ea-b50ff390bfc7",
+  "portee": "site",
+  "site": "LYON"
+ },
+ "verrou": null,
+ "journal": [
+  {
+   "date": "2026-01-15T08:00:00Z",
+   "par": "Exemple",
+   "action": "Création",
+   "objet": "Base",
+   "element": "",
+   "champ": "",
+   "avant": "",
+   "apres": "Registre d'exemple fictif"
+  }
+ ],
+ "data": {
+  "site": {
+   "nom": "LYON – Usine de Lyon (fictive)"
+  },
+  "schemas": [
+   {
+    "id": "SCH-001",
+    "titre": "Zones et conduits du site de Lyon",
+    "type": "Zones et conduits",
+    "exigences": [
+     "EX-ZONES",
+     "EX-CARTO"
+    ],
+    "description": "Découpage du site en zones de sécurité (bureautique, supervision, process) et conduits entre zones, avec le niveau cible.",
+    "perimetre": "Tout le site ; zones Z-SUP et Z-PROC",
+    "proprietaire": "Correspondant cybersécurité de site",
+    "responsable": "Administrateur réseau (fictif)",
+    "version": "2.1",
+    "classification": "Diffusion restreinte",
+    "format": "Image (PNG, SVG)",
+    "statut": "approuve",
+    "creeLe": "2025-03-10",
+    "revueLe": "2026-03-02",
+    "approbateur": "RSSI groupe",
+    "approuveLe": "2026-03-02",
+    "lien": {
+     "type": "espace",
+     "valeur": "sites/LYON/inventaires/schemas/SCH-001_Zones_et_conduits_LYON.svg"
+    },
+    "sis": [
+     "SI-SUPERVISION"
+    ],
+    "zones": [
+     "Z-SUP",
+     "Z-PROC"
+    ],
+    "actifs": [],
+    "historique": [
+     {
+      "precedente": "",
+      "approbateur": "",
+      "commentaire": "",
+      "fichier": "",
+      "evenement": "Création",
+      "version": "1.0",
+      "date": "2025-03-10",
+      "par": "Administrateur réseau (fictif)"
+     },
+     {
+      "precedente": "",
+      "approbateur": "RSSI groupe",
+      "commentaire": "",
+      "fichier": "",
+      "evenement": "Approbation",
+      "version": "1.0",
+      "date": "2025-03-20",
+      "par": "Administrateur réseau (fictif)"
+     },
+     {
+      "precedente": "1.0",
+      "approbateur": "",
+      "commentaire": "Zone de supervision séparée de la bureautique",
+      "fichier": "",
+      "evenement": "Nouvelle version",
+      "version": "2.0",
+      "date": "2025-09-12",
+      "par": "Administrateur réseau (fictif)"
+     },
+     {
+      "precedente": "",
+      "approbateur": "RSSI groupe",
+      "commentaire": "",
+      "fichier": "",
+      "evenement": "Approbation",
+      "version": "2.0",
+      "date": "2025-09-30",
+      "par": "Correspondant cybersécurité de site"
+     },
+     {
+      "precedente": "2.0",
+      "approbateur": "",
+      "commentaire": "Conduit supervision → process précisé (pare-feu FW_OT01)",
+      "fichier": "",
+      "evenement": "Nouvelle version",
+      "version": "2.1",
+      "date": "2026-02-20",
+      "par": "Administrateur réseau (fictif)"
+     },
+     {
+      "precedente": "",
+      "approbateur": "RSSI groupe",
+      "commentaire": "",
+      "fichier": "",
+      "evenement": "Approbation",
+      "version": "2.1",
+      "date": "2026-03-02",
+      "par": "Correspondant cybersécurité de site"
+     }
+    ]
+   },
+   {
+    "id": "SCH-002",
+    "titre": "Réseau logique de la ligne 2",
+    "type": "Réseau logique (VLAN, adressage)",
+    "exigences": [
+     "EX-RESEAU",
+     "EX-FLUX"
+    ],
+    "description": "VLAN, adressage et flux autorisés de la supervision de la ligne 2.",
+    "perimetre": "SI Supervision ligne 2",
+    "proprietaire": "Administrateur réseau (fictif)",
+    "responsable": "Administrateur réseau (fictif)",
+    "version": "1.4",
+    "classification": "Confidentiel",
+    "format": "Visio",
+    "statut": "approuve",
+    "creeLe": "2024-06-12",
+    "revueLe": "2025-05-20",
+    "approbateur": "Responsable infrastructure",
+    "approuveLe": "2025-05-20",
+    "lien": {
+     "type": "espace",
+     "valeur": "sites/LYON/inventaires/schemas/SCH-002_Reseau_logique_L2.vsdx"
+    },
+    "sis": [
+     "SI-SUPERVISION"
+    ],
+    "zones": [
+     "Z-SUP",
+     "Z-PROC"
+    ],
+    "actifs": [],
+    "historique": [
+     {
+      "precedente": "",
+      "approbateur": "Responsable infrastructure",
+      "commentaire": "",
+      "fichier": "",
+      "evenement": "Approbation",
+      "version": "1.4",
+      "date": "2025-05-20",
+      "par": "Administrateur réseau (fictif)"
+     }
+    ]
+   },
+   {
+    "id": "SCH-003",
+    "titre": "Architecture d'administration",
+    "type": "Architecture d'administration",
+    "exigences": [
+     "EX-ADMIN"
+    ],
+    "description": "Poste d'administration dédié, bastion, réseau d'administration séparé.",
+    "perimetre": "Équipements réseau et serveurs du site",
+    "proprietaire": "Correspondant cybersécurité de site",
+    "responsable": "Administrateur réseau (fictif)",
+    "version": "0.3",
+    "classification": "Confidentiel",
+    "format": "Visio",
+    "statut": "validation",
+    "creeLe": "2026-09-15",
+    "lien": {
+     "type": "https",
+     "valeur": "https://sharepoint.exemple.fr/sites/smsi-lyon/schemas/SCH-003_Administration.vsdx"
+    },
+    "sis": [],
+    "zones": [],
+    "actifs": [],
+    "historique": [
+     {
+      "precedente": "",
+      "approbateur": "",
+      "commentaire": "",
+      "fichier": "",
+      "evenement": "Création",
+      "version": "0.3",
+      "date": "2026-09-15",
+      "par": "Administrateur réseau (fictif)"
+     }
+    ]
+   },
+   {
+    "id": "SCH-004",
+    "titre": "Accès distants des prestataires",
+    "type": "Accès distants et interconnexions",
+    "exigences": [
+     "EX-ACCES"
+    ],
+    "description": "Chemin d'accès de la télémaintenance : VPN du client, bastion, comptes nominatifs.",
+    "perimetre": "Intégrateur de la supervision (fictif)",
+    "proprietaire": "Responsable maintenance (fictif)",
+    "responsable": "",
+    "version": "1.0",
+    "classification": "Diffusion restreinte",
+    "format": "PDF",
+    "statut": "brouillon",
+    "creeLe": "2026-10-05",
+    "lien": {
+     "type": "chemin",
+     "valeur": "\\\\srv-fichiers.exemple.local\\smsi\\LYON\\schemas\\SCH-004_Acces_distants.pdf"
+    },
+    "sis": [],
+    "zones": [],
+    "actifs": [],
+    "historique": []
+   },
+   {
+    "id": "SCH-005",
+    "titre": "Sauvegardes et reprise de la supervision",
+    "type": "Sauvegarde et reprise",
+    "exigences": [
+     "EX-REPRISE"
+    ],
+    "description": "Sauvegarde du serveur de supervision vers le NAS, copie hors ligne, ordre de redémarrage.",
+    "perimetre": "SI Supervision ligne 2",
+    "proprietaire": "",
+    "responsable": "Administrateur réseau (fictif)",
+    "version": "1.0",
+    "classification": "Diffusion restreinte",
+    "format": "Visio",
+    "statut": "approuve",
+    "creeLe": "2025-01-20",
+    "revueLe": "2025-01-20",
+    "approbateur": "Responsable de production",
+    "approuveLe": "2025-01-20",
+    "prochaineRevue": "2026-01-20",
+    "lien": {
+     "type": "espace",
+     "valeur": "sites/LYON/inventaires/schemas/SCH-005_Sauvegardes_supervision.vsdx"
+    },
+    "sis": [
+     "SI-SUPERVISION"
+    ],
+    "zones": [],
+    "actifs": [
+     "SRV_SCADA01",
+     "VM_HIST01"
+    ],
+    "historique": [
+     {
+      "precedente": "",
+      "approbateur": "Responsable de production",
+      "commentaire": "",
+      "fichier": "",
+      "evenement": "Approbation",
+      "version": "1.0",
+      "date": "2025-01-20",
+      "par": "Administrateur réseau (fictif)"
+     }
+    ]
+   },
+   {
+    "id": "SCH-006",
+    "titre": "Plan de câblage de la baie BAIE-01",
+    "type": "Réseau physique (câblage, baies)",
+    "exigences": [
+     "EX-RESEAU",
+     "EX-LOCAUX"
+    ],
+    "description": "Ancienne version du plan de câblage (remplacée par la fiche de brassage WerbAssets).",
+    "perimetre": "Local technique, baie BAIE-01",
+    "proprietaire": "Administrateur réseau (fictif)",
+    "responsable": "",
+    "version": "1.0",
+    "classification": "Interne",
+    "format": "PDF",
+    "statut": "obsolete",
+    "creeLe": "2023-02-01",
+    "revueLe": "2023-02-01",
+    "lien": {
+     "type": "chemin",
+     "valeur": "\\\\srv-fichiers.exemple.local\\smsi\\LYON\\archives\\Cablage_BAIE-01.pdf"
+    },
+    "sis": [],
+    "zones": [],
+    "actifs": [],
+    "historique": []
+   }
+  ],
+  "archives": {
+   "schemas": []
+  },
+  "refs": {
+   "types": [
+    "Architecture générale du SI",
+    "Réseau logique (VLAN, adressage)",
+    "Réseau physique (câblage, baies)",
+    "Zones et conduits",
+    "Flux",
+    "Architecture d'administration",
+    "Accès distants et interconnexions",
+    "Architecture applicative",
+    "Sauvegarde et reprise",
+    "Sûreté (vidéo, contrôle d'accès)",
+    "Autre"
+   ],
+   "exigences": [
+    [
+     "EX-CARTO",
+     "Cartographie du SI"
+    ],
+    [
+     "EX-ZONES",
+     "Zones et conduits"
+    ],
+    [
+     "EX-FLUX",
+     "Flux et cloisonnement"
+    ],
+    [
+     "EX-RESEAU",
+     "Plan d'adressage et réseau physique"
+    ],
+    [
+     "EX-ADMIN",
+     "Architecture d'administration"
+    ],
+    [
+     "EX-ACCES",
+     "Accès distants et interconnexions"
+    ],
+    [
+     "EX-REPRISE",
+     "Sauvegarde et reprise"
+    ],
+    [
+     "EX-LOCAUX",
+     "Locaux techniques et baies"
+    ]
+   ]
+  },
+  "listesGroupe": {},
+  "parametres": {
+   "racine": "S:\\SMSI_GROUPE_DEMO",
+   "revueMois": 12,
+   "visioDirect": false
+  },
+  "largeurs": {},
+  "modeles": [
+   {
+    "fichier": "modeles/schemas/Modele_schema_A3_cartouche.vstx",
+    "origine": "groupe",
+    "nom": "Schéma A3 avec cartouche (exemple)",
+    "type": "Zones et conduits",
+    "exigences": [
+     "EX-ZONES",
+     "EX-CARTO"
+    ],
+    "classification": "Diffusion restreinte",
+    "description": "Modèle d'exemple fictif : page A3 paysage, zone de dessin et cartouche à balises. À remplacer par les modèles de l'entreprise.",
+    "balises": [
+     "AUTEUR",
+     "CLASSIFICATION",
+     "DATE",
+     "EXIGENCES",
+     "ID",
+     "ORGANISATION",
+     "PROPRIETAIRE",
+     "SITE",
+     "SITE_NOM",
+     "STATUT",
+     "TITRE",
+     "TYPE",
+     "VERSION"
+    ],
+    "inconnues": [],
+    "analyseLe": "2026-01-15T08:00:00Z"
+   },
+   {
+    "fichier": "modeles/schemas/Modele_sauvegarde_reprise_A3.vstx",
+    "origine": "groupe",
+    "nom": "Sauvegarde et reprise A3 (EX-REPRISE)",
+    "type": "Sauvegarde et reprise",
+    "exigences": [
+     "EX-REPRISE"
+    ],
+    "classification": "Diffusion restreinte",
+    "description": "Planche A3 : zones, sauvegardes et leur heure, copie hors ligne, restauration testée, ordre de redémarrage avec RTO et RPO, légende et cartouche. Textes à remplacer par ceux du site.",
+    "balises": [
+     "AUTEUR",
+     "CLASSIFICATION",
+     "DATE",
+     "EXIGENCES",
+     "ID",
+     "ORGANISATION",
+     "PROPRIETAIRE",
+     "SITE",
+     "SITE_NOM",
+     "STATUT",
+     "TITRE",
+     "TYPE",
+     "VERSION"
+    ],
+    "inconnues": [],
+    "analyseLe": "2026-01-15T08:00:00Z"
+   },
+   {
+    "fichier": "modeles/schemas/Modele_zones_conduits_A3.vstx",
+    "origine": "groupe",
+    "nom": "Zones et conduits A3 (EX-ZONES)",
+    "type": "Zones et conduits",
+    "exigences": [
+     "EX-ZONES",
+     "EX-CARTO"
+    ],
+    "classification": "Diffusion restreinte",
+    "description": "Planche A3 : zones par criticité (couleurs de WerbMap) avec SL-T, conduits et équipements de filtrage, tableau des conduits, légende et cartouche. Textes à remplacer.",
+    "balises": [
+     "AUTEUR",
+     "CLASSIFICATION",
+     "DATE",
+     "EXIGENCES",
+     "ID",
+     "ORGANISATION",
+     "PROPRIETAIRE",
+     "SITE",
+     "SITE_NOM",
+     "STATUT",
+     "TITRE",
+     "TYPE",
+     "VERSION"
+    ],
+    "inconnues": [],
+    "analyseLe": "2026-01-15T08:00:00Z"
+   },
+   {
+    "fichier": "modeles/schemas/Modele_acces_distants_A3.vstx",
+    "origine": "groupe",
+    "nom": "Accès distants et interconnexions A3 (EX-ACCES)",
+    "type": "Accès distants et interconnexions",
+    "exigences": [
+     "EX-ACCES"
+    ],
+    "classification": "Diffusion restreinte",
+    "description": "Planche A3 : tiers et sites extérieurs, point d'entrée unique (VPN, bastion, MFA), zones atteintes, chemins interdits, tableau des accès externes, légende et cartouche. Textes à remplacer.",
+    "balises": [
+     "AUTEUR",
+     "CLASSIFICATION",
+     "DATE",
+     "EXIGENCES",
+     "ID",
+     "ORGANISATION",
+     "PROPRIETAIRE",
+     "SITE",
+     "SITE_NOM",
+     "STATUT",
+     "TITRE",
+     "TYPE",
+     "VERSION"
+    ],
+    "inconnues": [],
+    "analyseLe": "2026-01-15T08:00:00Z"
+   },
+   {
+    "fichier": "modeles/schemas/Modele_administration_A3.vstx",
+    "origine": "groupe",
+    "nom": "Architecture d'administration A3 (EX-ADMIN)",
+    "type": "Architecture d'administration",
+    "exigences": [
+     "EX-ADMIN"
+    ],
+    "classification": "Diffusion restreinte",
+    "description": "Planche A3 : poste et réseau d'administration dédiés, bastion, ressources administrées par zone, exceptions, chemin interdit depuis la bureautique, tableau des ressources, légende et cartouche. Textes à remplacer.",
+    "balises": [
+     "AUTEUR",
+     "CLASSIFICATION",
+     "DATE",
+     "EXIGENCES",
+     "ID",
+     "ORGANISATION",
+     "PROPRIETAIRE",
+     "SITE",
+     "SITE_NOM",
+     "STATUT",
+     "TITRE",
+     "TYPE",
+     "VERSION"
+    ],
+    "inconnues": [],
+    "analyseLe": "2026-01-15T08:00:00Z"
+   }
+  ],
+  "recus": {
+   "si": {
+    "items": [
+     {
+      "id": "SI-SUPERVISION",
+      "nom": "Supervision ligne 2",
+      "fonction": "Conduite et historisation de la ligne 2",
+      "actifs": [
+       "API_L2_01",
+       "SRV_SCADA01",
+       "VM_HIST01"
+      ]
+     }
+    ],
+    "majLe": "2026-01-15T08:00:00Z"
+   },
+   "zones": {
+    "items": [
+     {
+      "id": "Z-PROC",
+      "nom": "Réseaux process"
+     },
+     {
+      "id": "Z-SUP",
+      "nom": "Supervision"
+     }
+    ],
+    "majLe": "2026-01-15T08:00:00Z"
+   },
+   "actifs": {
+    "items": [
+     {
+      "id": "API_L2_01",
+      "type": "Automate",
+      "libelle": "Automate ligne 2",
+      "zone": "Z-PROC"
+     },
+     {
+      "id": "SW_CORE01",
+      "type": "Switch",
+      "libelle": "Commutateur de cœur OT",
+      "zone": "Z-SUP"
+     },
+     {
+      "id": "FW_OT01",
+      "type": "Pare-feu",
+      "libelle": "Pare-feu IT / OT",
+      "zone": "Z-SUP"
+     },
+     {
+      "id": "SRV_SCADA01",
+      "type": "Serveur",
+      "libelle": "Serveur de supervision",
+      "zone": "Z-SUP"
+     },
+     {
+      "id": "HYP_OT01",
+      "type": "Hyperviseur",
+      "libelle": "Hyperviseur OT",
+      "zone": "Z-SUP"
+     },
+     {
+      "id": "NAS_BCK01",
+      "type": "Serveur",
+      "libelle": "NAS de sauvegarde",
+      "zone": "Z-SUP"
+     },
+     {
+      "id": "PC_ING01",
+      "type": "Station de travail",
+      "libelle": "Poste d'ingénierie automatisme",
+      "zone": "Z-SUP"
+     },
+     {
+      "id": "VM_HIST01",
+      "type": "Machine virtuelle",
+      "libelle": "Historian",
+      "zone": "Z-SUP"
+     },
+     {
+      "id": "VM_AD01",
+      "type": "Machine virtuelle",
+      "libelle": "Contrôleur de domaine OT",
+      "zone": "Z-SUP"
+     }
+    ],
+    "majLe": "2026-01-15T08:00:00Z"
+   }
+  },
+  "publication": {
+   "le": "2026-11-05T17:24:32.980Z",
+   "par": "Exemple",
+   "exigences": 8,
+   "schemas": 5,
+   "empreinte": "1a1c3d3f"
+  }
+ }
+}

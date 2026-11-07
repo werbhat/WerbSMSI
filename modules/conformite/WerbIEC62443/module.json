@@ -1,0 +1,55 @@
+{
+  "charte": "1.0",
+  "id": "werbiec62443",
+  "idsAnciens": [
+    "werbtools-iec62443"
+  ],
+  "produit": "WerbIEC62443",
+  "version": "1.11.0",
+  "dateVersion": "2026-10",
+  "auteur": "@WerbHat",
+  "signature": "Développé par @WerbHat",
+  "description": "Gestion des exigences de cybersécurité IEC 62443",
+  "rubrique": "conformite",
+  "portees": [
+    "groupe",
+    "site"
+  ],
+  "entree": "application/WerbIEC62443.html",
+  "empreinte": {
+    "algo": "SHA-256",
+    "valeur": "0c4dfcbc0f14502ebfa8f0ab3eca016e2b114e79c6df3065eb6d77de4f0bb933"
+  },
+  "donnees": {
+    "format": "WERBIEC62443",
+    "schema": 2,
+    "extension": ".werbiec62443.json",
+    "formatsLus": [
+      "IEC62443-EXIGENCES",
+      "WERBTOOLS-IEC62443"
+    ],
+    "extensionsLues": [
+      ".werbtools-iec62443.json"
+    ]
+  },
+  "echanges": {
+    "publie": [
+      "site:prestataires",
+      "site:syntheseConformite"
+    ],
+    "consomme": [
+      "groupe:sites",
+      "groupe:mesuresSocle",
+      "site:zones",
+      "site:conduits"
+    ]
+  },
+  "compatPortail": ">=1.0.0",
+  "licence": "MIT",
+  "navigateurs": [
+    "edge",
+    "chrome",
+    "firefox"
+  ],
+  "ouvertureParLien": true
+}

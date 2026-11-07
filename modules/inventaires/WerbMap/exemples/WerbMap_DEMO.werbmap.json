@@ -1,0 +1,4489 @@
+{
+ "format": "WERBMAP",
+ "schema": 5,
+ "famille": "WERBSMSI",
+ "meta": {
+  "produit": "WerbMap",
+  "appVersion": "1.15.0",
+  "auteur": "@WerbHat",
+  "generateur": "WerbMap v1.15.0 – Développé par @WerbHat",
+  "creeLe": "2026-10-22",
+  "modifieLe": "2026-10-30T13:47:48.629Z",
+  "modifiePar": "admin.demo"
+ },
+ "verrou": null,
+ "integrite": {
+  "algo": "SHA-256",
+  "precedente": "4988ff61e4d93392b684118b1a535689a158ee8083f4bc53508471cbe7a2172d",
+  "valeur": "8d9b114d6378668fc3f4e3b8e515d9e90c9001993941556a37f2011acd93c8cd"
+ },
+ "data": {
+  "version": 5,
+  "savedAt": "2026-10-30T13:47:48.629Z",
+  "savedBy": "admin.demo",
+  "comptes": [
+   {
+    "login": "admin.demo",
+    "nom": "Administrateur DEMO",
+    "role": "Administrateur",
+    "salt": "cea316743c9052dba2afda0e78b8e5ff",
+    "hash": "b9eb9d5bf27f8e9577760ad606a5c1112ac1f5571cfeabdd7eae715e82d7dea6",
+    "actif": true,
+    "cree": "2026-10-22T15:10:28.767Z"
+   },
+   {
+    "login": "tech.demo",
+    "nom": "Technicien DEMO",
+    "role": "Éditeur",
+    "salt": "7c2d39da8c8463603aa1d0910a01fccd",
+    "hash": "4ba8f97870a5b87c81d0fdbca9e19040970f6a1a387aaa90f4853f8de3963ba3",
+    "actif": true,
+    "cree": "2026-10-22T15:10:31.906Z"
+   },
+   {
+    "login": "audit.demo",
+    "nom": "Auditeur DEMO",
+    "role": "Lecteur",
+    "salt": "e39cc3640487c891f10d43e515bda001",
+    "hash": "b3d9a53d13388fdd01edd9624b761060c7a749f31318f9104b72fece81208ac4",
+    "actif": true,
+    "cree": "2026-10-22T15:10:33.491Z"
+   }
+  ],
+  "inventaire": {
+   "meta": {
+    "org": "Usine Démo (fictive)",
+    "site": "DEMO",
+    "ref": "CONF-SMSI-DEMO-INV-001",
+    "auteur": "Administrateur DEMO",
+    "lienDoc": "https://exemple.sharepoint.com/sites/DEMO/Docs"
+   },
+   "zones": {
+    "100": {
+     "zone": "ZCE",
+     "isole": false,
+     "perim": "Zone API ; Serveur SNCC; Clients",
+     "libelle": "",
+     "crit": "Rouge",
+     "cells": [
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      }
+     ]
+    },
+    "110": {
+     "zone": "ZCE",
+     "isole": false,
+     "perim": "Ligne de conditionnement 1",
+     "libelle": "Process ligne 1",
+     "crit": "Rouge",
+     "cells": [
+      {
+       "n": "RSX_PROC_PESAGE",
+       "st": "En service"
+      },
+      {
+       "n": "RSX_PROC_API",
+       "st": "En service"
+      },
+      {
+       "n": "RSX_PROC_SNCC",
+       "st": "En service"
+      },
+      {
+       "n": "RSX_PROC_IHM",
+       "st": "En service"
+      },
+      {
+       "n": "RSX_PROC_VARIATEURS",
+       "st": "Réservé"
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      }
+     ]
+    },
+    "120": {
+     "zone": "ZCE",
+     "isole": false,
+     "perim": "Ligne de conditionnement 2 (projet)",
+     "libelle": "",
+     "crit": "Rouge",
+     "cells": [
+      {
+       "n": "RSX_PROC_LIGNE2",
+       "st": "En cours"
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      }
+     ]
+    },
+    "130": {
+     "zone": "ZCE",
+     "isole": false,
+     "perim": "",
+     "libelle": "",
+     "crit": "Rouge",
+     "cells": [
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      }
+     ]
+    },
+    "140": {
+     "zone": "ZCE",
+     "isole": false,
+     "perim": "",
+     "libelle": "",
+     "crit": "Rouge",
+     "cells": [
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      }
+     ]
+    },
+    "150": {
+     "zone": "ZCE",
+     "isole": false,
+     "perim": "",
+     "libelle": "",
+     "crit": "Rouge",
+     "cells": [
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      }
+     ]
+    },
+    "160": {
+     "zone": "ZCE",
+     "isole": false,
+     "perim": "",
+     "libelle": "",
+     "crit": "Rouge",
+     "cells": [
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      }
+     ]
+    },
+    "170": {
+     "zone": "ZCE",
+     "isole": false,
+     "perim": "",
+     "libelle": "",
+     "crit": "Rouge",
+     "cells": [
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      }
+     ]
+    },
+    "180": {
+     "zone": "ZCE",
+     "isole": false,
+     "perim": "",
+     "libelle": "",
+     "crit": "Rouge",
+     "cells": [
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      }
+     ]
+    },
+    "190": {
+     "zone": "ZCE",
+     "isole": false,
+     "perim": "",
+     "libelle": "",
+     "crit": "Rouge",
+     "cells": [
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      }
+     ]
+    },
+    "200": {
+     "zone": "ZCE",
+     "isole": true,
+     "perim": "ADMIN-E",
+     "libelle": "Administration",
+     "crit": "Orange",
+     "cells": [
+      {
+       "n": "RSX_ADMIN_SWITCH",
+       "st": "En service"
+      },
+      {
+       "n": "RSX_ADMIN_ILO",
+       "st": "En service"
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      }
+     ]
+    },
+    "210": {
+     "zone": "ZCE",
+     "isole": false,
+     "perim": "ADMIN-E",
+     "libelle": "",
+     "crit": "Orange",
+     "cells": [
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      }
+     ]
+    },
+    "220": {
+     "zone": "ZCE",
+     "isole": false,
+     "perim": "Admin process",
+     "libelle": "",
+     "crit": "Orange",
+     "cells": [
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      }
+     ]
+    },
+    "230": {
+     "zone": "ZCE",
+     "isole": false,
+     "perim": "",
+     "libelle": "",
+     "crit": "Orange",
+     "cells": [
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      }
+     ]
+    },
+    "240": {
+     "zone": "ZCE",
+     "isole": false,
+     "perim": "Serveur process",
+     "libelle": "",
+     "crit": "Orange",
+     "cells": [
+      {
+       "n": "RSX_PROC_SERVEURS",
+       "st": "En service"
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      }
+     ]
+    },
+    "250": {
+     "zone": "ZCE",
+     "isole": false,
+     "perim": "Serveur process",
+     "libelle": "",
+     "crit": "Orange",
+     "cells": [
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      }
+     ]
+    },
+    "260": {
+     "zone": "ZCE",
+     "isole": false,
+     "perim": "Services interne",
+     "libelle": "",
+     "crit": "Orange",
+     "cells": [
+      {
+       "n": "RSX_IT_SERVICES",
+       "st": "En service"
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      }
+     ]
+    },
+    "270": {
+     "zone": "ZCE",
+     "isole": false,
+     "perim": "",
+     "libelle": "",
+     "crit": "Orange",
+     "cells": [
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      }
+     ]
+    },
+    "280": {
+     "zone": "ZCE",
+     "isole": false,
+     "perim": "",
+     "libelle": "",
+     "crit": "Orange",
+     "cells": [
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      }
+     ]
+    },
+    "290": {
+     "zone": "ZCE",
+     "isole": false,
+     "perim": "",
+     "libelle": "",
+     "crit": "Orange",
+     "cells": [
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      }
+     ]
+    },
+    "300": {
+     "zone": "ZCM",
+     "isole": false,
+     "perim": "Zone metier",
+     "libelle": "Bureautique",
+     "crit": "Jaune",
+     "cells": [
+      {
+       "n": "RSX_IT_BUREAUTIQUE",
+       "st": "En service"
+      },
+      {
+       "n": "RSX_IT_IMPRIMANTES",
+       "st": "En service"
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      }
+     ]
+    },
+    "310": {
+     "zone": "ZCM",
+     "isole": false,
+     "perim": "Zone metier",
+     "libelle": "Prestataires",
+     "crit": "Jaune",
+     "cells": [
+      {
+       "n": "RSX_IT_PRESTATAIRES",
+       "st": "En cours"
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      }
+     ]
+    },
+    "320": {
+     "zone": "ZCM",
+     "isole": false,
+     "perim": "Zone metier",
+     "libelle": "",
+     "crit": "Jaune",
+     "cells": [
+      {
+       "n": "RSX_IT_WIFI_INVITES",
+       "st": "Réservé"
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      }
+     ]
+    },
+    "330": {
+     "zone": "ZCM",
+     "isole": false,
+     "perim": "Zone metier",
+     "libelle": "",
+     "crit": "Jaune",
+     "cells": [
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      }
+     ]
+    },
+    "340": {
+     "zone": "ZCM",
+     "isole": false,
+     "perim": "Zone metier",
+     "libelle": "",
+     "crit": "Jaune",
+     "cells": [
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      }
+     ]
+    },
+    "350": {
+     "zone": "ZCM",
+     "isole": false,
+     "perim": "Zone metier",
+     "libelle": "",
+     "crit": "Jaune",
+     "cells": [
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      }
+     ]
+    },
+    "360": {
+     "zone": "ZCM",
+     "isole": false,
+     "perim": "Zone metier",
+     "libelle": "",
+     "crit": "Jaune",
+     "cells": [
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      }
+     ]
+    },
+    "370": {
+     "zone": "ZCM",
+     "isole": false,
+     "perim": "Zone metier",
+     "libelle": "",
+     "crit": "Jaune",
+     "cells": [
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      }
+     ]
+    },
+    "380": {
+     "zone": "ZCM",
+     "isole": false,
+     "perim": "Zone metier",
+     "libelle": "",
+     "crit": "Jaune",
+     "cells": [
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      }
+     ]
+    },
+    "390": {
+     "zone": "ZCM",
+     "isole": false,
+     "perim": "Zone metier",
+     "libelle": "",
+     "crit": "Jaune",
+     "cells": [
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      }
+     ]
+    },
+    "400": {
+     "zone": "ZCM",
+     "isole": true,
+     "perim": "Zone sureté",
+     "libelle": "Vidéo / contrôle d’accès",
+     "crit": "Vert",
+     "cells": [
+      {
+       "n": "RSX_SURETE_CAMERAS",
+       "st": "En service"
+      },
+      {
+       "n": "RSX_SURETE_BADGES",
+       "st": "En service"
+      },
+      {
+       "n": "RSX_SURETE_INTERPHONES",
+       "st": "En service"
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      }
+     ]
+    },
+    "410": {
+     "zone": "ZCM",
+     "isole": false,
+     "perim": "Zone sureté",
+     "libelle": "",
+     "crit": "Vert",
+     "cells": [
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      }
+     ]
+    },
+    "420": {
+     "zone": "ZCM",
+     "isole": false,
+     "perim": "Zone sureté",
+     "libelle": "",
+     "crit": "Vert",
+     "cells": [
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      }
+     ]
+    },
+    "430": {
+     "zone": "ZCM",
+     "isole": false,
+     "perim": "Zone metier",
+     "libelle": "",
+     "crit": "Vert",
+     "cells": [
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      }
+     ]
+    },
+    "440": {
+     "zone": "ZCM",
+     "isole": false,
+     "perim": "",
+     "libelle": "",
+     "crit": "Vert",
+     "cells": [
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      }
+     ]
+    },
+    "450": {
+     "zone": "ZCM",
+     "isole": false,
+     "perim": "",
+     "libelle": "",
+     "crit": "Vert",
+     "cells": [
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      }
+     ]
+    },
+    "460": {
+     "zone": "ZCM",
+     "isole": false,
+     "perim": "",
+     "libelle": "",
+     "crit": "Vert",
+     "cells": [
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      }
+     ]
+    },
+    "470": {
+     "zone": "ZCM",
+     "isole": false,
+     "perim": "",
+     "libelle": "",
+     "crit": "Vert",
+     "cells": [
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      }
+     ]
+    },
+    "480": {
+     "zone": "ZCM",
+     "isole": false,
+     "perim": "",
+     "libelle": "",
+     "crit": "Vert",
+     "cells": [
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      }
+     ]
+    },
+    "490": {
+     "zone": "ZCM",
+     "isole": false,
+     "perim": "",
+     "libelle": "",
+     "crit": "Vert",
+     "cells": [
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      },
+      {
+       "n": "",
+       "st": ""
+      }
+     ]
+    }
+   },
+   "vlans": {
+    "110": {
+     "vname": "",
+     "sw": "Process",
+     "ip": "10.10.10.0",
+     "mask": "255.255.255.0",
+     "gw": "10.10.10.254",
+     "comment": "Réseau automates ligne 1"
+    },
+    "111": {
+     "vname": "",
+     "sw": "Process",
+     "ip": "10.10.11.0",
+     "mask": "255.255.255.0",
+     "gw": "10.10.11.254",
+     "comment": ""
+    },
+    "112": {
+     "vname": "",
+     "sw": "Process",
+     "ip": "10.10.12.0",
+     "mask": "255.255.255.0",
+     "gw": "10.10.12.254",
+     "comment": ""
+    },
+    "113": {
+     "vname": "",
+     "sw": "Process",
+     "ip": "10.10.13.0",
+     "mask": "255.255.255.0",
+     "gw": "10.10.13.254",
+     "comment": ""
+    },
+    "120": {
+     "vname": "",
+     "sw": "Process",
+     "ip": "10.10.20.0",
+     "mask": "255.255.255.0",
+     "gw": "10.10.20.254",
+     "comment": ""
+    },
+    "200": {
+     "vname": "",
+     "sw": "Cœur",
+     "ip": "10.20.0.0",
+     "mask": "255.255.255.0",
+     "gw": "10.20.0.254",
+     "comment": ""
+    },
+    "201": {
+     "vname": "",
+     "sw": "Cœur",
+     "ip": "10.20.1.0",
+     "mask": "255.255.255.0",
+     "gw": "10.20.1.254",
+     "comment": ""
+    },
+    "240": {
+     "vname": "",
+     "sw": "Cœur",
+     "ip": "10.20.40.0",
+     "mask": "255.255.255.0",
+     "gw": "10.20.40.254",
+     "comment": ""
+    },
+    "260": {
+     "vname": "",
+     "sw": "Cœur",
+     "ip": "10.20.60.0",
+     "mask": "255.255.255.0",
+     "gw": "10.20.60.254",
+     "comment": ""
+    },
+    "300": {
+     "vname": "",
+     "sw": "Accès",
+     "ip": "10.30.0.0",
+     "mask": "255.255.255.0",
+     "gw": "10.30.0.254",
+     "comment": ""
+    },
+    "301": {
+     "vname": "",
+     "sw": "Accès",
+     "ip": "10.30.1.0",
+     "mask": "255.255.255.0",
+     "gw": "10.30.1.1",
+     "comment": ""
+    },
+    "310": {
+     "vname": "",
+     "sw": "Accès",
+     "ip": "10.30.10.0",
+     "mask": "255.255.255.0",
+     "gw": "10.30.10.254",
+     "comment": ""
+    },
+    "400": {
+     "vname": "",
+     "sw": "Accès",
+     "ip": "10.40.0.0",
+     "mask": "/23",
+     "gw": "10.40.0.254",
+     "comment": "Réseau /23 qui chevauche le VLAN 401 (exercice)"
+    },
+    "401": {
+     "vname": "",
+     "sw": "Accès",
+     "ip": "10.40.1.0",
+     "mask": "255.255.255.0",
+     "gw": "10.40.1.254",
+     "comment": ""
+    },
+    "402": {
+     "vname": "",
+     "sw": "Accès",
+     "ip": "10.40.2.0",
+     "mask": "255.255.255.0",
+     "gw": "10.40.2.254",
+     "comment": ""
+    },
+    "xmvjoh533wg3ze": {
+     "vname": "",
+     "sw": "Process",
+     "ip": "192.168.10.0",
+     "mask": "24",
+     "gw": "",
+     "comment": ""
+    },
+    "xmvjoh533mdkeh": {
+     "vname": "",
+     "sw": "Accès",
+     "ip": "192.168.20.0",
+     "mask": "255.255.255.0",
+     "gw": "192.168.20.1",
+     "comment": ""
+    }
+   },
+   "refs": {
+    "typesActif": [
+     "Affichage dynamique (Digital Signage)",
+     "Appareil IoT",
+     "Automate (PLC)",
+     "Baie de stockage",
+     "Caméra",
+     "Capteur environnemental",
+     "Capteur OT",
+     "Client léger",
+     "Commutateur (Switch)",
+     "Commutateur KVM",
+     "Compteur électrique",
+     "Hyperviseur",
+     "Imprimante",
+     "Interface Homme-Machine (IHM)",
+     "Interphone",
+     "Lecteur biométrique",
+     "Lecteur de badge",
+     "Mur d’images (Video Wall)",
+     "NAS (Stockage en réseau)",
+     "NVR (Enregistreur vidéo réseau)",
+     "Onduleur (UPS)",
+     "Ordinateur de bureau",
+     "Ordinateur portable",
+     "Panneau de brassage",
+     "Panneau de contrôle d’accès",
+     "Pare-feu",
+     "Passerelle",
+     "PC industriel",
+     "Point accès WIFI",
+     "Point d'accès",
+     "Répartiteur de charge (Load Balancer)",
+     "Robot industriel",
+     "Routeur",
+     "SAN (Réseau de stockage)",
+     "Serveur",
+     "Smartphone",
+     "Station de travail",
+     "Système SCADA",
+     "Tablette",
+     "Téléphone VoIP",
+     "Télévision",
+     "Variateur",
+     "XVR (Enregistreur vidéo hybride)"
+    ],
+    "typesMachine": [
+     "Workstation",
+     "Server",
+     "Hypervisor",
+     "Laptop"
+    ],
+    "abrev": [
+     [
+      "SRV_",
+      "Serveur"
+     ],
+     [
+      "SW_",
+      "Switch ethernet"
+     ],
+     [
+      "PC_",
+      "Ordinateur, poste"
+     ],
+     [
+      "CAM_",
+      "Caméra"
+     ],
+     [
+      "ZAR_",
+      "Identification et gestion des ZAR"
+     ],
+     [
+      "API_",
+      "Automate"
+     ],
+     [
+      "TEL_",
+      "Téléphone"
+     ],
+     [
+      "OSM_",
+      "Switch ethernet industriel process"
+     ],
+     [
+      "RSX_",
+      "Scpécifie groupe de réseaux"
+     ],
+     [
+      "WO_",
+      "Repérage cable réseaux fibre optiwue"
+     ],
+     [
+      "WN_",
+      "Repérage cable réseaux ethernet"
+     ],
+     [
+      "RG_",
+      "Répartiteur générale principale : baies principale"
+     ],
+     [
+      "SR_",
+      "Sous répartiteur Baies locales"
+     ],
+     [
+      "BN_",
+      "Borne normale intégré dans les baies"
+     ],
+     [
+      "BR_",
+      "Borne réduite intégré dans les baies"
+     ],
+     [
+      "BS_",
+      "Borne simple intégré dans les baies"
+     ],
+     [
+      "RO_",
+      "Rocade optique"
+     ],
+     [
+      "RC_",
+      "Rocade cuivre"
+     ],
+     [
+      "EA_",
+      "Elément actifs dans la baie"
+     ],
+     [
+      "WF_",
+      "Repère cable coaxial"
+     ],
+     [
+      "OND_",
+      "Onduleur"
+     ],
+     [
+      "RPC_",
+      "Prise raccordement courant"
+     ],
+     [
+      "BOX_",
+      "Boitier d'accès WAN"
+     ]
+    ],
+    "parefeux": [
+     "FW_METIER",
+     "FW_PROCESS"
+    ],
+    "zones": [
+     "ZCE",
+     "ZCM"
+    ],
+    "couches": [
+     "Cœur",
+     "Distribution",
+     "Accès",
+     "Process"
+    ],
+    "typesNat": [
+     "SNAT (source)",
+     "DNAT (destination)",
+     "PAT / redirection de port",
+     "Masquerade",
+     "NAT statique 1:1"
+    ],
+    "roles": [
+     "RSSI",
+     "Responsable informatique",
+     "Technicien IT",
+     "Automaticien",
+     "Responsable de production",
+     "Exploitant",
+     "Prestataire",
+     "Demandeur"
+    ],
+    "domainesProc": [
+     "PLM – Cycle de vie",
+     "MCS – Mises à jour",
+     "PKI – Certificats",
+     "MCO",
+     "Licences",
+     "Réseau",
+     "Gouvernance SMSI"
+    ],
+    "reseaux": [
+     [
+      "RSX_PROC",
+      "Réseau d'actifs côté process"
+     ],
+     [
+      "RSX_WAN",
+      "Réseau d'actifs côté WAN"
+     ],
+     [
+      "RSX_ADMIN",
+      "Réseau spécifique aux accès d'administration d'actifs"
+     ],
+     [
+      "RSX_IT",
+      "Réseau domaine IT"
+     ]
+    ]
+   },
+   "listesGroupe": {},
+   "si": [
+    {
+     "id": "xmvv11lvsgsege",
+     "nom": "SI Supervision ligne 1",
+     "fonction": "Conduite, supervision et historisation de la ligne 1 : automates, poste SNCC, IHM et serveurs SCADA / historien.",
+     "perimetre": "Automates et OSM de la ligne 1, poste de supervision, IHM, serveurs SCADA et historien virtualisés sur SRV_HYP01 / SRV_HYP02.",
+     "vlans": [
+      "111",
+      "112",
+      "113",
+      "240"
+     ],
+     "d": "4",
+     "i": "4",
+     "c": "2",
+     "score": "72",
+     "maturite": "Intermédiaire",
+     "comment": "Fiche d'exemple de la base de démonstration.",
+     "sauv": [
+      {
+       "id": "xmvv11lvsoc289",
+       "c": "Sauvegarde quotidienne",
+       "v": "Quotidienne à 22 h (serveurs SCADA et historien), rétention 30 jours"
+      },
+      {
+       "id": "xmvv11lvsxle63",
+       "c": "Sauvegarde hors ligne",
+       "v": "Hebdomadaire sur disque déconnecté, rangé au coffre"
+      },
+      {
+       "id": "xmvv11lvsqkth0",
+       "c": "Test de restauration",
+       "v": "Annuel — dernier test réussi en mars 2026"
+      }
+     ],
+     "redon": [
+      {
+       "id": "xmvv11lvs9pdx8",
+       "e": "Hyperviseur",
+       "v": "Oui"
+      },
+      {
+       "id": "xmvv11lvsiul97",
+       "e": "Pare-feu",
+       "v": "Non"
+      },
+      {
+       "id": "xmvv11lvsmwpp2",
+       "e": "Switchs cœur",
+       "v": "Partielle"
+      },
+      {
+       "id": "xmvv11lvsn30zj",
+       "e": "Serveurs applicatifs",
+       "v": "Oui"
+      },
+      {
+       "id": "xmvv11lvsdbhtz",
+       "e": "Base de données",
+       "v": "Non"
+      }
+     ],
+     "risques": [
+      {
+       "id": "xmvv11lvspgyg7",
+       "d": "Cyberattaque externe",
+       "n": "Fort"
+      },
+      {
+       "id": "xmvv11lvsuxafz",
+       "d": "Erreur humaine",
+       "n": "Moyen"
+      },
+      {
+       "id": "xmvv11lvs1srb5",
+       "d": "Défaillance matérielle",
+       "n": "Moyen"
+      },
+      {
+       "id": "xmvv11lvsrt6yg",
+       "d": "Prestataires",
+       "n": "Fort"
+      },
+      {
+       "id": "xmvv11lvs47nmy",
+       "d": "Interconnexion IT/OT",
+       "n": "Critique"
+      }
+     ],
+     "prios": [
+      {
+       "id": "xmvv11lvs5cq1g",
+       "p": "P1",
+       "a": "Limiter le flux SRV_SCADA01 → automates (port 102) aux seuls automates de la ligne",
+       "delai": "3 mois"
+      },
+      {
+       "id": "xmvv11lvswtiz8",
+       "p": "P1",
+       "a": "Tester la restauration complète du serveur SCADA depuis la sauvegarde hors ligne",
+       "delai": "6 mois"
+      },
+      {
+       "id": "xmvv11lvs2z4b0",
+       "p": "P2",
+       "a": "Doubler le pare-feu process (FW_PROCESS01)",
+       "delai": "12 mois"
+      },
+      {
+       "id": "xmvv11lvsb6xk5",
+       "p": "Conforme",
+       "a": "Antivirus et mises à jour Windows des serveurs suivis mensuellement",
+       "delai": ""
+      }
+     ],
+     "raci": {
+      "taches": [
+       {
+        "id": "xmvv11lvservte",
+        "l": "Sauvegarde et restauration"
+       },
+       {
+        "id": "xmvv11lvsqmrf6",
+        "l": "Mises à jour de sécurité"
+       },
+       {
+        "id": "xmvv11lvs2igsq",
+        "l": "Gestion des comptes et des accès"
+       },
+       {
+        "id": "xmvv11lvsv2r7z",
+        "l": "Journalisation et supervision"
+       },
+       {
+        "id": "xmvv11lvs4fsgb",
+        "l": "Sauvegarde des configurations"
+       },
+       {
+        "id": "xmvv11lvs3pjs1",
+        "l": "Gestion des incidents"
+       },
+       {
+        "id": "xmvv11lvsa9m7w",
+        "l": "Gestion des changements"
+       }
+      ],
+      "acteurs": [
+       "Automaticien",
+       "Responsable de production",
+       "Responsable informatique",
+       "RSSI",
+       "Exploitant"
+      ],
+      "cases": {
+       "xmvv11lvservte|Responsable informatique": "R",
+       "xmvv11lvservte|Responsable de production": "A",
+       "xmvv11lvservte|Automaticien": "C",
+       "xmvv11lvservte|RSSI": "I",
+       "xmvv11lvsqmrf6|Responsable informatique": "R",
+       "xmvv11lvsqmrf6|Automaticien": "R",
+       "xmvv11lvsqmrf6|Responsable de production": "A",
+       "xmvv11lvsqmrf6|RSSI": "C",
+       "xmvv11lvsqmrf6|Exploitant": "I",
+       "xmvv11lvs2igsq|Responsable informatique": "R",
+       "xmvv11lvs2igsq|RSSI": "A",
+       "xmvv11lvs2igsq|Automaticien": "C",
+       "xmvv11lvs2igsq|Exploitant": "I",
+       "xmvv11lvsv2r7z|Responsable informatique": "R",
+       "xmvv11lvsv2r7z|RSSI": "A",
+       "xmvv11lvsv2r7z|Exploitant": "I",
+       "xmvv11lvs4fsgb|Automaticien": "R",
+       "xmvv11lvs4fsgb|Responsable de production": "A",
+       "xmvv11lvs4fsgb|Responsable informatique": "C",
+       "xmvv11lvs3pjs1|Exploitant": "R",
+       "xmvv11lvs3pjs1|Automaticien": "R",
+       "xmvv11lvs3pjs1|Responsable de production": "A",
+       "xmvv11lvs3pjs1|RSSI": "C",
+       "xmvv11lvs3pjs1|Responsable informatique": "C",
+       "xmvv11lvsa9m7w|Automaticien": "R",
+       "xmvv11lvsa9m7w|Responsable de production": "A",
+       "xmvv11lvsa9m7w|RSSI": "C",
+       "xmvv11lvsa9m7w|Responsable informatique": "C",
+       "xmvv11lvsa9m7w|Exploitant": "I"
+      }
+     }
+    },
+    {
+     "id": "xmvv11lvx7prmj",
+     "nom": "SI Infrastructure et services IT",
+     "fonction": "Socle commun : administration des commutateurs et pare-feux, cartes d'administration (iLO), annuaire, mises à jour (WSUS) et heure (NTP).",
+     "perimetre": "SW_CORE01, SW_BUREAUX, FW_PROCESS01, FW_METIER01, SRV_AD01, SRV_WSUS01, SRV_NTP01, interfaces iLO des hyperviseurs.",
+     "vlans": [
+      "200",
+      "201",
+      "260"
+     ],
+     "d": "3",
+     "i": "3",
+     "c": "3",
+     "score": "55",
+     "maturite": "Avancé",
+     "comment": "Fiche d'exemple de la base de démonstration.",
+     "sauv": [
+      {
+       "id": "xmvv11lvxrn5o5",
+       "c": "Sauvegarde quotidienne",
+       "v": "Quotidienne (annuaire, WSUS), rétention 15 jours"
+      },
+      {
+       "id": "xmvv11lvxy12y7",
+       "c": "Sauvegarde hors ligne",
+       "v": "Mensuelle sur bande externalisée"
+      },
+      {
+       "id": "xmvv11lvxlefa6",
+       "c": "Test de restauration",
+       "v": "Semestriel — dernier test en avril 2026"
+      }
+     ],
+     "redon": [
+      {
+       "id": "xmvv11lvx11n66",
+       "e": "Hyperviseur",
+       "v": "Oui"
+      },
+      {
+       "id": "xmvv11lvxanzco",
+       "e": "Pare-feu",
+       "v": "Partielle"
+      },
+      {
+       "id": "xmvv11lvxv2fcm",
+       "e": "Switchs cœur",
+       "v": "Non"
+      },
+      {
+       "id": "xmvv11lvxla635",
+       "e": "Serveurs applicatifs",
+       "v": "Partielle"
+      },
+      {
+       "id": "xmvv11lvxon3xu",
+       "e": "Base de données",
+       "v": "Oui"
+      }
+     ],
+     "risques": [
+      {
+       "id": "xmvv11lvxzjqtz",
+       "d": "Cyberattaque externe",
+       "n": "Moyen"
+      },
+      {
+       "id": "xmvv11lvxo9t8x",
+       "d": "Erreur humaine",
+       "n": "Moyen"
+      },
+      {
+       "id": "xmvv11lvxbpsec",
+       "d": "Défaillance matérielle",
+       "n": "Faible"
+      },
+      {
+       "id": "xmvv11lvxesua0",
+       "d": "Prestataires",
+       "n": "Moyen"
+      },
+      {
+       "id": "xmvv11lvx8p9x9",
+       "d": "Interconnexion IT/OT",
+       "n": "Fort"
+      }
+     ],
+     "prios": [
+      {
+       "id": "xmvv11lvxn67vi",
+       "p": "P1",
+       "a": "Sauvegarder automatiquement les configurations des commutateurs et pare-feux après chaque changement",
+       "delai": "3 mois"
+      },
+      {
+       "id": "xmvv11lvxxe5lq",
+       "p": "P2",
+       "a": "Second commutateur cœur (SW_CORE01 est un point unique de défaillance)",
+       "delai": "12 mois"
+      },
+      {
+       "id": "xmvv11lvxjv8lw",
+       "p": "Conforme",
+       "a": "Comptes d'administration nominatifs et revus chaque année",
+       "delai": ""
+      }
+     ],
+     "raci": {
+      "taches": [
+       {
+        "id": "xmvv11lvxiti28",
+        "l": "Sauvegarde et restauration"
+       },
+       {
+        "id": "xmvv11lvxj39dh",
+        "l": "Mises à jour de sécurité"
+       },
+       {
+        "id": "xmvv11lvxcu09w",
+        "l": "Gestion des comptes et des accès"
+       },
+       {
+        "id": "xmvv11lvxaed9n",
+        "l": "Journalisation et supervision"
+       },
+       {
+        "id": "xmvv11lvx8sgjr",
+        "l": "Sauvegarde des configurations"
+       },
+       {
+        "id": "xmvv11lvxt87yg",
+        "l": "Gestion des incidents"
+       },
+       {
+        "id": "xmvv11lvxh8sos",
+        "l": "Gestion des changements"
+       }
+      ],
+      "acteurs": [
+       "Responsable informatique",
+       "Technicien IT",
+       "RSSI",
+       "Prestataire"
+      ],
+      "cases": {
+       "xmvv11lvxiti28|Technicien IT": "R",
+       "xmvv11lvxiti28|Responsable informatique": "A",
+       "xmvv11lvxiti28|RSSI": "I",
+       "xmvv11lvxj39dh|Technicien IT": "R",
+       "xmvv11lvxj39dh|Responsable informatique": "A",
+       "xmvv11lvxj39dh|RSSI": "C",
+       "xmvv11lvxcu09w|Technicien IT": "R",
+       "xmvv11lvxcu09w|RSSI": "A",
+       "xmvv11lvxcu09w|Responsable informatique": "C",
+       "xmvv11lvxaed9n|Technicien IT": "R",
+       "xmvv11lvxaed9n|Responsable informatique": "A",
+       "xmvv11lvxaed9n|RSSI": "C",
+       "xmvv11lvxaed9n|Prestataire": "I",
+       "xmvv11lvx8sgjr|Technicien IT": "R",
+       "xmvv11lvx8sgjr|Responsable informatique": "A",
+       "xmvv11lvx8sgjr|Prestataire": "C",
+       "xmvv11lvxt87yg|Technicien IT": "R",
+       "xmvv11lvxt87yg|Responsable informatique": "A",
+       "xmvv11lvxt87yg|RSSI": "C",
+       "xmvv11lvxt87yg|Prestataire": "C",
+       "xmvv11lvxh8sos|Prestataire": "R",
+       "xmvv11lvxh8sos|Responsable informatique": "A",
+       "xmvv11lvxh8sos|RSSI": "C",
+       "xmvv11lvxh8sos|Technicien IT": "I"
+      }
+     }
+    },
+    {
+     "id": "xmvv11lw0o4ndw",
+     "nom": "SI Bureautique du site",
+     "fonction": "Postes de travail, ingénierie et impression des services du site.",
+     "perimetre": "Postes bureautiques, poste d'ingénierie PC_ING01, imprimantes de l'accueil et de l'atelier.",
+     "vlans": [
+      "300",
+      "301"
+     ],
+     "d": "2",
+     "i": "2",
+     "c": "2",
+     "score": "38",
+     "maturite": "Avancé",
+     "comment": "Fiche d'exemple de la base de démonstration.",
+     "sauv": [
+      {
+       "id": "xmvv11lw0jhgjp",
+       "c": "Sauvegarde quotidienne",
+       "v": "Documents sur partage réseau, sauvegardé chaque nuit"
+      },
+      {
+       "id": "xmvv11lw0wbf6j",
+       "c": "Sauvegarde hors ligne",
+       "v": "Non (données de bureau non critiques)"
+      },
+      {
+       "id": "xmvv11lw081xpt",
+       "c": "Test de restauration",
+       "v": "Annuel — dernier test en janvier 2026"
+      }
+     ],
+     "redon": [
+      {
+       "id": "xmvv11lw06cf3r",
+       "e": "Hyperviseur",
+       "v": "Non"
+      },
+      {
+       "id": "xmvv11lw0x0408",
+       "e": "Pare-feu",
+       "v": "Non"
+      },
+      {
+       "id": "xmvv11lw0igjuz",
+       "e": "Switchs cœur",
+       "v": "Partielle"
+      },
+      {
+       "id": "xmvv11lw02hgvw",
+       "e": "Serveurs applicatifs",
+       "v": "Non"
+      },
+      {
+       "id": "xmvv11lw0pm2lk",
+       "e": "Base de données",
+       "v": "Non"
+      }
+     ],
+     "risques": [
+      {
+       "id": "xmvv11lw07ogjg",
+       "d": "Cyberattaque externe",
+       "n": "Moyen"
+      },
+      {
+       "id": "xmvv11lw09bd5l",
+       "d": "Erreur humaine",
+       "n": "Fort"
+      },
+      {
+       "id": "xmvv11lw0tmqnv",
+       "d": "Défaillance matérielle",
+       "n": "Faible"
+      },
+      {
+       "id": "xmvv11lw0k9lwc",
+       "d": "Prestataires",
+       "n": "Faible"
+      },
+      {
+       "id": "xmvv11lw0qmdwe",
+       "d": "Interconnexion IT/OT",
+       "n": "Fort"
+      }
+     ],
+     "prios": [
+      {
+       "id": "xmvv11lw02k6tl",
+       "p": "P2",
+       "a": "Interdire depuis la bureautique tout accès aux automates (flux « block » à conserver et à contrôler)",
+       "delai": "6 mois"
+      },
+      {
+       "id": "xmvv11lw0tzwk1",
+       "p": "P3",
+       "a": "Remplacer les imprimantes sans mise à jour de firmware",
+       "delai": "24 mois"
+      }
+     ],
+     "raci": {
+      "taches": [
+       {
+        "id": "xmvv11lw0gixwg",
+        "l": "Sauvegarde et restauration"
+       },
+       {
+        "id": "xmvv11lw07yuna",
+        "l": "Mises à jour de sécurité"
+       },
+       {
+        "id": "xmvv11lw0rr98e",
+        "l": "Gestion des comptes et des accès"
+       },
+       {
+        "id": "xmvv11lw0hnp1m",
+        "l": "Journalisation et supervision"
+       },
+       {
+        "id": "xmvv11lw0yghl8",
+        "l": "Sauvegarde des configurations"
+       },
+       {
+        "id": "xmvv11lw0gu2l1",
+        "l": "Gestion des incidents"
+       },
+       {
+        "id": "xmvv11lw0df26x",
+        "l": "Gestion des changements"
+       }
+      ],
+      "acteurs": [
+       "Responsable informatique",
+       "Technicien IT",
+       "RSSI"
+      ],
+      "cases": {
+       "xmvv11lw0gixwg|Technicien IT": "R",
+       "xmvv11lw0gixwg|Responsable informatique": "A",
+       "xmvv11lw07yuna|Technicien IT": "R",
+       "xmvv11lw07yuna|Responsable informatique": "A",
+       "xmvv11lw07yuna|RSSI": "I",
+       "xmvv11lw0rr98e|Technicien IT": "R",
+       "xmvv11lw0rr98e|RSSI": "A",
+       "xmvv11lw0hnp1m|Technicien IT": "R",
+       "xmvv11lw0hnp1m|Responsable informatique": "A",
+       "xmvv11lw0yghl8|Technicien IT": "R",
+       "xmvv11lw0yghl8|Responsable informatique": "A",
+       "xmvv11lw0gu2l1|Technicien IT": "R",
+       "xmvv11lw0gu2l1|Responsable informatique": "A",
+       "xmvv11lw0gu2l1|RSSI": "C",
+       "xmvv11lw0df26x|Technicien IT": "R",
+       "xmvv11lw0df26x|Responsable informatique": "A"
+      }
+     }
+    },
+    {
+     "id": "xmvv11lw2ix2tb",
+     "nom": "SI Sûreté (vidéo et contrôle d'accès)",
+     "fonction": "Vidéoprotection du site, contrôle d'accès par badge et interphonie.",
+     "perimetre": "Caméras du portail, du quai et du parking (réseau isolé), lecteur de badges de l'entrée, interphones.",
+     "vlans": [
+      "400",
+      "401",
+      "402",
+      "xmvjoharpe40xv"
+     ],
+     "d": "3",
+     "i": "2",
+     "c": "3",
+     "score": "47",
+     "maturite": "Initial",
+     "comment": "Fiche d'exemple de la base de démonstration.",
+     "sauv": [
+      {
+       "id": "xmvv11lw23me85",
+       "c": "Sauvegarde quotidienne",
+       "v": "Enregistrements vidéo conservés 30 jours sur l'enregistreur"
+      },
+      {
+       "id": "xmvv11lw2hbhno",
+       "c": "Sauvegarde hors ligne",
+       "v": "Non"
+      },
+      {
+       "id": "xmvv11lw2p1vqj",
+       "c": "Test de restauration",
+       "v": "Jamais testé"
+      }
+     ],
+     "redon": [
+      {
+       "id": "xmvv11lw2qhj5h",
+       "e": "Hyperviseur",
+       "v": "Non"
+      },
+      {
+       "id": "xmvv11lw2bsq43",
+       "e": "Pare-feu",
+       "v": "Non"
+      },
+      {
+       "id": "xmvv11lw2079jk",
+       "e": "Switchs cœur",
+       "v": "Non"
+      },
+      {
+       "id": "xmvv11lw2ber2x",
+       "e": "Serveurs applicatifs",
+       "v": "Non"
+      },
+      {
+       "id": "xmvv11lw230kel",
+       "e": "Base de données",
+       "v": "Non"
+      }
+     ],
+     "risques": [
+      {
+       "id": "xmvv11lw24c05n",
+       "d": "Cyberattaque externe",
+       "n": "Fort"
+      },
+      {
+       "id": "xmvv11lw2kuwb8",
+       "d": "Erreur humaine",
+       "n": "Moyen"
+      },
+      {
+       "id": "xmvv11lw2oz0nt",
+       "d": "Défaillance matérielle",
+       "n": "Fort"
+      },
+      {
+       "id": "xmvv11lw253l4p",
+       "d": "Prestataires",
+       "n": "Critique"
+      },
+      {
+       "id": "xmvv11lw250x64",
+       "d": "Interconnexion IT/OT",
+       "n": "Faible"
+      }
+     ],
+     "prios": [
+      {
+       "id": "xmvv11lw2v956m",
+       "p": "P1",
+       "a": "Changer les mots de passe par défaut des caméras et de l'enregistreur (prestataire)",
+       "delai": "1 mois"
+      },
+      {
+       "id": "xmvv11lw2kt8ub",
+       "p": "P1",
+       "a": "Contrat de maintenance avec mises à jour de firmware des caméras",
+       "delai": "3 mois"
+      },
+      {
+       "id": "xmvv11lw2y6irr",
+       "p": "P2",
+       "a": "Sauvegarder la configuration du contrôle d'accès",
+       "delai": "6 mois"
+      }
+     ],
+     "raci": {
+      "taches": [
+       {
+        "id": "xmvv11lw2rh6g7",
+        "l": "Sauvegarde et restauration"
+       },
+       {
+        "id": "xmvv11lw2u7rl5",
+        "l": "Mises à jour de sécurité"
+       },
+       {
+        "id": "xmvv11lw2man26",
+        "l": "Gestion des comptes et des accès"
+       },
+       {
+        "id": "xmvv11lw2d90xc",
+        "l": "Journalisation et supervision"
+       },
+       {
+        "id": "xmvv11lw2bs4nw",
+        "l": "Sauvegarde des configurations"
+       },
+       {
+        "id": "xmvv11lw2677fb",
+        "l": "Gestion des incidents"
+       },
+       {
+        "id": "xmvv11lw2sbnmr",
+        "l": "Gestion des changements"
+       }
+      ],
+      "acteurs": [
+       "Responsable informatique",
+       "RSSI",
+       "Prestataire",
+       "Exploitant"
+      ],
+      "cases": {
+       "xmvv11lw2rh6g7|Prestataire": "R",
+       "xmvv11lw2rh6g7|Responsable informatique": "A",
+       "xmvv11lw2rh6g7|RSSI": "I",
+       "xmvv11lw2u7rl5|Prestataire": "R",
+       "xmvv11lw2u7rl5|Responsable informatique": "A",
+       "xmvv11lw2u7rl5|RSSI": "C",
+       "xmvv11lw2man26|Responsable informatique": "R",
+       "xmvv11lw2man26|RSSI": "A",
+       "xmvv11lw2man26|Prestataire": "C",
+       "xmvv11lw2d90xc|Prestataire": "R",
+       "xmvv11lw2d90xc|RSSI": "A",
+       "xmvv11lw2d90xc|Exploitant": "I",
+       "xmvv11lw2bs4nw|Prestataire": "R",
+       "xmvv11lw2bs4nw|Responsable informatique": "A",
+       "xmvv11lw2677fb|Exploitant": "R",
+       "xmvv11lw2677fb|RSSI": "A",
+       "xmvv11lw2677fb|Prestataire": "C",
+       "xmvv11lw2sbnmr|Prestataire": "R",
+       "xmvv11lw2sbnmr|Responsable informatique": "A",
+       "xmvv11lw2sbnmr|RSSI": "C"
+      }
+     }
+    }
+   ],
+   "modeles": {},
+   "coffrets": [
+    {
+     "id": "xmvjoh54k8lrnn",
+     "crit": true,
+     "tag": "RG_01",
+     "libelle": "Baie principale salle serveur",
+     "niveau": "RDC",
+     "comment": "Onduleur dédié"
+    },
+    {
+     "id": "xmvjoh54krmvbi",
+     "crit": true,
+     "tag": "SR_ATELIER",
+     "libelle": "Sous-répartiteur atelier",
+     "niveau": "RDC",
+     "comment": "Fibre depuis RG_01"
+    },
+    {
+     "id": "xmvjoh54ko7o4e",
+     "crit": false,
+     "tag": "SR_BUREAUX",
+     "libelle": "Sous-répartiteur bureaux",
+     "niveau": "R+1",
+     "comment": ""
+    },
+    {
+     "id": "xmvjoh54kfz7w8",
+     "crit": false,
+     "tag": "SR_POSTE_GARDE",
+     "libelle": "Coffret poste de garde",
+     "niveau": "RDC",
+     "comment": "Vidéo + badges"
+    }
+   ],
+   "rsx": [
+    {
+     "id": "xmvjoh54kgg840",
+     "crit": true,
+     "tag": "SW_CORE01",
+     "libelle": "Switch cœur de réseau",
+     "emplacement": "Salle serveur",
+     "coffret": "RG_01",
+     "type": "Commutateur (Switch)",
+     "marque": "HPE",
+     "reference": "Aruba 6300M",
+     "serie": "SG1234ABCD",
+     "fw": "10.12.1010",
+     "lienFw": "https://support.exemple/fw",
+     "lienSuivi": "",
+     "comment": ""
+    },
+    {
+     "id": "xmvjoh54kzrnle",
+     "crit": true,
+     "tag": "FW_PROCESS01",
+     "libelle": "Pare-feu process",
+     "emplacement": "Salle serveur",
+     "coffret": "RG_01",
+     "type": "Pare-feu",
+     "marque": "Stormshield",
+     "reference": "SNi40",
+     "serie": "SN40A1234",
+     "fw": "4.8.3",
+     "lienFw": "",
+     "lienSuivi": "",
+     "comment": ""
+    },
+    {
+     "id": "xmvjoh54kz58ai",
+     "crit": true,
+     "tag": "FW_METIER01",
+     "libelle": "Pare-feu métier",
+     "emplacement": "Salle serveur",
+     "coffret": "RG_01",
+     "type": "Pare-feu",
+     "marque": "Stormshield",
+     "reference": "SN310",
+     "serie": "SN31B5678",
+     "fw": "4.8.3",
+     "lienFw": "",
+     "lienSuivi": "",
+     "comment": ""
+    },
+    {
+     "id": "xmvjoh54kwxmj8",
+     "crit": true,
+     "tag": "OSM_LIGNE1",
+     "libelle": "Switch industriel ligne 1",
+     "emplacement": "Atelier ligne 1",
+     "coffret": "SR_ATELIER",
+     "type": "Commutateur (Switch)",
+     "marque": "Siemens",
+     "reference": "SCALANCE XC208",
+     "serie": "VPH1234567",
+     "fw": "V4.4",
+     "lienFw": "",
+     "lienSuivi": "",
+     "comment": ""
+    },
+    {
+     "id": "xmvjoh54koz9e0",
+     "crit": false,
+     "tag": "SW_BUREAUX",
+     "libelle": "Switch bureaux",
+     "emplacement": "Bureaux R+1",
+     "coffret": "SR_BUREAUX",
+     "type": "Commutateur (Switch)",
+     "marque": "HPE",
+     "reference": "Aruba 2930F",
+     "serie": "CN12EF34",
+     "fw": "16.11",
+     "lienFw": "",
+     "lienSuivi": "",
+     "comment": ""
+    },
+    {
+     "id": "xmvjoh54kbc0mf",
+     "crit": true,
+     "tag": "API_LIGNE1",
+     "libelle": "Automate ligne 1",
+     "emplacement": "Atelier ligne 1",
+     "coffret": "SR_ATELIER",
+     "type": "Automate (PLC)",
+     "marque": "Siemens",
+     "reference": "S7-1500 CPU 1515",
+     "serie": "S C-XYZ12345",
+     "fw": "V3.0",
+     "lienFw": "",
+     "lienSuivi": "",
+     "comment": ""
+    },
+    {
+     "id": "xmvjoh54kdnzcu",
+     "crit": true,
+     "tag": "IHM_LIGNE1",
+     "libelle": "Pupitre opérateur ligne 1",
+     "emplacement": "Atelier ligne 1",
+     "coffret": "",
+     "type": "Interface Homme-Machine (IHM)",
+     "marque": "Siemens",
+     "reference": "TP1200 Comfort",
+     "serie": "S V-ABC9876",
+     "fw": "V17",
+     "lienFw": "",
+     "lienSuivi": "",
+     "comment": ""
+    },
+    {
+     "id": "xmvjoh54kqsuku",
+     "crit": false,
+     "tag": "CAM_PORTAIL",
+     "libelle": "Caméra portail",
+     "emplacement": "Entrée site",
+     "coffret": "SR_POSTE_GARDE",
+     "type": "Caméra",
+     "marque": "Axis",
+     "reference": "P3265-LVE",
+     "serie": "ACCC8E123456",
+     "fw": "11.8",
+     "lienFw": "",
+     "lienSuivi": "",
+     "comment": ""
+    },
+    {
+     "id": "xmvjoh54k056jy",
+     "crit": false,
+     "tag": "CAM_QUAI",
+     "libelle": "Caméra quai",
+     "emplacement": "Quai expédition",
+     "coffret": "SR_POSTE_GARDE",
+     "type": "Caméra",
+     "marque": "Axis",
+     "reference": "P3265-LVE",
+     "serie": "ACCC8E654321",
+     "fw": "11.8",
+     "lienFw": "",
+     "lienSuivi": "",
+     "comment": ""
+    },
+    {
+     "id": "xmvjoh54kkah97",
+     "crit": false,
+     "tag": "API_PESAGE",
+     "libelle": "Terminal de pesage",
+     "emplacement": "Bascule",
+     "coffret": "",
+     "type": "Automate (PLC)",
+     "marque": "Mettler",
+     "reference": "IND780",
+     "serie": "MT-0099",
+     "fw": "8.2",
+     "lienFw": "",
+     "lienSuivi": "",
+     "comment": "Réseau isolé VLAN 1"
+    },
+    {
+     "id": "xmvjoh54ke9ogu",
+     "crit": false,
+     "tag": "OND_RG01",
+     "libelle": "Onduleur baie principale",
+     "emplacement": "Salle serveur",
+     "coffret": "RG_01",
+     "type": "Onduleur (UPS)",
+     "marque": "Eaton",
+     "reference": "9PX 3000",
+     "serie": "GA12345",
+     "fw": "",
+     "lienFw": "",
+     "lienSuivi": "",
+     "comment": ""
+    },
+    {
+     "id": "xmvjoh54ljzcd6",
+     "crit": false,
+     "tag": "IMP_ACCUEIL",
+     "libelle": "Imprimante accueil",
+     "emplacement": "Accueil",
+     "coffret": "SR_BUREAUX",
+     "type": "Imprimante",
+     "marque": "Canon",
+     "reference": "iR-ADV C3826",
+     "serie": "XYZ001",
+     "fw": "",
+     "lienFw": "",
+     "lienSuivi": "",
+     "comment": "TAG hors abréviations (exercice)"
+    },
+    {
+     "id": "xmvjohbjw0rtwn",
+     "tag": "IMP_ATELIER",
+     "libelle": "Imprimante atelier",
+     "emplacement": "Atelier",
+     "coffret": "SR_ATELIER",
+     "marque": "Canon",
+     "type": "Imprimante"
+    }
+   ],
+   "machines": [
+    {
+     "id": "xmvjoh54lpma6s",
+     "crit": true,
+     "tag": "SRV_HYP01",
+     "libelle": "Hyperviseur 1",
+     "emplacement": "Salle serveur",
+     "coffret": "RG_01",
+     "fonction": "Virtualisation",
+     "type": "Hypervisor",
+     "os": "VMware ESXi",
+     "licences": "vSphere Std",
+     "vos": "8.0U2",
+     "condMaj": "Fenêtre mensuelle",
+     "marque": "Dell",
+     "modele": "PowerEdge R650",
+     "serie": "ABCD123",
+     "mes": "2024-03-15",
+     "contrat": "ProSupport 5 ans",
+     "cpuInfo": "Xeon Silver 4314",
+     "cpu": "2x16/32",
+     "ram": "256 Go",
+     "disques": "4x 1,92 To SSD",
+     "raid": "RAID 10",
+     "infoVm": "5 VM",
+     "alim": "Double alimentation",
+     "specs": "",
+     "comment": ""
+    },
+    {
+     "id": "xmvjoh54lumgwa",
+     "crit": true,
+     "tag": "SRV_HYP02",
+     "libelle": "Hyperviseur 2",
+     "emplacement": "Salle serveur",
+     "coffret": "RG_01",
+     "fonction": "Virtualisation",
+     "type": "Hypervisor",
+     "os": "VMware ESXi",
+     "licences": "vSphere Std",
+     "vos": "8.0U2",
+     "condMaj": "Fenêtre mensuelle",
+     "marque": "Dell",
+     "modele": "PowerEdge R650",
+     "serie": "ABCD124",
+     "mes": "2024-03-15",
+     "contrat": "ProSupport 5 ans",
+     "cpuInfo": "Xeon Silver 4314",
+     "cpu": "2x16/32",
+     "ram": "256 Go",
+     "disques": "4x 1,92 To SSD",
+     "raid": "RAID 10",
+     "infoVm": "Secours",
+     "alim": "Double alimentation",
+     "specs": "",
+     "comment": ""
+    },
+    {
+     "id": "xmvjoh54mfer7p",
+     "crit": true,
+     "tag": "PC_SUPERVISION01",
+     "libelle": "Poste supervision atelier",
+     "emplacement": "Salle de contrôle",
+     "coffret": "SR_ATELIER",
+     "fonction": "Supervision SCADA",
+     "type": "Workstation",
+     "os": "Windows 10 IoT LTSC",
+     "licences": "OEM",
+     "vos": "21H2",
+     "condMaj": "Validation éditeur",
+     "marque": "HP",
+     "modele": "Z2 G9",
+     "serie": "CZC1234",
+     "mes": "2023-09-01",
+     "contrat": "",
+     "cpuInfo": "i7-12700",
+     "cpu": "12/20",
+     "ram": "32 Go",
+     "disques": "1 To NVMe",
+     "raid": "",
+     "infoVm": "",
+     "alim": "Simple",
+     "specs": "",
+     "comment": ""
+    },
+    {
+     "id": "xmvjoh54mtns3a",
+     "crit": false,
+     "tag": "PC_ING01",
+     "libelle": "Portable ingénierie automates",
+     "emplacement": "Bureau méthodes",
+     "coffret": "",
+     "fonction": "Programmation API",
+     "type": "Laptop",
+     "os": "Windows 11 Pro",
+     "licences": "OEM",
+     "vos": "23H2",
+     "condMaj": "WSUS",
+     "marque": "Dell",
+     "modele": "Latitude 5540",
+     "serie": "7XYZ9",
+     "mes": "2025-01-10",
+     "contrat": "",
+     "cpuInfo": "i5-1345U",
+     "cpu": "10/12",
+     "ram": "16 Go",
+     "disques": "512 Go",
+     "raid": "",
+     "infoVm": "",
+     "alim": "Batterie",
+     "specs": "",
+     "comment": "Connexion ponctuelle"
+    }
+   ],
+   "vms": [
+    {
+     "id": "xmvjoh54m1efq9",
+     "crit": true,
+     "tag": "SRV_SCADA01",
+     "libelle": "Serveur SCADA",
+     "hyperv": "SRV_HYP01",
+     "fonction": "Supervision",
+     "type": "Server",
+     "os": "Windows Server 2022",
+     "licences": "Datacenter",
+     "vos": "21H2",
+     "cpu": "8",
+     "ram": "32",
+     "dd1": "200",
+     "dd2": "500",
+     "eth": "1 vNIC VLAN 240",
+     "specs": "",
+     "arret": "Arrêter la supervision avant",
+     "lienDoc": "",
+     "comment": ""
+    },
+    {
+     "id": "xmvjoh54m0mijo",
+     "crit": true,
+     "tag": "SRV_HISTO01",
+     "libelle": "Historian process",
+     "hyperv": "SRV_HYP01",
+     "fonction": "Historisation",
+     "type": "Server",
+     "os": "Windows Server 2022",
+     "licences": "Datacenter",
+     "vos": "21H2",
+     "cpu": "4",
+     "ram": "16",
+     "dd1": "100",
+     "dd2": "1000",
+     "eth": "1 vNIC VLAN 240",
+     "specs": "",
+     "arret": "",
+     "lienDoc": "",
+     "comment": ""
+    },
+    {
+     "id": "xmvjoh54mgkuai",
+     "crit": false,
+     "tag": "SRV_AD01",
+     "libelle": "Contrôleur de domaine",
+     "hyperv": "SRV_HYP02",
+     "fonction": "Annuaire",
+     "type": "Server",
+     "os": "Windows Server 2022",
+     "licences": "Datacenter",
+     "vos": "21H2",
+     "cpu": "2",
+     "ram": "8",
+     "dd1": "100",
+     "dd2": "",
+     "eth": "1 vNIC VLAN 260",
+     "specs": "",
+     "arret": "",
+     "lienDoc": "",
+     "comment": ""
+    },
+    {
+     "id": "xmvjoh54mcyc5h",
+     "crit": false,
+     "tag": "SRV_WSUS01",
+     "libelle": "Serveur WSUS",
+     "hyperv": "SRV_HYP02",
+     "fonction": "Mises à jour",
+     "type": "Server",
+     "os": "Windows Server 2022",
+     "licences": "Datacenter",
+     "vos": "21H2",
+     "cpu": "2",
+     "ram": "8",
+     "dd1": "100",
+     "dd2": "500",
+     "eth": "1 vNIC VLAN 260",
+     "specs": "",
+     "arret": "",
+     "lienDoc": "",
+     "comment": ""
+    },
+    {
+     "id": "xmvjoh54mbrfow",
+     "crit": false,
+     "tag": "SRV_NTP01",
+     "libelle": "Serveur de temps",
+     "hyperv": "SRV_HYP03",
+     "fonction": "NTP",
+     "type": "Server",
+     "os": "Debian",
+     "licences": "",
+     "vos": "12",
+     "cpu": "1",
+     "ram": "2",
+     "dd1": "20",
+     "dd2": "",
+     "eth": "1 vNIC VLAN 260",
+     "specs": "",
+     "arret": "",
+     "lienDoc": "",
+     "comment": "Hyperviseur inexistant (exercice)"
+    }
+   ],
+   "ips": [
+    {
+     "id": "xmvjoh54nk6clq",
+     "vlan": "111",
+     "type": "Automate (PLC)",
+     "tag": "API_LIGNE1",
+     "ip": "10.10.11.10",
+     "mac": "",
+     "produit": "S7-1500",
+     "port": "X1 P1",
+     "about": "OSM_LIGNE1",
+     "portAb": "P3",
+     "comment": "",
+     "migre": true,
+     "nat": ""
+    },
+    {
+     "id": "xmvjoh54nwknd5",
+     "vlan": "111",
+     "type": "Commutateur (Switch)",
+     "tag": "OSM_LIGNE1",
+     "ip": "10.10.11.2",
+     "mac": "",
+     "produit": "SCALANCE",
+     "port": "",
+     "about": "SW_CORE01",
+     "portAb": "1/1/10",
+     "comment": "",
+     "migre": true,
+     "nat": ""
+    },
+    {
+     "id": "xmvjoh54n8w4t0",
+     "vlan": "113",
+     "type": "Interface Homme-Machine (IHM)",
+     "tag": "IHM_LIGNE1",
+     "ip": "10.10.13.20",
+     "mac": "",
+     "produit": "TP1200",
+     "port": "",
+     "about": "OSM_LIGNE1",
+     "portAb": "P4",
+     "comment": "",
+     "migre": true,
+     "nat": ""
+    },
+    {
+     "id": "xmvjoh54nx4fig",
+     "vlan": "RSX_PROC_SCADA",
+     "type": "Station de travail",
+     "tag": "PC_SUPERVISION01",
+     "ip": "10.10.12.30",
+     "mac": "",
+     "produit": "Z2 G9",
+     "port": "",
+     "about": "OSM_LIGNE1",
+     "portAb": "P8",
+     "comment": "Réseau inconnu (exercice)",
+     "migre": false,
+     "nat": ""
+    },
+    {
+     "id": "xmvjoh54n237wx",
+     "vlan": "112",
+     "type": "Station de travail",
+     "tag": "PC_SUPERVISION01",
+     "ip": "10.10.12.30",
+     "mac": "",
+     "produit": "Z2 G9",
+     "port": "",
+     "about": "OSM_LIGNE1",
+     "portAb": "P8",
+     "comment": "",
+     "migre": true,
+     "nat": ""
+    },
+    {
+     "id": "xmvjoh54nspomz",
+     "vlan": "240",
+     "type": "Serveur",
+     "tag": "SRV_SCADA01",
+     "ip": "10.20.40.10",
+     "mac": "",
+     "produit": "VM",
+     "port": "",
+     "about": "",
+     "portAb": "",
+     "comment": "",
+     "migre": true,
+     "nat": ""
+    },
+    {
+     "id": "xmvjoh54nej4es",
+     "vlan": "240",
+     "type": "Serveur",
+     "tag": "SRV_HISTO01",
+     "ip": "10.20.40.11",
+     "mac": "",
+     "produit": "VM",
+     "port": "",
+     "about": "",
+     "portAb": "",
+     "comment": "",
+     "migre": true,
+     "nat": ""
+    },
+    {
+     "id": "xmvjoh54neuvtl",
+     "vlan": "240",
+     "type": "Hyperviseur",
+     "tag": "SRV_HYP01",
+     "ip": "10.20.40.5",
+     "mac": "",
+     "produit": "R650",
+     "port": "iDRAC",
+     "about": "SW_CORE01",
+     "portAb": "1/1/1",
+     "comment": "",
+     "migre": true,
+     "nat": ""
+    },
+    {
+     "id": "xmvjoh54nbbfht",
+     "vlan": "240",
+     "type": "Hyperviseur",
+     "tag": "SRV_HYP02",
+     "ip": "10.20.40.6",
+     "mac": "",
+     "produit": "R650",
+     "port": "",
+     "about": "SW_CORE01",
+     "portAb": "1/1/2",
+     "comment": "",
+     "migre": true,
+     "nat": ""
+    },
+    {
+     "id": "xmvjoh54nvop85",
+     "vlan": "200",
+     "type": "Commutateur (Switch)",
+     "tag": "SW_CORE01",
+     "ip": "10.20.0.1",
+     "mac": "",
+     "produit": "Aruba 6300M",
+     "port": "mgmt",
+     "about": "",
+     "portAb": "",
+     "comment": "",
+     "migre": true,
+     "nat": ""
+    },
+    {
+     "id": "xmvjoh54nncwzt",
+     "vlan": "200",
+     "type": "Commutateur (Switch)",
+     "tag": "SW_BUREAUX",
+     "ip": "10.20.0.2",
+     "mac": "",
+     "produit": "Aruba 2930F",
+     "port": "mgmt",
+     "about": "SW_CORE01",
+     "portAb": "1/1/20",
+     "comment": "",
+     "migre": true,
+     "nat": ""
+    },
+    {
+     "id": "xmvjoh54ntwlm7",
+     "vlan": "200",
+     "type": "Pare-feu",
+     "tag": "FW_PROCESS01",
+     "ip": "10.20.0.10",
+     "mac": "",
+     "produit": "SNi40",
+     "port": "",
+     "about": "SW_CORE01",
+     "portAb": "1/1/47",
+     "comment": "",
+     "migre": true,
+     "nat": ""
+    },
+    {
+     "id": "xmvjoh54nhlngu",
+     "vlan": "200",
+     "type": "Pare-feu",
+     "tag": "FW_METIER01",
+     "ip": "10.20.0.11",
+     "mac": "",
+     "produit": "SN310",
+     "port": "",
+     "about": "SW_CORE01",
+     "portAb": "1/1/48",
+     "comment": "",
+     "migre": true,
+     "nat": ""
+    },
+    {
+     "id": "xmvjoh54n4dccq",
+     "vlan": "201",
+     "type": "Serveur",
+     "tag": "SRV_HYP01",
+     "ip": "10.20.1.5",
+     "mac": "",
+     "produit": "iDRAC",
+     "port": "",
+     "about": "SW_CORE01",
+     "portAb": "1/1/3",
+     "comment": "",
+     "migre": true,
+     "nat": ""
+    },
+    {
+     "id": "xmvjoh54nb01p5",
+     "vlan": "260",
+     "type": "Serveur",
+     "tag": "SRV_AD01",
+     "ip": "10.20.60.10",
+     "mac": "",
+     "produit": "VM",
+     "port": "",
+     "about": "",
+     "portAb": "",
+     "comment": "",
+     "migre": true,
+     "nat": ""
+    },
+    {
+     "id": "xmvjoh54nluchd",
+     "vlan": "260",
+     "type": "Serveur",
+     "tag": "SRV_WSUS01",
+     "ip": "10.20.60.11",
+     "mac": "",
+     "produit": "VM",
+     "port": "",
+     "about": "",
+     "portAb": "",
+     "comment": "",
+     "migre": true,
+     "nat": ""
+    },
+    {
+     "id": "xmvjoh54nr3wjq",
+     "vlan": "260",
+     "type": "Serveur",
+     "tag": "SRV_NTP01",
+     "ip": "10.20.60.12",
+     "mac": "",
+     "produit": "VM",
+     "port": "",
+     "about": "",
+     "portAb": "",
+     "comment": "",
+     "migre": true,
+     "nat": ""
+    },
+    {
+     "id": "xmvjoh54njkthf",
+     "vlan": "300",
+     "type": "Ordinateur portable",
+     "tag": "PC_ING01",
+     "ip": "10.30.0.50",
+     "mac": "",
+     "produit": "Latitude",
+     "port": "",
+     "about": "SW_BUREAUX",
+     "portAb": "12",
+     "comment": "DHCP réservé",
+     "migre": false,
+     "nat": ""
+    },
+    {
+     "id": "xmvjoh54njr059",
+     "vlan": "301",
+     "type": "Imprimante",
+     "tag": "IMP_ACCUEIL",
+     "ip": "10.30.1.20",
+     "mac": "",
+     "produit": "C3826",
+     "port": "",
+     "about": "SW_BUREAUX",
+     "portAb": "5",
+     "comment": "",
+     "migre": true,
+     "nat": ""
+    },
+    {
+     "id": "xmvjoh54nbnuid",
+     "vlan": "301",
+     "type": "Imprimante",
+     "tag": "IMP_ATELIER",
+     "ip": "10.30.1.20",
+     "mac": "",
+     "produit": "",
+     "port": "",
+     "about": "SW_BUREAUX",
+     "portAb": "6",
+     "comment": "Doublon IP + TAG inconnu (exercice)",
+     "migre": false,
+     "nat": ""
+    },
+    {
+     "id": "xmvjoh54nk16v1",
+     "vlan": "400",
+     "type": "Caméra",
+     "tag": "CAM_PORTAIL",
+     "ip": "10.40.0.21",
+     "mac": "",
+     "produit": "P3265",
+     "port": "",
+     "about": "SW_CORE01",
+     "portAb": "1/1/30",
+     "comment": "",
+     "migre": true,
+     "nat": ""
+    },
+    {
+     "id": "xmvjoh54n2hd56",
+     "vlan": "400",
+     "type": "Caméra",
+     "tag": "CAM_QUAI",
+     "ip": "10.40.1.22",
+     "mac": "",
+     "produit": "P3265",
+     "port": "",
+     "about": "SW_CORE01",
+     "portAb": "1/1/31",
+     "comment": "Réseau /23",
+     "migre": true,
+     "nat": ""
+    },
+    {
+     "id": "xmvjoh54nmmt5h",
+     "vlan": "401",
+     "type": "Lecteur de badge",
+     "tag": "LB_ENTREE",
+     "ip": "10.40.2.30",
+     "mac": "",
+     "produit": "",
+     "port": "",
+     "about": "SW_CORE01",
+     "portAb": "1/1/32",
+     "comment": "Hors réseau (exercice)",
+     "migre": false,
+     "nat": ""
+    },
+    {
+     "id": "xmvjoh54nwo84z",
+     "vlan": "xmvjoh533wg3ze",
+     "type": "Automate (PLC)",
+     "tag": "API_PESAGE",
+     "ip": "192.168.10.10",
+     "mac": "",
+     "produit": "IND780",
+     "port": "",
+     "about": "",
+     "portAb": "",
+     "comment": "VLAN 1 isolé",
+     "migre": false,
+     "nat": ""
+    },
+    {
+     "id": "xmvjoh54nmkz0q",
+     "vlan": "xmvjoh533mdkeh",
+     "type": "Automate (PLC)",
+     "tag": "API_GTB01",
+     "ip": "192.168.20.10",
+     "mac": "",
+     "produit": "",
+     "port": "",
+     "about": "",
+     "portAb": "",
+     "comment": "VLAN 1 isolé",
+     "migre": false,
+     "nat": ""
+    }
+   ],
+   "flux": [
+    {
+     "id": "xmvjoh54ux5bfm",
+     "comment": "NTP vers automates",
+     "state": "on",
+     "action": "pass",
+     "log": "minor",
+     "utype": "",
+     "ether": "ipv4",
+     "src": "SRV_NTP01",
+     "dst": "RSX_PROC_API",
+     "port": "ntp",
+     "proto": "udp",
+     "insp": "firewall",
+     "ntp": true,
+     "wsus": false,
+     "interco": false,
+     "fw": "FW_PROCESS",
+     "comment2": ""
+    },
+    {
+     "id": "xmvjoh54uvhrye",
+     "comment": "WSUS vers serveurs process",
+     "state": "on",
+     "action": "pass",
+     "log": "minor",
+     "utype": "",
+     "ether": "ipv4",
+     "src": "SRV_WSUS01",
+     "dst": "RSX_PROC_SERVEURS",
+     "port": "https",
+     "proto": "tcp",
+     "insp": "ips",
+     "ntp": false,
+     "wsus": true,
+     "interco": false,
+     "fw": "FW_PROCESS",
+     "comment2": ""
+    },
+    {
+     "id": "xmvjoh54u4shcc",
+     "comment": "Supervision vers automates",
+     "state": "on",
+     "action": "pass",
+     "log": "none",
+     "utype": "",
+     "ether": "ipv4",
+     "src": "SRV_SCADA01",
+     "dst": "RSX_PROC_API",
+     "port": "102",
+     "proto": "tcp",
+     "insp": "ips",
+     "ntp": false,
+     "wsus": false,
+     "interco": false,
+     "fw": "FW_PROCESS",
+     "comment2": "S7comm"
+    },
+    {
+     "id": "xmvjoh54ud7l9i",
+     "comment": "Admin switchs depuis IT",
+     "state": "on",
+     "action": "pass",
+     "log": "major",
+     "utype": "",
+     "ether": "ipv4",
+     "src": "RSX_IT_BUREAUTIQUE",
+     "dst": "RSX_ADMIN_SWITCH",
+     "port": "ssh",
+     "proto": "tcp",
+     "insp": "ips",
+     "ntp": false,
+     "wsus": false,
+     "interco": false,
+     "fw": "FW_METIER",
+     "comment2": "Bastion recommandé"
+    },
+    {
+     "id": "xmvjoh54uzzoat",
+     "comment": "Blocage IT vers process",
+     "state": "on",
+     "action": "block",
+     "log": "major",
+     "utype": "",
+     "ether": "any",
+     "src": "RSX_IT_BUREAUTIQUE",
+     "dst": "RSX_PROC_API",
+     "port": "any",
+     "proto": "any",
+     "insp": "firewall",
+     "ntp": false,
+     "wsus": false,
+     "interco": false,
+     "fw": "FW_PROCESS",
+     "comment2": "Règle de fin"
+    },
+    {
+     "id": "xmvjoh54ujq33s",
+     "comment": "Interco site distant",
+     "state": "off",
+     "action": "pass",
+     "log": "log",
+     "utype": "",
+     "ether": "ipv4",
+     "src": "RSX_PROC_SERVEURS",
+     "dst": "any",
+     "port": "https",
+     "proto": "tcp",
+     "insp": "ips",
+     "ntp": false,
+     "wsus": false,
+     "interco": true,
+     "fw": "",
+     "comment2": ""
+    }
+   ],
+   "proc": [
+    {
+     "id": "xmvjoh54ue3p7c",
+     "phase": "INTEGRATION D'UN NOUVEL EQUIPEMENT",
+     "section": "ENREGISTREMENTS DES DONNEES",
+     "etape": "Identification de l'équipement par étiquetage physique",
+     "moyens": "Etiquette dymo",
+     "lien": "",
+     "pid": "xmvv11l8xj7kid"
+    },
+    {
+     "id": "xmvjoh54uomwwh",
+     "phase": "INTEGRATION D'UN NOUVEL EQUIPEMENT",
+     "section": "ENREGISTREMENTS DES DONNEES",
+     "etape": "Enregistrement les informations de l'équipement",
+     "moyens": "- Saisir repères et données dans feuille \"Liste équipements\"",
+     "lien": "",
+     "pid": "xmvv11l8xj7kid"
+    },
+    {
+     "id": "xmvjoh54umibfc",
+     "phase": "INTEGRATION D'UN NOUVEL EQUIPEMENT",
+     "section": "CONFIGURATION ET SECURISATION",
+     "etape": "Suivre procédures de protection informatiques",
+     "moyens": "- se référer aux fichiers situé dans le dossier \"3.6 - PROCEDURES DE PROTECTION INFORMATIQUES\"",
+     "lien": "",
+     "pid": "xmvv11l8xj7kid"
+    },
+    {
+     "id": "xmvjoh54uote1n",
+     "phase": "INTEGRATION D'UN NOUVEL EQUIPEMENT",
+     "section": "CONFIGURATION ET SECURISATION",
+     "etape": "Configuration des accès administrateurs\n  ---> Saisir toutes les données dans la feuille \"Identifiants\"",
+     "moyens": "- Supprimer si possible compte admin par défaut\n- Créer un nouveau compte admin\n- Créer des comptes utilisateurs avec droits spécifiques si besoins",
+     "lien": "",
+     "pid": "xmvv11l8xj7kid"
+    },
+    {
+     "id": "xmvjoh54umvsxi",
+     "phase": "INTEGRATION D'UN NOUVEL EQUIPEMENT",
+     "section": "CONFIGURATION ET SECURISATION",
+     "etape": "Suppression des services non utiles",
+     "moyens": "- Supprimer tous les services et protocoles en les désactivant",
+     "lien": "",
+     "pid": "xmvv11l8xj7kid"
+    },
+    {
+     "id": "xmvjoh54ukl6hp",
+     "phase": "INTEGRATION D'UN NOUVEL EQUIPEMENT",
+     "section": "CONFIGURATION ET SECURISATION",
+     "etape": "Configuration réseaux",
+     "moyens": "- Saisir info dans la feuille \"Connexion IP\"",
+     "lien": "",
+     "pid": "xmvv11l8xj7kid"
+    },
+    {
+     "id": "xmvjoh54u9rs63",
+     "phase": "INTEGRATION D'UN NOUVEL EQUIPEMENT",
+     "section": "DOCUMENTATIONS",
+     "etape": "Classement de notices et documentations constructeurs",
+     "moyens": "- Créer un dossier pour chaque équipement dans le dossier \"2-Dossiers Equipements Docs et données\"\n- Récupérer et classer les notices et docs dans ce dossier",
+     "lien": "",
+     "pid": "xmvv11l8xj7kid"
+    },
+    {
+     "id": "xmvjoh54u2zivq",
+     "phase": "INTEGRATION D'UN NOUVEL EQUIPEMENT",
+     "section": "DOCUMENTATIONS",
+     "etape": "Mise à jour des plans et schémas",
+     "moyens": "- Mettre à jour les schémas d'armoire\n- Archiver les fichiers mis à jour",
+     "lien": "",
+     "pid": "xmvv11l8xj7kid"
+    },
+    {
+     "id": "xmvjoh54unfo1l",
+     "phase": "INTEGRATION D'UN NOUVEL EQUIPEMENT",
+     "section": "TRACABILITE",
+     "etape": "Tracer les modifications apportées",
+     "moyens": "- Renseigner le tableau de suivi des interventions",
+     "lien": "",
+     "pid": "xmvv11l8xj7kid"
+    },
+    {
+     "id": "xmvjoh54ud2upu",
+     "phase": "INTERVENTION SUR UN EQUIPEMENT EXISTANT",
+     "section": "CONFIGURATION ET SECURISATION",
+     "etape": "Mise à jour FIRMWARE",
+     "moyens": "",
+     "lien": "",
+     "pid": "xmvv11l8xj7kid"
+    },
+    {
+     "id": "xmvjoh54u8zqg5",
+     "phase": "INTERVENTION SUR UN EQUIPEMENT EXISTANT",
+     "section": "CONFIGURATION ET SECURISATION",
+     "etape": "Mise à jour SOFTWARE",
+     "moyens": "",
+     "lien": "",
+     "pid": "xmvv11l8xj7kid"
+    },
+    {
+     "id": "xmvjoh54uzcp7n",
+     "phase": "INTERVENTION SUR UN EQUIPEMENT EXISTANT",
+     "section": "DOCUMENTATIONS",
+     "etape": "Classement de notices et documentations constructeurs",
+     "moyens": "- Créer un dossier pour chaque équipement dans le dossier \"2-Dossiers Equipements Docs et données\"\n- Récupérer et classer les notices et docs dans ce dossier",
+     "lien": "",
+     "pid": "xmvv11l8xj7kid"
+    },
+    {
+     "id": "xmvjoh54uvcv7x",
+     "phase": "INTERVENTION SUR UN EQUIPEMENT EXISTANT",
+     "section": "DOCUMENTATIONS",
+     "etape": "Mise à jour des plans et schémas",
+     "moyens": "- Mettre à jour les schémas d'armoire\n- Archiver les fichiers mis à jour",
+     "lien": "",
+     "pid": "xmvv11l8xj7kid"
+    },
+    {
+     "id": "xmvjoh54u4hmzb",
+     "phase": "INTERVENTION SUR UN EQUIPEMENT EXISTANT",
+     "section": "TRACABILITE",
+     "etape": "Tracer les modifications apportées",
+     "moyens": "- Renseigner le tableau de suivi des interventions",
+     "lien": "",
+     "pid": "xmvv11l8xj7kid"
+    },
+    {
+     "id": "xmvjoh54ulo24i",
+     "phase": "SUPPRESSION D'UN EQUIPEMENT EXISTANT",
+     "section": "SUPPRESSION PHYSIQUE",
+     "etape": "Suppression de l'équipement",
+     "moyens": "",
+     "lien": "",
+     "pid": "xmvv11l8xj7kid"
+    },
+    {
+     "id": "xmvjoh54uc7buy",
+     "phase": "SUPPRESSION D'UN EQUIPEMENT EXISTANT",
+     "section": "SUPPRESSION PHYSIQUE",
+     "etape": "Suppression des liaisons avec le système",
+     "moyens": "",
+     "lien": "",
+     "pid": "xmvv11l8xj7kid"
+    },
+    {
+     "id": "xmvjoh54uho8uy",
+     "phase": "SUPPRESSION D'UN EQUIPEMENT EXISTANT",
+     "section": "DOCUMENTATIONS",
+     "etape": "Supprimer données équipements",
+     "moyens": "- Supprimer le dossier de l'équipement concerné qui se trouve dans le dossier \"2-Dossiers Equipements Docs et données\"",
+     "lien": "",
+     "pid": "xmvv11l8xj7kid"
+    },
+    {
+     "id": "xmvjoh54ujm78z",
+     "phase": "SUPPRESSION D'UN EQUIPEMENT EXISTANT",
+     "section": "DOCUMENTATIONS",
+     "etape": "Mise à jour des plans et schémas",
+     "moyens": "- Mettre à jour les schémas d'armoire\n- Archiver les fichiers mis à jour",
+     "lien": "",
+     "pid": "xmvv11l8xj7kid"
+    },
+    {
+     "id": "xmvjoh54ujk76g",
+     "phase": "SUPPRESSION D'UN EQUIPEMENT EXISTANT",
+     "section": "TRACABILITE",
+     "etape": "Tracer les modifications apportées",
+     "moyens": "- Renseigner le tableau de suivi des interventions",
+     "lien": "",
+     "pid": "xmvv11l8xj7kid"
+    }
+   ],
+   "procs": [
+    {
+     "id": "xmvv11l8xj7kid",
+     "model": "plm",
+     "code": "PRO-PLM-001",
+     "titre": "Cycle de vie des équipements (PLM)",
+     "domaine": "PLM – Cycle de vie",
+     "version": "1.0",
+     "statut": "Brouillon",
+     "proprio": "",
+     "approb": "",
+     "dateValid": "",
+     "revue": "",
+     "frequence": "Annuelle",
+     "objet": "Définir les étapes à suivre pour intégrer un nouvel équipement, intervenir sur un équipement existant ou le supprimer, afin de garantir la tenue à jour des inventaires, la sécurisation et la traçabilité.",
+     "perimetre": "Tous les équipements informatiques et industriels inventoriés dans WerbMap : coffrets, actifs réseau, machines physiques et virtuelles.",
+     "refsN": "ISO/IEC 27001:2022 – A.5.9 Inventaire des informations et autres actifs associés\nISO/IEC 27001:2022 – A.7.14 Élimination ou recyclage sécurisé(e) du matériel\nISO/IEC 27001:2022 – A.8.9 Gestion de la configuration",
+     "declencheur": "- Arrivée d'un nouvel équipement\n- Intervention sur un équipement (mise à jour, modification de configuration)\n- Retrait ou remplacement d'un équipement",
+     "lien": ""
+    }
+   ],
+   "isoNets": [
+    {
+     "id": "xmvjoh533wg3ze",
+     "vid": 1,
+     "n": "RSX_PESAGE_ISO",
+     "st": "En service",
+     "zone": "ZCE",
+     "perim": "Bascule camion – réseau autonome",
+     "libelle": "Pesage"
+    },
+    {
+     "id": "xmvjoh533mdkeh",
+     "vid": 1,
+     "n": "RSX_GTB_ISO",
+     "st": "En service",
+     "zone": "ZCM",
+     "perim": "Gestion technique du bâtiment",
+     "libelle": "GTB"
+    },
+    {
+     "id": "xmvjoharpe40xv",
+     "vid": 1,
+     "n": "RSX_CAM_PARKING_ISO",
+     "st": "En service",
+     "zone": "",
+     "perim": "Caméras parking – switch autonome",
+     "libelle": "Vidéo parking"
+    }
+   ],
+   "routes": [],
+   "nat": []
+  },
+  "versions": [
+   {
+    "v": 1,
+    "date": "2026-10-22T15:10:28.770Z",
+    "user": "admin.demo",
+    "nom": "Administrateur DEMO",
+    "comment": "Création de la base",
+    "changes": 2,
+    "hash": "ad84ad04a591a1c5d7f68bff50fbf8e39a6d55dc1e473b74fe359d556f179072"
+   },
+   {
+    "v": 2,
+    "date": "2026-10-22T15:10:34.999Z",
+    "user": "admin.demo",
+    "nom": "Administrateur DEMO",
+    "comment": "Import initial du classeur DEMO",
+    "changes": 3,
+    "hash": "1db7b4313e3933a7ea68b078c4be9019b846e4ae9b626960758ffc926b05d97b"
+   },
+   {
+    "v": 3,
+    "date": "2026-10-22T15:10:40.082Z",
+    "user": "tech.demo",
+    "nom": "Technicien DEMO",
+    "comment": "Ajout de l’imprimante de l’atelier et du réseau isolé caméra parking",
+    "changes": 11,
+    "hash": "c866cd8e62d8077e73edd28bff2758396e82e74c58a899425ceac95d37683355"
+   },
+   {
+    "v": 4,
+    "date": "2026-10-22T15:10:41.481Z",
+    "user": "tech.demo",
+    "nom": "Technicien DEMO",
+    "comment": "Correction de la passerelle du VLAN 301",
+    "changes": 1,
+    "hash": "4988ff61e4d93392b684118b1a535689a158ee8083f4bc53508471cbe7a2172d"
+   },
+   {
+    "v": 5,
+    "date": "2026-10-30T13:47:48.629Z",
+    "user": "admin.demo",
+    "nom": "Administrateur DEMO",
+    "comment": "Exemples de fiches SI (Liste des SI) pour la démonstration",
+    "changes": 4,
+    "hash": "8d9b114d6378668fc3f4e3b8e515d9e90c9001993941556a37f2011acd93c8cd"
+   }
+  ],
+  "journal": [
+   {
+    "v": 1,
+    "ts": "2026-10-22T15:10:28.767Z",
+    "user": "admin.demo",
+    "obj": "Base",
+    "id": "WerbMap_DEMO.json",
+    "champ": "Création",
+    "avant": "",
+    "apres": "base créée"
+   },
+   {
+    "v": 1,
+    "ts": "2026-10-22T15:10:28.768Z",
+    "user": "admin.demo",
+    "obj": "Utilisateur",
+    "id": "admin.demo",
+    "champ": "Création",
+    "avant": "",
+    "apres": "Administrateur – Administrateur DEMO"
+   },
+   {
+    "v": 2,
+    "ts": "2026-10-22T15:10:30.470Z",
+    "user": "admin.demo",
+    "obj": "Base",
+    "id": "kit_source.xlsx",
+    "champ": "Import Excel",
+    "avant": "0 VLAN, 0 IP, 0 équipements",
+    "apres": "Listes de choix ← « TableauListeChoix », Matrice VLAN ← « VLAN-DEMO » : 17 VLAN + 2 réseau(x) isolé(s), Table IP VLAN ← « TableIP_VLAN-DEMO » : 17 réseaux, Coffrets et baies informatiques ← « Lst_Coffret » : 4 lignes, Actifs informatiques (hors PC et serveurs) ← « Lst_Actifs_RSX » : 12 lignes, Machines physiques ← « Lst_MachinePhysique » : 4 lignes, Machines virtuelles ← « Lst_MachineVirtuelle » : 5 lignes, Plan d'adressage IP ← « TableIP-DEMO » : 25 lignes (1 sans réseau reconnu), Matrice de flux ← « MatriceFlux » : 6 lignes, Procédure ← « MATRICE PLM » : 19 étapes"
+   },
+   {
+    "v": 2,
+    "ts": "2026-10-22T15:10:31.906Z",
+    "user": "admin.demo",
+    "obj": "Utilisateur",
+    "id": "tech.demo",
+    "champ": "Création",
+    "avant": "",
+    "apres": "Éditeur – Technicien DEMO"
+   },
+   {
+    "v": 2,
+    "ts": "2026-10-22T15:10:33.491Z",
+    "user": "admin.demo",
+    "obj": "Utilisateur",
+    "id": "audit.demo",
+    "champ": "Création",
+    "avant": "",
+    "apres": "Lecteur – Auditeur DEMO"
+   },
+   {
+    "v": 3,
+    "ts": "2026-10-22T15:10:37.765Z",
+    "user": "tech.demo",
+    "obj": "Réseau isolé",
+    "id": "(nouveau)",
+    "champ": "Création",
+    "avant": "",
+    "apres": "VLAN 1"
+   },
+   {
+    "v": 3,
+    "ts": "2026-10-22T15:10:38.053Z",
+    "user": "tech.demo",
+    "obj": "Réseau isolé",
+    "id": "(nouveau)",
+    "champ": "Nom du réseau",
+    "avant": "",
+    "apres": "RSX_CAM_PARKING_ISO"
+   },
+   {
+    "v": 3,
+    "ts": "2026-10-22T15:10:38.241Z",
+    "user": "tech.demo",
+    "obj": "Réseau isolé",
+    "id": "RSX_CAM_PARKING_ISO",
+    "champ": "Périmètre",
+    "avant": "",
+    "apres": "Caméras parking – switch autonome"
+   },
+   {
+    "v": 3,
+    "ts": "2026-10-22T15:10:38.479Z",
+    "user": "tech.demo",
+    "obj": "Réseau isolé",
+    "id": "RSX_CAM_PARKING_ISO",
+    "champ": "Libellé",
+    "avant": "",
+    "apres": "Vidéo parking"
+   },
+   {
+    "v": 3,
+    "ts": "2026-10-22T15:10:38.780Z",
+    "user": "tech.demo",
+    "obj": "Actif réseau",
+    "id": "(nouvelle ligne)",
+    "champ": "Création",
+    "avant": "",
+    "apres": "créée"
+   },
+   {
+    "v": 3,
+    "ts": "2026-10-22T15:10:39.075Z",
+    "user": "tech.demo",
+    "obj": "Actif réseau",
+    "id": "(nouveau)",
+    "champ": "TAG équipement",
+    "avant": "",
+    "apres": "IMP_ATELIER"
+   },
+   {
+    "v": 3,
+    "ts": "2026-10-22T15:10:39.248Z",
+    "user": "tech.demo",
+    "obj": "Actif réseau",
+    "id": "IMP_ATELIER",
+    "champ": "Libellé",
+    "avant": "",
+    "apres": "Imprimante atelier"
+   },
+   {
+    "v": 3,
+    "ts": "2026-10-22T15:10:39.393Z",
+    "user": "tech.demo",
+    "obj": "Actif réseau",
+    "id": "IMP_ATELIER",
+    "champ": "Emplacement",
+    "avant": "",
+    "apres": "Atelier"
+   },
+   {
+    "v": 3,
+    "ts": "2026-10-22T15:10:39.576Z",
+    "user": "tech.demo",
+    "obj": "Actif réseau",
+    "id": "IMP_ATELIER",
+    "champ": "Coffret",
+    "avant": "",
+    "apres": "SR_ATELIER"
+   },
+   {
+    "v": 3,
+    "ts": "2026-10-22T15:10:39.762Z",
+    "user": "tech.demo",
+    "obj": "Actif réseau",
+    "id": "IMP_ATELIER",
+    "champ": "Marque",
+    "avant": "",
+    "apres": "Canon"
+   },
+   {
+    "v": 3,
+    "ts": "2026-10-22T15:10:39.897Z",
+    "user": "tech.demo",
+    "obj": "Actif réseau",
+    "id": "IMP_ATELIER",
+    "champ": "Type actif",
+    "avant": "",
+    "apres": "Imprimante"
+   },
+   {
+    "v": 4,
+    "ts": "2026-10-22T15:10:41.232Z",
+    "user": "tech.demo",
+    "obj": "VLAN",
+    "id": "VLAN 301",
+    "champ": "Passerelle",
+    "avant": "10.30.1.254",
+    "apres": "10.30.1.1"
+   },
+   {
+    "v": 5,
+    "ts": "2026-10-30T13:47:48.617Z",
+    "user": "admin.demo",
+    "obj": "Fiche SI",
+    "id": "SI Supervision ligne 1",
+    "champ": "Création",
+    "avant": "",
+    "apres": "fiche d'exemple (base de démonstration)"
+   },
+   {
+    "v": 5,
+    "ts": "2026-10-30T13:47:48.621Z",
+    "user": "admin.demo",
+    "obj": "Fiche SI",
+    "id": "SI Infrastructure et services IT",
+    "champ": "Création",
+    "avant": "",
+    "apres": "fiche d'exemple (base de démonstration)"
+   },
+   {
+    "v": 5,
+    "ts": "2026-10-30T13:47:48.624Z",
+    "user": "admin.demo",
+    "obj": "Fiche SI",
+    "id": "SI Bureautique du site",
+    "champ": "Création",
+    "avant": "",
+    "apres": "fiche d'exemple (base de démonstration)"
+   },
+   {
+    "v": 5,
+    "ts": "2026-10-30T13:47:48.626Z",
+    "user": "admin.demo",
+    "obj": "Fiche SI",
+    "id": "SI Sûreté (vidéo et contrôle d'accès)",
+    "champ": "Création",
+    "avant": "",
+    "apres": "fiche d'exemple (base de démonstration)"
+   }
+  ]
+ }
+}

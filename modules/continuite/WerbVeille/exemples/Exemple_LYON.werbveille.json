@@ -1,0 +1,676 @@
+{
+ "format": "WERBVEILLE",
+ "schema": 1,
+ "famille": "WERBSMSI",
+ "meta": {
+  "produit": "WerbVeille",
+  "appVersion": "1.1.0",
+  "auteur": "@WerbHat",
+  "generateur": "WerbVeille v1.1.0 – Développé par @WerbHat",
+  "modifieLe": "2026-10-31T08:00:00Z",
+  "modifiePar": "Exemple",
+  "creeLe": "2026-10-31",
+  "groupeId": "e6a47cd7-77fe-463f-b6ea-b50ff390bfc7",
+  "portee": "site",
+  "site": "LYON"
+ },
+ "verrou": null,
+ "journal": [
+  {
+   "date": "2026-10-31T08:00:00.000Z",
+   "par": "Exemple",
+   "action": "Création",
+   "objet": "Veille",
+   "element": "",
+   "champ": "",
+   "avant": "",
+   "apres": "Veille d'exemple fictive"
+  }
+ ],
+ "data": {
+  "veille": {
+   "nom": "Veille du site LYON (exemple fictif)",
+   "responsable": "Correspondant cyber Lyon (fictif)"
+  },
+  "sources": [
+   {
+    "nom": "Graham Cluley",
+    "url": "https://grahamcluley.com/feed/",
+    "categorie": "Actualités",
+    "langue": "en",
+    "actif": true,
+    "tout": false,
+    "id": "s1"
+   },
+   {
+    "nom": "Threatpost",
+    "url": "https://threatpost.com/feed/",
+    "categorie": "Actualités",
+    "langue": "en",
+    "actif": true,
+    "tout": false,
+    "id": "s2"
+   },
+   {
+    "nom": "Krebs on Security",
+    "url": "https://krebsonsecurity.com/feed/",
+    "categorie": "Actualités",
+    "langue": "en",
+    "actif": true,
+    "tout": false,
+    "id": "s3"
+   },
+   {
+    "nom": "Dark Reading",
+    "url": "https://www.darkreading.com/rss.xml",
+    "categorie": "Actualités",
+    "langue": "en",
+    "actif": true,
+    "tout": false,
+    "id": "s4"
+   },
+   {
+    "nom": "We Live Security",
+    "url": "http://feeds.feedburner.com/eset/blog",
+    "categorie": "Actualités",
+    "langue": "en",
+    "actif": false,
+    "tout": false,
+    "id": "s5"
+   },
+   {
+    "nom": "DaVinci Forensics",
+    "url": "https://davinciforensics.co.za/cybersecurity/feed/",
+    "categorie": "Actualités",
+    "langue": "en",
+    "actif": true,
+    "tout": false,
+    "id": "s6"
+   },
+   {
+    "nom": "Cisco",
+    "url": "https://blogs.cisco.com/security/feed",
+    "categorie": "Éditeur",
+    "langue": "en",
+    "actif": true,
+    "tout": false,
+    "id": "s7"
+   },
+   {
+    "nom": "Information Security Magazine",
+    "url": "https://www.infosecurity-magazine.com/rss/news/",
+    "categorie": "Actualités",
+    "langue": "en",
+    "actif": true,
+    "tout": false,
+    "id": "s8"
+   },
+   {
+    "nom": "Google",
+    "url": "http://feeds.feedburner.com/GoogleOnlineSecurityBlog",
+    "categorie": "Actualités",
+    "langue": "en",
+    "actif": false,
+    "tout": false,
+    "id": "s9"
+   },
+   {
+    "nom": "Google TAG",
+    "url": "https://blog.google/threat-analysis-group/rss/",
+    "categorie": "Actualités",
+    "langue": "en",
+    "actif": true,
+    "tout": false,
+    "id": "s10"
+   },
+   {
+    "nom": "Trend Micro",
+    "url": "http://feeds.trendmicro.com/TrendMicroResearch",
+    "categorie": "Actualités",
+    "langue": "en",
+    "actif": true,
+    "tout": false,
+    "id": "s11"
+   },
+   {
+    "nom": "Bleeping Computer",
+    "url": "https://www.bleepingcomputer.com/feed/",
+    "categorie": "Actualités",
+    "langue": "en",
+    "actif": true,
+    "tout": false,
+    "id": "s12"
+   },
+   {
+    "nom": "Proof Point",
+    "url": "https://www.proofpoint.com/us/rss.xml",
+    "categorie": "Actualités",
+    "langue": "en",
+    "actif": true,
+    "tout": false,
+    "id": "s13"
+   },
+   {
+    "nom": "Hacker News",
+    "url": "http://feeds.feedburner.com/TheHackersNews?format=xml",
+    "categorie": "Actualités",
+    "langue": "en",
+    "actif": true,
+    "tout": false,
+    "id": "s14"
+   },
+   {
+    "nom": "Schneier on Security",
+    "url": "https://www.schneier.com/feed/atom/",
+    "categorie": "Actualités",
+    "langue": "en",
+    "actif": true,
+    "tout": false,
+    "id": "s15"
+   },
+   {
+    "nom": "Binary Defense",
+    "url": "https://www.binarydefense.com/feed/",
+    "categorie": "Actualités",
+    "langue": "en",
+    "actif": true,
+    "tout": false,
+    "id": "s16"
+   },
+   {
+    "nom": "Securelist",
+    "url": "https://securelist.com/feed/",
+    "categorie": "Actualités",
+    "langue": "en",
+    "actif": true,
+    "tout": false,
+    "id": "s17"
+   },
+   {
+    "nom": "Checkpoint Research",
+    "url": "https://research.checkpoint.com/feed/",
+    "categorie": "Actualités",
+    "langue": "en",
+    "actif": true,
+    "tout": false,
+    "id": "s18"
+   },
+   {
+    "nom": "VirusBulletin",
+    "url": "https://www.virusbulletin.com/rss",
+    "categorie": "Actualités",
+    "langue": "en",
+    "actif": true,
+    "tout": false,
+    "id": "s19"
+   },
+   {
+    "nom": "Modexp",
+    "url": "https://modexp.wordpress.com/feed/",
+    "categorie": "Actualités",
+    "langue": "en",
+    "actif": true,
+    "tout": false,
+    "id": "s20"
+   },
+   {
+    "nom": "James Forshaw",
+    "url": "https://www.tiraniddo.dev/feeds/posts/default",
+    "categorie": "Actualités",
+    "langue": "en",
+    "actif": true,
+    "tout": false,
+    "id": "s21"
+   },
+   {
+    "nom": "Adam Chester",
+    "url": "https://blog.xpnsec.com/rss.xml",
+    "categorie": "Actualités",
+    "langue": "en",
+    "actif": true,
+    "tout": false,
+    "id": "s22"
+   },
+   {
+    "nom": "Microsoft Security",
+    "url": "https://msrc-blog.microsoft.com/feed/",
+    "categorie": "Éditeur",
+    "langue": "en",
+    "actif": true,
+    "tout": false,
+    "id": "s23"
+   },
+   {
+    "nom": "Recorded Future",
+    "url": "https://www.recordedfuture.com/feed",
+    "categorie": "Actualités",
+    "langue": "en",
+    "actif": true,
+    "tout": false,
+    "id": "s24"
+   },
+   {
+    "nom": "SentinelOne",
+    "url": "https://www.sentinelone.com/feed/",
+    "categorie": "Actualités",
+    "langue": "en",
+    "actif": true,
+    "tout": false,
+    "id": "s25"
+   },
+   {
+    "nom": "RedCanary",
+    "url": "https://redcanary.com/feed/",
+    "categorie": "Actualités",
+    "langue": "en",
+    "actif": true,
+    "tout": false,
+    "id": "s26"
+   },
+   {
+    "nom": "Cyber-News",
+    "url": "https://cyber-news.fr/feed/atom?",
+    "categorie": "Actualités",
+    "langue": "fr",
+    "actif": true,
+    "tout": false,
+    "id": "s27"
+   },
+   {
+    "nom": "Leak-Lookup",
+    "url": "https://leak-lookup.com/rss",
+    "categorie": "Fuites de données",
+    "langue": "en",
+    "actif": true,
+    "tout": false,
+    "id": "s28"
+   },
+   {
+    "nom": "ATT",
+    "url": "https://cybersecurity.att.com/site/blog-all-rss",
+    "categorie": "Actualités",
+    "langue": "en",
+    "actif": true,
+    "tout": false,
+    "id": "s29"
+   },
+   {
+    "nom": "US-CERT CISA",
+    "url": "https://www.cisa.gov/uscert/ncas/alerts.xml",
+    "categorie": "Alertes CERT",
+    "langue": "en",
+    "actif": true,
+    "tout": false,
+    "id": "s30"
+   },
+   {
+    "nom": "NCSC",
+    "url": "https://www.ncsc.gov.uk/api/1/services/v1/report-rss-feed.xml",
+    "categorie": "Alertes CERT",
+    "langue": "en",
+    "actif": true,
+    "tout": false,
+    "id": "s31"
+   },
+   {
+    "nom": "Center of Internet Security",
+    "url": "https://www.cisecurity.org/feed/advisories",
+    "categorie": "Avis de sécurité",
+    "langue": "en",
+    "actif": true,
+    "tout": false,
+    "id": "s32"
+   },
+   {
+    "nom": "FR-CERT Alertes",
+    "url": "https://cert.ssi.gouv.fr/alerte/feed/",
+    "categorie": "Alertes CERT",
+    "langue": "fr",
+    "actif": true,
+    "tout": true,
+    "id": "s33"
+   },
+   {
+    "nom": "FR-CERT Avis",
+    "url": "https://cert.ssi.gouv.fr/avis/feed/",
+    "categorie": "Avis de sécurité",
+    "langue": "fr",
+    "actif": true,
+    "tout": false,
+    "id": "s34"
+   },
+   {
+    "nom": "EU-ENISA Publications",
+    "url": "https://www.enisa.europa.eu/publications/RSS",
+    "categorie": "Actualités",
+    "langue": "en",
+    "actif": true,
+    "tout": false,
+    "id": "s35"
+   },
+   {
+    "nom": "Microsoft Sentinel",
+    "url": "https://techcommunity.microsoft.com/plugins/custom/microsoft/o365/custom-blog-rss?tid=8149516204242144484&board=MicrosoftSentinelBlog&size=25",
+    "categorie": "Éditeur",
+    "langue": "en",
+    "actif": true,
+    "tout": false,
+    "id": "s36"
+   },
+   {
+    "nom": "NCC",
+    "url": "https://research.nccgroup.com/category/threat-intelligence/feed/",
+    "categorie": "Actualités",
+    "langue": "en",
+    "actif": true,
+    "tout": false,
+    "id": "s37"
+   },
+   {
+    "nom": "SANS",
+    "url": "https://isc.sans.edu/rssfeed.xml",
+    "categorie": "Actualités",
+    "langue": "en",
+    "actif": true,
+    "tout": false,
+    "id": "s38"
+   },
+   {
+    "nom": "DataBreaches",
+    "url": "https://www.databreaches.net/feed/",
+    "categorie": "Fuites de données",
+    "langue": "en",
+    "actif": false,
+    "tout": false,
+    "id": "s39"
+   },
+   {
+    "nom": "Unit42",
+    "url": "https://unit42.paloaltonetworks.com/feed/",
+    "categorie": "Actualités",
+    "langue": "en",
+    "actif": true,
+    "tout": false,
+    "id": "s40"
+   },
+   {
+    "nom": "MSRC Security Update",
+    "url": "https://api.msrc.microsoft.com/update-guide/rss",
+    "categorie": "Éditeur",
+    "langue": "en",
+    "actif": true,
+    "tout": false,
+    "id": "s41"
+   },
+   {
+    "nom": "ICS CISA",
+    "url": "https://www.cisa.gov/cybersecurity-advisories/ics-advisories.xml",
+    "categorie": "Avis ICS / OT",
+    "langue": "en",
+    "actif": true,
+    "tout": false,
+    "id": "s42"
+   }
+  ],
+  "mots": [
+   {
+    "id": "m1",
+    "mot": "Constructeur A",
+    "origine": "inventaire",
+    "tags": [
+     "API_L2_01"
+    ],
+    "actif": true
+   },
+   {
+    "id": "m2",
+    "mot": "Constructeur B",
+    "origine": "inventaire",
+    "tags": [
+     "SRV_SCADA01"
+    ],
+    "actif": true
+   },
+   {
+    "id": "m3",
+    "mot": "DSM 7.2",
+    "origine": "inventaire",
+    "tags": [
+     "NAS_BCK01"
+    ],
+    "actif": true
+   },
+   {
+    "id": "m4",
+    "mot": "Hyperviseur 8.0",
+    "origine": "inventaire",
+    "tags": [
+     "HYP_OT01"
+    ],
+    "actif": true
+   },
+   {
+    "id": "m5",
+    "mot": "Windows 11 23H2",
+    "origine": "inventaire",
+    "tags": [
+     "PC_ING01"
+    ],
+    "actif": true
+   },
+   {
+    "id": "m6",
+    "mot": "Windows Server 2019",
+    "origine": "inventaire",
+    "tags": [
+     "VM_HIST01"
+    ],
+    "actif": true
+   },
+   {
+    "id": "m7",
+    "mot": "Windows Server 2022",
+    "origine": "inventaire",
+    "tags": [
+     "SRV_SCADA01",
+     "VM_AD01"
+    ],
+    "actif": true
+   }
+  ],
+  "exclusions": [
+   "webinaire",
+   "webinar"
+  ],
+  "options": {
+   "delai": 20,
+   "joursConserves": 90
+  },
+  "alertes": [
+   {
+    "id": "a1f0000000000000000000000000001",
+    "source": "ICS CISA",
+    "categorie": "Avis ICS / OT",
+    "titre": "Constructeur A : vulnérabilité d'authentification dans les automates de ligne (avis fictif)",
+    "lien": "https://exemple.invalid/veille/1",
+    "date": "2026-10-30T07:00:00Z",
+    "resume": "",
+    "mots": [
+     "Constructeur A"
+    ],
+    "actifs": [
+     "API_L2_01"
+    ],
+    "statut": "Concerné",
+    "commentaire": "Automate de la ligne 2 concerné : correctif à planifier avec l'intégrateur.",
+    "action": "",
+    "recueLe": "2026-10-31T06:00:00Z",
+    "par": "Exemple"
+   },
+   {
+    "id": "a1f0000000000000000000000000002",
+    "source": "FR-CERT Avis",
+    "categorie": "Avis de sécurité",
+    "titre": "Multiples vulnérabilités dans Windows Server 2022 (avis fictif)",
+    "lien": "https://exemple.invalid/veille/2",
+    "date": "2026-10-29T15:00:00Z",
+    "resume": "",
+    "mots": [
+     "Windows Server 2022"
+    ],
+    "actifs": [
+     "SRV_SCADA01",
+     "VM_AD01"
+    ],
+    "statut": "À analyser",
+    "commentaire": "",
+    "action": "",
+    "recueLe": "2026-10-31T06:00:00Z",
+    "par": "Exemple"
+   },
+   {
+    "id": "a1f0000000000000000000000000003",
+    "source": "FR-CERT Alertes",
+    "categorie": "Alertes CERT",
+    "titre": "Campagne d'hameçonnage ciblant l'industrie (alerte fictive)",
+    "lien": "https://exemple.invalid/veille/3",
+    "date": "2026-10-28T09:00:00Z",
+    "resume": "",
+    "mots": [],
+    "actifs": [],
+    "statut": "Nouvelle",
+    "commentaire": "",
+    "action": "",
+    "recueLe": "2026-10-31T06:00:00Z",
+    "par": ""
+   },
+   {
+    "id": "a1f0000000000000000000000000004",
+    "source": "Bleeping Computer",
+    "categorie": "Actualités",
+    "titre": "Correctif de sécurité DSM 7.2 pour les NAS (article fictif)",
+    "lien": "https://exemple.invalid/veille/4",
+    "date": "2026-10-27T18:00:00Z",
+    "resume": "",
+    "mots": [
+     "DSM 7.2"
+    ],
+    "actifs": [
+     "NAS_BCK01"
+    ],
+    "statut": "Traitée",
+    "commentaire": "Correctif appliqué le 30/10 (intervention fictive).",
+    "action": "",
+    "recueLe": "2026-10-31T06:00:00Z",
+    "par": "Exemple"
+   }
+  ],
+  "imports": [
+   {
+    "fichier": "2026-10-31_060000.werbveille-resultats.json",
+    "le": "2026-10-31T08:00:00.000Z",
+    "par": "Exemple",
+    "collecteLe": "2026-10-31T06:00:00Z",
+    "machine": "POSTE-VEILLE (fictif)",
+    "articles": 4,
+    "nouvelles": 4,
+    "erreurs": [
+     {
+      "source": "EU-ENISA Publications",
+      "message": "HTTP Error 404: Not Found (exemple fictif)"
+     }
+    ]
+   }
+  ],
+  "kit": {},
+  "recus": {
+   "actifs": {
+    "items": [
+     {
+      "id": "API_L2_01",
+      "libelle": "Automate ligne 2",
+      "type": "Automate",
+      "marque": "Constructeur A",
+      "modele": "",
+      "os": "",
+      "firmware": ""
+     },
+     {
+      "id": "SW_CORE01",
+      "libelle": "Commutateur de cœur OT",
+      "type": "Switch",
+      "marque": "",
+      "modele": "",
+      "os": "",
+      "firmware": ""
+     },
+     {
+      "id": "FW_OT01",
+      "libelle": "Pare-feu IT / OT",
+      "type": "Pare-feu",
+      "marque": "",
+      "modele": "",
+      "os": "",
+      "firmware": ""
+     },
+     {
+      "id": "SRV_SCADA01",
+      "libelle": "Serveur de supervision",
+      "type": "Serveur",
+      "marque": "Constructeur B",
+      "modele": "",
+      "os": "Windows Server 2022",
+      "firmware": ""
+     },
+     {
+      "id": "HYP_OT01",
+      "libelle": "Hyperviseur OT",
+      "type": "Hyperviseur",
+      "marque": "",
+      "modele": "",
+      "os": "Hyperviseur 8.0",
+      "firmware": ""
+     },
+     {
+      "id": "NAS_BCK01",
+      "libelle": "NAS de sauvegarde",
+      "type": "Serveur",
+      "marque": "",
+      "modele": "",
+      "os": "DSM 7.2",
+      "firmware": ""
+     },
+     {
+      "id": "PC_ING01",
+      "libelle": "Poste d'ingénierie automatisme",
+      "type": "Station de travail",
+      "marque": "",
+      "modele": "",
+      "os": "Windows 11 23H2",
+      "firmware": ""
+     },
+     {
+      "id": "VM_HIST01",
+      "libelle": "Historian",
+      "type": "Machine virtuelle",
+      "marque": "",
+      "modele": "",
+      "os": "Windows Server 2019",
+      "firmware": ""
+     },
+     {
+      "id": "VM_AD01",
+      "libelle": "Contrôleur de domaine OT",
+      "type": "Machine virtuelle",
+      "marque": "",
+      "modele": "",
+      "os": "Windows Server 2022",
+      "firmware": ""
+     }
+    ],
+    "majLe": "2026-10-31T08:00:00.000Z"
+   }
+  },
+  "largeurs": {}
+ }
+}

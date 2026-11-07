@@ -1,0 +1,51 @@
+{
+  "charte": "1.0",
+  "id": "werbpresta",
+  "produit": "WerbPresta",
+  "version": "1.4.0",
+  "dateVersion": "2026-10",
+  "auteur": "@WerbHat",
+  "signature": "Développé par @WerbHat",
+  "description": "Prestataires du site et du groupe : périmètre et actifs, accès, criticité, cahier d'exigences cyber (IEC 62443-2-4, NIS2), évaluation, consolidation",
+  "rubrique": "conformite",
+  "portees": [
+    "groupe",
+    "site"
+  ],
+  "entree": "application/WerbPresta.html",
+  "empreinte": {
+    "algo": "SHA-256",
+    "valeur": "0e51d91cfa940d003656f791778f1bed460134641ec1a00da309e11d18fe6175"
+  },
+  "donnees": {
+    "format": "WERBPRESTA",
+    "schema": 1,
+    "extension": ".werbpresta.json",
+    "formatsLus": []
+  },
+  "echanges": {
+    "publie": [
+      "site:evaluationsPrestataires",
+      "groupe:modeleQuestionnaire"
+    ],
+    "consomme": [
+      "groupe:sites",
+      "groupe:prestataires",
+      "site:si",
+      "site:zones",
+      "site:actifs",
+      "site:prestataires",
+      "site:evaluationsPrestataires",
+      "groupe:modeleQuestionnaire"
+    ]
+  },
+  "compatPortail": ">=1.1.1",
+  "licence": "MIT",
+  "navigateurs": [
+    "edge",
+    "chrome",
+    "firefox"
+  ],
+  "ouvertureParLien": true,
+  "exemple": "exemples/Exemple_LYON.werbpresta.json"
+}

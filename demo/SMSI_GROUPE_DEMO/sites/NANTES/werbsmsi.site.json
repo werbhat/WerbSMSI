@@ -1,0 +1,26 @@
+{
+  "format": "WERBSMSI-SITE",
+  "schema": 1,
+  "famille": "WERBSMSI",
+  "meta": {
+    "produit": "WerbSMSI",
+    "appVersion": "1.0.0",
+    "auteur": "@WerbHat",
+    "generateur": "WerbSMSI v1.0.0 – Développé par @WerbHat",
+    "creeLe": "2026-10-23",
+    "modifieLe": "2026-10-23T16:35:55Z",
+    "modifiePar": "werb_charte.py",
+    "groupeId": "e6a47cd7-77fe-463f-b6ea-b50ff390bfc7",
+    "portee": "site",
+    "site": "NANTES"
+  },
+  "data": {
+    "groupeId": "e6a47cd7-77fe-463f-b6ea-b50ff390bfc7",
+    "code": "NANTES",
+    "nom": "Usine de Nantes (fictive)",
+    "entite": "GDI Production",
+    "correspondant": "",
+    "classification": "Diffusion restreinte",
+    "bases": []
+  }
+}

@@ -1,0 +1,47 @@
+{
+ "format": "WERBSMSI-PUBLICATION",
+ "schema": 1,
+ "famille": "WERBSMSI",
+ "meta": {
+  "produit": "werbiec62443",
+  "appVersion": "0.0.0",
+  "auteur": "@WerbHat",
+  "generateur": "werbiec62443 (exemple) – Développé par @WerbHat",
+  "creeLe": "2026-10-23",
+  "modifieLe": "2026-10-23T00:00:00Z",
+  "modifiePar": "Exemple",
+  "groupeId": "e6a47cd7-77fe-463f-b6ea-b50ff390bfc7",
+  "module": "werbiec62443",
+  "portee": "site",
+  "publiePar": "Exemple",
+  "publieLe": "2026-10-23T00:00:00Z",
+  "site": "LYON"
+ },
+ "data": {
+  "prestataires": [
+   {
+    "id": "CYB-EXG-001/P01",
+    "nom": "Intégrateur fictif",
+    "role": "Intégrateur (62443-2-4)",
+    "source": "werbiec62443",
+    "majLe": "2026-10-23"
+   }
+  ],
+  "syntheseConformite": [
+   {
+    "id": "CYB-EXG-001/conformite",
+    "referentiel": "IEC 62443-3-3",
+    "perimetre": "Ligne 2 (exemple)",
+    "taux": 62.5,
+    "exigences": 48,
+    "conformes": 30,
+    "ecartsMajeurs": 4,
+    "mesuresSocleNonAppliquees": [
+     "MS-01"
+    ],
+    "source": "werbiec62443",
+    "majLe": "2026-10-23"
+   }
+  ]
+ }
+}

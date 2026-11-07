@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Schéma fictif de démonstration – WerbCartoSI – Développé par @WerbHat -->
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="360" viewBox="0 0 640 360" font-family="Segoe UI, Arial, sans-serif" font-size="13">
+  <rect width="640" height="360" fill="#ffffff"/>
+  <text x="20" y="28" font-size="16" font-weight="bold" fill="#1f3864">Zones et conduits – site de Lyon (exemple fictif)</text>
+  <rect x="20" y="50" width="180" height="110" rx="8" fill="#e8eef9" stroke="#2e5090"/><text x="32" y="74" font-weight="bold">Bureautique</text><text x="32" y="96">Postes, messagerie</text>
+  <rect x="230" y="50" width="180" height="110" rx="8" fill="#fff4d6" stroke="#9a6a00"/><text x="242" y="74" font-weight="bold">Z-SUP Supervision</text><text x="242" y="96">SCADA, historien</text><text x="242" y="116">SL-T 2</text>
+  <rect x="440" y="50" width="180" height="110" rx="8" fill="#fde7e5" stroke="#b3261e"/><text x="452" y="74" font-weight="bold">Z-PROC Process</text><text x="452" y="96">Automates ligne 2</text><text x="452" y="116">SL-T 3</text>
+  <line x1="200" y1="105" x2="230" y2="105" stroke="#1d2330" stroke-width="2"/><line x1="410" y1="105" x2="440" y2="105" stroke="#1d2330" stroke-width="2"/>
+  <text x="20" y="200">Conduits filtrés par le pare-feu FW_OT01 (fictif).</text>
+  <rect x="20" y="290" width="600" height="50" fill="none" stroke="#5d6676"/><text x="30" y="310">SCH-001 · version 2.1 · Diffusion restreinte · site LYON</text><text x="30" y="330">Propriétaire : correspondant cybersécurité de site · approuvé par le RSSI groupe</text>
+</svg>

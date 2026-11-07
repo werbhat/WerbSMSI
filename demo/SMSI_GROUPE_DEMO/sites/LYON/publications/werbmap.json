@@ -1,0 +1,250 @@
+{
+ "format": "WERBSMSI-PUBLICATION",
+ "schema": 1,
+ "famille": "WERBSMSI",
+ "meta": {
+  "produit": "werbmap",
+  "appVersion": "0.0.0",
+  "auteur": "@WerbHat",
+  "generateur": "werbmap (exemple) – Développé par @WerbHat",
+  "creeLe": "2026-10-23",
+  "modifieLe": "2026-10-24T00:00:00Z",
+  "modifiePar": "Exemple",
+  "groupeId": "e6a47cd7-77fe-463f-b6ea-b50ff390bfc7",
+  "module": "werbmap",
+  "portee": "site",
+  "publiePar": "Exemple",
+  "publieLe": "2026-10-24T00:00:00Z",
+  "site": "LYON"
+ },
+ "data": {
+  "zones": [
+   {
+    "id": "Z-PROC",
+    "nom": "Réseaux process",
+    "slt": 3,
+    "criticite": "process",
+    "source": "werbmap",
+    "majLe": "2026-10-23"
+   },
+   {
+    "id": "Z-SUP",
+    "nom": "Supervision",
+    "slt": 2,
+    "criticite": "metier-critique",
+    "source": "werbmap",
+    "majLe": "2026-10-23"
+   }
+  ],
+  "conduits": [
+   {
+    "id": "C-SUP-PROC",
+    "de": "Z-SUP",
+    "vers": "Z-PROC",
+    "description": "Supervision vers automates",
+    "source": "werbmap",
+    "majLe": "2026-10-23"
+   }
+  ],
+  "actifs": [
+   {
+    "id": "API_L2_01",
+    "type": "Automate",
+    "famille": "reseau",
+    "zone": "Z-PROC",
+    "criticite": "process",
+    "libelle": "Automate ligne 2",
+    "emplacement": "Atelier ligne 2",
+    "coffret": "CF-L2-01",
+    "marque": "Constructeur A",
+    "source": "werbmap",
+    "majLe": "2026-10-24",
+    "modele": "AUTO-1500",
+    "firmware": "V2.9.4"
+   },
+   {
+    "id": "SW_CORE01",
+    "type": "Switch",
+    "famille": "reseau",
+    "zone": "Z-SUP",
+    "libelle": "Commutateur de cœur OT",
+    "emplacement": "Salle serveurs B",
+    "coffret": "BAIE-01",
+    "source": "werbmap",
+    "majLe": "2026-10-24",
+    "marque": "Constructeur C",
+    "modele": "SW-24G-IND",
+    "firmware": "8.4.2"
+   },
+   {
+    "id": "FW_OT01",
+    "type": "Pare-feu",
+    "famille": "reseau",
+    "zone": "Z-SUP",
+    "criticite": "critique",
+    "libelle": "Pare-feu IT / OT",
+    "emplacement": "Salle serveurs B",
+    "coffret": "BAIE-01",
+    "source": "werbmap",
+    "majLe": "2026-10-24",
+    "marque": "Constructeur D",
+    "modele": "FW-IND-200",
+    "firmware": "7.2.1"
+   },
+   {
+    "id": "SRV_SCADA01",
+    "type": "Serveur",
+    "famille": "physique",
+    "zone": "Z-SUP",
+    "criticite": "metier-critique",
+    "libelle": "Serveur de supervision",
+    "emplacement": "Salle serveurs B",
+    "coffret": "BAIE-01",
+    "os": "Windows Server 2022",
+    "fonction": "Supervision",
+    "marque": "Constructeur B",
+    "source": "werbmap",
+    "majLe": "2026-10-24",
+    "modele": "SRV-R740",
+    "firmware": "2.19.1"
+   },
+   {
+    "id": "HYP_OT01",
+    "type": "Hyperviseur",
+    "famille": "physique",
+    "zone": "Z-SUP",
+    "libelle": "Hyperviseur OT",
+    "emplacement": "Salle serveurs B",
+    "coffret": "BAIE-01",
+    "os": "Hyperviseur 8.0",
+    "fonction": "Virtualisation",
+    "source": "werbmap",
+    "majLe": "2026-10-24",
+    "marque": "Constructeur B",
+    "modele": "SRV-R740",
+    "firmware": "2.17.0"
+   },
+   {
+    "id": "NAS_BCK01",
+    "type": "Serveur",
+    "famille": "physique",
+    "zone": "Z-SUP",
+    "libelle": "NAS de sauvegarde",
+    "emplacement": "Local technique",
+    "os": "DSM 7.2",
+    "fonction": "Sauvegardes",
+    "source": "werbmap",
+    "majLe": "2026-10-24",
+    "marque": "Constructeur E",
+    "modele": "NAS-4B",
+    "firmware": "5.1.0"
+   },
+   {
+    "id": "PC_ING01",
+    "type": "Station de travail",
+    "famille": "physique",
+    "zone": "Z-SUP",
+    "libelle": "Poste d'ingénierie automatisme",
+    "emplacement": "Bureau méthodes",
+    "os": "Windows 11 23H2",
+    "fonction": "Ingénierie",
+    "source": "werbmap",
+    "majLe": "2026-10-24",
+    "marque": "Constructeur B",
+    "modele": "WS-5000",
+    "firmware": "1.12.0"
+   },
+   {
+    "id": "VM_HIST01",
+    "type": "Machine virtuelle",
+    "famille": "virtuelle",
+    "zone": "Z-SUP",
+    "libelle": "Historian",
+    "hote": "HYP_OT01",
+    "os": "Windows Server 2019",
+    "fonction": "Historisation",
+    "source": "werbmap",
+    "majLe": "2026-10-24"
+   },
+   {
+    "id": "VM_AD01",
+    "type": "Machine virtuelle",
+    "famille": "virtuelle",
+    "zone": "Z-SUP",
+    "libelle": "Contrôleur de domaine OT",
+    "hote": "HYP_OT01",
+    "os": "Windows Server 2022",
+    "fonction": "Annuaire",
+    "source": "werbmap",
+    "majLe": "2026-10-24"
+   }
+  ],
+  "si": [
+   {
+    "id": "SI-SUPERVISION",
+    "nom": "Supervision ligne 2",
+    "fonction": "Conduite et historisation de la ligne 2",
+    "d": 4,
+    "i": 3,
+    "c": 2,
+    "vlans": [
+     "210",
+     "220"
+    ],
+    "actifs": [
+     "API_L2_01",
+     "SRV_SCADA01",
+     "VM_HIST01"
+    ],
+    "source": "werbmap",
+    "majLe": "2026-10-30"
+   }
+  ],
+  "vlans": [
+   {
+    "id": "110",
+    "vlan": "110",
+    "nom": "VL110_PROCESS_L2",
+    "reseau": "PROCESS_L2",
+    "statut": "En service",
+    "zone": "Z-PROC",
+    "couche": "Process",
+    "source": "werbmap",
+    "majLe": "2026-01-15"
+   },
+   {
+    "id": "210",
+    "vlan": "210",
+    "nom": "VL210_SUPERVISION",
+    "reseau": "SUPERVISION",
+    "statut": "En service",
+    "zone": "Z-SUP",
+    "couche": "Supervision",
+    "source": "werbmap",
+    "majLe": "2026-01-15"
+   },
+   {
+    "id": "220",
+    "vlan": "220",
+    "nom": "VL220_HISTORIQUE",
+    "reseau": "HISTORIQUE",
+    "statut": "En service",
+    "zone": "Z-SUP",
+    "couche": "Supervision",
+    "source": "werbmap",
+    "majLe": "2026-01-15"
+   },
+   {
+    "id": "240",
+    "vlan": "240",
+    "nom": "VL240_ADMIN_OT",
+    "reseau": "ADMIN_OT",
+    "statut": "Réservé",
+    "zone": "Z-SUP",
+    "couche": "Supervision",
+    "source": "werbmap",
+    "majLe": "2026-01-15"
+   }
+  ]
+ }
+}

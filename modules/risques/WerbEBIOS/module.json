@@ -1,0 +1,58 @@
+{
+  "charte": "1.0",
+  "id": "werbebios",
+  "produit": "WerbEBIOS",
+  "version": "1.9.0",
+  "dateVersion": "2026-11",
+  "auteur": "@WerbHat",
+  "signature": "Développé par @WerbHat",
+  "description": "Analyse de risques EBIOS Risk Manager (ANSSI) du groupe et des sites : 5 ateliers, MITRE ATT&CK, rapport Word",
+  "rubrique": "risques",
+  "portees": [
+    "groupe",
+    "site"
+  ],
+  "entree": "application/WerbEBIOS.html",
+  "empreinte": {
+    "algo": "SHA-256",
+    "valeur": "e6b13212293fdf7f0d5c5aefed2a173183e63ffd919c5dc159eed5a65ba41b60"
+  },
+  "donnees": {
+    "format": "WERBEBIOS",
+    "schema": 1,
+    "extension": ".werbebios.json",
+    "formatsLus": []
+  },
+  "echanges": {
+    "publie": [
+      "groupe:echelles",
+      "groupe:valeursMetier",
+      "groupe:evenementsRedoutes",
+      "groupe:sourcesRisque",
+      "site:biensSupports",
+      "site:syntheseRisques",
+      "site:evenementsRedoutes",
+      "site:valeursMetier"
+    ],
+    "consomme": [
+      "groupe:sites",
+      "groupe:echelles",
+      "groupe:valeursMetier",
+      "groupe:evenementsRedoutes",
+      "groupe:sourcesRisque",
+      "groupe:mesuresSocle",
+      "site:actifs",
+      "site:si",
+      "site:evaluationsPrestataires"
+    ]
+  },
+  "compatPortail": ">=1.0.0",
+  "licence": "MIT",
+  "navigateurs": [
+    "edge",
+    "chrome",
+    "firefox"
+  ],
+  "ouvertureParLien": true,
+  "exemple": "exemples/Exemple_Site_Industriel.werbebios.json"
+}

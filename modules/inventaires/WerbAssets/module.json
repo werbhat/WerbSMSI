@@ -1,0 +1,89 @@
+{
+  "charte": "1.0",
+  "id": "werbassets",
+  "produit": "WerbAssets",
+  "version": "1.9.0",
+  "dateVersion": "2026-11",
+  "auteur": "@WerbHat",
+  "signature": "Développé par @WerbHat",
+  "description": "Fiches de configuration des assets réseau d'un site : pare-feu, switch, brassage des baies et autres équipements",
+  "rubrique": "inventaires",
+  "portees": [
+    "site"
+  ],
+  "entree": "application/WerbAssets.html",
+  "empreinte": {
+    "algo": "SHA-256",
+    "valeur": "022be91b1e91cb241b783e958d83cd1dd765b403e111c298ab9a908a23c2d480"
+  },
+  "donnees": {
+    "format": "WERBASSETS",
+    "schema": 1,
+    "extension": ".werbassets.json",
+    "formatsLus": []
+  },
+  "echanges": {
+    "publie": [],
+    "consomme": [
+      "groupe:sites",
+      "site:zones",
+      "site:actifs",
+      "site:vlans",
+      "groupe:listes"
+    ]
+  },
+  "compatPortail": ">=1.0.0",
+  "licence": "MIT",
+  "navigateurs": [
+    "edge",
+    "chrome",
+    "firefox"
+  ],
+  "ouvertureParLien": true,
+  "exemple": "exemples/Exemple_LYON.werbassets.json",
+  "listes": [
+    {
+      "id": "typesPort",
+      "libelle": "Types de port (switch)",
+      "forme": "simple",
+      "defaut": [
+        "RJ45",
+        "SFP",
+        "SFP+",
+        "QSFP"
+      ]
+    },
+    {
+      "id": "typesBandeau",
+      "libelle": "Types de port des bandeaux",
+      "forme": "simple",
+      "defaut": [
+        "RJ45",
+        "Fibre LC duplex",
+        "Fibre SC duplex",
+        "T-SC Duplex",
+        "Fibre MTP"
+      ]
+    },
+    {
+      "id": "typesWan",
+      "libelle": "Types de lien WAN",
+      "forme": "simple",
+      "defaut": [
+        "Fibre",
+        "Cuivre (xDSL)",
+        "4G / 5G",
+        "MPLS",
+        "Liaison louée",
+        "Satellite"
+      ]
+    }
+  ],
+  "sources": [
+    "signature.js",
+    "socle.js",
+    "guides.js",
+    "xlsx.js",
+    "app.js"
+  ]
+}

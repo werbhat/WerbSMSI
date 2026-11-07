@@ -1,0 +1,269 @@
+{
+ "format": "WERBSMSI-PUBLICATION",
+ "schema": 1,
+ "famille": "WERBSMSI",
+ "meta": {
+  "produit": "WerbAcademie",
+  "appVersion": "1.4.0",
+  "auteur": "@WerbHat",
+  "generateur": "WerbAcademie v1.4.0 – Développé par @WerbHat",
+  "creeLe": "2026-10-31",
+  "modifieLe": "2026-10-31T15:22:12Z",
+  "modifiePar": "Prénom TEST",
+  "groupeId": "e6a47cd7-77fe-463f-b6ea-b50ff390bfc7",
+  "module": "werbacademie",
+  "portee": "groupe",
+  "publiePar": "Prénom TEST",
+  "publieLe": "2026-10-31T15:22:12Z"
+ },
+ "data": {
+  "formations": {
+   "id": "academie",
+   "calculeLe": "2026-10-31",
+   "renouvellementAlerteMois": 2,
+   "catalogue": [
+    {
+     "code": "ACA-HYG",
+     "titre": "Hygiène numérique : les bons réflexes au quotidien",
+     "version": "1.0",
+     "populations": [
+      "tous"
+     ],
+     "periodiciteMois": 24,
+     "duree": 45
+    },
+    {
+     "code": "ACA-IA",
+     "titre": "Usage de l'intelligence artificielle",
+     "version": "1.0",
+     "populations": [
+      "tous"
+     ],
+     "periodiciteMois": 24,
+     "duree": 45
+    },
+    {
+     "code": "ACA-USB",
+     "titre": "Usage des clés USB et supports amovibles",
+     "version": "1.0",
+     "populations": [
+      "tous"
+     ],
+     "periodiciteMois": 24,
+     "duree": 30
+    },
+    {
+     "code": "ACA-QR",
+     "titre": "Usage des QR codes",
+     "version": "1.0",
+     "populations": [
+      "tous"
+     ],
+     "periodiciteMois": 24,
+     "duree": 20
+    },
+    {
+     "code": "ACA-MDP",
+     "titre": "Gestion des mots de passe",
+     "version": "1.0",
+     "populations": [
+      "tous"
+     ],
+     "periodiciteMois": 24,
+     "duree": 45
+    },
+    {
+     "code": "ACA-DIR",
+     "titre": "Cybersécurité : le rôle des dirigeants",
+     "version": "1.0",
+     "populations": [
+      "dirigeants"
+     ],
+     "periodiciteMois": 24,
+     "duree": 60
+    }
+   ],
+   "global": {
+    "personnes": 12,
+    "personnesAJour": 0,
+    "obligations": 63,
+    "ajour": 7,
+    "arenouveler": 2,
+    "retard": 4,
+    "jamais": 50,
+    "taux": 14
+   },
+   "dirigeants": {
+    "personnes": 3,
+    "personnesAJour": 0,
+    "obligations": 18,
+    "ajour": 3,
+    "arenouveler": 1,
+    "retard": 0,
+    "jamais": 14,
+    "taux": 22
+   },
+   "parSite": [
+    {
+     "site": "LYON",
+     "personnes": 6,
+     "personnesAJour": 0,
+     "obligations": 31,
+     "ajour": 2,
+     "arenouveler": 0,
+     "retard": 4,
+     "jamais": 25,
+     "taux": 6
+    },
+    {
+     "site": "NANTES",
+     "personnes": 2,
+     "personnesAJour": 0,
+     "obligations": 11,
+     "ajour": 1,
+     "arenouveler": 2,
+     "retard": 0,
+     "jamais": 8,
+     "taux": 27
+    },
+    {
+     "site": "GROUPE",
+     "personnes": 4,
+     "personnesAJour": 0,
+     "obligations": 21,
+     "ajour": 4,
+     "arenouveler": 0,
+     "retard": 0,
+     "jamais": 17,
+     "taux": 19
+    }
+   ],
+   "indicateurs": [
+    {
+     "site": "LYON",
+     "population": "collaborateurs",
+     "personnes": 1,
+     "personnesAJour": 0,
+     "obligations": 5,
+     "ajour": 0,
+     "arenouveler": 0,
+     "retard": 1,
+     "jamais": 4,
+     "taux": 0
+    },
+    {
+     "site": "LYON",
+     "population": "administrateurs",
+     "personnes": 1,
+     "personnesAJour": 0,
+     "obligations": 5,
+     "ajour": 1,
+     "arenouveler": 0,
+     "retard": 1,
+     "jamais": 3,
+     "taux": 20
+    },
+    {
+     "site": "LYON",
+     "population": "dirigeants",
+     "personnes": 1,
+     "personnesAJour": 0,
+     "obligations": 6,
+     "ajour": 0,
+     "arenouveler": 0,
+     "retard": 0,
+     "jamais": 6,
+     "taux": 0
+    },
+    {
+     "site": "LYON",
+     "population": "prestataires",
+     "personnes": 1,
+     "personnesAJour": 0,
+     "obligations": 5,
+     "ajour": 0,
+     "arenouveler": 0,
+     "retard": 0,
+     "jamais": 5,
+     "taux": 0
+    },
+    {
+     "site": "LYON",
+     "population": "operateurs",
+     "personnes": 2,
+     "personnesAJour": 0,
+     "obligations": 10,
+     "ajour": 1,
+     "arenouveler": 0,
+     "retard": 2,
+     "jamais": 7,
+     "taux": 10
+    },
+    {
+     "site": "NANTES",
+     "population": "dirigeants",
+     "personnes": 1,
+     "personnesAJour": 0,
+     "obligations": 6,
+     "ajour": 1,
+     "arenouveler": 1,
+     "retard": 0,
+     "jamais": 4,
+     "taux": 33
+    },
+    {
+     "site": "NANTES",
+     "population": "operateurs",
+     "personnes": 1,
+     "personnesAJour": 0,
+     "obligations": 5,
+     "ajour": 0,
+     "arenouveler": 1,
+     "retard": 0,
+     "jamais": 4,
+     "taux": 20
+    },
+    {
+     "site": "GROUPE",
+     "population": "collaborateurs",
+     "personnes": 2,
+     "personnesAJour": 0,
+     "obligations": 10,
+     "ajour": 1,
+     "arenouveler": 0,
+     "retard": 0,
+     "jamais": 9,
+     "taux": 10
+    },
+    {
+     "site": "GROUPE",
+     "population": "administrateurs",
+     "personnes": 1,
+     "personnesAJour": 0,
+     "obligations": 5,
+     "ajour": 1,
+     "arenouveler": 0,
+     "retard": 0,
+     "jamais": 4,
+     "taux": 20
+    },
+    {
+     "site": "GROUPE",
+     "population": "dirigeants",
+     "personnes": 1,
+     "personnesAJour": 0,
+     "obligations": 6,
+     "ajour": 2,
+     "arenouveler": 0,
+     "retard": 0,
+     "jamais": 4,
+     "taux": 33
+    }
+   ],
+   "sessions12Mois": 2,
+   "reussites12Mois": 4,
+   "source": "werbacademie",
+   "majLe": "2026-10-31"
+  }
+ }
+}

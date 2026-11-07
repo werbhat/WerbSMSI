@@ -1,0 +1,20 @@
+{
+ "format": "WERBMAP",
+ "schema": 4,
+ "famille": "WERBSMSI",
+ "meta": {
+  "produit": "WerbMap",
+  "appVersion": "0.0.0",
+  "auteur": "@WerbHat",
+  "generateur": "WerbMap (exemple d'enveloppe) – Développé par @WerbHat",
+  "creeLe": "2026-10-23",
+  "modifieLe": "2026-10-23T00:00:00Z",
+  "modifiePar": "Exemple",
+  "groupeId": "e6a47cd7-77fe-463f-b6ea-b50ff390bfc7",
+  "portee": "site",
+  "site": "LYON"
+ },
+ "verrou": null,
+ "journal": [],
+ "data": {}
+}

@@ -1,0 +1,759 @@
+{
+ "format": "WERBEBIOS",
+ "schema": 1,
+ "famille": "WERBSMSI",
+ "meta": {
+  "produit": "WerbEBIOS",
+  "appVersion": "1.0.0",
+  "auteur": "@WerbHat",
+  "generateur": "WerbEBIOS v1.0.0 – Développé par @WerbHat",
+  "creeLe": "2026-10-24",
+  "modifieLe": "2026-10-24T08:00:00Z",
+  "modifiePar": "Exemple",
+  "groupeId": "e6a47cd7-77fe-463f-b6ea-b50ff390bfc7",
+  "portee": "site",
+  "site": "LYON"
+ },
+ "verrou": null,
+ "journal": [
+  {
+   "date": "2026-10-24T08:00:00.000Z",
+   "par": "Exemple",
+   "action": "Création",
+   "objet": "Analyse",
+   "element": "",
+   "champ": "",
+   "avant": "",
+   "apres": "Analyse d'exemple fictive"
+  }
+ ],
+ "data": {
+  "missions": [
+   {
+    "id": "MI-01",
+    "nom": "Produire sur la ligne 2",
+    "description": "Conditionnement des produits finis."
+   }
+  ],
+  "vm": [
+   {
+    "id": "VM-01",
+    "nom": "Production des lignes industrielles",
+    "nature": "Processus métier",
+    "missions": [
+     "MI-01"
+    ],
+    "responsable": "Responsable de production",
+    "description": "",
+    "rg": "VM-01"
+   },
+   {
+    "id": "VM-02",
+    "nom": "Recettes et paramètres de fabrication",
+    "nature": "Propriété intellectuelle",
+    "missions": [
+     "MI-01"
+    ],
+    "responsable": "Automaticien",
+    "description": "",
+    "rg": "VM-02"
+   },
+   {
+    "id": "VM-03",
+    "nom": "Historique de production (traçabilité)",
+    "nature": "Information opérationnelle",
+    "missions": [
+     "MI-01"
+    ],
+    "responsable": "Qualité",
+    "description": "Exigence réglementaire de traçabilité des lots."
+   }
+  ],
+  "bs": [
+   {
+    "id": "BS-01",
+    "nom": "Système de supervision",
+    "type": "Système (ensemble)",
+    "vm": [
+     "VM-01",
+     "VM-03"
+    ],
+    "actifs": [
+     "SRV_SCADA01",
+     "VM_HIST01"
+    ],
+    "responsable": "Responsable d'exploitation",
+    "description": ""
+   },
+   {
+    "id": "BS-02",
+    "nom": "Automates de la ligne 2",
+    "type": "Matériel",
+    "vm": [
+     "VM-01",
+     "VM-02"
+    ],
+    "actifs": [
+     "API_L2_01"
+    ],
+    "responsable": "Automaticien",
+    "description": ""
+   },
+   {
+    "id": "BS-03",
+    "nom": "Poste d'ingénierie automatisme",
+    "type": "Matériel",
+    "vm": [
+     "VM-02"
+    ],
+    "actifs": [
+     "PC_ING01"
+    ],
+    "responsable": "Automaticien",
+    "description": "Contient les projets automates."
+   },
+   {
+    "id": "BS-04",
+    "nom": "Pare-feu IT / OT",
+    "type": "Réseau",
+    "vm": [
+     "VM-01"
+    ],
+    "actifs": [
+     "FW_OT01"
+    ],
+    "responsable": "Responsable d'exploitation",
+    "description": ""
+   },
+   {
+    "id": "BS-05",
+    "nom": "Sauvegardes du site",
+    "type": "Système (ensemble)",
+    "vm": [
+     "VM-01",
+     "VM-03"
+    ],
+    "actifs": [
+     "NAS_BCK01"
+    ],
+    "responsable": "Responsable d'exploitation",
+    "description": ""
+   },
+   {
+    "id": "BS-06",
+    "nom": "Intégrateur et mainteneurs",
+    "type": "Organisation, prestataire",
+    "vm": [
+     "VM-01"
+    ],
+    "actifs": [],
+    "responsable": "Acheteur",
+    "description": "Accès distants pour la maintenance."
+   }
+  ],
+  "er": [
+   {
+    "id": "ER-01",
+    "vm": "VM-01",
+    "description": "Arrêt prolongé d'une ligne de production",
+    "impacts": [
+     "Impacts sur les missions et services",
+     "Impacts financiers"
+    ],
+    "gravite": "3",
+    "justification": "",
+    "rg": "ER-01",
+    "criteres": [
+     "D"
+    ],
+    "besoin": "3"
+   },
+   {
+    "id": "ER-02",
+    "vm": "VM-02",
+    "description": "Vol ou divulgation des recettes de fabrication",
+    "impacts": [
+     "Impacts financiers",
+     "Impacts sur l'image et la confiance"
+    ],
+    "gravite": "3",
+    "justification": "",
+    "rg": "ER-02",
+    "criteres": [
+     "C"
+    ],
+    "besoin": "4"
+   },
+   {
+    "id": "ER-03",
+    "vm": "VM-03",
+    "description": "Perte de l'historique de production d'un lot",
+    "impacts": [
+     "Impacts juridiques"
+    ],
+    "gravite": "2",
+    "justification": "Rappel de lot impossible à circonscrire.",
+    "criteres": [
+     "I",
+     "T"
+    ],
+    "besoin": "3"
+   }
+  ],
+  "socle": [
+   {
+    "id": "SOC-01",
+    "referentiel": "Socle de mesures du groupe",
+    "exigence": "Comptes nominatifs sur les postes d'ingénierie",
+    "etat": "Non appliqué",
+    "ecart": "Compte « ingenieur » partagé sur PC_ING01.",
+    "justification": "",
+    "rg": "MS-01"
+   },
+   {
+    "id": "SOC-02",
+    "referentiel": "Socle de mesures du groupe",
+    "exigence": "Cloisonnement IT / OT par pare-feu filtrant",
+    "etat": "Appliqué",
+    "ecart": "",
+    "justification": "FW_OT01 en place.",
+    "rg": "MS-02"
+   }
+  ],
+  "srov": [
+   {
+    "id": "SROV-01",
+    "source": "Crime organisé",
+    "objectif": "Lucratif (rançon, fraude, revente)",
+    "motivation": "4",
+    "ressources": "4",
+    "activite": "4",
+    "retenu": true,
+    "justification": "Couple retenu par le groupe",
+    "rg": "SROV-01",
+    "er": [
+     "ER-01"
+    ]
+   },
+   {
+    "id": "SROV-02",
+    "source": "État étranger",
+    "objectif": "Espionnage",
+    "motivation": "3",
+    "ressources": "4",
+    "activite": "2",
+    "retenu": true,
+    "justification": "Couple retenu par le groupe",
+    "rg": "SROV-02",
+    "er": [
+     "ER-02"
+    ]
+   },
+   {
+    "id": "SROV-03",
+    "source": "Attaquant interne (salarié, ex-salarié)",
+    "objectif": "Vengeance",
+    "motivation": "2",
+    "ressources": "2",
+    "activite": "1",
+    "retenu": false,
+    "justification": "Aucun signal récent sur le site."
+   }
+  ],
+  "pp": [
+   {
+    "id": "PP-01",
+    "nom": "Intégrateur Alpha (fictif)",
+    "categorie": "Intégrateur",
+    "dependance": "4",
+    "penetration": "4",
+    "maturite": "2",
+    "confiance": "3",
+    "description": "Accès distant permanent au poste d'ingénierie."
+   },
+   {
+    "id": "PP-02",
+    "nom": "Mainteneur Beta (fictif)",
+    "categorie": "Mainteneur",
+    "dependance": "3",
+    "penetration": "3",
+    "maturite": "2",
+    "confiance": "2",
+    "description": "Clés USB lors des interventions."
+   },
+   {
+    "id": "PP-03",
+    "nom": "Éditeur Gamma (fictif)",
+    "categorie": "Fournisseur",
+    "dependance": "3",
+    "penetration": "2",
+    "maturite": "3",
+    "confiance": "3",
+    "description": "Mises à jour de la supervision."
+   },
+   {
+    "id": "PP-04",
+    "nom": "Infogérant IT du groupe (fictif)",
+    "categorie": "Prestataire",
+    "dependance": "2",
+    "penetration": "2",
+    "maturite": "4",
+    "confiance": "4",
+    "description": "Administration de l'annuaire."
+   }
+  ],
+  "ss": [
+   {
+    "id": "SS-01",
+    "srov": "SROV-01",
+    "description": "Le groupe cybercriminel compromet l'accès distant de l'intégrateur puis déploie un rançongiciel sur la supervision et les sauvegardes.",
+    "er": [
+     "ER-01",
+     "ER-03"
+    ],
+    "pp": [
+     "PP-01"
+    ],
+    "mesuresEco": "Exiger l'authentification forte et la journalisation des accès de l'intégrateur."
+   },
+   {
+    "id": "SS-02",
+    "srov": "SROV-01",
+    "description": "Le groupe cybercriminel infecte le poste d'ingénierie par une clé USB du mainteneur et arrête les automates.",
+    "er": [
+     "ER-01"
+    ],
+    "pp": [
+     "PP-02"
+    ],
+    "mesuresEco": "Station blanche obligatoire pour les supports amovibles des prestataires."
+   },
+   {
+    "id": "SS-03",
+    "srov": "SROV-02",
+    "description": "Un service étranger compromet la mise à jour de l'éditeur de supervision pour exfiltrer les recettes.",
+    "er": [
+     "ER-02"
+    ],
+    "pp": [
+     "PP-03"
+    ],
+    "mesuresEco": "Vérifier l'intégrité des mises à jour de l'éditeur."
+   }
+  ],
+  "so": [
+   {
+    "id": "SO-01",
+    "ss": "SS-01",
+    "description": "Hameçonnage de l'intégrateur, vol de ses identifiants VPN, rebond vers la supervision, chiffrement de la supervision et du NAS.",
+    "bs": [
+     "BS-01",
+     "BS-05",
+     "BS-06"
+    ],
+    "vraisemblance": "3",
+    "actions": [
+     {
+      "phase": "connaitre",
+      "technique": "T1591 – Gather Victim Org Information",
+      "description": "Identification de l'intégrateur sur les réseaux sociaux professionnels"
+     },
+     {
+      "phase": "rentrer",
+      "technique": "T1566 – Phishing",
+      "description": "Courriel piégé à un technicien de l'intégrateur"
+     },
+     {
+      "phase": "rentrer",
+      "technique": "T0822 – External Remote Services",
+      "description": "Connexion VPN avec les identifiants volés"
+     },
+     {
+      "phase": "trouver",
+      "technique": "T1018 – Remote System Discovery",
+      "description": "Découverte de la supervision et du NAS"
+     },
+     {
+      "phase": "exploiter",
+      "technique": "T1490 – Inhibit System Recovery",
+      "description": "Suppression des sauvegardes"
+     },
+     {
+      "phase": "exploiter",
+      "technique": "T1486 – Data Encrypted for Impact",
+      "description": "Chiffrement de la supervision"
+     }
+    ],
+    "traitement": "reduire",
+    "mesures": [
+     "M-01",
+     "M-02",
+     "M-03"
+    ],
+    "gRes": "",
+    "vRes": "1",
+    "justification": "Authentification forte et sauvegarde hors ligne testée."
+   },
+   {
+    "id": "SO-02",
+    "ss": "SS-01",
+    "description": "Depuis la supervision compromise, modification des seuils d'alarme de sûreté sur les automates.",
+    "bs": [
+     "BS-01",
+     "BS-02"
+    ],
+    "vraisemblance": "2",
+    "actions": [
+     {
+      "phase": "rentrer",
+      "technique": "T0822 – External Remote Services",
+      "description": "Accès distant de l'intégrateur compromis"
+     },
+     {
+      "phase": "trouver",
+      "technique": "T0861 – Point & Tag Identification",
+      "description": "Repérage des points d'alarme"
+     },
+     {
+      "phase": "exploiter",
+      "technique": "T0838 – Modify Alarm Settings",
+      "description": "Désactivation des alarmes"
+     },
+     {
+      "phase": "exploiter",
+      "technique": "T0836 – Modify Parameter",
+      "description": "Modification des consignes"
+     }
+    ],
+    "traitement": "reduire",
+    "mesures": [
+     "M-01",
+     "M-04"
+    ],
+    "gRes": "",
+    "vRes": "1",
+    "justification": "Fonctions de sûreté câblées indépendantes, contrôle des modifications."
+   },
+   {
+    "id": "SO-03",
+    "ss": "SS-02",
+    "description": "Clé USB infectée branchée sur le poste d'ingénierie, téléversement d'un programme malveillant dans l'automate.",
+    "bs": [
+     "BS-02",
+     "BS-03"
+    ],
+    "vraisemblance": "3",
+    "actions": [
+     {
+      "phase": "rentrer",
+      "technique": "T0847 – Replication Through Removable Media",
+      "description": "Clé USB du mainteneur"
+     },
+     {
+      "phase": "rentrer",
+      "technique": "T1204 – User Execution",
+      "description": "Ouverture d'un fichier projet piégé"
+     },
+     {
+      "phase": "trouver",
+      "technique": "T0846 – Remote System Discovery",
+      "description": "Recherche des automates"
+     },
+     {
+      "phase": "exploiter",
+      "technique": "T0843 – Program Download",
+      "description": "Téléversement d'un programme modifié"
+     },
+     {
+      "phase": "exploiter",
+      "technique": "T0813 – Denial of Control",
+      "description": "Arrêt de la ligne"
+     }
+    ],
+    "traitement": "reduire",
+    "mesures": [
+     "M-05",
+     "M-06"
+    ],
+    "gRes": "",
+    "vRes": "2",
+    "justification": "Station blanche et comptes nominatifs ; risque résiduel accepté par la direction du site."
+   },
+   {
+    "id": "SO-04",
+    "ss": "SS-03",
+    "description": "Mise à jour piégée de la supervision, collecte des recettes et exfiltration par le canal de mise à jour.",
+    "bs": [
+     "BS-01",
+     "BS-03"
+    ],
+    "vraisemblance": "2",
+    "actions": [
+     {
+      "phase": "rentrer",
+      "technique": "T1195 – Supply Chain Compromise",
+      "description": "Mise à jour compromise chez l'éditeur"
+     },
+     {
+      "phase": "trouver",
+      "technique": "T1005 – Data from Local System",
+      "description": "Collecte des recettes"
+     },
+     {
+      "phase": "exploiter",
+      "technique": "T1041 – Exfiltration Over C2 Channel",
+      "description": "Exfiltration"
+     }
+    ],
+    "traitement": "accepter",
+    "mesures": [
+     "M-06"
+    ],
+    "gRes": "",
+    "vRes": "",
+    "justification": ""
+   }
+  ],
+  "mesures": [
+   {
+    "id": "M-01",
+    "jalon": "J1",
+    "nom": "Authentification forte et bastion pour les accès distants",
+    "type": "Protection",
+    "responsable": "Responsable d'exploitation",
+    "echeance": "2026-12-15",
+    "statut": "En cours",
+    "cout": "Moyen",
+    "description": ""
+   },
+   {
+    "id": "M-02",
+    "jalon": "J1",
+    "nom": "Sauvegarde hors ligne de la supervision et test de restauration annuel",
+    "type": "Résilience",
+    "responsable": "Responsable d'exploitation",
+    "echeance": "2026-11-30",
+    "statut": "En cours",
+    "cout": "Faible",
+    "description": ""
+   },
+   {
+    "id": "M-03",
+    "jalon": "J3",
+    "nom": "Clause cybersécurité et revue annuelle de l'intégrateur",
+    "type": "Gouvernance",
+    "responsable": "Acheteur",
+    "echeance": "2027-03-31",
+    "statut": "À lancer",
+    "cout": "Faible",
+    "description": ""
+   },
+   {
+    "id": "M-04",
+    "jalon": "J2",
+    "nom": "Contrôle des modifications de programmes et de paramètres",
+    "type": "Défense",
+    "responsable": "Automaticien",
+    "echeance": "2027-01-31",
+    "statut": "À lancer",
+    "cout": "Moyen",
+    "description": ""
+   },
+   {
+    "id": "M-05",
+    "jalon": "J1",
+    "nom": "Station blanche pour les supports amovibles",
+    "type": "Protection",
+    "responsable": "Responsable d'exploitation",
+    "echeance": "2026-10-15",
+    "statut": "Terminée",
+    "cout": "Faible",
+    "description": ""
+   },
+   {
+    "id": "M-06",
+    "jalon": "J2",
+    "nom": "Comptes nominatifs sur le poste d'ingénierie (socle MS-01)",
+    "type": "Protection",
+    "responsable": "Automaticien",
+    "echeance": "2026-12-31",
+    "statut": "À lancer",
+    "cout": "Faible",
+    "description": ""
+   }
+  ],
+  "etude": {
+   "nom": "Analyse de risques – ligne 2 de Lyon (exemple fictif)",
+   "reference": "LYON-L2",
+   "organisation": "Groupe Démo Industrie (fictif)",
+   "perimetre": "Ligne de production 2 de l'usine de Lyon : supervision, automates, réseau OT, poste d'ingénierie, sauvegardes.",
+   "objectifs": "Décliner l'analyse du groupe sur la ligne 2 et définir le plan de traitement avant la modernisation du contrôle-commande.",
+   "commanditaire": "Directeur du site de Lyon (fictif)",
+   "animateur": "Correspondant cybersécurité du site (fictif)",
+   "participants": "Responsable d'exploitation, automaticien, intégrateur, RSSI groupe",
+   "date": "2026-09-30",
+   "version": "1.2",
+   "classification": "Diffusion restreinte"
+  },
+  "echelles": {
+   "gravite": [
+    {
+     "niveau": 1,
+     "libelle": "Mineure",
+     "description": "Sans impact opérationnel ni sur la performance ; contournement aisé."
+    },
+    {
+     "niveau": 2,
+     "libelle": "Significative",
+     "description": "Dégradation des missions ou de la performance, surmontable avec des moyens ordinaires."
+    },
+    {
+     "niveau": 3,
+     "libelle": "Grave",
+     "description": "Forte dégradation des missions, conséquences sérieuses et durables, surmontables avec difficulté."
+    },
+    {
+     "niveau": 4,
+     "libelle": "Critique",
+     "description": "Incapacité à assurer tout ou partie des missions ; conséquences dramatiques, voire irréversibles."
+    }
+   ],
+   "vraisemblance": [
+    {
+     "niveau": 1,
+     "libelle": "Peu vraisemblable",
+     "description": "Peu de chances de réussite pour la source de risque."
+    },
+    {
+     "niveau": 2,
+     "libelle": "Vraisemblable",
+     "description": "Chances significatives de réussite."
+    },
+    {
+     "niveau": 3,
+     "libelle": "Très vraisemblable",
+     "description": "Fortes chances de réussite."
+    },
+    {
+     "niveau": 4,
+     "libelle": "Quasi certain",
+     "description": "Réussite quasi certaine ou déjà constatée."
+    }
+   ],
+   "niveauxRisque": [
+    {
+     "niveau": 1,
+     "libelle": "Faible",
+     "couleur": "#2e7d32"
+    },
+    {
+     "niveau": 2,
+     "libelle": "Modéré",
+     "couleur": "#b88a00"
+    },
+    {
+     "niveau": 3,
+     "libelle": "Élevé",
+     "couleur": "#d9640a"
+    },
+    {
+     "niveau": 4,
+     "libelle": "Très élevé",
+     "couleur": "#b3261e"
+    }
+   ],
+   "matrice": [
+    [
+     1,
+     1,
+     2,
+     3
+    ],
+    [
+     1,
+     2,
+     3,
+     3
+    ],
+    [
+     2,
+     3,
+     3,
+     4
+    ],
+    [
+     3,
+     3,
+     4,
+     4
+    ]
+   ],
+   "seuilDanger": 2.5,
+   "seuilControle": 0.9,
+   "besoins": [
+    {
+     "niveau": 1,
+     "libelle": "Faible",
+     "description": "Atteinte tolérable : interruption de plusieurs jours, erreur ou divulgation sans conséquence notable."
+    },
+    {
+     "niveau": 2,
+     "libelle": "Modéré",
+     "description": "Atteinte gênante : service à rétablir dans la journée, données internes, erreurs à corriger rapidement."
+    },
+    {
+     "niveau": 3,
+     "libelle": "Fort",
+     "description": "Atteinte grave : service à rétablir en quelques heures, données sensibles, intégrité et traces vérifiées."
+    },
+    {
+     "niveau": 4,
+     "libelle": "Très fort",
+     "description": "Atteinte inacceptable : continuité exigée, données critiques ou réglementées, traçabilité complète."
+    }
+   ]
+  },
+  "inventaire": {
+   "site": "LYON",
+   "chargeLe": "2026-10-24T08:00:00.000Z",
+   "actifs": [
+    {
+     "id": "API_L2_01",
+     "libelle": "Automate ligne 2",
+     "type": "Automate",
+     "famille": "reseau"
+    },
+    {
+     "id": "FW_OT01",
+     "libelle": "Pare-feu IT / OT",
+     "type": "Pare-feu",
+     "famille": "reseau"
+    },
+    {
+     "id": "SRV_SCADA01",
+     "libelle": "Serveur de supervision",
+     "type": "Serveur",
+     "famille": "physique"
+    },
+    {
+     "id": "NAS_BCK01",
+     "libelle": "NAS de sauvegarde",
+     "type": "Serveur",
+     "famille": "physique"
+    },
+    {
+     "id": "PC_ING01",
+     "libelle": "Poste d'ingénierie automatisme",
+     "type": "Station de travail",
+     "famille": "physique"
+    },
+    {
+     "id": "VM_HIST01",
+     "libelle": "Historian",
+     "type": "Machine virtuelle",
+     "famille": "virtuelle"
+    }
+   ]
+  }
+ }
+}

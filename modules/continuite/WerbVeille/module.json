@@ -1,0 +1,41 @@
+{
+  "charte": "1.0",
+  "id": "werbveille",
+  "produit": "WerbVeille",
+  "version": "1.3.0",
+  "dateVersion": "2026-11",
+  "auteur": "@WerbHat",
+  "signature": "Développé par @WerbHat",
+  "description": "Veille sur les menaces et vulnérabilités d'un site : sources RSS, mots-clés tirés de l'inventaire WerbMap, kit de collecte, tri des alertes",
+  "rubrique": "continuite",
+  "portees": [
+    "site"
+  ],
+  "entree": "application/WerbVeille.html",
+  "empreinte": {
+    "algo": "SHA-256",
+    "valeur": "b551b95a12693cbb90dd52766c2f83115bd22a7586f8b2cb4f113c15d0d14c6d"
+  },
+  "donnees": {
+    "format": "WERBVEILLE",
+    "schema": 1,
+    "extension": ".werbveille.json",
+    "formatsLus": []
+  },
+  "echanges": {
+    "publie": [],
+    "consomme": [
+      "groupe:sites",
+      "site:actifs"
+    ]
+  },
+  "compatPortail": ">=1.1.1",
+  "licence": "MIT",
+  "navigateurs": [
+    "edge",
+    "chrome",
+    "firefox"
+  ],
+  "ouvertureParLien": true,
+  "exemple": "exemples/Exemple_LYON.werbveille.json"
+}

@@ -1,0 +1,39 @@
+{
+ "format": "WERBSMSI-PUBLICATION",
+ "schema": 1,
+ "famille": "WERBSMSI",
+ "meta": {
+  "produit": "werbiec62443",
+  "appVersion": "0.0.0",
+  "auteur": "@WerbHat",
+  "generateur": "werbiec62443 (exemple) – Développé par @WerbHat",
+  "creeLe": "2026-10-23",
+  "modifieLe": "2026-10-23T00:00:00Z",
+  "modifiePar": "Exemple",
+  "groupeId": "e6a47cd7-77fe-463f-b6ea-b50ff390bfc7",
+  "module": "werbiec62443",
+  "portee": "site",
+  "publiePar": "Exemple",
+  "publieLe": "2026-10-23T00:00:00Z",
+  "site": "NANTES"
+ },
+ "data": {
+  "syntheseConformite": [
+   {
+    "id": "CYB-NAN-002/conformite",
+    "referentiel": "IEC 62443-3-3",
+    "perimetre": "Conditionnement",
+    "taux": 41.7,
+    "exigences": 36,
+    "conformes": 15,
+    "ecartsMajeurs": 7,
+    "mesuresSocleNonAppliquees": [
+     "MS-01",
+     "MS-02"
+    ],
+    "source": "werbiec62443",
+    "majLe": "2026-10-23"
+   }
+  ]
+ }
+}

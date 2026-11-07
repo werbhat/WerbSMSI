@@ -1,0 +1,67 @@
+{
+ "format": "WERBSMSI-GROUPE",
+ "schema": 1,
+ "famille": "WERBSMSI",
+ "meta": {
+  "produit": "WerbSMSI",
+  "appVersion": "1.0.0",
+  "auteur": "@WerbHat",
+  "generateur": "WerbSMSI v1.0.0 – Développé par @WerbHat",
+  "creeLe": "2026-10-23",
+  "modifieLe": "2026-10-23T16:35:55Z",
+  "modifiePar": "werb_charte.py",
+  "groupeId": "e6a47cd7-77fe-463f-b6ea-b50ff390bfc7",
+  "portee": "groupe"
+ },
+ "data": {
+  "groupeId": "e6a47cd7-77fe-463f-b6ea-b50ff390bfc7",
+  "organisation": "Groupe Démo Industrie (fictif)",
+  "sigle": "GDI",
+  "entites": [],
+  "classification": "Diffusion restreinte",
+  "responsable": "Prénom NOM – RSSI groupe",
+  "sites": [
+   {
+    "code": "LYON",
+    "nom": "Usine de Lyon (fictive)",
+    "dossier": "sites/LYON",
+    "entite": "GDI Production",
+    "actif": true
+   },
+   {
+    "code": "NANTES",
+    "nom": "Usine de Nantes (fictive)",
+    "dossier": "sites/NANTES",
+    "entite": "GDI Production",
+    "actif": true
+   }
+  ],
+  "bases": [
+   {
+    "module": "werbebios",
+    "fichier": "groupe/risques/EBIOS_Groupe_2026.werbebios.json",
+    "libelle": "Analyse de risques d'entreprise 2026"
+   },
+   {
+    "module": "werbgouvernance",
+    "fichier": "groupe/gouvernance/Gouvernance_GDI.werbgouvernance.json",
+    "libelle": "Gouvernance du SMSI"
+   },
+   {
+    "module": "werbiec62443",
+    "fichier": "groupe/conformite/Exigences_Groupe.werbiec62443.json",
+    "libelle": "Exigences IEC 62443 cadre du groupe"
+   },
+   {
+    "module": "werbacademie",
+    "fichier": "groupe/continuite/Academie_GDI.werbacademie.json",
+    "libelle": "Académie cyber du groupe (formations et sensibilisations)"
+   },
+   {
+    "module": "werbexploitation",
+    "fichier": "groupe/exploitation/Exploitation_Groupe.werbexploitation.json",
+    "libelle": "Catalogue matériel et logiciel du groupe"
+   }
+  ]
+ }
+}

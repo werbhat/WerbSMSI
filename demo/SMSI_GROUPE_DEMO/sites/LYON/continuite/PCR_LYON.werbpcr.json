@@ -1,0 +1,406 @@
+{
+ "format": "WERBPCR",
+ "schema": 1,
+ "famille": "WERBSMSI",
+ "meta": {
+  "produit": "WerbPCR",
+  "appVersion": "1.6.0",
+  "auteur": "@WerbHat",
+  "generateur": "WerbPCR v1.6.0 – Développé par @WerbHat",
+  "modifieLe": "2026-10-31T08:00:00Z",
+  "modifiePar": "Exemple",
+  "creeLe": "2026-10-31",
+  "groupeId": "e6a47cd7-77fe-463f-b6ea-b50ff390bfc7",
+  "portee": "site",
+  "site": "LYON"
+ },
+ "verrou": null,
+ "journal": [
+  {
+   "date": "2026-10-31T08:00:00.000Z",
+   "par": "Exemple",
+   "action": "Création",
+   "objet": "Plan",
+   "element": "",
+   "champ": "",
+   "avant": "",
+   "apres": "Plan d'exemple fictif"
+  }
+ ],
+ "data": {
+  "plan": {
+   "nom": "Plan de cybersécurité et de reprise du site de Lyon (exemple fictif)",
+   "reference": "PCR-LYON-2026",
+   "organisation": "Groupe Démo Industrie (fictif)",
+   "site": "LYON – Usine de Lyon (fictive)",
+   "version": "1.0",
+   "date": "2026-10-31",
+   "redacteur": "Correspondant cyber Lyon (fictif)",
+   "approbateur": "RSSI groupe (fictif)",
+   "classification": "Diffusion restreinte"
+  },
+  "perimetre": {
+   "descriptions": {
+    "LYON-L2/ER-01": "Arrêt de la ligne 2 au-delà d'une équipe de production : commandes clients en retard, pénalités contractuelles.",
+    "LYON-L2/ER-02": "Les recettes sont le savoir-faire du site ; leur divulgation profiterait directement à un concurrent."
+   }
+  },
+  "fiches": {
+   "SI-SUPERVISION": {
+    "description": "Supervision et conduite de la ligne 2 : serveur SCADA, historisation, automate de ligne.",
+    "vms": [
+     "LYON-L2/VM-01",
+     "LYON-L2/VM-03"
+    ],
+    "vmLibres": [],
+    "responsables": [
+     {
+      "id": "r1",
+      "role": "Correspondant cybersécurité de site",
+      "nom": "Correspondant cyber Lyon (fictif)",
+      "crise": "Coordonne l'isolement et la reprise ; alerte le RSSI groupe.",
+      "suppleant": "Responsable maintenance (fictif)"
+     }
+    ],
+    "ers": [
+     "LYON-L2/ER-01"
+    ],
+    "risques": [
+     {
+      "id": "q1",
+      "type": "Attaque informatique",
+      "description": "Rançongiciel propagé depuis le réseau bureautique vers la supervision."
+     },
+     {
+      "id": "q2",
+      "type": "Défaillance matérielle",
+      "description": "Panne disque du serveur SCADA."
+     }
+    ],
+    "mitigation": [
+     {
+      "id": "m1",
+      "mesure": "Cloisonnement bureautique / supervision par le pare-feu FW_OT01",
+      "etat": "En place",
+      "suivi": ""
+     },
+     {
+      "id": "m2",
+      "mesure": "Durcissement et mises à jour du serveur SCADA",
+      "etat": "Prévue",
+      "suivi": "PA-2026-004"
+     }
+    ],
+    "remediation": [
+     {
+      "id": "f1",
+      "ordre": "1",
+      "type": "Alerte et décision",
+      "action": "Prévenir le correspondant cybersécurité et le responsable de production ; décider de l'isolement",
+      "delai": "15 min",
+      "responsable": "Chef d'équipe de production (fictif)",
+      "suivi": ""
+     },
+     {
+      "id": "f2",
+      "ordre": "2",
+      "type": "Confinement",
+      "action": "Isoler le VLAN de supervision au pare-feu FW_OT01",
+      "delai": "15 min",
+      "responsable": "Administrateur réseau (fictif)",
+      "suivi": ""
+     },
+     {
+      "id": "f3",
+      "ordre": "3",
+      "type": "Mode dégradé",
+      "action": "Passer la ligne 2 en conduite locale aux pupitres, relevés manuels sur fiche papier",
+      "delai": "30 min",
+      "responsable": "Responsable de production (fictif)",
+      "suivi": ""
+     },
+     {
+      "id": "f4",
+      "ordre": "4",
+      "type": "Déclenchement du PRI",
+      "action": "Supervision non rétablie au bout de 2 h ou compromission confirmée : lancer la procédure de reprise du PRI",
+      "delai": "2 h",
+      "responsable": "Responsable de production (fictif)",
+      "suivi": ""
+     }
+    ]
+   }
+  },
+  "pri": {
+   "sis": {
+    "SI-SUPERVISION": {
+     "rto": 8,
+     "rpo": 168,
+     "impact": "Arrêt de la ligne 2 : production perdue, commandes clients en retard au-delà d'une équipe.",
+     "degrade": "Conduite locale aux pupitres de la ligne, relevés manuels ; tenable pendant une équipe (8 h).",
+     "amont": [],
+     "externes": [
+      {
+       "id": "x1",
+       "type": "Prestataire de maintenance",
+       "nom": "Intégrateur de la supervision (fictif)",
+       "commentaire": "Contrat de maintenance avec intervention sous 4 h ouvrées."
+      },
+      {
+       "id": "x2",
+       "type": "Énergie",
+       "nom": "Onduleur du local technique",
+       "commentaire": "Autonomie de 20 minutes."
+      }
+     ],
+     "declenchement": "Le responsable de production décide la reprise, sur avis du correspondant cybersécurité de site.",
+     "etapes": [
+      {
+       "id": "e1",
+       "action": "Vérifier que l'incident est contenu (VLAN de supervision isolé, cause identifiée)",
+       "responsable": "Correspondant cybersécurité de site",
+       "duree": "30 min",
+       "verification": "Aucun flux inattendu vers la supervision."
+      },
+      {
+       "id": "e2",
+       "action": "Restaurer le serveur SCADA depuis la sauvegarde BCK_001 saine",
+       "responsable": "Intégrateur (fictif)",
+       "duree": "4 h",
+       "verification": "Serveur démarré, application de supervision lancée."
+      },
+      {
+       "id": "e3",
+       "action": "Recharger le programme de l'automate API_L2_01 si nécessaire et comparer à la référence",
+       "responsable": "Responsable maintenance (fictif)",
+       "duree": "1 h",
+       "verification": "Programme identique à la version de référence."
+      },
+      {
+       "id": "e4",
+       "action": "Essais de conduite avec l'exploitation",
+       "responsable": "Responsable de production (fictif)",
+       "duree": "1 h",
+       "verification": "Lecture des mesures et commandes vérifiées sur un poste."
+      }
+     ],
+     "retour": "Le responsable de production prononce le retour à la normale après les essais ; fin du mode dégradé consignée."
+    }
+   }
+  },
+  "recus": {
+   "evenementsRedoutes": {
+    "items": [
+     {
+      "id": "LYON-L2/ER-01",
+      "valeurMetier": "LYON-L2/VM-01",
+      "valeurMetierNom": "Production des lignes industrielles",
+      "description": "Arrêt prolongé d'une ligne de production",
+      "criteres": [
+       "D"
+      ],
+      "besoin": 3,
+      "impacts": "Impacts sur les missions et services, Impacts financiers",
+      "gravite": 3,
+      "evenementGroupe": "ER-01"
+     },
+     {
+      "id": "LYON-L2/ER-02",
+      "valeurMetier": "LYON-L2/VM-02",
+      "valeurMetierNom": "Recettes et paramètres de fabrication",
+      "description": "Vol ou divulgation des recettes de fabrication",
+      "criteres": [
+       "C"
+      ],
+      "besoin": 4,
+      "impacts": "Impacts financiers, Impacts sur l'image et la confiance",
+      "gravite": 3,
+      "evenementGroupe": "ER-02"
+     },
+     {
+      "id": "LYON-L2/ER-03",
+      "valeurMetier": "LYON-L2/VM-03",
+      "valeurMetierNom": "Historique de production (traçabilité)",
+      "description": "Perte de l'historique de production d'un lot",
+      "criteres": [
+       "I",
+       "T"
+      ],
+      "besoin": 3,
+      "impacts": "Impacts juridiques",
+      "gravite": 2,
+      "evenementGroupe": ""
+     }
+    ],
+    "majLe": "2026-10-31T08:00:00.000Z",
+    "source": "site:evenementsRedoutes"
+   },
+   "si": {
+    "items": [
+     {
+      "id": "SI-SUPERVISION",
+      "nom": "Supervision ligne 2",
+      "fonction": "Conduite et historisation de la ligne 2",
+      "d": 4,
+      "i": 3,
+      "c": 2,
+      "vlans": [
+       "210",
+       "220"
+      ],
+      "actifs": [
+       "API_L2_01",
+       "SRV_SCADA01",
+       "VM_HIST01"
+      ]
+     }
+    ],
+    "majLe": "2026-10-31T08:00:00.000Z",
+    "source": "site:si"
+   },
+   "valeursMetier": {
+    "items": [
+     {
+      "id": "LYON-L2/VM-01",
+      "nom": "Production des lignes industrielles",
+      "nature": "Processus métier",
+      "description": ""
+     },
+     {
+      "id": "LYON-L2/VM-02",
+      "nom": "Recettes et paramètres de fabrication",
+      "nature": "Propriété intellectuelle",
+      "description": ""
+     },
+     {
+      "id": "LYON-L2/VM-03",
+      "nom": "Historique de production (traçabilité)",
+      "nature": "Information opérationnelle",
+      "description": "Exigence réglementaire de traçabilité des lots."
+     }
+    ],
+    "majLe": "2026-10-31T08:00:00.000Z",
+    "source": "site:valeursMetier"
+   },
+   "biensSupports": {
+    "items": [
+     {
+      "id": "BS-SCADA",
+      "nom": "Système de supervision",
+      "actifs": [
+       "SRV_SCADA01"
+      ],
+      "valeursMetier": [
+       "LYON-L2/VM-01",
+       "LYON-L2/VM-03"
+      ]
+     }
+    ],
+    "majLe": "2026-10-31T08:00:00.000Z",
+    "source": "site:biensSupports"
+   },
+   "risques": {
+    "items": [
+     {
+      "id": "R-LYON-01",
+      "libelle": "Rançongiciel sur la supervision",
+      "evenementRedoute": "ER-01",
+      "etude": "EBIOS_LYON_L2",
+      "actifs": [
+       "SRV_SCADA01"
+      ],
+      "niveauBrut": 3,
+      "niveauResiduel": 2,
+      "traitement": "reduire"
+     }
+    ],
+    "majLe": "2026-10-31T08:00:00.000Z",
+    "source": "site:syntheseRisques"
+   },
+   "sauvegardes": {
+    "items": [
+     {
+      "id": "BCK_001",
+      "donnees": "Configuration et historiques de la supervision",
+      "categorie": "BCK_1: Premier Backup",
+      "etat": "ACTIF",
+      "actifSource": "SRV_SCADA01",
+      "actifDestination": "NAS_BCK01",
+      "periodicite": "Hebdomadaire",
+      "dernierTest": "2026-03-10",
+      "statutTest": "a-jour"
+     },
+     {
+      "id": "BCK_002",
+      "donnees": "Copie hors ligne de BCK_001",
+      "categorie": "BCK_3: Backup offline",
+      "etat": "ACTIF",
+      "actifSource": "NAS_BCK01",
+      "actifDestination": "",
+      "periodicite": "1 mois",
+      "dernierTest": "",
+      "statutTest": "jamais"
+     }
+    ],
+    "majLe": "2026-10-31T08:00:00.000Z",
+    "source": "site:sauvegardes"
+   },
+   "roles": {
+    "items": [
+     {
+      "id": "R-RSSI",
+      "nom": "RSSI groupe",
+      "niveau": "groupe"
+     },
+     {
+      "id": "R-CORR",
+      "nom": "Correspondant cybersécurité de site",
+      "niveau": "site"
+     }
+    ],
+    "majLe": "2026-10-31T08:00:00.000Z",
+    "source": "groupe:roles"
+   },
+   "echelles": {
+    "gravite": [
+     {
+      "niveau": 1,
+      "libelle": "Mineure"
+     },
+     {
+      "niveau": 2,
+      "libelle": "Significative"
+     },
+     {
+      "niveau": 3,
+      "libelle": "Grave"
+     },
+     {
+      "niveau": 4,
+      "libelle": "Critique"
+     }
+    ],
+    "besoins": [
+     {
+      "niveau": 1,
+      "libelle": "Faible"
+     },
+     {
+      "niveau": 2,
+      "libelle": "Modéré"
+     },
+     {
+      "niveau": 3,
+      "libelle": "Fort"
+     },
+     {
+      "niveau": 4,
+      "libelle": "Très fort"
+     }
+    ],
+    "majLe": "2026-10-31T08:00:00.000Z"
+   }
+  },
+  "largeurs": {}
+ }
+}

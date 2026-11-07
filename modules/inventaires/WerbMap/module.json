@@ -1,0 +1,271 @@
+{
+  "charte": "1.0",
+  "id": "werbmap",
+  "produit": "WerbMap",
+  "version": "1.26.0",
+  "dateVersion": "2026-11",
+  "auteur": "@WerbHat",
+  "signature": "Développé par @WerbHat",
+  "description": "Cartographie VLAN, adressage IP, actifs et flux d'un site",
+  "rubrique": "inventaires",
+  "portees": [
+    "site"
+  ],
+  "entree": "application/WerbMap.html",
+  "empreinte": {
+    "algo": "SHA-256",
+    "valeur": "cb32e2be1fd1d3cd0dfbdfc289fb7f816f77476125d14e9895ee5eb2735c3660"
+  },
+  "donnees": {
+    "format": "WERBMAP",
+    "schema": 5,
+    "extension": ".werbmap.json",
+    "formatsLus": [
+      "werbhat-vlan-ipam"
+    ]
+  },
+  "echanges": {
+    "publie": [
+      "site:zones",
+      "site:conduits",
+      "site:actifs",
+      "site:si",
+      "site:vlans"
+    ],
+    "consomme": [
+      "groupe:sites",
+      "groupe:listes",
+      "groupe:echelles",
+      "site:syntheseRisques",
+      "site:sauvegardes",
+      "site:remediations",
+      "site:evaluationsPrestataires",
+      "site:cartographies",
+      "site:fluxRealises",
+      "site:plm"
+    ]
+  },
+  "compatPortail": ">=1.0.0",
+  "licence": "MIT",
+  "navigateurs": [
+    "edge",
+    "chrome",
+    "firefox"
+  ],
+  "ouvertureParLien": true,
+  "exemple": "exemples/WerbMap_DEMO.werbmap.json",
+  "listes": [
+    {
+      "id": "typesActif",
+      "libelle": "Types d'actif",
+      "forme": "simple",
+      "defaut": [
+        "Affichage dynamique (Digital Signage)",
+        "Appareil IoT",
+        "Automate (PLC)",
+        "Baie de stockage",
+        "Caméra",
+        "Capteur environnemental",
+        "Capteur OT",
+        "Client léger",
+        "Commutateur (Switch)",
+        "Commutateur KVM",
+        "Compteur électrique",
+        "Hyperviseur",
+        "Imprimante",
+        "Interface Homme-Machine (IHM)",
+        "Interphone",
+        "Lecteur biométrique",
+        "Lecteur de badge",
+        "Mur d’images (Video Wall)",
+        "NAS (Stockage en réseau)",
+        "NVR (Enregistreur vidéo réseau)",
+        "Onduleur (UPS)",
+        "Ordinateur de bureau",
+        "Ordinateur portable",
+        "Panneau de brassage",
+        "Panneau de contrôle d’accès",
+        "Pare-feu",
+        "Passerelle",
+        "PC industriel",
+        "Point accès WIFI",
+        "Point d'accès",
+        "Répartiteur de charge (Load Balancer)",
+        "Robot industriel",
+        "Routeur",
+        "SAN (Réseau de stockage)",
+        "Serveur",
+        "Smartphone",
+        "Station de travail",
+        "Système SCADA",
+        "Tablette",
+        "Téléphone VoIP",
+        "Télévision",
+        "Variateur",
+        "XVR (Enregistreur vidéo hybride)"
+      ]
+    },
+    {
+      "id": "typesMachine",
+      "libelle": "Types de machine",
+      "forme": "simple",
+      "defaut": [
+        "Workstation",
+        "Server",
+        "Hypervisor",
+        "Laptop"
+      ]
+    },
+    {
+      "id": "abrev",
+      "libelle": "Abréviations des TAG",
+      "forme": "paires",
+      "defaut": [
+        [
+          "SRV_",
+          "Serveur"
+        ],
+        [
+          "SW_",
+          "Switch ethernet"
+        ],
+        [
+          "PC_",
+          "Ordinateur, poste"
+        ],
+        [
+          "CAM_",
+          "Caméra"
+        ],
+        [
+          "ZAR_",
+          "Identification et gestion des ZAR"
+        ],
+        [
+          "API_",
+          "Automate"
+        ],
+        [
+          "TEL_",
+          "Téléphone"
+        ],
+        [
+          "OSM_",
+          "Switch ethernet industriel process"
+        ],
+        [
+          "RSX_",
+          "Spécifie groupe de réseaux"
+        ],
+        [
+          "WO_",
+          "Repérage câble réseau fibre optique"
+        ],
+        [
+          "WN_",
+          "Repérage câble réseau ethernet"
+        ],
+        [
+          "RG_",
+          "Répartiteur général principal : baies principales"
+        ],
+        [
+          "SR_",
+          "Sous-répartiteur baies locales"
+        ],
+        [
+          "BN_",
+          "Borne normale intégrée dans les baies"
+        ],
+        [
+          "BR_",
+          "Borne réduite intégrée dans les baies"
+        ],
+        [
+          "BS_",
+          "Borne simple intégrée dans les baies"
+        ],
+        [
+          "RO_",
+          "Rocade optique"
+        ],
+        [
+          "RC_",
+          "Rocade cuivre"
+        ],
+        [
+          "EA_",
+          "Élément actif dans la baie"
+        ],
+        [
+          "WF_",
+          "Repère câble coaxial"
+        ],
+        [
+          "OND_",
+          "Onduleur"
+        ],
+        [
+          "RPC_",
+          "Prise raccordement courant"
+        ],
+        [
+          "BOX_",
+          "Boîtier d'accès WAN"
+        ]
+      ]
+    },
+    {
+      "id": "couches",
+      "libelle": "Couches switch (COUCHE_SW)",
+      "forme": "simple",
+      "defaut": [
+        "Cœur",
+        "Distribution",
+        "Accès",
+        "Process"
+      ]
+    },
+    {
+      "id": "typesNat",
+      "libelle": "Types de NAT",
+      "forme": "simple",
+      "defaut": [
+        "SNAT (source)",
+        "DNAT (destination)",
+        "PAT / redirection de port",
+        "Masquerade",
+        "NAT statique 1:1"
+      ]
+    },
+    {
+      "id": "roles",
+      "libelle": "Rôles",
+      "forme": "simple",
+      "defaut": [
+        "RSSI",
+        "Responsable informatique",
+        "Technicien IT",
+        "Automaticien",
+        "Responsable de production",
+        "Exploitant",
+        "Prestataire",
+        "Demandeur"
+      ]
+    },
+    {
+      "id": "domainesProc",
+      "libelle": "Domaines de procédure",
+      "forme": "simple",
+      "defaut": [
+        "PLM – Cycle de vie",
+        "MCS – Mises à jour",
+        "PKI – Certificats",
+        "MCO",
+        "Licences",
+        "Réseau",
+        "Gouvernance SMSI"
+      ]
+    }
+  ]
+}

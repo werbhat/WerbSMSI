@@ -1,0 +1,6 @@
+# WerbSMSI – Développé par @WerbHat
+# Dossier de travail temporaire (sources à intégrer, exports) : jamais versionné
+/Temp/
+/charte/
+# Sorties des tests (documents générés) : jamais versionnées
+**/tests/sortie/

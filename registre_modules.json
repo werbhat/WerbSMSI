@@ -1,0 +1,272 @@
+{
+  "format": "WERBSMSI-REGISTRE",
+  "schema": 2,
+  "charte": "1.0",
+  "niveaux": [
+    {
+      "id": "groupe",
+      "libelle": "Groupe",
+      "description": "Pilotage du SMSI et analyse de risques d'entreprise"
+    },
+    {
+      "id": "site",
+      "libelle": "Site",
+      "description": "Actifs, analyses et exigences propres à un site"
+    }
+  ],
+  "generateur": "WerbSMSI – Développé par @WerbHat",
+  "rubriques": [
+    {
+      "id": "gouvernance",
+      "ordre": 1,
+      "libelle": "Gouvernance SMSI",
+      "portees": [
+        "groupe"
+      ],
+      "description": "Politique, rôles, socle de mesures, procédures, revues, plan d'actions",
+      "etape": "gouverner"
+    },
+    {
+      "id": "risques",
+      "ordre": 3,
+      "libelle": "Analyse des risques",
+      "portees": [
+        "groupe",
+        "site"
+      ],
+      "description": "Analyse d'entreprise au groupe, analyses déclinées par site",
+      "etape": "risques"
+    },
+    {
+      "id": "inventaires",
+      "ordre": 2,
+      "libelle": "Inventaires ICS",
+      "portees": [
+        "site"
+      ],
+      "description": "Réseaux, actifs, flux et registres d'exploitation du site",
+      "etape": "connaitre"
+    },
+    {
+      "id": "conformite",
+      "ordre": 4,
+      "libelle": "Conformité & exigences",
+      "portees": [
+        "groupe",
+        "site"
+      ],
+      "description": "Applicabilité au groupe, exigences et preuves par site",
+      "etape": "exigences"
+    },
+    {
+      "id": "exploitation",
+      "ordre": 5,
+      "libelle": "Exploitation (MCO/MCS)",
+      "portees": [
+        "groupe",
+        "site"
+      ],
+      "description": "Licences, certificats, sauvegardes, habilitations, interventions, mises à jour ; au groupe, catalogue matériel et logiciel commun",
+      "etape": "controler"
+    },
+    {
+      "id": "continuite",
+      "ordre": 6,
+      "libelle": "Continuité & résilience",
+      "portees": [
+        "groupe",
+        "site"
+      ],
+      "description": "Plan de cybersécurité et de reprise (PCI, PRI), réponse à incident, veille sur les menaces et les vulnérabilités",
+      "etape": "resilience"
+    }
+  ],
+  "etapes": [
+    {
+      "id": "gouverner",
+      "ordre": 1,
+      "libelle": "Gouverner",
+      "sousTitre": "Définir le cadre et les responsabilités",
+      "emoji": "🏛️",
+      "teinte": "bleu"
+    },
+    {
+      "id": "connaitre",
+      "ordre": 2,
+      "libelle": "Connaître son SI",
+      "sousTitre": "Cartographier son environnement",
+      "emoji": "🗺️",
+      "teinte": "vert"
+    },
+    {
+      "id": "risques",
+      "ordre": 3,
+      "libelle": "Comprendre les risques",
+      "sousTitre": "Évaluer et décider",
+      "emoji": "⚠️",
+      "teinte": "orange"
+    },
+    {
+      "id": "exigences",
+      "ordre": 4,
+      "libelle": "Maîtriser les exigences",
+      "sousTitre": "Répondre aux obligations réglementaires",
+      "emoji": "📋",
+      "teinte": "violet"
+    },
+    {
+      "id": "controler",
+      "ordre": 5,
+      "libelle": "Contrôler le terrain",
+      "sousTitre": "Vérifier l'efficacité",
+      "emoji": "🔍",
+      "teinte": "rouge"
+    },
+    {
+      "id": "resilience",
+      "ordre": 6,
+      "libelle": "Assurer la résilience",
+      "sousTitre": "Anticiper et se préparer",
+      "emoji": "🛟",
+      "teinte": "cyan"
+    },
+    {
+      "id": "competences",
+      "ordre": 7,
+      "libelle": "Faire vivre le SMSI",
+      "sousTitre": "Développer les compétences",
+      "emoji": "🎓",
+      "teinte": "ambre"
+    }
+  ],
+  "modules": [
+    {
+      "id": "werbgouvernance",
+      "chemin": "modules/gouvernance/WerbGouvernance",
+      "depot": "../WerbGouvernance",
+      "etat": "publie",
+      "version": "1.8.0",
+      "etape": "gouverner"
+    },
+    {
+      "id": "werbreferentiels",
+      "chemin": "modules/gouvernance/WerbReferentiels",
+      "depot": "../WerbReferentiels",
+      "etat": "publie",
+      "version": "1.5.1",
+      "etape": "gouverner"
+    },
+    {
+      "id": "werbmap",
+      "chemin": "modules/inventaires/WerbMap",
+      "depot": "../WerbMap",
+      "etat": "publie",
+      "version": "1.26.0",
+      "etape": "connaitre"
+    },
+    {
+      "id": "werbassets",
+      "chemin": "modules/inventaires/WerbAssets",
+      "depot": "../WerbAssets",
+      "etat": "publie",
+      "version": "1.9.0",
+      "etape": "connaitre"
+    },
+    {
+      "id": "werbcartosi",
+      "chemin": "modules/inventaires/WerbCartoSI",
+      "depot": "../WerbCartoSI",
+      "etat": "publie",
+      "version": "1.5.0",
+      "etape": "connaitre"
+    },
+    {
+      "id": "werbebios",
+      "chemin": "modules/risques/WerbEBIOS",
+      "depot": "../WerbEBIOS",
+      "etat": "publie",
+      "version": "1.9.0",
+      "etape": "risques"
+    },
+    {
+      "id": "werbnis2",
+      "chemin": "modules/conformite/WerbNIS2",
+      "depot": "../WerbNIS2",
+      "etat": "publie",
+      "version": "1.7.0",
+      "etape": "exigences"
+    },
+    {
+      "id": "werbiec62443",
+      "chemin": "modules/conformite/WerbIEC62443",
+      "depot": "../WerbIEC62443",
+      "etat": "publie",
+      "version": "1.11.0",
+      "etape": "exigences"
+    },
+    {
+      "id": "werbpresta",
+      "chemin": "modules/conformite/WerbPresta",
+      "depot": "../WerbPresta",
+      "etat": "publie",
+      "version": "1.4.0",
+      "etape": "exigences"
+    },
+    {
+      "id": "werbrgpd",
+      "chemin": "modules/conformite/WerbRGPD",
+      "depot": "../WerbRGPD",
+      "etat": "publie",
+      "version": "1.0.0",
+      "etape": "exigences"
+    },
+    {
+      "id": "werbexploitation",
+      "chemin": "modules/exploitation/WerbExploitation",
+      "depot": "../WerbExploitation",
+      "etat": "publie",
+      "version": "1.20.0",
+      "etape": "controler"
+    },
+    {
+      "id": "werbrecette",
+      "chemin": "modules/exploitation/WerbRecette",
+      "depot": "../WerbRecette",
+      "etat": "publie",
+      "version": "1.8.0",
+      "etape": "controler"
+    },
+    {
+      "id": "werbpentest",
+      "chemin": "modules/exploitation/WerbPentest",
+      "depot": "../WerbPentest",
+      "etat": "publie",
+      "version": "1.7.0",
+      "etape": "controler"
+    },
+    {
+      "id": "werbpcr",
+      "chemin": "modules/continuite/WerbPCR",
+      "depot": "../WerbPCR",
+      "etat": "publie",
+      "version": "1.6.0",
+      "etape": "resilience"
+    },
+    {
+      "id": "werbveille",
+      "chemin": "modules/continuite/WerbVeille",
+      "depot": "../WerbVeille",
+      "etat": "publie",
+      "version": "1.3.0",
+      "etape": "resilience"
+    },
+    {
+      "id": "werbacademie",
+      "chemin": "modules/continuite/WerbAcademie",
+      "depot": "../WerbAcademie",
+      "etat": "publie",
+      "version": "1.5.0",
+      "etape": "competences"
+    }
+  ]
+}

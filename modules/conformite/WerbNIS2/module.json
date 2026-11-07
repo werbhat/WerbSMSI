@@ -1,0 +1,52 @@
+{
+  "charte": "1.0",
+  "id": "werbnis2",
+  "produit": "WerbNIS2",
+  "version": "1.7.0",
+  "dateVersion": "2026-11",
+  "auteur": "@WerbHat",
+  "signature": "Développé par @WerbHat",
+  "description": "Conformité NIS2 d'une entité ou d'un site : 20 règles, audit de 152 points en 28 thématiques, couverture, plan d'actions, rapport",
+  "rubrique": "conformite",
+  "portees": [
+    "groupe",
+    "site"
+  ],
+  "entree": "application/WerbNIS2.html",
+  "empreinte": {
+    "algo": "SHA-256",
+    "valeur": "75a09b6fd2f46cabb49fd41fd9cac5665a174a86edb59e58bf492e9aff7bde2d"
+  },
+  "donnees": {
+    "format": "WERBNIS2",
+    "schema": 1,
+    "extension": ".werbnis2.json",
+    "formatsLus": []
+  },
+  "echanges": {
+    "publie": [],
+    "consomme": [
+      "groupe:organisation",
+      "groupe:sites",
+      "groupe:formations",
+      "site:cartographies"
+    ]
+  },
+  "compatPortail": ">=1.1.1",
+  "licence": "MIT",
+  "navigateurs": [
+    "edge",
+    "chrome",
+    "firefox"
+  ],
+  "ouvertureParLien": true,
+  "exemple": "exemples/Exemple_LYON.werbnis2.json",
+  "sources": [
+    "signature.js",
+    "socle.js",
+    "guides.js",
+    "referentiel.js",
+    "xlsx.js",
+    "app.js"
+  ]
+}

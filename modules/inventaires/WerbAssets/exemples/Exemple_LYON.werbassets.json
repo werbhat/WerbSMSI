@@ -1,0 +1,1364 @@
+{
+ "format": "WERBASSETS",
+ "schema": 1,
+ "famille": "WERBSMSI",
+ "meta": {
+  "produit": "WerbAssets",
+  "appVersion": "1.0.0",
+  "auteur": "@WerbHat",
+  "generateur": "WerbAssets v1.0.0 – Développé par @WerbHat",
+  "creeLe": "2026-10-26",
+  "modifieLe": "2026-10-26T08:00:00Z",
+  "modifiePar": "Exemple",
+  "groupeId": "e6a47cd7-77fe-463f-b6ea-b50ff390bfc7",
+  "portee": "site",
+  "site": "LYON"
+ },
+ "verrou": null,
+ "journal": [
+  {
+   "date": "2026-10-26T08:00:00Z",
+   "par": "Exemple",
+   "action": "Création",
+   "objet": "Base",
+   "element": "",
+   "champ": "",
+   "avant": "",
+   "apres": "Base d'exemple fictive"
+  }
+ ],
+ "data": {
+  "site": {
+   "nom": "Usine de Lyon (fictive)"
+  },
+  "inventaire": {
+   "site": "LYON",
+   "source": "sites/LYON/publications",
+   "publieLe": "2026-10-24T00:00:00Z",
+   "chargeLe": "2026-10-26T08:00:00Z",
+   "actifs": [
+    {
+     "id": "API_L2_01",
+     "type": "Automate",
+     "famille": "reseau",
+     "zone": "Z-PROC",
+     "criticite": "process",
+     "libelle": "Automate ligne 2",
+     "emplacement": "Atelier ligne 2",
+     "coffret": "CF-L2-01",
+     "marque": "Constructeur A"
+    },
+    {
+     "id": "SW_CORE01",
+     "type": "Switch",
+     "famille": "reseau",
+     "zone": "Z-SUP",
+     "libelle": "Commutateur de cœur OT",
+     "emplacement": "Salle serveurs B",
+     "coffret": "BAIE-01"
+    },
+    {
+     "id": "FW_OT01",
+     "type": "Pare-feu",
+     "famille": "reseau",
+     "zone": "Z-SUP",
+     "criticite": "critique",
+     "libelle": "Pare-feu IT / OT",
+     "emplacement": "Salle serveurs B",
+     "coffret": "BAIE-01"
+    },
+    {
+     "id": "SRV_SCADA01",
+     "type": "Serveur",
+     "famille": "physique",
+     "zone": "Z-SUP",
+     "criticite": "metier-critique",
+     "libelle": "Serveur de supervision",
+     "emplacement": "Salle serveurs B",
+     "coffret": "BAIE-01",
+     "os": "Windows Server 2022",
+     "fonction": "Supervision",
+     "marque": "Constructeur B"
+    },
+    {
+     "id": "HYP_OT01",
+     "type": "Hyperviseur",
+     "famille": "physique",
+     "zone": "Z-SUP",
+     "libelle": "Hyperviseur OT",
+     "emplacement": "Salle serveurs B",
+     "coffret": "BAIE-01",
+     "os": "Hyperviseur 8.0",
+     "fonction": "Virtualisation"
+    },
+    {
+     "id": "NAS_BCK01",
+     "type": "Serveur",
+     "famille": "physique",
+     "zone": "Z-SUP",
+     "libelle": "NAS de sauvegarde",
+     "emplacement": "Local technique",
+     "os": "DSM 7.2",
+     "fonction": "Sauvegardes"
+    },
+    {
+     "id": "PC_ING01",
+     "type": "Station de travail",
+     "famille": "physique",
+     "zone": "Z-SUP",
+     "libelle": "Poste d'ingénierie automatisme",
+     "emplacement": "Bureau méthodes",
+     "os": "Windows 11 23H2",
+     "fonction": "Ingénierie"
+    },
+    {
+     "id": "VM_HIST01",
+     "type": "Machine virtuelle",
+     "famille": "virtuelle",
+     "zone": "Z-SUP",
+     "libelle": "Historian",
+     "hote": "HYP_OT01",
+     "os": "Windows Server 2019",
+     "fonction": "Historisation"
+    },
+    {
+     "id": "VM_AD01",
+     "type": "Machine virtuelle",
+     "famille": "virtuelle",
+     "zone": "Z-SUP",
+     "libelle": "Contrôleur de domaine OT",
+     "hote": "HYP_OT01",
+     "os": "Windows Server 2022",
+     "fonction": "Annuaire"
+    }
+   ],
+   "zones": [
+    {
+     "id": "Z-PROC",
+     "nom": "Réseaux process",
+     "slt": "3"
+    },
+    {
+     "id": "Z-SUP",
+     "nom": "Supervision",
+     "slt": "2"
+    }
+   ]
+  },
+  "fiches": [
+   {
+    "tag": "FW_OT01",
+    "cat": "",
+    "ref": {
+     "type": "Pare-feu",
+     "famille": "reseau",
+     "zone": "Z-SUP",
+     "libelle": "Pare-feu IT / OT",
+     "emplacement": "Salle serveurs B",
+     "coffret": "BAIE-01"
+    },
+    "modele": "NGFW-100",
+    "version": "7.2.8",
+    "serie": "FW100-DEMO-0001",
+    "administrateur": "Équipe OT du site",
+    "commentaire": "Pare-feu de séparation entre le réseau de gestion et les réseaux industriels.",
+    "reseauPublic": "203.0.113.0/29",
+    "ipPublique": "203.0.113.2",
+    "routeurWan": "Routeur opérateur",
+    "portWan": "WAN1",
+    "typeWan": "Fibre",
+    "passerelle": "203.0.113.1",
+    "autresInfos": "Haute disponibilité prévue en 2027 (lien HA sur Ethernet 4).",
+    "filtrageUrl": "Désactivé : aucun accès Internet depuis les réseaux industriels.",
+    "interfaces": [
+     {
+      "port": "Ethernet 1",
+      "type": "Physique",
+      "affectation": "Réseau WAN",
+      "dhcp": "NON",
+      "etat": "En service",
+      "reseau": "RSX_WAN",
+      "vlanNom": "",
+      "vlanId": "",
+      "cidr": "203.0.113.0/29",
+      "masque": "255.255.255.248",
+      "ipPasserelle": "203.0.113.2",
+      "ipActifs": "",
+      "commentaire": ""
+     },
+     {
+      "port": "Ethernet 2",
+      "type": "Physique",
+      "affectation": "Supervision",
+      "dhcp": "NON",
+      "etat": "En service",
+      "reseau": "RSX_SUP",
+      "vlanNom": "VL200_SUP",
+      "vlanId": "200",
+      "cidr": "10.20.0.0/24",
+      "masque": "255.255.255.0",
+      "ipPasserelle": "10.20.0.254",
+      "ipActifs": "10.20.0.10 SRV_SCADA01\n10.20.0.11 HYP_OT01\n10.20.0.20 PC_ING01",
+      "commentaire": ""
+     },
+     {
+      "port": "Ethernet 2.210",
+      "type": "VLAN",
+      "affectation": "Administration",
+      "dhcp": "NON",
+      "etat": "En cours",
+      "reseau": "RSX_ADMIN",
+      "vlanNom": "VL210_ADMIN",
+      "vlanId": "210",
+      "cidr": "10.21.0.0/26",
+      "masque": "255.255.255.192",
+      "ipPasserelle": "10.21.0.62",
+      "ipActifs": "",
+      "commentaire": ""
+     },
+     {
+      "port": "Ethernet 3",
+      "type": "Physique",
+      "affectation": "Process ligne 2",
+      "dhcp": "NON",
+      "etat": "En service",
+      "reseau": "RSX_PROC_L2",
+      "vlanNom": "VL110_PROC",
+      "vlanId": "110",
+      "cidr": "10.11.0.0/24",
+      "masque": "255.255.255.0",
+      "ipPasserelle": "10.11.0.254",
+      "ipActifs": "10.11.0.20 API_L2_01",
+      "commentaire": ""
+     },
+     {
+      "port": "Ethernet 4",
+      "type": "Physique",
+      "affectation": "Liaison HA",
+      "dhcp": "NON",
+      "etat": "Réservé",
+      "reseau": "",
+      "vlanNom": "",
+      "vlanId": "",
+      "cidr": "",
+      "masque": "",
+      "ipPasserelle": "",
+      "ipActifs": "",
+      "commentaire": "Réservé au second pare-feu"
+     }
+    ],
+    "controles": {
+     "MAJ-01": {
+      "etat": "fait",
+      "valeur": "Firmware 7.2.8 installé le 15/09/2026"
+     },
+     "CNX-01": {
+      "etat": "fait",
+      "valeur": "Serveur web embarqué (HTTPS)"
+     },
+     "CNX-02": {
+      "etat": "fait",
+      "valeur": "Mot de passe et second facteur"
+     },
+     "CNX-03": {
+      "etat": "fait",
+      "valeur": ""
+     },
+     "CNX-04": {
+      "etat": "fait",
+      "valeur": ""
+     },
+     "CNX-05": {
+      "etat": "afaire",
+      "valeur": "Longueur minimale à porter à 14 caractères"
+     },
+     "CNX-06": {
+      "etat": "fait",
+      "valeur": "Verrouillage après 5 échecs"
+     },
+     "RSX-01": {
+      "etat": "fait",
+      "valeur": "IP fixe"
+     },
+     "RSX-02": {
+      "etat": "fait",
+      "valeur": ""
+     },
+     "RSX-03": {
+      "etat": "fait",
+      "valeur": ""
+     },
+     "RSX-04": {
+      "etat": "fait",
+      "valeur": ""
+     },
+     "RSX-05": {
+      "etat": "fait",
+      "valeur": "Activé sur toutes les interfaces"
+     },
+     "SRV-01": {
+      "etat": "fait",
+      "valeur": ""
+     },
+     "SRV-02": {
+      "etat": "fait",
+      "valeur": ""
+     },
+     "SRV-03": {
+      "etat": "fait",
+      "valeur": "Telnet et HTTP désactivés"
+     },
+     "REG-01": {
+      "etat": "fait",
+      "valeur": ""
+     },
+     "REG-02": {
+      "etat": "fait",
+      "valeur": "Matrice de flux WerbMap"
+     },
+     "SAV-01": {
+      "etat": "fait",
+      "valeur": "Sauvegarde chiffrée sur NAS_BCK01"
+     },
+     "HPR-01": {
+      "etat": "fait",
+      "valeur": ""
+     },
+     "HPR-02": {
+      "etat": "na",
+      "valeur": ""
+     },
+     "HPR-03": {
+      "etat": "afaire",
+      "valeur": ""
+     },
+     "PRD-01": {
+      "etat": "na",
+      "valeur": "Interdit en production"
+     },
+     "PRD-02": {
+      "etat": "na",
+      "valeur": ""
+     }
+    }
+   },
+   {
+    "tag": "SW_CORE01",
+    "cat": "",
+    "ref": {
+     "type": "Switch",
+     "famille": "reseau",
+     "zone": "Z-SUP",
+     "libelle": "Commutateur de cœur OT",
+     "emplacement": "Salle serveurs B",
+     "coffret": "BAIE-01"
+    },
+    "modele": "SW-24G-2SFP",
+    "version": "10.12",
+    "serie": "SWC-DEMO-0001",
+    "administrateur": "Équipe OT du site",
+    "ipAdmin": "10.21.0.10",
+    "masqueAdmin": "255.255.255.192",
+    "passerelleAdmin": "10.21.0.62",
+    "nbRj45": "24",
+    "nbSfp": "2",
+    "guideDoc": "Procédure de configuration : DOC-SW-001 (fictive)",
+    "annexes": "",
+    "vlans": [
+     {
+      "id": "1",
+      "nom": "Défaut (inutilisé)",
+      "commentaire": "Aucun port"
+     },
+     {
+      "id": "110",
+      "nom": "VL110_PROC",
+      "commentaire": "Process ligne 2"
+     },
+     {
+      "id": "200",
+      "nom": "VL200_SUP",
+      "commentaire": "Supervision"
+     },
+     {
+      "id": "210",
+      "nom": "VL210_ADMIN",
+      "commentaire": "Administration des équipements"
+     }
+    ],
+    "ports": [
+     {
+      "n": "1",
+      "libelle": "SRV_SCADA01",
+      "type": "RJ45",
+      "etat": "ACTIF",
+      "vlan": "200",
+      "ut": "Untagged",
+      "repere": "C-001",
+      "about": "SRV_SCADA01",
+      "commentaire": "",
+      "statut": "En service"
+     },
+     {
+      "n": "2",
+      "libelle": "HYP_OT01",
+      "type": "RJ45",
+      "etat": "ACTIF",
+      "vlan": "200",
+      "ut": "Untagged",
+      "repere": "C-002",
+      "about": "HYP_OT01",
+      "commentaire": "",
+      "statut": "En service"
+     },
+     {
+      "n": "3",
+      "libelle": "PC_ING01",
+      "type": "RJ45",
+      "etat": "ACTIF",
+      "vlan": "200",
+      "ut": "Untagged",
+      "repere": "C-003",
+      "about": "BAIE-01-BS01 port 3",
+      "commentaire": "",
+      "statut": "En service"
+     },
+     {
+      "n": "4",
+      "libelle": "Réservé poste d'ingénierie 2",
+      "type": "RJ45",
+      "etat": "BLOQUÉ",
+      "vlan": "200",
+      "ut": "",
+      "repere": "",
+      "about": "",
+      "commentaire": "",
+      "statut": "Réservé"
+     },
+     {
+      "n": "5",
+      "libelle": "",
+      "type": "RJ45",
+      "etat": "BLOQUÉ",
+      "vlan": "",
+      "ut": "",
+      "repere": "",
+      "about": "",
+      "commentaire": "",
+      "statut": ""
+     },
+     {
+      "n": "6",
+      "libelle": "",
+      "type": "RJ45",
+      "etat": "BLOQUÉ",
+      "vlan": "",
+      "ut": "",
+      "repere": "",
+      "about": "",
+      "commentaire": "",
+      "statut": ""
+     },
+     {
+      "n": "7",
+      "libelle": "",
+      "type": "RJ45",
+      "etat": "BLOQUÉ",
+      "vlan": "",
+      "ut": "",
+      "repere": "",
+      "about": "",
+      "commentaire": "",
+      "statut": ""
+     },
+     {
+      "n": "8",
+      "libelle": "",
+      "type": "RJ45",
+      "etat": "BLOQUÉ",
+      "vlan": "",
+      "ut": "",
+      "repere": "",
+      "about": "",
+      "commentaire": "",
+      "statut": ""
+     },
+     {
+      "n": "9",
+      "libelle": "",
+      "type": "RJ45",
+      "etat": "BLOQUÉ",
+      "vlan": "",
+      "ut": "",
+      "repere": "",
+      "about": "",
+      "commentaire": "",
+      "statut": ""
+     },
+     {
+      "n": "10",
+      "libelle": "",
+      "type": "RJ45",
+      "etat": "BLOQUÉ",
+      "vlan": "",
+      "ut": "",
+      "repere": "",
+      "about": "",
+      "commentaire": "",
+      "statut": ""
+     },
+     {
+      "n": "11",
+      "libelle": "",
+      "type": "RJ45",
+      "etat": "BLOQUÉ",
+      "vlan": "",
+      "ut": "",
+      "repere": "",
+      "about": "",
+      "commentaire": "",
+      "statut": ""
+     },
+     {
+      "n": "12",
+      "libelle": "",
+      "type": "RJ45",
+      "etat": "BLOQUÉ",
+      "vlan": "",
+      "ut": "",
+      "repere": "",
+      "about": "",
+      "commentaire": "",
+      "statut": ""
+     },
+     {
+      "n": "13",
+      "libelle": "",
+      "type": "RJ45",
+      "etat": "BLOQUÉ",
+      "vlan": "",
+      "ut": "",
+      "repere": "",
+      "about": "",
+      "commentaire": "",
+      "statut": ""
+     },
+     {
+      "n": "14",
+      "libelle": "",
+      "type": "RJ45",
+      "etat": "BLOQUÉ",
+      "vlan": "",
+      "ut": "",
+      "repere": "",
+      "about": "",
+      "commentaire": "",
+      "statut": ""
+     },
+     {
+      "n": "15",
+      "libelle": "",
+      "type": "RJ45",
+      "etat": "BLOQUÉ",
+      "vlan": "",
+      "ut": "",
+      "repere": "",
+      "about": "",
+      "commentaire": "",
+      "statut": ""
+     },
+     {
+      "n": "16",
+      "libelle": "",
+      "type": "RJ45",
+      "etat": "BLOQUÉ",
+      "vlan": "",
+      "ut": "",
+      "repere": "",
+      "about": "",
+      "commentaire": "",
+      "statut": ""
+     },
+     {
+      "n": "17",
+      "libelle": "",
+      "type": "RJ45",
+      "etat": "BLOQUÉ",
+      "vlan": "",
+      "ut": "",
+      "repere": "",
+      "about": "",
+      "commentaire": "",
+      "statut": ""
+     },
+     {
+      "n": "18",
+      "libelle": "",
+      "type": "RJ45",
+      "etat": "BLOQUÉ",
+      "vlan": "",
+      "ut": "",
+      "repere": "",
+      "about": "",
+      "commentaire": "",
+      "statut": ""
+     },
+     {
+      "n": "19",
+      "libelle": "",
+      "type": "RJ45",
+      "etat": "BLOQUÉ",
+      "vlan": "",
+      "ut": "",
+      "repere": "",
+      "about": "",
+      "commentaire": "",
+      "statut": ""
+     },
+     {
+      "n": "20",
+      "libelle": "",
+      "type": "RJ45",
+      "etat": "BLOQUÉ",
+      "vlan": "",
+      "ut": "",
+      "repere": "",
+      "about": "",
+      "commentaire": "",
+      "statut": ""
+     },
+     {
+      "n": "21",
+      "libelle": "",
+      "type": "RJ45",
+      "etat": "BLOQUÉ",
+      "vlan": "",
+      "ut": "",
+      "repere": "",
+      "about": "",
+      "commentaire": "",
+      "statut": ""
+     },
+     {
+      "n": "22",
+      "libelle": "",
+      "type": "RJ45",
+      "etat": "BLOQUÉ",
+      "vlan": "",
+      "ut": "",
+      "repere": "",
+      "about": "",
+      "commentaire": "",
+      "statut": ""
+     },
+     {
+      "n": "23",
+      "libelle": "",
+      "type": "RJ45",
+      "etat": "BLOQUÉ",
+      "vlan": "",
+      "ut": "",
+      "repere": "",
+      "about": "",
+      "commentaire": "",
+      "statut": ""
+     },
+     {
+      "n": "24",
+      "libelle": "Uplink FW_OT01 Ethernet 2",
+      "type": "RJ45",
+      "etat": "ACTIF",
+      "vlan": "200;210",
+      "ut": "Tagged",
+      "repere": "C-024",
+      "about": "FW_OT01",
+      "commentaire": "",
+      "statut": "En service"
+     },
+     {
+      "n": "25",
+      "libelle": "Trunk vers coffret ligne 2",
+      "type": "SFP",
+      "etat": "ACTIF",
+      "vlan": "110",
+      "ut": "Tagged",
+      "repere": "F-001",
+      "about": "BAIE-01-RO01 port 1",
+      "commentaire": "",
+      "statut": "En service"
+     },
+     {
+      "n": "26",
+      "libelle": "",
+      "type": "SFP",
+      "etat": "BLOQUÉ",
+      "vlan": "",
+      "ut": "",
+      "repere": "",
+      "about": "",
+      "commentaire": "Future liaison vers la supervision secours",
+      "statut": "En cours"
+     }
+    ],
+    "controles": {
+     "MAJ-01": {
+      "etat": "fait",
+      "valeur": "10.12"
+     },
+     "CNX-01": {
+      "etat": "fait",
+      "valeur": "Serveur web embarqué"
+     },
+     "CNX-02": {
+      "etat": "fait",
+      "valeur": "Mot de passe uniquement"
+     },
+     "CNX-03": {
+      "etat": "fait",
+      "valeur": ""
+     },
+     "CNX-04": {
+      "etat": "fait",
+      "valeur": ""
+     },
+     "CNX-05": {
+      "etat": "afaire",
+      "valeur": ""
+     },
+     "RSX-01": {
+      "etat": "fait",
+      "valeur": "IP fixe"
+     },
+     "RSX-02": {
+      "etat": "fait",
+      "valeur": ""
+     },
+     "SRV-03": {
+      "etat": "afaire",
+      "valeur": "SNMP v1 encore actif"
+     },
+     "SAV-01": {
+      "etat": "fait",
+      "valeur": "Export de configuration du 02/10/2026"
+     }
+    }
+   },
+   {
+    "tag": "API_L2_01",
+    "cat": "",
+    "ref": {
+     "type": "Automate",
+     "famille": "reseau",
+     "zone": "Z-PROC",
+     "libelle": "Automate ligne 2",
+     "emplacement": "Atelier ligne 2",
+     "coffret": "CF-L2-01"
+    },
+    "modele": "CPU-1500 (fictif)",
+    "version": "2.9",
+    "administrateur": "Automaticien du site",
+    "ipAdmin": "10.11.0.20",
+    "acces": "Logiciel de programmation du constructeur",
+    "notes": "Protection en écriture activée ; mot de passe de niveau 3 détenu par le responsable automatisme."
+   },
+   {
+    "tag": "SW_L2_02",
+    "cat": "switch",
+    "ref": {
+     "type": "Switch",
+     "famille": "reseau",
+     "zone": "Z-PROC",
+     "libelle": "Ancien switch ligne 2 (déposé)",
+     "emplacement": "Atelier ligne 2",
+     "coffret": "CF-L2-01"
+    },
+    "modele": "SW-8G",
+    "version": "3.1",
+    "serie": "SWL-DEMO-0002",
+    "commentaire": "Déposé en 2026 et retiré de WerbMap : fiche conservée pour l'historique.",
+    "nbRj45": "8",
+    "nbSfp": "0"
+   }
+  ],
+  "baies": [
+   {
+    "id": "xbaie01",
+    "tag": "BAIE-01",
+    "libelle": "Baie principale salle serveurs B",
+    "emplacement": "Salle serveurs B"
+   },
+   {
+    "id": "xcfl201",
+    "tag": "CF-L2-01",
+    "libelle": "Coffret réseau ligne 2",
+    "emplacement": "Atelier ligne 2"
+   }
+  ],
+  "bandeaux": [
+   {
+    "id": "xbs01",
+    "baie": "BAIE-01",
+    "tag": "BAIE-01-BS01",
+    "libelle": "Bandeau cuivre salle de contrôle",
+    "position": "31",
+    "nbPorts": "24",
+    "typePort": "RJ45",
+    "commentaire": "",
+    "raccords": [
+     {
+      "n": "1",
+      "reseau": "Supervision",
+      "repereLiaison": "C-101",
+      "tenant": "Salle de contrôle prise P01",
+      "detail": "RJ45",
+      "repCable": "C-101",
+      "repAbout": "PC_ING01",
+      "actifAbout": "PC_ING01",
+      "commentaire": ""
+     },
+     {
+      "n": "2",
+      "reseau": "",
+      "repereLiaison": "",
+      "tenant": "",
+      "detail": "",
+      "repCable": "",
+      "repAbout": "",
+      "actifAbout": "",
+      "commentaire": ""
+     },
+     {
+      "n": "3",
+      "reseau": "Supervision",
+      "repereLiaison": "C-003",
+      "tenant": "SW_CORE01",
+      "detail": "RJ45",
+      "repCable": "C-003",
+      "repAbout": "SW_CORE01 port 3",
+      "actifAbout": "SW_CORE01",
+      "commentaire": ""
+     },
+     {
+      "n": "4",
+      "reseau": "",
+      "repereLiaison": "",
+      "tenant": "",
+      "detail": "",
+      "repCable": "",
+      "repAbout": "",
+      "actifAbout": "",
+      "commentaire": ""
+     },
+     {
+      "n": "5",
+      "reseau": "",
+      "repereLiaison": "",
+      "tenant": "",
+      "detail": "",
+      "repCable": "",
+      "repAbout": "",
+      "actifAbout": "",
+      "commentaire": ""
+     },
+     {
+      "n": "6",
+      "reseau": "",
+      "repereLiaison": "",
+      "tenant": "",
+      "detail": "",
+      "repCable": "",
+      "repAbout": "",
+      "actifAbout": "",
+      "commentaire": ""
+     },
+     {
+      "n": "7",
+      "reseau": "",
+      "repereLiaison": "",
+      "tenant": "",
+      "detail": "",
+      "repCable": "",
+      "repAbout": "",
+      "actifAbout": "",
+      "commentaire": ""
+     },
+     {
+      "n": "8",
+      "reseau": "",
+      "repereLiaison": "",
+      "tenant": "",
+      "detail": "",
+      "repCable": "",
+      "repAbout": "",
+      "actifAbout": "",
+      "commentaire": ""
+     },
+     {
+      "n": "9",
+      "reseau": "",
+      "repereLiaison": "",
+      "tenant": "",
+      "detail": "",
+      "repCable": "",
+      "repAbout": "",
+      "actifAbout": "",
+      "commentaire": ""
+     },
+     {
+      "n": "10",
+      "reseau": "",
+      "repereLiaison": "",
+      "tenant": "",
+      "detail": "",
+      "repCable": "",
+      "repAbout": "",
+      "actifAbout": "",
+      "commentaire": ""
+     },
+     {
+      "n": "11",
+      "reseau": "",
+      "repereLiaison": "",
+      "tenant": "",
+      "detail": "",
+      "repCable": "",
+      "repAbout": "",
+      "actifAbout": "",
+      "commentaire": ""
+     },
+     {
+      "n": "12",
+      "reseau": "",
+      "repereLiaison": "",
+      "tenant": "",
+      "detail": "",
+      "repCable": "",
+      "repAbout": "",
+      "actifAbout": "",
+      "commentaire": ""
+     },
+     {
+      "n": "13",
+      "reseau": "",
+      "repereLiaison": "",
+      "tenant": "",
+      "detail": "",
+      "repCable": "",
+      "repAbout": "",
+      "actifAbout": "",
+      "commentaire": ""
+     },
+     {
+      "n": "14",
+      "reseau": "",
+      "repereLiaison": "",
+      "tenant": "",
+      "detail": "",
+      "repCable": "",
+      "repAbout": "",
+      "actifAbout": "",
+      "commentaire": ""
+     },
+     {
+      "n": "15",
+      "reseau": "",
+      "repereLiaison": "",
+      "tenant": "",
+      "detail": "",
+      "repCable": "",
+      "repAbout": "",
+      "actifAbout": "",
+      "commentaire": ""
+     },
+     {
+      "n": "16",
+      "reseau": "",
+      "repereLiaison": "",
+      "tenant": "",
+      "detail": "",
+      "repCable": "",
+      "repAbout": "",
+      "actifAbout": "",
+      "commentaire": ""
+     },
+     {
+      "n": "17",
+      "reseau": "",
+      "repereLiaison": "",
+      "tenant": "",
+      "detail": "",
+      "repCable": "",
+      "repAbout": "",
+      "actifAbout": "",
+      "commentaire": ""
+     },
+     {
+      "n": "18",
+      "reseau": "",
+      "repereLiaison": "",
+      "tenant": "",
+      "detail": "",
+      "repCable": "",
+      "repAbout": "",
+      "actifAbout": "",
+      "commentaire": ""
+     },
+     {
+      "n": "19",
+      "reseau": "",
+      "repereLiaison": "",
+      "tenant": "",
+      "detail": "",
+      "repCable": "",
+      "repAbout": "",
+      "actifAbout": "",
+      "commentaire": ""
+     },
+     {
+      "n": "20",
+      "reseau": "",
+      "repereLiaison": "",
+      "tenant": "",
+      "detail": "",
+      "repCable": "",
+      "repAbout": "",
+      "actifAbout": "",
+      "commentaire": ""
+     },
+     {
+      "n": "21",
+      "reseau": "",
+      "repereLiaison": "",
+      "tenant": "",
+      "detail": "",
+      "repCable": "",
+      "repAbout": "",
+      "actifAbout": "",
+      "commentaire": ""
+     },
+     {
+      "n": "22",
+      "reseau": "",
+      "repereLiaison": "",
+      "tenant": "",
+      "detail": "",
+      "repCable": "",
+      "repAbout": "",
+      "actifAbout": "",
+      "commentaire": ""
+     },
+     {
+      "n": "23",
+      "reseau": "",
+      "repereLiaison": "",
+      "tenant": "",
+      "detail": "",
+      "repCable": "",
+      "repAbout": "",
+      "actifAbout": "",
+      "commentaire": ""
+     },
+     {
+      "n": "24",
+      "reseau": "Trunk interco temporaire",
+      "repereLiaison": "nc",
+      "tenant": "CF-L2-01",
+      "detail": "",
+      "repCable": "",
+      "repAbout": "",
+      "actifAbout": "",
+      "commentaire": "À retirer après la mise en service de la fibre"
+     }
+    ]
+   },
+   {
+    "id": "xro01",
+    "baie": "BAIE-01",
+    "tag": "BAIE-01-RO01",
+    "libelle": "Tiroir optique vers la ligne 2",
+    "position": "38",
+    "nbPorts": "12",
+    "typePort": "Fibre LC duplex",
+    "commentaire": "Fibre multimode OM3",
+    "raccords": [
+     {
+      "n": "1",
+      "reseau": "Trunk ligne 2",
+      "repereLiaison": "WO-BAIE01-RO01/CF-L2-01-RO01-A",
+      "tenant": "CF-L2-01-RO01",
+      "detail": "Rd",
+      "repCable": "F-001",
+      "repAbout": "SW_CORE01 port 25",
+      "actifAbout": "TX - LC en 1000baseSX",
+      "commentaire": ""
+     },
+     {
+      "n": "2",
+      "reseau": "Trunk ligne 2",
+      "repereLiaison": "WO-BAIE01-RO01/CF-L2-01-RO01-A",
+      "tenant": "CF-L2-01-RO01",
+      "detail": "Bk",
+      "repCable": "F-001",
+      "repAbout": "SW_CORE01 port 25",
+      "actifAbout": "RX - LC en 1000baseSX",
+      "commentaire": ""
+     },
+     {
+      "n": "3",
+      "reseau": "libre",
+      "repereLiaison": "",
+      "tenant": "",
+      "detail": "",
+      "repCable": "",
+      "repAbout": "",
+      "actifAbout": "",
+      "commentaire": ""
+     },
+     {
+      "n": "4",
+      "reseau": "libre",
+      "repereLiaison": "",
+      "tenant": "",
+      "detail": "",
+      "repCable": "",
+      "repAbout": "",
+      "actifAbout": "",
+      "commentaire": ""
+     },
+     {
+      "n": "5",
+      "reseau": "libre",
+      "repereLiaison": "",
+      "tenant": "",
+      "detail": "",
+      "repCable": "",
+      "repAbout": "",
+      "actifAbout": "",
+      "commentaire": ""
+     },
+     {
+      "n": "6",
+      "reseau": "libre",
+      "repereLiaison": "",
+      "tenant": "",
+      "detail": "",
+      "repCable": "",
+      "repAbout": "",
+      "actifAbout": "",
+      "commentaire": ""
+     },
+     {
+      "n": "7",
+      "reseau": "libre",
+      "repereLiaison": "",
+      "tenant": "",
+      "detail": "",
+      "repCable": "",
+      "repAbout": "",
+      "actifAbout": "",
+      "commentaire": ""
+     },
+     {
+      "n": "8",
+      "reseau": "libre",
+      "repereLiaison": "",
+      "tenant": "",
+      "detail": "",
+      "repCable": "",
+      "repAbout": "",
+      "actifAbout": "",
+      "commentaire": ""
+     },
+     {
+      "n": "9",
+      "reseau": "libre",
+      "repereLiaison": "",
+      "tenant": "",
+      "detail": "",
+      "repCable": "",
+      "repAbout": "",
+      "actifAbout": "",
+      "commentaire": ""
+     },
+     {
+      "n": "10",
+      "reseau": "libre",
+      "repereLiaison": "",
+      "tenant": "",
+      "detail": "",
+      "repCable": "",
+      "repAbout": "",
+      "actifAbout": "",
+      "commentaire": ""
+     },
+     {
+      "n": "11",
+      "reseau": "libre",
+      "repereLiaison": "",
+      "tenant": "",
+      "detail": "",
+      "repCable": "",
+      "repAbout": "",
+      "actifAbout": "",
+      "commentaire": ""
+     },
+     {
+      "n": "12",
+      "reseau": "libre",
+      "repereLiaison": "",
+      "tenant": "",
+      "detail": "",
+      "repCable": "",
+      "repAbout": "",
+      "actifAbout": "",
+      "commentaire": ""
+     }
+    ]
+   },
+   {
+    "id": "xro02",
+    "baie": "CF-L2-01",
+    "tag": "CF-L2-01-RO01",
+    "libelle": "Tiroir optique du coffret ligne 2",
+    "position": "2",
+    "nbPorts": "12",
+    "typePort": "Fibre LC duplex",
+    "commentaire": "",
+    "raccords": [
+     {
+      "n": "1",
+      "reseau": "Trunk vers baie principale",
+      "repereLiaison": "WO-BAIE01-RO01/CF-L2-01-RO01-A",
+      "tenant": "BAIE-01-RO01",
+      "detail": "Rd",
+      "repCable": "F-001",
+      "repAbout": "API_L2_01 X1",
+      "actifAbout": "TX - LC en 1000baseSX",
+      "commentaire": ""
+     },
+     {
+      "n": "2",
+      "reseau": "Trunk vers baie principale",
+      "repereLiaison": "WO-BAIE01-RO01/CF-L2-01-RO01-A",
+      "tenant": "BAIE-01-RO01",
+      "detail": "Bk",
+      "repCable": "F-001",
+      "repAbout": "API_L2_01 X1",
+      "actifAbout": "RX - LC en 1000baseSX",
+      "commentaire": ""
+     },
+     {
+      "n": "3",
+      "reseau": "libre",
+      "repereLiaison": "",
+      "tenant": "",
+      "detail": "",
+      "repCable": "",
+      "repAbout": "",
+      "actifAbout": "",
+      "commentaire": ""
+     },
+     {
+      "n": "4",
+      "reseau": "libre",
+      "repereLiaison": "",
+      "tenant": "",
+      "detail": "",
+      "repCable": "",
+      "repAbout": "",
+      "actifAbout": "",
+      "commentaire": ""
+     },
+     {
+      "n": "5",
+      "reseau": "libre",
+      "repereLiaison": "",
+      "tenant": "",
+      "detail": "",
+      "repCable": "",
+      "repAbout": "",
+      "actifAbout": "",
+      "commentaire": ""
+     },
+     {
+      "n": "6",
+      "reseau": "libre",
+      "repereLiaison": "",
+      "tenant": "",
+      "detail": "",
+      "repCable": "",
+      "repAbout": "",
+      "actifAbout": "",
+      "commentaire": ""
+     },
+     {
+      "n": "7",
+      "reseau": "libre",
+      "repereLiaison": "",
+      "tenant": "",
+      "detail": "",
+      "repCable": "",
+      "repAbout": "",
+      "actifAbout": "",
+      "commentaire": ""
+     },
+     {
+      "n": "8",
+      "reseau": "libre",
+      "repereLiaison": "",
+      "tenant": "",
+      "detail": "",
+      "repCable": "",
+      "repAbout": "",
+      "actifAbout": "",
+      "commentaire": ""
+     },
+     {
+      "n": "9",
+      "reseau": "libre",
+      "repereLiaison": "",
+      "tenant": "",
+      "detail": "",
+      "repCable": "",
+      "repAbout": "",
+      "actifAbout": "",
+      "commentaire": ""
+     },
+     {
+      "n": "10",
+      "reseau": "libre",
+      "repereLiaison": "",
+      "tenant": "",
+      "detail": "",
+      "repCable": "",
+      "repAbout": "",
+      "actifAbout": "",
+      "commentaire": ""
+     },
+     {
+      "n": "11",
+      "reseau": "libre",
+      "repereLiaison": "",
+      "tenant": "",
+      "detail": "",
+      "repCable": "",
+      "repAbout": "",
+      "actifAbout": "",
+      "commentaire": ""
+     },
+     {
+      "n": "12",
+      "reseau": "libre",
+      "repereLiaison": "",
+      "tenant": "",
+      "detail": "",
+      "repCable": "",
+      "repAbout": "",
+      "actifAbout": "",
+      "commentaire": ""
+     }
+    ]
+   }
+  ]
+ }
+}

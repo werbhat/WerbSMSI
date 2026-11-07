@@ -1,0 +1,905 @@
+{
+ "format": "WERBNIS2",
+ "schema": 1,
+ "famille": "WERBSMSI",
+ "meta": {
+  "produit": "WerbNIS2",
+  "appVersion": "1.0.0",
+  "auteur": "@WerbHat",
+  "generateur": "WerbNIS2 v1.0.0 – Développé par @WerbHat",
+  "modifieLe": "2026-10-24T08:00:00Z",
+  "modifiePar": "Exemple",
+  "creeLe": "2026-10-19",
+  "groupeId": "e6a47cd7-77fe-463f-b6ea-b50ff390bfc7",
+  "portee": "site",
+  "site": "LYON"
+ },
+ "verrou": null,
+ "journal": [
+  {
+   "date": "2026-10-19T08:00:00.000Z",
+   "par": "Exemple",
+   "action": "Création",
+   "objet": "Base",
+   "element": "",
+   "champ": "",
+   "avant": "",
+   "apres": "Base d'exemple fictive"
+  }
+ ],
+ "data": {
+  "entite": {
+   "raisonSociale": "GDI Production (fictive)",
+   "siren": "000 000 000",
+   "site": "LYON – Usine de Lyon (fictive)",
+   "adresse": "Zone industrielle fictive, 69000 Lyon",
+   "effectif": "320",
+   "chiffreAffaires": "62 M€",
+   "statut": "Entité importante",
+   "annexe": "Annexe II – autre secteur critique",
+   "secteur": "Fabrication",
+   "sousSecteur": "Fabrication de machines et équipements",
+   "declaration": "Déclaration fictive du 15/09/2026",
+   "justificationStatut": "Grande entreprise d'un secteur de l'annexe II : entité importante (exemple fictif).",
+   "dirigeant": "Directeur général (fictif)",
+   "conseiller": "Responsable SSI du groupe (fictif)",
+   "pointContact": "Correspondant cyber du site (fictif)",
+   "pointContactCoord": "cyber@exemple.invalid",
+   "rssi": "Responsable SSI du groupe (fictif)",
+   "organisation": "Comité sécurité trimestriel ; correspondant cyber sur le site ; RACI en cours de rédaction.",
+   "activites": "Usinage et assemblage (responsable : directeur de site)\nLogistique expédition (responsable : responsable logistique)\nMaintenance (responsable : responsable maintenance)",
+   "sir": "SI de production (supervision, automates des lignes 1 et 2)\nSI de gestion (ERP, messagerie)\nGTC du bâtiment",
+   "exclusions": "Réseau Wi-Fi invités : aucun lien avec les activités, isolé physiquement.",
+   "notes": "Exemple fictif destiné à la démonstration de WerbNIS2."
+  },
+  "audit": {
+   "reference": "AUD-NIS2-2026-01",
+   "objet": "Audit de conformité NIS2 du site de Lyon (exemple fictif)",
+   "auditeur": "Auditeur Exemple",
+   "dateDebut": "2026-10-19",
+   "dateFin": "",
+   "classification": "Diffusion restreinte",
+   "perimetre": "SI de production et SI de gestion du site de Lyon. Thématiques 1 à 22 auditées, 23 à 28 planifiées.",
+   "conclusion": ""
+  },
+  "regles": {
+   "1": {
+    "etat": "Liste des activités et des SIR établie ; un responsable par activité.",
+    "resteAFaire": "Faire valider la liste par la direction et prévoir sa revue annuelle."
+   },
+   "2": {
+    "etat": "PSSI approuvée ; point de contact déclaré.",
+    "resteAFaire": "Décliner les politiques de chiffrement et de contrôle d'accès."
+   },
+   "3": {
+    "etat": "",
+    "resteAFaire": ""
+   },
+   "4": {
+    "etat": "",
+    "resteAFaire": ""
+   },
+   "5": {
+    "etat": "",
+    "resteAFaire": ""
+   },
+   "6": {
+    "etat": "",
+    "resteAFaire": ""
+   },
+   "7": {
+    "etat": "",
+    "resteAFaire": ""
+   },
+   "8": {
+    "etat": "",
+    "resteAFaire": ""
+   },
+   "9": {
+    "etat": "",
+    "resteAFaire": ""
+   },
+   "10": {
+    "etat": "",
+    "resteAFaire": ""
+   },
+   "11": {
+    "etat": "",
+    "resteAFaire": ""
+   },
+   "12": {
+    "etat": "",
+    "resteAFaire": ""
+   },
+   "13": {
+    "etat": "",
+    "resteAFaire": ""
+   },
+   "14": {
+    "etat": "",
+    "resteAFaire": ""
+   },
+   "15": {
+    "etat": "",
+    "resteAFaire": ""
+   },
+   "16": {
+    "etat": "",
+    "resteAFaire": ""
+   },
+   "17": {
+    "etat": "",
+    "resteAFaire": ""
+   },
+   "18": {
+    "etat": "",
+    "resteAFaire": ""
+   },
+   "19": {
+    "etat": "",
+    "resteAFaire": ""
+   },
+   "20": {
+    "etat": "",
+    "resteAFaire": ""
+   }
+  },
+  "evaluations": {
+   "RECENSEMENT_SI.a": {
+    "statut": "PL+",
+    "commentaire": "Mesure engagée, dans la bonne direction ; formalisation ou périmètre à compléter.",
+    "preuves": "PSSI v2 (fictive), entretien avec le responsable SSI",
+    "majLe": "2026-10-20T09:00:00.000Z",
+    "par": "Auditeur Exemple"
+   },
+   "RECENSEMENT_SI.b": {
+    "statut": "PL-",
+    "commentaire": "Éléments partiels ; la démarche actuelle ne permet pas d'atteindre l'objectif.",
+    "preuves": "",
+    "majLe": "2026-10-20T09:00:00.000Z",
+    "par": "Auditeur Exemple"
+   },
+   "RECENSEMENT_SI.c": {
+    "statut": "OK",
+    "commentaire": "Mesure en place et documentée ; preuve consultée lors de l'audit.",
+    "preuves": "PSSI v2 (fictive), entretien avec le responsable SSI",
+    "majLe": "2026-10-20T09:00:00.000Z",
+    "par": "Auditeur Exemple"
+   },
+   "ROLE.a": {
+    "statut": "OK",
+    "commentaire": "Mesure en place et documentée ; preuve consultée lors de l'audit.",
+    "preuves": "PSSI v2 (fictive), entretien avec le responsable SSI",
+    "majLe": "2026-10-20T09:00:00.000Z",
+    "par": "Auditeur Exemple"
+   },
+   "ROLE.b": {
+    "statut": "PL+",
+    "commentaire": "Mesure engagée, dans la bonne direction ; formalisation ou périmètre à compléter.",
+    "preuves": "PSSI v2 (fictive), entretien avec le responsable SSI",
+    "majLe": "2026-10-20T09:00:00.000Z",
+    "par": "Auditeur Exemple"
+   },
+   "ROLE.c": {
+    "statut": "OK",
+    "commentaire": "Mesure en place et documentée ; preuve consultée lors de l'audit.",
+    "preuves": "PSSI v2 (fictive), entretien avec le responsable SSI",
+    "majLe": "2026-10-20T09:00:00.000Z",
+    "par": "Auditeur Exemple"
+   },
+   "PSSI.a": {
+    "statut": "PL+",
+    "commentaire": "Mesure engagée, dans la bonne direction ; formalisation ou périmètre à compléter.",
+    "preuves": "PSSI v2 (fictive), entretien avec le responsable SSI",
+    "majLe": "2026-10-20T09:00:00.000Z",
+    "par": "Auditeur Exemple"
+   },
+   "PSSI.b": {
+    "statut": "OK",
+    "commentaire": "Mesure en place et documentée ; preuve consultée lors de l'audit.",
+    "preuves": "PSSI v2 (fictive), entretien avec le responsable SSI",
+    "majLe": "2026-10-20T09:00:00.000Z",
+    "par": "Auditeur Exemple"
+   },
+   "PSSI.c": {
+    "statut": "OK",
+    "commentaire": "Mesure en place et documentée ; preuve consultée lors de l'audit.",
+    "preuves": "PSSI v2 (fictive), entretien avec le responsable SSI",
+    "majLe": "2026-10-20T09:00:00.000Z",
+    "par": "Auditeur Exemple"
+   },
+   "PSSI.d": {
+    "statut": "OK",
+    "commentaire": "Mesure en place et documentée ; preuve consultée lors de l'audit.",
+    "preuves": "PSSI v2 (fictive), entretien avec le responsable SSI",
+    "majLe": "2026-10-20T09:00:00.000Z",
+    "par": "Auditeur Exemple"
+   },
+   "PSSI.e": {
+    "statut": "PL+",
+    "commentaire": "Mesure engagée, dans la bonne direction ; formalisation ou périmètre à compléter.",
+    "preuves": "PSSI v2 (fictive), entretien avec le responsable SSI",
+    "majLe": "2026-10-20T09:00:00.000Z",
+    "par": "Auditeur Exemple"
+   },
+   "CONFORMITE.a": {
+    "statut": "PL-",
+    "commentaire": "Éléments partiels ; la démarche actuelle ne permet pas d'atteindre l'objectif.",
+    "preuves": "",
+    "majLe": "2026-10-20T09:00:00.000Z",
+    "par": "Auditeur Exemple"
+   },
+   "CONFORMITE.b": {
+    "statut": "OK",
+    "commentaire": "Mesure en place et documentée ; preuve consultée lors de l'audit.",
+    "preuves": "PSSI v2 (fictive), entretien avec le responsable SSI",
+    "majLe": "2026-10-20T09:00:00.000Z",
+    "par": "Auditeur Exemple"
+   },
+   "CONFORMITE.c": {
+    "statut": "OK",
+    "commentaire": "Mesure en place et documentée ; preuve consultée lors de l'audit.",
+    "preuves": "PSSI v2 (fictive), entretien avec le responsable SSI",
+    "majLe": "2026-10-20T09:00:00.000Z",
+    "par": "Auditeur Exemple"
+   },
+   "ECOSYSTEME.a": {
+    "statut": "OK",
+    "commentaire": "Mesure en place et documentée ; preuve consultée lors de l'audit.",
+    "preuves": "PSSI v2 (fictive), entretien avec le responsable SSI",
+    "majLe": "2026-10-20T09:00:00.000Z",
+    "par": "Auditeur Exemple"
+   },
+   "ECOSYSTEME.b": {
+    "statut": "PL+",
+    "commentaire": "Mesure engagée, dans la bonne direction ; formalisation ou périmètre à compléter.",
+    "preuves": "PSSI v2 (fictive), entretien avec le responsable SSI",
+    "majLe": "2026-10-20T09:00:00.000Z",
+    "par": "Auditeur Exemple"
+   },
+   "CONTRAT.a": {
+    "statut": "PL+",
+    "commentaire": "Mesure engagée, dans la bonne direction ; formalisation ou périmètre à compléter.",
+    "preuves": "PSSI v2 (fictive), entretien avec le responsable SSI",
+    "majLe": "2026-10-20T09:00:00.000Z",
+    "par": "Auditeur Exemple"
+   },
+   "CONTRAT.b": {
+    "statut": "PL-",
+    "commentaire": "Éléments partiels ; la démarche actuelle ne permet pas d'atteindre l'objectif.",
+    "preuves": "",
+    "majLe": "2026-10-20T09:00:00.000Z",
+    "par": "Auditeur Exemple"
+   },
+   "RH.a": {
+    "statut": "OK",
+    "commentaire": "Mesure en place et documentée ; preuve consultée lors de l'audit.",
+    "preuves": "PSSI v2 (fictive), entretien avec le responsable SSI",
+    "majLe": "2026-10-20T09:00:00.000Z",
+    "par": "Auditeur Exemple"
+   },
+   "RH.b": {
+    "statut": "OK",
+    "commentaire": "Mesure en place et documentée ; preuve consultée lors de l'audit.",
+    "preuves": "PSSI v2 (fictive), entretien avec le responsable SSI",
+    "majLe": "2026-10-20T09:00:00.000Z",
+    "par": "Auditeur Exemple"
+   },
+   "RH.c": {
+    "statut": "OK",
+    "commentaire": "Mesure en place et documentée ; preuve consultée lors de l'audit.",
+    "preuves": "PSSI v2 (fictive), entretien avec le responsable SSI",
+    "majLe": "2026-10-20T09:00:00.000Z",
+    "par": "Auditeur Exemple"
+   },
+   "RH.d": {
+    "statut": "OK",
+    "commentaire": "Mesure en place et documentée ; preuve consultée lors de l'audit.",
+    "preuves": "PSSI v2 (fictive), entretien avec le responsable SSI",
+    "majLe": "2026-10-20T09:00:00.000Z",
+    "par": "Auditeur Exemple"
+   },
+   "RH.e": {
+    "statut": "OK",
+    "commentaire": "Mesure en place et documentée ; preuve consultée lors de l'audit.",
+    "preuves": "PSSI v2 (fictive), entretien avec le responsable SSI",
+    "majLe": "2026-10-20T09:00:00.000Z",
+    "par": "Auditeur Exemple"
+   },
+   "MCO_MCS.a": {
+    "statut": "OK",
+    "commentaire": "Mesure en place et documentée ; preuve consultée lors de l'audit.",
+    "preuves": "PSSI v2 (fictive), entretien avec le responsable SSI",
+    "majLe": "2026-10-20T09:00:00.000Z",
+    "par": "Auditeur Exemple"
+   },
+   "MCO_MCS.b": {
+    "statut": "NC",
+    "commentaire": "Aucune disposition constatée.",
+    "preuves": "",
+    "majLe": "2026-10-20T09:00:00.000Z",
+    "par": "Auditeur Exemple"
+   },
+   "MCO_MCS.c": {
+    "statut": "PL-",
+    "commentaire": "Éléments partiels ; la démarche actuelle ne permet pas d'atteindre l'objectif.",
+    "preuves": "",
+    "majLe": "2026-10-20T09:00:00.000Z",
+    "par": "Auditeur Exemple"
+   },
+   "MCO_MCS.d": {
+    "statut": "OK",
+    "commentaire": "Mesure en place et documentée ; preuve consultée lors de l'audit.",
+    "preuves": "PSSI v2 (fictive), entretien avec le responsable SSI",
+    "majLe": "2026-10-20T09:00:00.000Z",
+    "par": "Auditeur Exemple"
+   },
+   "MCO_MCS.f": {
+    "statut": "OK",
+    "commentaire": "Mesure en place et documentée ; preuve consultée lors de l'audit.",
+    "preuves": "PSSI v2 (fictive), entretien avec le responsable SSI",
+    "majLe": "2026-10-20T09:00:00.000Z",
+    "par": "Auditeur Exemple"
+   },
+   "MCO_MCS.g": {
+    "statut": "PL-",
+    "commentaire": "Éléments partiels ; la démarche actuelle ne permet pas d'atteindre l'objectif.",
+    "preuves": "",
+    "majLe": "2026-10-20T09:00:00.000Z",
+    "par": "Auditeur Exemple"
+   },
+   "MCO_MCS.h": {
+    "statut": "OK",
+    "commentaire": "Mesure en place et documentée ; preuve consultée lors de l'audit.",
+    "preuves": "PSSI v2 (fictive), entretien avec le responsable SSI",
+    "majLe": "2026-10-20T09:00:00.000Z",
+    "par": "Auditeur Exemple"
+   },
+   "MCO_MCS.i": {
+    "statut": "NC",
+    "commentaire": "Aucune disposition constatée.",
+    "preuves": "",
+    "majLe": "2026-10-20T09:00:00.000Z",
+    "par": "Auditeur Exemple"
+   },
+   "MCO_MCS.j": {
+    "statut": "PL-",
+    "commentaire": "Éléments partiels ; la démarche actuelle ne permet pas d'atteindre l'objectif.",
+    "preuves": "",
+    "majLe": "2026-10-20T09:00:00.000Z",
+    "par": "Auditeur Exemple"
+   },
+   "MCO_MCS.k": {
+    "statut": "PL-",
+    "commentaire": "Éléments partiels ; la démarche actuelle ne permet pas d'atteindre l'objectif.",
+    "preuves": "",
+    "majLe": "2026-10-20T09:00:00.000Z",
+    "par": "Auditeur Exemple"
+   },
+   "ACCES_PHYSIQUES.a": {
+    "statut": "NA",
+    "commentaire": "Sans objet sur le périmètre audité.",
+    "preuves": "",
+    "majLe": "2026-10-20T09:00:00.000Z",
+    "par": "Auditeur Exemple"
+   },
+   "ACCES_PHYSIQUES.b": {
+    "statut": "PL+",
+    "commentaire": "Mesure engagée, dans la bonne direction ; formalisation ou périmètre à compléter.",
+    "preuves": "PSSI v2 (fictive), entretien avec le responsable SSI",
+    "majLe": "2026-10-20T09:00:00.000Z",
+    "par": "Auditeur Exemple"
+   },
+   "ACCES_PHYSIQUES.c": {
+    "statut": "NC",
+    "commentaire": "Aucune disposition constatée.",
+    "preuves": "",
+    "majLe": "2026-10-20T09:00:00.000Z",
+    "par": "Auditeur Exemple"
+   },
+   "ACCES_PHYSIQUES.d": {
+    "statut": "PL-",
+    "commentaire": "Éléments partiels ; la démarche actuelle ne permet pas d'atteindre l'objectif.",
+    "preuves": "",
+    "majLe": "2026-10-20T09:00:00.000Z",
+    "par": "Auditeur Exemple"
+   },
+   "ACCES_PHYSIQUES.e": {
+    "statut": "PL+",
+    "commentaire": "Mesure engagée, dans la bonne direction ; formalisation ou périmètre à compléter.",
+    "preuves": "PSSI v2 (fictive), entretien avec le responsable SSI",
+    "majLe": "2026-10-20T09:00:00.000Z",
+    "par": "Auditeur Exemple"
+   },
+   "CLOISONNEMENT.a": {
+    "statut": "OK",
+    "commentaire": "Mesure en place et documentée ; preuve consultée lors de l'audit.",
+    "preuves": "PSSI v2 (fictive), entretien avec le responsable SSI",
+    "majLe": "2026-10-20T09:00:00.000Z",
+    "par": "Auditeur Exemple"
+   },
+   "CLOISONNEMENT.b": {
+    "statut": "OK",
+    "commentaire": "Mesure en place et documentée ; preuve consultée lors de l'audit.",
+    "preuves": "PSSI v2 (fictive), entretien avec le responsable SSI",
+    "majLe": "2026-10-20T09:00:00.000Z",
+    "par": "Auditeur Exemple"
+   },
+   "CLOISONNEMENT.c": {
+    "statut": "PL-",
+    "commentaire": "Éléments partiels ; la démarche actuelle ne permet pas d'atteindre l'objectif.",
+    "preuves": "",
+    "majLe": "2026-10-20T09:00:00.000Z",
+    "par": "Auditeur Exemple"
+   },
+   "CLOISONNEMENT.d": {
+    "statut": "OK",
+    "commentaire": "Mesure en place et documentée ; preuve consultée lors de l'audit.",
+    "preuves": "PSSI v2 (fictive), entretien avec le responsable SSI",
+    "majLe": "2026-10-20T09:00:00.000Z",
+    "par": "Auditeur Exemple"
+   },
+   "CLOISONNEMENT.e": {
+    "statut": "PL-",
+    "commentaire": "Éléments partiels ; la démarche actuelle ne permet pas d'atteindre l'objectif.",
+    "preuves": "",
+    "majLe": "2026-10-20T09:00:00.000Z",
+    "par": "Auditeur Exemple"
+   },
+   "CLOISONNEMENT.f": {
+    "statut": "OK",
+    "commentaire": "Mesure en place et documentée ; preuve consultée lors de l'audit.",
+    "preuves": "PSSI v2 (fictive), entretien avec le responsable SSI",
+    "majLe": "2026-10-20T09:00:00.000Z",
+    "par": "Auditeur Exemple"
+   },
+   "CLOISONNEMENT.g": {
+    "statut": "OK",
+    "commentaire": "Mesure en place et documentée ; preuve consultée lors de l'audit.",
+    "preuves": "PSSI v2 (fictive), entretien avec le responsable SSI",
+    "majLe": "2026-10-20T09:00:00.000Z",
+    "par": "Auditeur Exemple"
+   },
+   "CLOISONNEMENT.h": {
+    "statut": "PL+",
+    "commentaire": "Mesure engagée, dans la bonne direction ; formalisation ou périmètre à compléter.",
+    "preuves": "PSSI v2 (fictive), entretien avec le responsable SSI",
+    "majLe": "2026-10-20T09:00:00.000Z",
+    "par": "Auditeur Exemple"
+   },
+   "FILTRAGE.a": {
+    "statut": "PL-",
+    "commentaire": "Éléments partiels ; la démarche actuelle ne permet pas d'atteindre l'objectif.",
+    "preuves": "",
+    "majLe": "2026-10-20T09:00:00.000Z",
+    "par": "Auditeur Exemple"
+   },
+   "FILTRAGE.b": {
+    "statut": "OK",
+    "commentaire": "Mesure en place et documentée ; preuve consultée lors de l'audit.",
+    "preuves": "PSSI v2 (fictive), entretien avec le responsable SSI",
+    "majLe": "2026-10-20T09:00:00.000Z",
+    "par": "Auditeur Exemple"
+   },
+   "FILTRAGE.c": {
+    "statut": "PL-",
+    "commentaire": "Éléments partiels ; la démarche actuelle ne permet pas d'atteindre l'objectif.",
+    "preuves": "",
+    "majLe": "2026-10-20T09:00:00.000Z",
+    "par": "Auditeur Exemple"
+   },
+   "FILTRAGE.d": {
+    "statut": "PL+",
+    "commentaire": "Mesure engagée, dans la bonne direction ; formalisation ou périmètre à compléter.",
+    "preuves": "PSSI v2 (fictive), entretien avec le responsable SSI",
+    "majLe": "2026-10-20T09:00:00.000Z",
+    "par": "Auditeur Exemple"
+   },
+   "FILTRAGE.e": {
+    "statut": "OK",
+    "commentaire": "Mesure en place et documentée ; preuve consultée lors de l'audit.",
+    "preuves": "PSSI v2 (fictive), entretien avec le responsable SSI",
+    "majLe": "2026-10-20T09:00:00.000Z",
+    "par": "Auditeur Exemple"
+   },
+   "ACCES_DISTANTS.a": {
+    "statut": "PL+",
+    "commentaire": "Mesure engagée, dans la bonne direction ; formalisation ou périmètre à compléter.",
+    "preuves": "PSSI v2 (fictive), entretien avec le responsable SSI",
+    "majLe": "2026-10-20T09:00:00.000Z",
+    "par": "Auditeur Exemple"
+   },
+   "ACCES_DISTANTS.b": {
+    "statut": "PL-",
+    "commentaire": "Éléments partiels ; la démarche actuelle ne permet pas d'atteindre l'objectif.",
+    "preuves": "",
+    "majLe": "2026-10-20T09:00:00.000Z",
+    "par": "Auditeur Exemple"
+   },
+   "ACCES_DISTANTS.c": {
+    "statut": "OK",
+    "commentaire": "Mesure en place et documentée ; preuve consultée lors de l'audit.",
+    "preuves": "PSSI v2 (fictive), entretien avec le responsable SSI",
+    "majLe": "2026-10-20T09:00:00.000Z",
+    "par": "Auditeur Exemple"
+   },
+   "ACCES_DISTANTS.d": {
+    "statut": "OK",
+    "commentaire": "Mesure en place et documentée ; preuve consultée lors de l'audit.",
+    "preuves": "PSSI v2 (fictive), entretien avec le responsable SSI",
+    "majLe": "2026-10-20T09:00:00.000Z",
+    "par": "Auditeur Exemple"
+   },
+   "ACCES_DISTANTS.e": {
+    "statut": "NA",
+    "commentaire": "Sans objet sur le périmètre audité.",
+    "preuves": "",
+    "majLe": "2026-10-20T09:00:00.000Z",
+    "par": "Auditeur Exemple"
+   },
+   "PROT_CODES_MALVEILLANTS.a": {
+    "statut": "OK",
+    "commentaire": "Mesure en place et documentée ; preuve consultée lors de l'audit.",
+    "preuves": "PSSI v2 (fictive), entretien avec le responsable SSI",
+    "majLe": "2026-10-20T09:00:00.000Z",
+    "par": "Auditeur Exemple"
+   },
+   "PROT_CODES_MALVEILLANTS.b": {
+    "statut": "OK",
+    "commentaire": "Mesure en place et documentée ; preuve consultée lors de l'audit.",
+    "preuves": "PSSI v2 (fictive), entretien avec le responsable SSI",
+    "majLe": "2026-10-20T09:00:00.000Z",
+    "par": "Auditeur Exemple"
+   },
+   "PROT_CODES_MALVEILLANTS.c": {
+    "statut": "PL-",
+    "commentaire": "Éléments partiels ; la démarche actuelle ne permet pas d'atteindre l'objectif.",
+    "preuves": "",
+    "majLe": "2026-10-20T09:00:00.000Z",
+    "par": "Auditeur Exemple"
+   },
+   "PROT_CODES_MALVEILLANTS.d": {
+    "statut": "PL+",
+    "commentaire": "Mesure engagée, dans la bonne direction ; formalisation ou périmètre à compléter.",
+    "preuves": "PSSI v2 (fictive), entretien avec le responsable SSI",
+    "majLe": "2026-10-20T09:00:00.000Z",
+    "par": "Auditeur Exemple"
+   },
+   "PROT_CODES_MALVEILLANTS.e": {
+    "statut": "NC",
+    "commentaire": "Aucune disposition constatée.",
+    "preuves": "",
+    "majLe": "2026-10-20T09:00:00.000Z",
+    "par": "Auditeur Exemple"
+   },
+   "PROT_CODES_MALVEILLANTS.f": {
+    "statut": "PL-",
+    "commentaire": "Éléments partiels ; la démarche actuelle ne permet pas d'atteindre l'objectif.",
+    "preuves": "",
+    "majLe": "2026-10-20T09:00:00.000Z",
+    "par": "Auditeur Exemple"
+   },
+   "PROT_CODES_MALVEILLANTS.g": {
+    "statut": "OK",
+    "commentaire": "Mesure en place et documentée ; preuve consultée lors de l'audit.",
+    "preuves": "PSSI v2 (fictive), entretien avec le responsable SSI",
+    "majLe": "2026-10-20T09:00:00.000Z",
+    "par": "Auditeur Exemple"
+   },
+   "IDENTIFICATION.a": {
+    "statut": "NC",
+    "commentaire": "Aucune disposition constatée.",
+    "preuves": "",
+    "majLe": "2026-10-20T09:00:00.000Z",
+    "par": "Auditeur Exemple"
+   },
+   "IDENTIFICATION.b": {
+    "statut": "OK",
+    "commentaire": "Mesure en place et documentée ; preuve consultée lors de l'audit.",
+    "preuves": "PSSI v2 (fictive), entretien avec le responsable SSI",
+    "majLe": "2026-10-20T09:00:00.000Z",
+    "par": "Auditeur Exemple"
+   },
+   "IDENTIFICATION.c": {
+    "statut": "OK",
+    "commentaire": "Mesure en place et documentée ; preuve consultée lors de l'audit.",
+    "preuves": "PSSI v2 (fictive), entretien avec le responsable SSI",
+    "majLe": "2026-10-20T09:00:00.000Z",
+    "par": "Auditeur Exemple"
+   },
+   "IDENTIFICATION.d": {
+    "statut": "OK",
+    "commentaire": "Mesure en place et documentée ; preuve consultée lors de l'audit.",
+    "preuves": "PSSI v2 (fictive), entretien avec le responsable SSI",
+    "majLe": "2026-10-20T09:00:00.000Z",
+    "par": "Auditeur Exemple"
+   },
+   "IDENTIFICATION.e": {
+    "statut": "PL+",
+    "commentaire": "Mesure engagée, dans la bonne direction ; formalisation ou périmètre à compléter.",
+    "preuves": "PSSI v2 (fictive), entretien avec le responsable SSI",
+    "majLe": "2026-10-20T09:00:00.000Z",
+    "par": "Auditeur Exemple"
+   },
+   "AUTHENTIFICATION.a": {
+    "statut": "PL+",
+    "commentaire": "Mesure engagée, dans la bonne direction ; formalisation ou périmètre à compléter.",
+    "preuves": "PSSI v2 (fictive), entretien avec le responsable SSI",
+    "majLe": "2026-10-20T09:00:00.000Z",
+    "par": "Auditeur Exemple"
+   },
+   "AUTHENTIFICATION.b": {
+    "statut": "OK",
+    "commentaire": "Mesure en place et documentée ; preuve consultée lors de l'audit.",
+    "preuves": "PSSI v2 (fictive), entretien avec le responsable SSI",
+    "majLe": "2026-10-20T09:00:00.000Z",
+    "par": "Auditeur Exemple"
+   },
+   "AUTHENTIFICATION.c": {
+    "statut": "NC",
+    "commentaire": "Aucune disposition constatée.",
+    "preuves": "",
+    "majLe": "2026-10-20T09:00:00.000Z",
+    "par": "Auditeur Exemple"
+   },
+   "AUTHENTIFICATION.d": {
+    "statut": "NC",
+    "commentaire": "Aucune disposition constatée.",
+    "preuves": "",
+    "majLe": "2026-10-20T09:00:00.000Z",
+    "par": "Auditeur Exemple"
+   },
+   "AUTHENTIFICATION.e": {
+    "statut": "NC",
+    "commentaire": "Aucune disposition constatée.",
+    "preuves": "",
+    "majLe": "2026-10-20T09:00:00.000Z",
+    "par": "Auditeur Exemple"
+   },
+   "AUTHENTIFICATION.f": {
+    "statut": "OK",
+    "commentaire": "Mesure en place et documentée ; preuve consultée lors de l'audit.",
+    "preuves": "PSSI v2 (fictive), entretien avec le responsable SSI",
+    "majLe": "2026-10-20T09:00:00.000Z",
+    "par": "Auditeur Exemple"
+   },
+   "AUTHENTIFICATION.g": {
+    "statut": "OK",
+    "commentaire": "Mesure en place et documentée ; preuve consultée lors de l'audit.",
+    "preuves": "PSSI v2 (fictive), entretien avec le responsable SSI",
+    "majLe": "2026-10-20T09:00:00.000Z",
+    "par": "Auditeur Exemple"
+   },
+   "DROIT_ACCES.a": {
+    "statut": "OK",
+    "commentaire": "Mesure en place et documentée ; preuve consultée lors de l'audit.",
+    "preuves": "PSSI v2 (fictive), entretien avec le responsable SSI",
+    "majLe": "2026-10-20T09:00:00.000Z",
+    "par": "Auditeur Exemple"
+   },
+   "DROIT_ACCES.b": {
+    "statut": "OK",
+    "commentaire": "Mesure en place et documentée ; preuve consultée lors de l'audit.",
+    "preuves": "PSSI v2 (fictive), entretien avec le responsable SSI",
+    "majLe": "2026-10-20T09:00:00.000Z",
+    "par": "Auditeur Exemple"
+   },
+   "DROIT_ACCES.c": {
+    "statut": "PL+",
+    "commentaire": "Mesure engagée, dans la bonne direction ; formalisation ou périmètre à compléter.",
+    "preuves": "PSSI v2 (fictive), entretien avec le responsable SSI",
+    "majLe": "2026-10-20T09:00:00.000Z",
+    "par": "Auditeur Exemple"
+   },
+   "DROIT_ACCES.d": {
+    "statut": "OK",
+    "commentaire": "Mesure en place et documentée ; preuve consultée lors de l'audit.",
+    "preuves": "PSSI v2 (fictive), entretien avec le responsable SSI",
+    "majLe": "2026-10-20T09:00:00.000Z",
+    "par": "Auditeur Exemple"
+   },
+   "COMPTES_ADMIN.a": {
+    "statut": "OK",
+    "commentaire": "Mesure en place et documentée ; preuve consultée lors de l'audit.",
+    "preuves": "PSSI v2 (fictive), entretien avec le responsable SSI",
+    "majLe": "2026-10-20T09:00:00.000Z",
+    "par": "Auditeur Exemple"
+   },
+   "COMPTES_ADMIN.b": {
+    "statut": "OK",
+    "commentaire": "Mesure en place et documentée ; preuve consultée lors de l'audit.",
+    "preuves": "PSSI v2 (fictive), entretien avec le responsable SSI",
+    "majLe": "2026-10-20T09:00:00.000Z",
+    "par": "Auditeur Exemple"
+   },
+   "COMPTES_ADMIN.c": {
+    "statut": "OK",
+    "commentaire": "Mesure en place et documentée ; preuve consultée lors de l'audit.",
+    "preuves": "PSSI v2 (fictive), entretien avec le responsable SSI",
+    "majLe": "2026-10-20T09:00:00.000Z",
+    "par": "Auditeur Exemple"
+   },
+   "COMPTES_ADMIN.d": {
+    "statut": "PL-",
+    "commentaire": "Éléments partiels ; la démarche actuelle ne permet pas d'atteindre l'objectif.",
+    "preuves": "",
+    "majLe": "2026-10-20T09:00:00.000Z",
+    "par": "Auditeur Exemple"
+   },
+   "COMPTES_ADMIN.e": {
+    "statut": "PL-",
+    "commentaire": "Éléments partiels ; la démarche actuelle ne permet pas d'atteindre l'objectif.",
+    "preuves": "",
+    "majLe": "2026-10-20T09:00:00.000Z",
+    "par": "Auditeur Exemple"
+   },
+   "COMPTES_ADMIN.f": {
+    "statut": "PL+",
+    "commentaire": "Mesure engagée, dans la bonne direction ; formalisation ou périmètre à compléter.",
+    "preuves": "PSSI v2 (fictive), entretien avec le responsable SSI",
+    "majLe": "2026-10-20T09:00:00.000Z",
+    "par": "Auditeur Exemple"
+   },
+   "COMPTES_ADMIN.g": {
+    "statut": "PL+",
+    "commentaire": "Mesure engagée, dans la bonne direction ; formalisation ou périmètre à compléter.",
+    "preuves": "PSSI v2 (fictive), entretien avec le responsable SSI",
+    "majLe": "2026-10-20T09:00:00.000Z",
+    "par": "Auditeur Exemple"
+   },
+   "ANNUAIRES.a": {
+    "statut": "NC",
+    "commentaire": "Aucune disposition constatée.",
+    "preuves": "",
+    "majLe": "2026-10-20T09:00:00.000Z",
+    "par": "Auditeur Exemple"
+   },
+   "ANNUAIRES.b": {
+    "statut": "OK",
+    "commentaire": "Mesure en place et documentée ; preuve consultée lors de l'audit.",
+    "preuves": "PSSI v2 (fictive), entretien avec le responsable SSI",
+    "majLe": "2026-10-20T09:00:00.000Z",
+    "par": "Auditeur Exemple"
+   },
+   "ANNUAIRES.c": {
+    "statut": "PL+",
+    "commentaire": "Mesure engagée, dans la bonne direction ; formalisation ou périmètre à compléter.",
+    "preuves": "PSSI v2 (fictive), entretien avec le responsable SSI",
+    "majLe": "2026-10-20T09:00:00.000Z",
+    "par": "Auditeur Exemple"
+   },
+   "ANNUAIRES.d": {
+    "statut": "PL-",
+    "commentaire": "Éléments partiels ; la démarche actuelle ne permet pas d'atteindre l'objectif.",
+    "preuves": "",
+    "majLe": "2026-10-20T09:00:00.000Z",
+    "par": "Auditeur Exemple"
+   },
+   "ANNUAIRES.e": {
+    "statut": "PL+",
+    "commentaire": "Mesure engagée, dans la bonne direction ; formalisation ou périmètre à compléter.",
+    "preuves": "PSSI v2 (fictive), entretien avec le responsable SSI",
+    "majLe": "2026-10-20T09:00:00.000Z",
+    "par": "Auditeur Exemple"
+   },
+   "ANNUAIRES.f": {
+    "statut": "NC",
+    "commentaire": "Aucune disposition constatée.",
+    "preuves": "",
+    "majLe": "2026-10-20T09:00:00.000Z",
+    "par": "Auditeur Exemple"
+   },
+   "ANNUAIRES.g": {
+    "statut": "PL-",
+    "commentaire": "Éléments partiels ; la démarche actuelle ne permet pas d'atteindre l'objectif.",
+    "preuves": "",
+    "majLe": "2026-10-20T09:00:00.000Z",
+    "par": "Auditeur Exemple"
+   },
+   "INCIDENTS.c": {
+    "statut": "OK",
+    "commentaire": "Mesure en place et documentée ; preuve consultée lors de l'audit.",
+    "preuves": "PSSI v2 (fictive), entretien avec le responsable SSI",
+    "majLe": "2026-10-20T09:00:00.000Z",
+    "par": "Auditeur Exemple"
+   },
+   "INCIDENTS.f": {
+    "statut": "NC",
+    "commentaire": "Aucune disposition constatée.",
+    "preuves": "",
+    "majLe": "2026-10-20T09:00:00.000Z",
+    "par": "Auditeur Exemple"
+   },
+   "INCIDENTS.g": {
+    "statut": "OK",
+    "commentaire": "Mesure en place et documentée ; preuve consultée lors de l'audit.",
+    "preuves": "PSSI v2 (fictive), entretien avec le responsable SSI",
+    "majLe": "2026-10-20T09:00:00.000Z",
+    "par": "Auditeur Exemple"
+   },
+   "CONTINUITE_ACTIVITE.a": {
+    "statut": "PL+",
+    "commentaire": "Mesure engagée, dans la bonne direction ; formalisation ou périmètre à compléter.",
+    "preuves": "PSSI v2 (fictive), entretien avec le responsable SSI",
+    "majLe": "2026-10-20T09:00:00.000Z",
+    "par": "Auditeur Exemple"
+   },
+   "CONTINUITE_ACTIVITE.b": {
+    "statut": "OK",
+    "commentaire": "Mesure en place et documentée ; preuve consultée lors de l'audit.",
+    "preuves": "PSSI v2 (fictive), entretien avec le responsable SSI",
+    "majLe": "2026-10-20T09:00:00.000Z",
+    "par": "Auditeur Exemple"
+   },
+   "CONTINUITE_ACTIVITE.c": {
+    "statut": "PL+",
+    "commentaire": "Mesure engagée, dans la bonne direction ; formalisation ou périmètre à compléter.",
+    "preuves": "PSSI v2 (fictive), entretien avec le responsable SSI",
+    "majLe": "2026-10-20T09:00:00.000Z",
+    "par": "Auditeur Exemple"
+   },
+   "CONTINUITE_ACTIVITE.d": {
+    "statut": "PL-",
+    "commentaire": "Éléments partiels ; la démarche actuelle ne permet pas d'atteindre l'objectif.",
+    "preuves": "",
+    "majLe": "2026-10-20T09:00:00.000Z",
+    "par": "Auditeur Exemple"
+   },
+   "CONTINUITE_ACTIVITE.g": {
+    "statut": "OK",
+    "commentaire": "Mesure en place et documentée ; preuve consultée lors de l'audit.",
+    "preuves": "PSSI v2 (fictive), entretien avec le responsable SSI",
+    "majLe": "2026-10-20T09:00:00.000Z",
+    "par": "Auditeur Exemple"
+   },
+   "GESTION_CRISE.a": {
+    "statut": "OK",
+    "commentaire": "Mesure en place et documentée ; preuve consultée lors de l'audit.",
+    "preuves": "PSSI v2 (fictive), entretien avec le responsable SSI",
+    "majLe": "2026-10-20T09:00:00.000Z",
+    "par": "Auditeur Exemple"
+   },
+   "GESTION_CRISE.b": {
+    "statut": "OK",
+    "commentaire": "Mesure en place et documentée ; preuve consultée lors de l'audit.",
+    "preuves": "PSSI v2 (fictive), entretien avec le responsable SSI",
+    "majLe": "2026-10-20T09:00:00.000Z",
+    "par": "Auditeur Exemple"
+   },
+   "GESTION_CRISE.c": {
+    "statut": "PL-",
+    "commentaire": "Éléments partiels ; la démarche actuelle ne permet pas d'atteindre l'objectif.",
+    "preuves": "",
+    "majLe": "2026-10-20T09:00:00.000Z",
+    "par": "Auditeur Exemple"
+   },
+   "EXERCICES.a": {
+    "statut": "OK",
+    "commentaire": "Mesure en place et documentée ; preuve consultée lors de l'audit.",
+    "preuves": "PSSI v2 (fictive), entretien avec le responsable SSI",
+    "majLe": "2026-10-20T09:00:00.000Z",
+    "par": "Auditeur Exemple"
+   }
+  },
+  "actions": [
+   {
+    "id": "A-001",
+    "point": "ROLE.c",
+    "titre": "Formaliser le RACI de la sécurité numérique et la comitologie",
+    "responsable": "Responsable SSI",
+    "echeance": "2026-12-15",
+    "statut": "En cours",
+    "commentaire": ""
+   },
+   {
+    "id": "A-002",
+    "point": "CONTINUITE_ACTIVITE.c",
+    "titre": "Planifier et tracer un test annuel de restauration des sauvegardes",
+    "responsable": "Responsable informatique",
+    "echeance": "2027-01-31",
+    "statut": "À lancer",
+    "commentaire": ""
+   }
+  ]
+ }
+}

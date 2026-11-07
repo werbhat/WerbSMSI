@@ -1,0 +1,419 @@
+{
+ "format": "WERBGOUVERNANCE",
+ "schema": 1,
+ "famille": "WERBSMSI",
+ "meta": {
+  "produit": "WerbGouvernance",
+  "appVersion": "1.1.0",
+  "auteur": "@WerbHat",
+  "generateur": "WerbGouvernance v1.1.0 – Développé par @WerbHat",
+  "creeLe": "2026-10-24",
+  "modifieLe": "2026-10-24T08:00:00Z",
+  "modifiePar": "Exemple",
+  "groupeId": "e6a47cd7-77fe-463f-b6ea-b50ff390bfc7",
+  "portee": "groupe"
+ },
+ "verrou": null,
+ "journal": [
+  {
+   "date": "2026-10-24T08:00:00.000Z",
+   "par": "Exemple",
+   "action": "Création",
+   "objet": "Base",
+   "element": "",
+   "champ": "",
+   "avant": "",
+   "apres": "Base d'exemple fictive"
+  }
+ ],
+ "data": {
+  "organisation": {
+   "nom": "Groupe Démo Industrie (fictif)",
+   "perimetre": "Systèmes d'information industriels (OT) des sites de production de Lyon et de Nantes : supervision, automates, réseaux d'atelier et postes d'ingénierie. Les SI de gestion sont hors périmètre.",
+   "politique": {
+    "titre": "Politique de sécurité des systèmes d'information industriels",
+    "reference": "PSSI-OT-GDI",
+    "version": "2.0",
+    "dateApprobation": "2026-01-15",
+    "approbateur": "Direction générale (fictive)",
+    "prochaineRevue": "2027-01-15",
+    "lien": "",
+    "resume": "Protéger la disponibilité et l'intégrité de la production ; cloisonner IT et OT ; maîtriser les accès des prestataires ; détecter et traiter les incidents ; améliorer en continu (ISO/IEC 27001, IEC 62443)."
+   }
+  },
+  "roles": [
+   {
+    "id": "R-RSSI",
+    "nom": "RSSI groupe",
+    "niveau": "groupe",
+    "titulaire": "Prénom NOM (fictif)",
+    "suppleant": "Prénom NOM (fictif)",
+    "missions": "Pilote le SMSI, tient le socle de mesures, anime la revue de direction."
+   },
+   {
+    "id": "R-CORR",
+    "nom": "Correspondant cybersécurité de site",
+    "niveau": "site",
+    "titulaire": "",
+    "suppleant": "",
+    "missions": "Relaie le SMSI sur le site, tient les registres d'exploitation, publie les synthèses."
+   },
+   {
+    "id": "R-DIR",
+    "nom": "Directeur des opérations",
+    "niveau": "groupe",
+    "titulaire": "Prénom NOM (fictif)",
+    "suppleant": "",
+    "missions": "Approuve la politique, arbitre les risques résiduels."
+   },
+   {
+    "id": "R-EXPL",
+    "nom": "Responsable d'exploitation OT",
+    "niveau": "site",
+    "titulaire": "",
+    "suppleant": "",
+    "missions": "Maintien en condition opérationnelle et de sécurité des systèmes du site."
+   },
+   {
+    "id": "R-ACH",
+    "nom": "Acheteur référent prestataires",
+    "niveau": "groupe",
+    "titulaire": "Prénom NOM (fictif)",
+    "suppleant": "",
+    "missions": "Clauses de sécurité des contrats cadre."
+   }
+  ],
+  "mesures": [
+   {
+    "id": "MS-01",
+    "titre": "Comptes nominatifs sur les postes d'ingénierie",
+    "domaine": "Identification",
+    "obligatoire": true,
+    "references": [
+     "IEC62443-3-3:SR 1.1"
+    ],
+    "preuve": "Extraction des comptes locaux et de domaine"
+   },
+   {
+    "id": "MS-02",
+    "titre": "Cloisonnement IT / OT par pare-feu filtrant",
+    "domaine": "Architecture",
+    "obligatoire": true,
+    "references": [
+     "IEC62443-3-3:SR 5.1"
+    ],
+    "preuve": "Matrice de flux et règles du pare-feu"
+   },
+   {
+    "id": "MS-03",
+    "titre": "Revue annuelle des comptes à privilège",
+    "domaine": "Identification",
+    "obligatoire": true,
+    "references": [
+     "IEC62443-3-3:SR 1.3",
+     "ISO27001:A.5.18"
+    ],
+    "preuve": "Registre des comptes à privilège révisé"
+   },
+   {
+    "id": "MS-04",
+    "titre": "Sauvegarde hors ligne des configurations et tests de restauration",
+    "domaine": "Rétablissement",
+    "obligatoire": true,
+    "references": [
+     "IEC62443-3-3:SR 7.3",
+     "ISO27001:A.8.13"
+    ],
+    "preuve": "Registre des sauvegardes, procès-verbal de test"
+   },
+   {
+    "id": "MS-05",
+    "titre": "Correctifs de sécurité appliqués selon un plan validé",
+    "domaine": "Protection",
+    "obligatoire": true,
+    "references": [
+     "IEC62443-3-3:SR 3.2",
+     "ISO27001:A.8.8"
+    ],
+    "preuve": "Registre des mises à jour par campagne"
+   },
+   {
+    "id": "MS-06",
+    "titre": "Accès distants des prestataires par passerelle tracée",
+    "domaine": "Fournisseurs",
+    "obligatoire": true,
+    "references": [
+     "IEC62443-3-3:SR 1.13"
+    ],
+    "preuve": "Journal de la passerelle d'accès"
+   },
+   {
+    "id": "MS-07",
+    "titre": "Journalisation centralisée des événements de sécurité",
+    "domaine": "Détection",
+    "obligatoire": false,
+    "references": [
+     "IEC62443-3-3:SR 6.1"
+    ],
+    "preuve": "Configuration du collecteur"
+   },
+   {
+    "id": "MS-08",
+    "titre": "Sensibilisation annuelle des équipes de production",
+    "domaine": "Ressources humaines",
+    "obligatoire": false,
+    "references": [
+     "ISO27001:A.6.3"
+    ],
+    "preuve": "Feuilles de présence"
+   }
+  ],
+  "prestataires": [
+   {
+    "id": "PC-01",
+    "nom": "Intégrateur Alpha (fictif)",
+    "role": "Intégration contrôle-commande",
+    "contrat": "CC-2025-014",
+    "echeance": "2027-12-31",
+    "contact": "contact@alpha.exemple"
+   },
+   {
+    "id": "PC-02",
+    "nom": "Mainteneur Beta (fictif)",
+    "role": "Maintenance automates et réseaux",
+    "contrat": "CC-2024-031",
+    "echeance": "2026-12-31",
+    "contact": ""
+   },
+   {
+    "id": "PC-03",
+    "nom": "Éditeur Gamma (fictif)",
+    "role": "Support de la supervision",
+    "contrat": "CC-2026-002",
+    "echeance": "2029-01-31",
+    "contact": ""
+   }
+  ],
+  "procedures": [
+   {
+    "id": "p1",
+    "code": "PRO-GOV-001",
+    "titre": "Revue de direction du SMSI",
+    "domaine": "Gouvernance",
+    "version": "1.1",
+    "statut": "Validée",
+    "proprio": "RSSI groupe",
+    "approb": "Directeur des opérations",
+    "dateValid": "2026-01-20",
+    "revue": "2027-01-20",
+    "frequence": "Annuelle",
+    "objet": "Évaluer chaque année l'efficacité du SMSI et décider des améliorations.",
+    "perimetre": "SMSI du groupe et des sites.",
+    "refsN": "ISO/IEC 27001 § 9.3",
+    "declencheur": "Calendrier annuel ; incident majeur.",
+    "lien": ""
+   },
+   {
+    "id": "p2",
+    "code": "PRO-IAM-001",
+    "titre": "Gestion des comptes à privilège",
+    "domaine": "Identification",
+    "version": "1.0",
+    "statut": "Validée",
+    "proprio": "RSSI groupe",
+    "approb": "Directeur des opérations",
+    "dateValid": "2026-03-02",
+    "revue": "2027-03-02",
+    "frequence": "Annuelle",
+    "objet": "Créer, réviser et retirer les comptes d'administration des systèmes OT.",
+    "perimetre": "Tous les sites.",
+    "refsN": "IEC 62443-3-3 SR 1.3 ; mesure MS-03",
+    "declencheur": "Arrivée, départ, changement de fonction ; revue annuelle.",
+    "lien": ""
+   },
+   {
+    "id": "p3",
+    "code": "PRO-BCK-001",
+    "titre": "Sauvegarde et restauration des systèmes OT",
+    "domaine": "Rétablissement",
+    "version": "0.9",
+    "statut": "En revue",
+    "proprio": "Responsable d'exploitation OT",
+    "approb": "RSSI groupe",
+    "dateValid": "",
+    "revue": "2026-12-15",
+    "frequence": "Annuelle",
+    "objet": "Garantir la reconstruction des systèmes de production.",
+    "perimetre": "Serveurs, automates, équipements réseau.",
+    "refsN": "IEC 62443-3-3 SR 7.3 ; mesure MS-04",
+    "declencheur": "Calendrier des sauvegardes ; modification de configuration.",
+    "lien": ""
+   },
+   {
+    "id": "p4",
+    "code": "PRO-PRE-001",
+    "titre": "Intervention d'un prestataire sur le SI industriel",
+    "domaine": "Fournisseurs",
+    "version": "0.3",
+    "statut": "Brouillon",
+    "proprio": "Acheteur référent prestataires",
+    "approb": "RSSI groupe",
+    "dateValid": "",
+    "revue": "2026-11-30",
+    "frequence": "Annuelle",
+    "objet": "Encadrer les interventions sur site et à distance.",
+    "perimetre": "Prestataires sous contrat cadre et propres aux sites.",
+    "refsN": "IEC 62443-2-4 ; mesure MS-06",
+    "declencheur": "Demande d'intervention.",
+    "lien": ""
+   }
+  ],
+  "etapes": [
+   {
+    "id": "e1",
+    "pid": "p1",
+    "phase": "Préparation",
+    "section": "",
+    "etape": "Rassembler les éléments d'entrée : synthèses des sites, résultats d'audit, plan d'actions.",
+    "role": "RSSI groupe",
+    "moyens": "Portail WerbSMSI",
+    "preuve": "Dossier de revue",
+    "lien": ""
+   },
+   {
+    "id": "e2",
+    "pid": "p1",
+    "phase": "Revue",
+    "section": "",
+    "etape": "Présenter les écarts au socle et les risques résiduels ; décider des actions.",
+    "role": "Directeur des opérations",
+    "moyens": "Réunion",
+    "preuve": "Compte rendu",
+    "lien": ""
+   },
+   {
+    "id": "e3",
+    "pid": "p1",
+    "phase": "Suivi",
+    "section": "",
+    "etape": "Reporter les décisions au plan d'actions.",
+    "role": "RSSI groupe",
+    "moyens": "WerbGouvernance",
+    "preuve": "Plan d'actions",
+    "lien": ""
+   },
+   {
+    "id": "e4",
+    "pid": "p2",
+    "phase": "Création",
+    "section": "",
+    "etape": "Valider la demande et créer le compte nominatif.",
+    "role": "Responsable d'exploitation OT",
+    "moyens": "Annuaire OT",
+    "preuve": "Demande validée",
+    "lien": ""
+   },
+   {
+    "id": "e5",
+    "pid": "p2",
+    "phase": "Revue",
+    "section": "",
+    "etape": "Réviser la liste des comptes à privilège et retirer les comptes inutiles.",
+    "role": "Correspondant cybersécurité de site",
+    "moyens": "WerbExploitation",
+    "preuve": "Registre révisé",
+    "lien": ""
+   },
+   {
+    "id": "e6",
+    "pid": "p3",
+    "phase": "Sauvegarde",
+    "section": "",
+    "etape": "Vérifier chaque mois le bon déroulement des sauvegardes.",
+    "role": "Responsable d'exploitation OT",
+    "moyens": "Console de sauvegarde",
+    "preuve": "Registre de suivi (BCK-01)",
+    "lien": ""
+   },
+   {
+    "id": "e7",
+    "pid": "p3",
+    "phase": "Restauration",
+    "section": "",
+    "etape": "Tester une restauration complète une fois par an.",
+    "role": "Responsable d'exploitation OT",
+    "moyens": "Plateforme de test",
+    "preuve": "Procès-verbal (BCK-02)",
+    "lien": ""
+   }
+  ],
+  "revues": [
+   {
+    "id": "RD-01",
+    "date": "2026-01-20",
+    "participants": "Directeur des opérations, RSSI groupe, correspondants de Lyon et de Nantes (fictifs)",
+    "entrees": "Bilan 2025, synthèses de conformité IEC 62443, risques résiduels des sites.",
+    "decisions": "Politique v2.0 approuvée ; socle porté à 8 mesures ; tests de restauration obligatoires."
+   },
+   {
+    "id": "RD-02",
+    "date": "2026-07-08",
+    "participants": "RSSI groupe, correspondants de site",
+    "entrees": "Revue de mi-année du plan d'actions.",
+    "decisions": "Relance des actions de cloisonnement à Nantes."
+   }
+  ],
+  "actions": [
+   {
+    "id": "A-001",
+    "titre": "Mettre en œuvre MS-02 – Cloisonnement IT / OT par pare-feu filtrant",
+    "origine": "Socle non appliqué",
+    "site": "NANTES",
+    "responsable": "Correspondant cybersécurité de site",
+    "echeance": "2026-12-31",
+    "statut": "En cours",
+    "commentaire": "Pare-feu commandé."
+   },
+   {
+    "id": "A-002",
+    "titre": "Tester la restauration de la supervision",
+    "origine": "Revue de direction",
+    "site": "LYON",
+    "responsable": "Responsable d'exploitation OT",
+    "echeance": "2026-09-30",
+    "statut": "À lancer",
+    "commentaire": ""
+   },
+   {
+    "id": "A-003",
+    "titre": "Rédiger la procédure d'intervention des prestataires",
+    "origine": "Audit interne",
+    "site": "",
+    "responsable": "Acheteur référent prestataires",
+    "echeance": "2026-11-30",
+    "statut": "En cours",
+    "commentaire": ""
+   },
+   {
+    "id": "A-004",
+    "titre": "Déployer la journalisation centralisée",
+    "origine": "Analyse de risques",
+    "site": "LYON",
+    "responsable": "RSSI groupe",
+    "echeance": "2027-06-30",
+    "statut": "À lancer",
+    "commentaire": ""
+   },
+   {
+    "id": "A-005",
+    "titre": "Mettre à jour la politique v2.0",
+    "origine": "Revue de direction",
+    "site": "",
+    "responsable": "RSSI groupe",
+    "echeance": "2026-01-15",
+    "statut": "Terminée",
+    "commentaire": ""
+   }
+  ]
+ }
+}

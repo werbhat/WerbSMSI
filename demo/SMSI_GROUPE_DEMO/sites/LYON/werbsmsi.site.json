@@ -1,0 +1,82 @@
+{
+ "format": "WERBSMSI-SITE",
+ "schema": 1,
+ "famille": "WERBSMSI",
+ "meta": {
+  "produit": "WerbSMSI",
+  "appVersion": "1.0.0",
+  "auteur": "@WerbHat",
+  "generateur": "WerbSMSI v1.0.0 – Développé par @WerbHat",
+  "creeLe": "2026-10-23",
+  "modifieLe": "2026-10-23T16:35:54Z",
+  "modifiePar": "werb_charte.py",
+  "groupeId": "e6a47cd7-77fe-463f-b6ea-b50ff390bfc7",
+  "portee": "site",
+  "site": "LYON"
+ },
+ "data": {
+  "groupeId": "e6a47cd7-77fe-463f-b6ea-b50ff390bfc7",
+  "code": "LYON",
+  "nom": "Usine de Lyon (fictive)",
+  "entite": "GDI Production",
+  "correspondant": "Prénom NOM – correspondant cyber Lyon",
+  "classification": "Diffusion restreinte",
+  "bases": [
+   {
+    "module": "werbmap",
+    "fichier": "inventaires/WerbMap_LYON.werbmap.json",
+    "libelle": "Cartographie réseau Lyon"
+   },
+   {
+    "module": "werbebios",
+    "fichier": "risques/EBIOS_LYON_L2.werbebios.json",
+    "libelle": "Analyse de risques – ligne 2"
+   },
+   {
+    "module": "werbiec62443",
+    "fichier": "conformite/Projet_L2.werbiec62443.json",
+    "libelle": "Exigences IEC 62443 – ligne 2"
+   },
+   {
+    "module": "werbexploitation",
+    "fichier": "exploitation/Exploitation_LYON.werbexploitation.json",
+    "libelle": "Registres d'exploitation Lyon"
+   },
+   {
+    "module": "werbnis2",
+    "fichier": "conformite/NIS2_LYON.werbnis2.json",
+    "libelle": "Audit NIS2 du site"
+   },
+   {
+    "module": "werbpentest",
+    "fichier": "exploitation/Pentest_LYON.werbpentest.json",
+    "libelle": "Test d'intrusion du site"
+   },
+   {
+    "module": "werbpcr",
+    "fichier": "continuite/PCR_LYON.werbpcr.json",
+    "libelle": "Plan de cybersécurité et de reprise"
+   },
+   {
+    "module": "werbveille",
+    "fichier": "continuite/Veille_LYON.werbveille.json",
+    "libelle": "Veille de sécurité du site"
+   },
+   {
+    "module": "werbpresta",
+    "fichier": "conformite/Prestataires_LYON.werbpresta.json",
+    "libelle": "Prestataires du site"
+   },
+   {
+    "module": "werbcartosi",
+    "fichier": "inventaires/CartoSI_LYON.werbcartosi.json",
+    "libelle": "Registre des schémas d'architecture"
+   },
+   {
+    "module": "werbrgpd",
+    "fichier": "conformite/RGPD_LYON.werbrgpd.json",
+    "libelle": "Conformité RGPD du site"
+   }
+  ]
+ }
+}

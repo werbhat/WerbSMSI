@@ -1,0 +1,50 @@
+{
+  "charte": "1.0",
+  "id": "werbpcr",
+  "produit": "WerbPCR",
+  "version": "1.6.0",
+  "dateVersion": "2026-11",
+  "auteur": "@WerbHat",
+  "signature": "Développé par @WerbHat",
+  "description": "Plan de cybersécurité et de reprise d'un site : PCI (périmètre métier EBIOS, approche systémique, SI, fiches par SI, plan d'actions), puis PRI",
+  "rubrique": "continuite",
+  "portees": [
+    "site"
+  ],
+  "entree": "application/WerbPCR.html",
+  "empreinte": {
+    "algo": "SHA-256",
+    "valeur": "169ba8f043459cc472783fa544ef9383440af5b7db17e550c2285749d1a6e34d"
+  },
+  "donnees": {
+    "format": "WERBPCR",
+    "schema": 1,
+    "extension": ".werbpcr.json",
+    "formatsLus": []
+  },
+  "echanges": {
+    "publie": [],
+    "consomme": [
+      "groupe:sites",
+      "groupe:echelles",
+      "groupe:roles",
+      "site:si",
+      "site:evenementsRedoutes",
+      "site:valeursMetier",
+      "site:biensSupports",
+      "site:syntheseRisques",
+      "site:sauvegardes",
+      "site:evaluationsPrestataires",
+      "groupe:formations"
+    ]
+  },
+  "compatPortail": ">=1.1.1",
+  "licence": "MIT",
+  "navigateurs": [
+    "edge",
+    "chrome",
+    "firefox"
+  ],
+  "ouvertureParLien": true,
+  "exemple": "exemples/Exemple_LYON.werbpcr.json"
+}

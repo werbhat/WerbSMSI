@@ -1,0 +1,233 @@
+{
+ "format": "WERBSMSI-PUBLICATION",
+ "schema": 1,
+ "famille": "WERBSMSI",
+ "meta": {
+  "produit": "WerbCartoSI",
+  "appVersion": "1.3.0",
+  "auteur": "@WerbHat",
+  "generateur": "WerbCartoSI v1.3.0 – Développé par @WerbHat",
+  "creeLe": "2026-11-05",
+  "modifieLe": "2026-11-05T17:24:32Z",
+  "modifiePar": "Exemple",
+  "groupeId": "e6a47cd7-77fe-463f-b6ea-b50ff390bfc7",
+  "module": "werbcartosi",
+  "portee": "site",
+  "publiePar": "Exemple",
+  "publieLe": "2026-11-05T17:24:32Z",
+  "site": "LYON"
+ },
+ "data": {
+  "cartographies": [
+   {
+    "id": "EX-CARTO",
+    "libelle": "Cartographie du SI",
+    "etat": "couverte",
+    "groupe": false,
+    "schemas": [
+     {
+      "id": "SCH-001",
+      "titre": "Zones et conduits du site de Lyon",
+      "type": "Zones et conduits",
+      "version": "2.1",
+      "statut": "approuve",
+      "etat": "valide",
+      "classification": "Diffusion restreinte",
+      "approuveLe": "2026-03-02",
+      "revueLe": "2026-03-02",
+      "prochaineRevue": "2027-03-02",
+      "sis": [
+       "SI-SUPERVISION"
+      ],
+      "zones": [
+       "Z-SUP",
+       "Z-PROC"
+      ],
+      "actifs": []
+     }
+    ],
+    "source": "werbcartosi",
+    "majLe": "2026-11-05"
+   },
+   {
+    "id": "EX-ZONES",
+    "libelle": "Zones et conduits",
+    "etat": "couverte",
+    "groupe": false,
+    "schemas": [
+     {
+      "id": "SCH-001",
+      "titre": "Zones et conduits du site de Lyon",
+      "type": "Zones et conduits",
+      "version": "2.1",
+      "statut": "approuve",
+      "etat": "valide",
+      "classification": "Diffusion restreinte",
+      "approuveLe": "2026-03-02",
+      "revueLe": "2026-03-02",
+      "prochaineRevue": "2027-03-02",
+      "sis": [
+       "SI-SUPERVISION"
+      ],
+      "zones": [
+       "Z-SUP",
+       "Z-PROC"
+      ],
+      "actifs": []
+     }
+    ],
+    "source": "werbcartosi",
+    "majLe": "2026-11-05"
+   },
+   {
+    "id": "EX-FLUX",
+    "libelle": "Flux et cloisonnement",
+    "etat": "arevoir",
+    "groupe": false,
+    "schemas": [
+     {
+      "id": "SCH-002",
+      "titre": "Réseau logique de la ligne 2",
+      "type": "Réseau logique (VLAN, adressage)",
+      "version": "1.4",
+      "statut": "approuve",
+      "etat": "arevoir",
+      "classification": "Confidentiel",
+      "approuveLe": "2025-05-20",
+      "revueLe": "2025-05-20",
+      "prochaineRevue": "2026-05-20",
+      "sis": [
+       "SI-SUPERVISION"
+      ],
+      "zones": [
+       "Z-SUP",
+       "Z-PROC"
+      ],
+      "actifs": []
+     }
+    ],
+    "source": "werbcartosi",
+    "majLe": "2026-11-05"
+   },
+   {
+    "id": "EX-RESEAU",
+    "libelle": "Plan d'adressage et réseau physique",
+    "etat": "arevoir",
+    "groupe": false,
+    "schemas": [
+     {
+      "id": "SCH-002",
+      "titre": "Réseau logique de la ligne 2",
+      "type": "Réseau logique (VLAN, adressage)",
+      "version": "1.4",
+      "statut": "approuve",
+      "etat": "arevoir",
+      "classification": "Confidentiel",
+      "approuveLe": "2025-05-20",
+      "revueLe": "2025-05-20",
+      "prochaineRevue": "2026-05-20",
+      "sis": [
+       "SI-SUPERVISION"
+      ],
+      "zones": [
+       "Z-SUP",
+       "Z-PROC"
+      ],
+      "actifs": []
+     }
+    ],
+    "source": "werbcartosi",
+    "majLe": "2026-11-05"
+   },
+   {
+    "id": "EX-ADMIN",
+    "libelle": "Architecture d'administration",
+    "etat": "encours",
+    "groupe": false,
+    "schemas": [
+     {
+      "id": "SCH-003",
+      "titre": "Architecture d'administration",
+      "type": "Architecture d'administration",
+      "version": "0.3",
+      "statut": "validation",
+      "etat": "encours",
+      "classification": "Confidentiel",
+      "approuveLe": "",
+      "revueLe": "",
+      "prochaineRevue": "2027-09-15",
+      "sis": [],
+      "zones": [],
+      "actifs": []
+     }
+    ],
+    "source": "werbcartosi",
+    "majLe": "2026-11-05"
+   },
+   {
+    "id": "EX-ACCES",
+    "libelle": "Accès distants et interconnexions",
+    "etat": "encours",
+    "groupe": false,
+    "schemas": [
+     {
+      "id": "SCH-004",
+      "titre": "Accès distants des prestataires",
+      "type": "Accès distants et interconnexions",
+      "version": "1.0",
+      "statut": "brouillon",
+      "etat": "encours",
+      "classification": "Diffusion restreinte",
+      "approuveLe": "",
+      "revueLe": "",
+      "prochaineRevue": "2027-10-05",
+      "sis": [],
+      "zones": [],
+      "actifs": []
+     }
+    ],
+    "source": "werbcartosi",
+    "majLe": "2026-11-05"
+   },
+   {
+    "id": "EX-REPRISE",
+    "libelle": "Sauvegarde et reprise",
+    "etat": "arevoir",
+    "groupe": false,
+    "schemas": [
+     {
+      "id": "SCH-005",
+      "titre": "Sauvegardes et reprise de la supervision",
+      "type": "Sauvegarde et reprise",
+      "version": "1.0",
+      "statut": "approuve",
+      "etat": "arevoir",
+      "classification": "Diffusion restreinte",
+      "approuveLe": "2025-01-20",
+      "revueLe": "2025-01-20",
+      "prochaineRevue": "2026-01-20",
+      "sis": [
+       "SI-SUPERVISION"
+      ],
+      "zones": [],
+      "actifs": [
+       "SRV_SCADA01",
+       "VM_HIST01"
+      ]
+     }
+    ],
+    "source": "werbcartosi",
+    "majLe": "2026-11-05"
+   },
+   {
+    "id": "EX-LOCAUX",
+    "libelle": "Locaux techniques et baies",
+    "etat": "non",
+    "groupe": false,
+    "schemas": [],
+    "source": "werbcartosi",
+    "majLe": "2026-11-05"
+   }
+  ]
+ }
+}

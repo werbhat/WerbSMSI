@@ -1,0 +1,84 @@
+{
+  "charte": "1.0",
+  "id": "werbrgpd",
+  "produit": "WerbRGPD",
+  "version": "1.0.0",
+  "dateVersion": "2026-11",
+  "auteur": "@WerbHat",
+  "signature": "Développé par @WerbHat",
+  "description": "Conformité RGPD d'un site : registre des traitements, violations de données (72 h), demandes d'exercice des droits, sous-traitants",
+  "rubrique": "conformite",
+  "portees": [
+    "site"
+  ],
+  "entree": "application/WerbRGPD.html",
+  "empreinte": {
+    "algo": "SHA-256",
+    "valeur": "b63637ea18cb92b11ae6d41f77e788168169f5b7c0095237575d60e92c7cdbf1"
+  },
+  "donnees": {
+    "format": "WERBRGPD",
+    "schema": 1,
+    "extension": ".werbrgpd.json",
+    "formatsLus": []
+  },
+  "echanges": {
+    "publie": [],
+    "consomme": [
+      "groupe:sites",
+      "groupe:listes",
+      "site:si",
+      "site:actifs",
+      "site:evaluationsPrestataires"
+    ]
+  },
+  "compatPortail": ">=1.1.1",
+  "licence": "MIT",
+  "navigateurs": [
+    "edge",
+    "chrome",
+    "firefox"
+  ],
+  "sources": [
+    "signature.js",
+    "socle.js",
+    "guides.js",
+    "xlsx.js",
+    "app.js"
+  ],
+  "ouvertureParLien": true,
+  "exemple": "exemples/Exemple_LYON.werbrgpd.json",
+  "listes": [
+    {
+      "id": "personnes",
+      "libelle": "Catégories de personnes (RGPD)",
+      "forme": "simple",
+      "defaut": [
+        "Salariés",
+        "Intérimaires",
+        "Prestataires sur site",
+        "Visiteurs",
+        "Candidats",
+        "Clients",
+        "Contacts fournisseurs",
+        "Public, riverains"
+      ]
+    },
+    {
+      "id": "donnees",
+      "libelle": "Catégories de données (RGPD)",
+      "forme": "simple",
+      "defaut": [
+        "Identité, état civil",
+        "Coordonnées",
+        "Vie professionnelle",
+        "Numéro de badge, identifiant",
+        "Données de connexion, journaux",
+        "Images, vidéo",
+        "Localisation",
+        "Photo",
+        "Données économiques et financières"
+      ]
+    }
+  ]
+}

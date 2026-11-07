@@ -1,0 +1,50 @@
+{
+ "format": "WERBSMSI-PUBLICATION",
+ "schema": 1,
+ "famille": "WERBSMSI",
+ "meta": {
+  "produit": "WerbEBIOS",
+  "appVersion": "1.0.0",
+  "auteur": "@WerbHat",
+  "generateur": "WerbEBIOS v1.0.0 – Développé par @WerbHat",
+  "creeLe": "2026-10-23",
+  "modifieLe": "2026-10-23T00:00:00Z",
+  "modifiePar": "Exemple",
+  "groupeId": "e6a47cd7-77fe-463f-b6ea-b50ff390bfc7",
+  "module": "werbebios",
+  "portee": "site",
+  "publiePar": "Exemple",
+  "publieLe": "2026-10-23T00:00:00Z",
+  "site": "NANTES"
+ },
+ "data": {
+  "syntheseRisques": [
+   {
+    "id": "R-NAN-01",
+    "libelle": "Prise de contrôle à distance par le mainteneur",
+    "evenementRedoute": "ER-02",
+    "gravite": 4,
+    "vraisemblance": 3,
+    "niveauBrut": 4,
+    "niveauResiduel": 3,
+    "traitement": "reduire",
+    "etude": "EBIOS_NANTES",
+    "source": "werbebios",
+    "majLe": "2026-10-23"
+   },
+   {
+    "id": "R-NAN-02",
+    "libelle": "Arrêt de la ligne par maliciel USB",
+    "evenementRedoute": "ER-01",
+    "gravite": 3,
+    "vraisemblance": 2,
+    "niveauBrut": 2,
+    "niveauResiduel": 1,
+    "traitement": "accepter",
+    "etude": "EBIOS_NANTES",
+    "source": "werbebios",
+    "majLe": "2026-10-23"
+   }
+  ]
+ }
+}

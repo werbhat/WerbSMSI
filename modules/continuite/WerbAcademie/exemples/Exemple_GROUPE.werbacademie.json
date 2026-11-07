@@ -1,0 +1,1280 @@
+{
+ "format": "WERBACADEMIE",
+ "schema": 1,
+ "famille": "WERBSMSI",
+ "meta": {
+  "produit": "WerbAcademie",
+  "appVersion": "1.4.0",
+  "auteur": "@WerbHat",
+  "generateur": "WerbAcademie v1.4.0 – Développé par @WerbHat",
+  "modifieLe": "2026-10-31T08:00:00Z",
+  "modifiePar": "Exemple",
+  "creeLe": "2026-10-31",
+  "groupeId": "e6a47cd7-77fe-463f-b6ea-b50ff390bfc7",
+  "portee": "groupe"
+ },
+ "verrou": null,
+ "journal": [
+  {
+   "date": "2026-10-31T08:00:00.000Z",
+   "par": "Exemple",
+   "action": "Création",
+   "objet": "Académie",
+   "element": "",
+   "champ": "",
+   "avant": "",
+   "apres": "Académie d'exemple fictive"
+  }
+ ],
+ "data": {
+  "academie": {
+   "nom": "Académie cyber du groupe (exemple fictif)",
+   "organisation": "Groupe Démo Industrie (fictif)",
+   "responsable": "RSSI groupe (fictif)"
+  },
+  "formations": [
+   {
+    "code": "ACA-HYG",
+    "titre": "Hygiène numérique : les bons réflexes au quotidien",
+    "objectif": "Connaître les gestes simples qui protègent l'entreprise : mettre à jour, verrouiller, se méfier des messages piégés, séparer usages personnels et professionnels, signaler un doute sans attendre.",
+    "populations": [
+     "tous"
+    ],
+    "duree": 45,
+    "version": "1.0",
+    "statut": "publiee",
+    "periodiciteMois": 24,
+    "chapitres": [
+     {
+      "titre": "Pourquoi chacun est concerné",
+      "diapos": [
+       {
+        "titre": "Une attaque commence souvent par une personne",
+        "points": [
+         "Un courriel piégé, un faux appel, une clé USB trouvée : la porte d'entrée la plus fréquente",
+         "Les attaques sont le plus souvent automatiques : petite ou grande entreprise, tout le monde est visé",
+         "Conséquences : arrêt de la production, données perdues ou volées, clients et partenaires touchés"
+        ],
+        "notes": "Partir d'un exemple réel et récent, sans nommer d'entreprise. Demander à la salle qui a déjà reçu un message suspect."
+       },
+       {
+        "titre": "Vous êtes le premier rempart",
+        "points": [
+         "Les outils de sécurité ne voient pas tout",
+         "Un réflexe au bon moment arrête une attaque",
+         "Signaler un doute n'est jamais une gêne : c'est attendu"
+        ],
+        "notes": "Insister : on ne reproche pas un clic, on reproche de ne pas l'avoir signalé."
+       }
+      ],
+      "liens": [
+       {
+        "libelle": "Cybermalveillance.gouv.fr — assistance et prévention",
+        "url": "https://www.cybermalveillance.gouv.fr/",
+        "type": "site"
+       }
+      ]
+     },
+     {
+      "titre": "Les gestes essentiels",
+      "diapos": [
+       {
+        "titre": "Mettre à jour",
+        "points": [
+         "Accepter les mises à jour proposées par l'informatique",
+         "Ne pas repousser indéfiniment le redémarrage",
+         "Sur les équipements industriels : les mises à jour passent par la maintenance, jamais en direct"
+        ],
+        "notes": "Une faille corrigée mais non installée est la cause la plus courante des intrusions réussies."
+       },
+       {
+        "titre": "Verrouiller son poste",
+        "points": [
+         "Windows + L dès qu'on quitte son poste, même deux minutes",
+         "Ne pas laisser de session ouverte sur un poste partagé",
+         "Ranger les documents sensibles (bureau rangé)"
+        ],
+        "notes": "Faire pratiquer le raccourci Windows + L dans la salle."
+       },
+       {
+        "titre": "Se méfier des messages",
+        "points": [
+         "Expéditeur inattendu, urgence, menace, gain trop beau : signaux d'alerte",
+         "Survoler un lien avant de cliquer : l'adresse correspond-elle ?",
+         "Ne jamais saisir ses identifiants après avoir cliqué sur un lien reçu",
+         "Un doute sur un ordre de virement ou un changement de coordonnées bancaires : rappeler la personne sur un numéro connu"
+        ],
+        "notes": "Montrer deux ou trois exemples de faux messages (anonymisés)."
+       },
+       {
+        "titre": "Séparer le personnel et le professionnel",
+        "points": [
+         "Pas de messagerie personnelle ni de stockage personnel pour les documents de l'entreprise",
+         "Pas d'installation de logiciel sans l'accord de l'informatique",
+         "Rien de personnel branché sur le réseau industriel (téléphone, clé, chargeur USB)"
+        ],
+        "notes": "Rappeler la charte informatique de l'entreprise si elle existe."
+       }
+      ],
+      "liens": [
+       {
+        "libelle": "ANSSI — conseils et publications",
+        "url": "https://cyber.gouv.fr/",
+        "type": "site"
+       }
+      ]
+     },
+     {
+      "titre": "En cas de doute",
+      "diapos": [
+       {
+        "titre": "Signaler, tout de suite",
+        "points": [
+         "Message suspect : le signaler sans l'ouvrir ni le transférer à des collègues",
+         "Comportement anormal du poste : prévenir l'informatique",
+         "Clic malheureux : le dire immédiatement, chaque minute compte",
+         "Contact : le support informatique ou le correspondant cybersécurité du site"
+        ],
+        "notes": "Compléter avec le numéro et l'adresse de signalement de l'entreprise."
+       }
+      ],
+      "liens": []
+     }
+    ],
+    "quiz": {
+     "seuil": 80,
+     "questions": [
+      {
+       "texte": "Vous quittez votre poste pour une courte réunion. Que faites-vous ?",
+       "choix": [
+        "Rien, je reviens vite",
+        "Je verrouille ma session (Windows + L)",
+        "J'éteins l'écran"
+       ],
+       "bonnes": [
+        1
+       ],
+       "explication": "Éteindre l'écran ne protège rien : la session reste ouverte."
+      },
+      {
+       "texte": "Un courriel urgent de la direction demande de changer le RIB d'un fournisseur. Que faites-vous ?",
+       "choix": [
+        "J'applique la demande, c'est la direction",
+        "Je réponds au courriel pour confirmer",
+        "Je rappelle la personne sur un numéro que je connais déjà"
+       ],
+       "bonnes": [
+        2
+       ],
+       "explication": "Répondre au courriel, c'est répondre à l'escroc. On vérifie par un autre canal."
+      },
+      {
+       "texte": "Vous avez cliqué sur un lien suspect. Que faites-vous ?",
+       "choix": [
+        "Je préviens l'informatique immédiatement",
+        "J'attends de voir s'il se passe quelque chose",
+        "Je supprime le courriel et je n'en parle pas"
+       ],
+       "bonnes": [
+        0
+       ],
+       "explication": "Signaler tout de suite permet de contenir une attaque avant qu'elle ne se propage."
+      },
+      {
+       "texte": "Quels éléments sont des signaux d'alerte dans un message ? (plusieurs réponses)",
+       "choix": [
+        "Un ton d'urgence ou de menace",
+        "Une adresse d'expéditeur inhabituelle",
+        "Une demande de saisir ses identifiants",
+        "Une signature habituelle d'un collègue"
+       ],
+       "bonnes": [
+        0,
+        1,
+        2
+       ],
+       "explication": "L'urgence, l'expéditeur inattendu et la demande d'identifiants sont les trois signaux classiques de l'hameçonnage."
+      },
+      {
+       "texte": "Peut-on recharger son téléphone personnel sur un poste de l'atelier ?",
+       "choix": [
+        "Oui, c'est sans risque",
+        "Non, rien de personnel ne se branche sur le réseau industriel",
+        "Oui, si le téléphone est récent"
+       ],
+       "bonnes": [
+        1
+       ],
+       "explication": "Un téléphone branché en USB peut transporter un logiciel malveillant jusqu'au réseau industriel."
+      }
+     ]
+    },
+    "id": "f1"
+   },
+   {
+    "code": "ACA-IA",
+    "titre": "Usage de l'intelligence artificielle",
+    "objectif": "Utiliser les outils d'intelligence artificielle générative sans exposer les données de l'entreprise, vérifier leurs réponses et reconnaître les fraudes qui les utilisent.",
+    "populations": [
+     "tous"
+    ],
+    "duree": 45,
+    "version": "1.0",
+    "statut": "publiee",
+    "periodiciteMois": 24,
+    "chapitres": [
+     {
+      "titre": "Ce qu'est une IA générative",
+      "diapos": [
+       {
+        "titre": "Un outil puissant, pas un collègue de confiance",
+        "points": [
+         "Elle produit du texte, du code, des images à partir d'une demande",
+         "Elle peut se tromper avec assurance : elle invente parfois des faits ou des sources",
+         "Ce que vous y saisissez peut être conservé et réutilisé par le fournisseur"
+        ],
+        "notes": "Faire une démonstration d'une réponse fausse mais convaincante, si un outil autorisé est disponible."
+       }
+      ],
+      "liens": [
+       {
+        "libelle": "CNIL — intelligence artificielle",
+        "url": "https://www.cnil.fr/",
+        "type": "site"
+       }
+      ]
+     },
+     {
+      "titre": "Protéger les données",
+      "diapos": [
+       {
+        "titre": "Ce qu'on ne saisit jamais dans une IA publique",
+        "points": [
+         "Données personnelles (collègues, clients, candidats)",
+         "Plans, recettes, procédés, schémas réseau, adresses IP",
+         "Code source, configurations, identifiants et mots de passe",
+         "Contrats, offres, résultats financiers non publiés"
+        ],
+        "notes": "Règle simple : si vous ne le publieriez pas sur Internet, ne le donnez pas à une IA publique."
+       },
+       {
+        "titre": "Utiliser les outils autorisés",
+        "points": [
+         "N'utiliser que les outils validés par l'entreprise, avec son compte professionnel",
+         "Pas de compte personnel pour un usage professionnel",
+         "Pas d'extension de navigateur ou d'application IA installée sans accord"
+        ],
+        "notes": "Compléter avec la liste des outils autorisés dans l'entreprise."
+       }
+      ],
+      "liens": []
+     },
+     {
+      "titre": "Vérifier et rester vigilant",
+      "diapos": [
+       {
+        "titre": "Relire et vérifier",
+        "points": [
+         "Vérifier les faits, les chiffres et les sources avant d'utiliser une réponse",
+         "Relire un code ou une procédure générés avant de les appliquer",
+         "Vous restez responsable de ce que vous produisez avec l'IA"
+        ],
+        "notes": ""
+       },
+       {
+        "titre": "Les fraudes qui utilisent l'IA",
+        "points": [
+         "Voix ou vidéo imitant un dirigeant (hypertrucage) pour demander un virement",
+         "Messages d'hameçonnage sans faute, personnalisés",
+         "Réflexe : une demande inhabituelle se vérifie par un autre canal, même si la voix est familière"
+        ],
+        "notes": "Rappeler la procédure de validation des virements de l'entreprise."
+       }
+      ],
+      "liens": [
+       {
+        "libelle": "Cybermalveillance.gouv.fr — arnaques et fraudes",
+        "url": "https://www.cybermalveillance.gouv.fr/",
+        "type": "site"
+       }
+      ]
+     }
+    ],
+    "quiz": {
+     "seuil": 80,
+     "questions": [
+      {
+       "texte": "Peut-on coller un extrait du plan d'adressage réseau dans une IA publique pour obtenir de l'aide ?",
+       "choix": [
+        "Oui, si on supprime le nom de l'entreprise",
+        "Non, ce sont des données techniques sensibles",
+        "Oui, l'IA ne garde rien"
+       ],
+       "bonnes": [
+        1
+       ],
+       "explication": "Les données saisies peuvent être conservées ; un plan réseau aide un attaquant."
+      },
+      {
+       "texte": "L'IA vous donne une réponse précise et sourcée. Que faites-vous ?",
+       "choix": [
+        "Je l'utilise telle quelle",
+        "Je vérifie les faits et les sources",
+        "Je la transmets à mon responsable sans relire"
+       ],
+       "bonnes": [
+        1
+       ],
+       "explication": "Une IA peut inventer des faits et des sources avec assurance."
+      },
+      {
+       "texte": "Un appel vidéo de votre directeur demande un virement urgent et confidentiel. Que faites-vous ?",
+       "choix": [
+        "J'exécute, je reconnais son visage et sa voix",
+        "Je vérifie par un autre canal et j'applique la procédure de validation",
+        "Je demande à un collègue de le faire"
+       ],
+       "bonnes": [
+        1
+       ],
+       "explication": "La voix et l'image peuvent être imitées par l'IA."
+      },
+      {
+       "texte": "Quels outils d'IA pouvez-vous utiliser pour le travail ?",
+       "choix": [
+        "Tous ceux qui sont gratuits",
+        "Ceux validés par l'entreprise, avec le compte professionnel",
+        "Ceux qu'utilisent mes collègues"
+       ],
+       "bonnes": [
+        1
+       ],
+       "explication": "Seuls les outils validés offrent les garanties attendues sur les données."
+      },
+      {
+       "texte": "Quelles données ne doivent jamais être saisies dans une IA publique ? (plusieurs réponses)",
+       "choix": [
+        "Un mot de passe",
+        "Des données personnelles de collègues",
+        "Une recette de fabrication",
+        "Une question sur la grammaire française"
+       ],
+       "bonnes": [
+        0,
+        1,
+        2
+       ],
+       "explication": "Identifiants, données personnelles et savoir-faire restent dans l'entreprise."
+      }
+     ]
+    },
+    "id": "f2"
+   },
+   {
+    "code": "ACA-USB",
+    "titre": "Usage des clés USB et supports amovibles",
+    "objectif": "Savoir quand et comment utiliser une clé USB ou un disque amovible sans faire entrer de logiciel malveillant, notamment sur les postes industriels.",
+    "populations": [
+     "tous"
+    ],
+    "duree": 30,
+    "version": "1.0",
+    "statut": "publiee",
+    "periodiciteMois": 24,
+    "chapitres": [
+     {
+      "titre": "Le risque",
+      "diapos": [
+       {
+        "titre": "Une clé USB peut contaminer un réseau isolé",
+        "points": [
+         "Un logiciel malveillant se copie seul d'un poste à une clé, puis de la clé à un autre poste",
+         "Le réseau industriel, même sans Internet, est atteint par les clés et les portables de maintenance",
+         "Une clé piégée peut se faire passer pour un clavier et taper des commandes"
+        ],
+        "notes": "Citer l'exemple historique d'attaques d'installations industrielles par clé USB, sans détail technique."
+       }
+      ],
+      "liens": []
+     },
+     {
+      "titre": "Les règles",
+      "diapos": [
+       {
+        "titre": "Clé trouvée, clé inconnue",
+        "points": [
+         "Ne jamais brancher une clé trouvée ou offerte (salon, courrier)",
+         "La remettre à l'informatique ou au correspondant cybersécurité"
+        ],
+        "notes": "Les tests de clés abandonnées sur un parking montrent qu'une grande partie est branchée."
+       },
+       {
+        "titre": "Utiliser une clé de l'entreprise",
+        "points": [
+         "Clés fournies par l'entreprise, chiffrées pour les données sensibles",
+         "Passer la clé sur la station de décontamination avant usage, si elle existe",
+         "Ne pas mélanger usage personnel et professionnel"
+        ],
+        "notes": "Compléter avec l'emplacement de la station de décontamination."
+       },
+       {
+        "titre": "Sur les postes industriels",
+        "points": [
+         "Aucune clé sans accord et contrôle préalable",
+         "Les prestataires suivent la même règle : leurs clés et portables sont contrôlés",
+         "Préférer les échanges par le moyen prévu (zone d'échange, serveur de transfert)"
+        ],
+        "notes": ""
+       }
+      ],
+      "liens": [
+       {
+        "libelle": "ANSSI — conseils et publications",
+        "url": "https://cyber.gouv.fr/",
+        "type": "site"
+       }
+      ]
+     }
+    ],
+    "quiz": {
+     "seuil": 80,
+     "questions": [
+      {
+       "texte": "Vous trouvez une clé USB sur le parking. Que faites-vous ?",
+       "choix": [
+        "Je la branche pour trouver son propriétaire",
+        "Je la remets à l'informatique sans la brancher",
+        "Je la garde, elle peut servir"
+       ],
+       "bonnes": [
+        1
+       ],
+       "explication": "Une clé abandonnée est un piège classique."
+      },
+      {
+       "texte": "Un prestataire veut brancher sa clé sur un poste de supervision. Que faites-vous ?",
+       "choix": [
+        "J'accepte, il connaît le matériel",
+        "Je fais contrôler la clé selon la procédure avant tout branchement",
+        "Je branche la clé sur mon poste d'abord"
+       ],
+       "bonnes": [
+        1
+       ],
+       "explication": "Les règles s'appliquent aussi aux prestataires ; brancher sur son propre poste ne fait que déplacer le risque."
+      },
+      {
+       "texte": "Le réseau industriel n'est pas relié à Internet. Une clé USB peut-elle le contaminer ?",
+       "choix": [
+        "Non",
+        "Oui"
+       ],
+       "bonnes": [
+        1
+       ],
+       "explication": "Les supports amovibles sont justement la voie d'entrée des réseaux isolés."
+      },
+      {
+       "texte": "Comment transporter des données sensibles sur une clé ?",
+       "choix": [
+        "Sur une clé personnelle",
+        "Sur une clé de l'entreprise chiffrée",
+        "Sur n'importe quelle clé, en renommant le fichier"
+       ],
+       "bonnes": [
+        1
+       ],
+       "explication": "Une clé se perd facilement : le chiffrement protège son contenu."
+      }
+     ]
+    },
+    "id": "f3"
+   },
+   {
+    "code": "ACA-QR",
+    "titre": "Usage des QR codes",
+    "objectif": "Reconnaître l'hameçonnage par QR code et adopter les bons réflexes avant d'ouvrir un lien obtenu en scannant un code.",
+    "populations": [
+     "tous"
+    ],
+    "duree": 20,
+    "version": "1.0",
+    "statut": "publiee",
+    "periodiciteMois": 24,
+    "chapitres": [
+     {
+      "titre": "Un lien caché",
+      "diapos": [
+       {
+        "titre": "Un QR code est une adresse que l'on ne voit pas",
+        "points": [
+         "Scanner un QR code revient à cliquer sur un lien sans l'avoir lu",
+         "Hameçonnage par QR code (« quishing ») : courriels, affiches, autocollants posés sur un QR code légitime",
+         "Le téléphone est souvent moins protégé que le poste de travail"
+        ],
+        "notes": "Montrer un autocollant collé sur un QR code de parking ou de borne de recharge."
+       }
+      ],
+      "liens": [
+       {
+        "libelle": "Cybermalveillance.gouv.fr — hameçonnage",
+        "url": "https://www.cybermalveillance.gouv.fr/",
+        "type": "site"
+       }
+      ]
+     },
+     {
+      "titre": "Les réflexes",
+      "diapos": [
+       {
+        "titre": "Avant d'ouvrir",
+        "points": [
+         "Lire l'adresse affichée par le téléphone avant de l'ouvrir",
+         "Méfiance devant un QR code reçu par courriel qui demande de se connecter",
+         "Vérifier qu'un QR code public n'est pas un autocollant ajouté"
+        ],
+        "notes": ""
+       },
+       {
+        "titre": "Après avoir scanné",
+        "points": [
+         "Ne jamais saisir ses identifiants professionnels sur une page ouverte par QR code",
+         "Ne pas payer ni donner de coordonnées bancaires sans vérifier le site",
+         "Un doute : fermer la page et signaler"
+        ],
+        "notes": "Rappeler le contact de signalement de l'entreprise."
+       }
+      ],
+      "liens": []
+     }
+    ],
+    "quiz": {
+     "seuil": 80,
+     "questions": [
+      {
+       "texte": "Un courriel vous demande de scanner un QR code pour « réactiver votre compte ». Que faites-vous ?",
+       "choix": [
+        "Je scanne et je me connecte",
+        "Je ne scanne pas et je signale le message",
+        "Je scanne avec le téléphone d'un collègue"
+       ],
+       "bonnes": [
+        1
+       ],
+       "explication": "C'est un scénario classique d'hameçonnage par QR code."
+      },
+      {
+       "texte": "Que faire avant d'ouvrir le lien d'un QR code ?",
+       "choix": [
+        "Lire l'adresse affichée",
+        "Rien, les QR codes sont sûrs",
+        "Augmenter la luminosité de l'écran"
+       ],
+       "bonnes": [
+        0
+       ],
+       "explication": "Le téléphone affiche l'adresse : c'est le moment de la vérifier."
+      },
+      {
+       "texte": "Un QR code de parking semble collé par-dessus un autre. Que faites-vous ?",
+       "choix": [
+        "Je l'utilise quand même",
+        "Je ne le scanne pas et je paie par un autre moyen",
+        "Je scanne les deux"
+       ],
+       "bonnes": [
+        1
+       ],
+       "explication": "Un autocollant ajouté redirige souvent vers un faux site de paiement."
+      }
+     ]
+    },
+    "id": "f4"
+   },
+   {
+    "code": "ACA-MDP",
+    "titre": "Gestion des mots de passe",
+    "objectif": "Choisir des mots de passe robustes et uniques, les ranger dans un gestionnaire, activer la double authentification et ne jamais les partager en clair.",
+    "populations": [
+     "tous"
+    ],
+    "duree": 45,
+    "version": "1.0",
+    "statut": "publiee",
+    "periodiciteMois": 24,
+    "chapitres": [
+     {
+      "titre": "Un bon mot de passe",
+      "diapos": [
+       {
+        "titre": "Long, unique, imprévisible",
+        "points": [
+         "Une phrase de passe de plusieurs mots est plus robuste et plus facile à retenir",
+         "Un mot de passe différent pour chaque service : un vol ne doit ouvrir qu'une porte",
+         "Éviter dates de naissance, prénoms, nom de l'entreprise suivi de l'année"
+        ],
+        "notes": "Faire construire une phrase de passe à la salle (sans la noter)."
+       },
+       {
+        "titre": "Les mots de passe d'usine",
+        "points": [
+         "Équipements livrés avec admin / admin : à changer à la mise en service",
+         "Caméras, onduleurs, imprimantes, switchs sont concernés",
+         "Signaler tout équipement qui garde son mot de passe d'usine"
+        ],
+        "notes": "Population administrateurs et opérateurs OT : insister."
+       }
+      ],
+      "liens": [
+       {
+        "libelle": "Cybermalveillance.gouv.fr — gérer ses mots de passe",
+        "url": "https://www.cybermalveillance.gouv.fr/",
+        "type": "site"
+       }
+      ]
+     },
+     {
+      "titre": "Ranger et protéger",
+      "diapos": [
+       {
+        "titre": "Un gestionnaire de mots de passe",
+        "points": [
+         "Un coffre chiffré (par exemple KeePass) retient les mots de passe à votre place",
+         "Un seul mot de passe maître, très robuste, à retenir",
+         "Ni tableur, ni Post-it, ni carnet dans la baie"
+        ],
+        "notes": "Pour les administrateurs : renvoyer au guide « Les mots de passe » de WerbMap (coffre structuré par SI et TAG)."
+       },
+       {
+        "titre": "La double authentification",
+        "points": [
+         "Un code ou une validation sur un second appareil en plus du mot de passe",
+         "Un mot de passe volé ne suffit plus",
+         "Ne jamais valider une demande que l'on n'a pas faite soi-même"
+        ],
+        "notes": "Expliquer l'attaque par lassitude : notifications répétées jusqu'à ce qu'on accepte."
+       }
+      ],
+      "liens": [
+       {
+        "libelle": "KeePass — site officiel",
+        "url": "https://keepass.info/",
+        "type": "site"
+       }
+      ]
+     },
+     {
+      "titre": "Ne jamais partager en clair",
+      "diapos": [
+       {
+        "titre": "Partager un secret",
+        "points": [
+         "Jamais d'identifiant et de mot de passe en clair par courriel, messagerie ou SMS",
+         "Personne de l'informatique ne vous demandera votre mot de passe",
+         "Si un partage est indispensable : lien éphémère d'un service de confiance, canaux séparés, mot de passe changé ensuite"
+        ],
+        "notes": "Rappeler l'outil de partage éphémère retenu par l'entreprise."
+       }
+      ],
+      "liens": []
+     }
+    ],
+    "quiz": {
+     "seuil": 80,
+     "questions": [
+      {
+       "texte": "Lequel de ces mots de passe est le plus robuste ?",
+       "choix": [
+        "Entreprise2026!",
+        "Jean1985",
+        "violon-marée-cactus-boussole-17"
+       ],
+       "bonnes": [
+        2
+       ],
+       "explication": "Une phrase de passe longue et imprévisible résiste mieux qu'un mot court avec des symboles."
+      },
+      {
+       "texte": "Peut-on utiliser le même mot de passe pour la messagerie et un site personnel ?",
+       "choix": [
+        "Oui, si le mot de passe est robuste",
+        "Non, un mot de passe par service"
+       ],
+       "bonnes": [
+        1
+       ],
+       "explication": "Un site personnel piraté donnerait alors l'accès à la messagerie de l'entreprise."
+      },
+      {
+       "texte": "Le support informatique vous appelle et demande votre mot de passe. Que faites-vous ?",
+       "choix": [
+        "Je le donne, c'est le support",
+        "Je refuse et je signale l'appel",
+        "Je le donne puis je le change"
+       ],
+       "bonnes": [
+        1
+       ],
+       "explication": "Personne n'a besoin de votre mot de passe : c'est une tentative d'escroquerie."
+      },
+      {
+       "texte": "Vous recevez une demande de validation de connexion que vous n'avez pas faite. Que faites-vous ?",
+       "choix": [
+        "Je valide pour qu'elle s'arrête",
+        "Je refuse et je préviens l'informatique",
+        "Je l'ignore"
+       ],
+       "bonnes": [
+        1
+       ],
+       "explication": "Quelqu'un connaît probablement votre mot de passe : il faut le changer et prévenir."
+      },
+      {
+       "texte": "Où ranger ses mots de passe professionnels ? (plusieurs réponses)",
+       "choix": [
+        "Dans un gestionnaire de mots de passe validé",
+        "Dans un fichier Excel sur le bureau",
+        "Sur un Post-it sous le clavier",
+        "En mémoire, pour les quelques mots de passe principaux"
+       ],
+       "bonnes": [
+        0,
+        3
+       ],
+       "explication": "Le gestionnaire et la mémoire ; jamais un fichier ou un papier lisible par d'autres."
+      }
+     ]
+    },
+    "id": "f5"
+   },
+   {
+    "code": "ACA-DIR",
+    "titre": "Cybersécurité : le rôle des dirigeants",
+    "objectif": "Connaître les responsabilités de la direction en cybersécurité (directive NIS2, article 20), piloter les risques et savoir réagir en cas de crise.",
+    "populations": [
+     "dirigeants"
+    ],
+    "duree": 60,
+    "version": "1.0",
+    "statut": "publiee",
+    "periodiciteMois": 24,
+    "chapitres": [
+     {
+      "titre": "Une responsabilité de direction",
+      "diapos": [
+       {
+        "titre": "Ce que demande la directive NIS2",
+        "points": [
+         "Les organes de direction approuvent les mesures de gestion des risques de cybersécurité et supervisent leur mise en œuvre (article 20)",
+         "Ils peuvent être tenus responsables des manquements de l'entité",
+         "Leurs membres suivent une formation ; l'entité encourage une formation régulière de son personnel",
+         "Les mesures attendues sont listées à l'article 21 : analyse des risques, gestion des incidents, continuité, chaîne d'approvisionnement, hygiène et formation, authentification à plusieurs facteurs…"
+        ],
+        "notes": "Vérifier les dispositions de la loi nationale de transposition et le statut de l'entité (essentielle ou importante)."
+       },
+       {
+        "titre": "Ce que l'on risque",
+        "points": [
+         "Arrêt de la production, perte de données, rançon, atteinte à la réputation et à la confiance des clients",
+         "Sur les installations industrielles : sécurité des personnes, des équipements et de l'environnement",
+         "Sanctions NIS2 : jusqu'à 10 M€ ou 2 % du chiffre d'affaires mondial (entités essentielles), 7 M€ ou 1,4 % (entités importantes)"
+        ],
+        "notes": "Citer un incident connu du secteur, sans nommer de victime si l'information n'est pas publique."
+       }
+      ],
+      "liens": [
+       {
+        "libelle": "ANSSI — la directive NIS 2",
+        "url": "https://cyber.gouv.fr/la-directive-nis-2",
+        "type": "site"
+       },
+       {
+        "libelle": "Directive (UE) 2022/2555 (NIS 2) — EUR-Lex",
+        "url": "https://eur-lex.europa.eu/eli/dir/2022/2555/oj",
+        "type": "document"
+       }
+      ]
+     },
+     {
+      "titre": "Piloter la sécurité",
+      "diapos": [
+       {
+        "titre": "Décider et arbitrer",
+        "points": [
+         "Approuver la politique de sécurité et le plan d'action",
+         "Fixer le niveau de risque acceptable et arbitrer les priorités",
+         "Allouer les budgets et les ressources, nommer les responsables",
+         "Suivre les indicateurs en revue de direction : risques, incidents, formation, conformité"
+        ],
+        "notes": "Montrer le tableau de bord du portail WerbSMSI et les indicateurs de formation."
+       },
+       {
+        "titre": "Les fournisseurs et les prestataires",
+        "points": [
+         "Une part importante des attaques passe par un fournisseur ou un prestataire",
+         "Exiger des engagements de sécurité dans les contrats (cahier d'exigences)",
+         "Contrôler les accès à distance des prestataires"
+        ],
+        "notes": ""
+       }
+      ],
+      "liens": []
+     },
+     {
+      "titre": "En cas de crise",
+      "diapos": [
+       {
+        "titre": "Les premières heures",
+        "points": [
+         "Réunir la cellule de crise et décider vite : isoler, arrêter une installation, basculer en mode dégradé",
+         "Notifier l'autorité d'un incident important : alerte précoce sous 24 heures, notification sous 72 heures, rapport final sous un mois",
+         "Communiquer : personnel, clients, partenaires ; une seule voix",
+         "La décision de payer une rançon ne se prend jamais seul ; les autorités recommandent de ne pas payer"
+        ],
+        "notes": "Rappeler les coordonnées de la cellule de crise et le plan de continuité de l'entreprise."
+       },
+       {
+        "titre": "Montrer l'exemple",
+        "points": [
+         "Appliquer les mêmes règles que tous, sans dérogation pour la direction",
+         "Les dirigeants sont des cibles privilégiées : hameçonnage ciblé, fraude au président",
+         "Tout virement inhabituel se vérifie par un contre-appel sur un numéro connu"
+        ],
+        "notes": ""
+       }
+      ],
+      "liens": [
+       {
+        "libelle": "Cybermalveillance.gouv.fr — fraude au président",
+        "url": "https://www.cybermalveillance.gouv.fr/",
+        "type": "site"
+       }
+      ]
+     }
+    ],
+    "quiz": {
+     "seuil": 80,
+     "questions": [
+      {
+       "texte": "Selon la directive NIS2, qui approuve les mesures de gestion des risques de cybersécurité ?",
+       "choix": [
+        "Le service informatique seul",
+        "Les organes de direction",
+        "Le prestataire d'infogérance"
+       ],
+       "bonnes": [
+        1
+       ],
+       "explication": "Article 20 : la direction approuve les mesures, supervise leur mise en œuvre et peut en être tenue responsable."
+      },
+      {
+       "texte": "Dans quel délai l'alerte précoce d'un incident important doit-elle être envoyée ?",
+       "choix": [
+        "24 heures",
+        "72 heures",
+        "Un mois"
+       ],
+       "bonnes": [
+        0
+       ],
+       "explication": "Alerte précoce sous 24 heures, notification sous 72 heures, rapport final sous un mois."
+      },
+      {
+       "texte": "Quelles décisions relèvent de la direction ?",
+       "choix": [
+        "Fixer le niveau de risque acceptable",
+        "Allouer le budget et les ressources",
+        "Configurer les pare-feu",
+        "Approuver la politique de sécurité"
+       ],
+       "bonnes": [
+        0,
+        1,
+        3
+       ],
+       "explication": "La direction décide et arbitre ; la configuration technique revient aux équipes."
+      },
+      {
+       "texte": "Le « président » demande par courriel un virement urgent et confidentiel. Le bon réflexe ?",
+       "choix": [
+        "Exécuter le virement",
+        "Vérifier par un contre-appel sur un numéro connu",
+        "Répondre au courriel pour demander des détails"
+       ],
+       "bonnes": [
+        1
+       ],
+       "explication": "La fraude au président joue sur l'urgence et la confidentialité : on vérifie par un autre canal."
+      }
+     ]
+    },
+    "id": "f6"
+   }
+  ],
+  "personnes": [
+   {
+    "id": "p1",
+    "nom": "Claire DÉMO",
+    "fonction": "Directrice générale (fictive)",
+    "population": "dirigeants",
+    "site": "GROUPE",
+    "actif": true,
+    "sortieLe": ""
+   },
+   {
+    "id": "p2",
+    "nom": "Hugo DÉMO",
+    "fonction": "Directeur de site (fictif)",
+    "population": "dirigeants",
+    "site": "LYON",
+    "actif": true,
+    "sortieLe": ""
+   },
+   {
+    "id": "p3",
+    "nom": "Inès DÉMO",
+    "fonction": "Directrice de site (fictive)",
+    "population": "dirigeants",
+    "site": "NANTES",
+    "actif": true,
+    "sortieLe": ""
+   },
+   {
+    "id": "p4",
+    "nom": "Paul DÉMO",
+    "fonction": "Administrateur systèmes et réseaux (fictif)",
+    "population": "administrateurs",
+    "site": "GROUPE",
+    "actif": true,
+    "sortieLe": ""
+   },
+   {
+    "id": "p5",
+    "nom": "Léa DÉMO",
+    "fonction": "Correspondante cybersécurité de site (fictive)",
+    "population": "administrateurs",
+    "site": "LYON",
+    "actif": true,
+    "sortieLe": ""
+   },
+   {
+    "id": "p6",
+    "nom": "Marc DÉMO",
+    "fonction": "Technicien de maintenance (fictif)",
+    "population": "operateurs",
+    "site": "LYON",
+    "actif": true,
+    "sortieLe": ""
+   },
+   {
+    "id": "p7",
+    "nom": "Sarah DÉMO",
+    "fonction": "Conductrice de ligne (fictive)",
+    "population": "operateurs",
+    "site": "LYON",
+    "actif": true,
+    "sortieLe": ""
+   },
+   {
+    "id": "p8",
+    "nom": "Yann DÉMO",
+    "fonction": "Technicien automaticien (fictif)",
+    "population": "operateurs",
+    "site": "NANTES",
+    "actif": true,
+    "sortieLe": ""
+   },
+   {
+    "id": "p9",
+    "nom": "Nora DÉMO",
+    "fonction": "Service qualité (fictif)",
+    "population": "collaborateurs",
+    "site": "LYON",
+    "actif": true,
+    "sortieLe": ""
+   },
+   {
+    "id": "p10",
+    "nom": "Lucas DÉMO",
+    "fonction": "Service achats (fictif)",
+    "population": "collaborateurs",
+    "site": "GROUPE",
+    "actif": true,
+    "sortieLe": ""
+   },
+   {
+    "id": "p11",
+    "nom": "Emma DÉMO",
+    "fonction": "Service comptabilité (fictif)",
+    "population": "collaborateurs",
+    "site": "GROUPE",
+    "actif": true,
+    "sortieLe": ""
+   },
+   {
+    "id": "p12",
+    "nom": "Tom DÉMO",
+    "fonction": "Intégrateur de la supervision (prestataire fictif)",
+    "population": "prestataires",
+    "site": "LYON",
+    "actif": true,
+    "sortieLe": ""
+   },
+   {
+    "id": "p13",
+    "nom": "Julie DÉMO",
+    "fonction": "Ancienne assistante de site (fictive)",
+    "population": "collaborateurs",
+    "site": "NANTES",
+    "actif": false,
+    "sortieLe": "2025-06-30"
+   }
+  ],
+  "sessions": [
+   {
+    "id": "s1",
+    "formation": "f1",
+    "code": "ACA-HYG",
+    "titre": "Hygiène numérique : les bons réflexes au quotidien",
+    "version": "1.0",
+    "seuil": 80,
+    "nbQuestions": 5,
+    "date": "2024-09-17",
+    "site": "LYON",
+    "animateur": "Léa DÉMO",
+    "format": "presentiel",
+    "duree": 45,
+    "lieu": "Salle de formation du site",
+    "notes": "",
+    "participants": [
+     {
+      "personne": "p6",
+      "present": true,
+      "score": 5
+     },
+     {
+      "personne": "p7",
+      "present": true,
+      "score": 4
+     },
+     {
+      "personne": "p9",
+      "present": true,
+      "score": 4
+     },
+     {
+      "personne": "p5",
+      "present": true,
+      "score": 5
+     }
+    ]
+   },
+   {
+    "id": "s2",
+    "formation": "f1",
+    "code": "ACA-HYG",
+    "titre": "Hygiène numérique : les bons réflexes au quotidien",
+    "version": "1.0",
+    "seuil": 80,
+    "nbQuestions": 5,
+    "date": "2025-03-12",
+    "site": "GROUPE",
+    "animateur": "Paul DÉMO",
+    "format": "distanciel",
+    "duree": 45,
+    "lieu": "Visioconférence",
+    "notes": "",
+    "participants": [
+     {
+      "personne": "p1",
+      "present": true,
+      "score": 5
+     },
+     {
+      "personne": "p4",
+      "present": true,
+      "score": 4
+     },
+     {
+      "personne": "p10",
+      "present": true,
+      "score": 4
+     },
+     {
+      "personne": "p11",
+      "present": true,
+      "score": 3
+     }
+    ]
+   },
+   {
+    "id": "s3",
+    "formation": "f5",
+    "code": "ACA-MDP",
+    "titre": "Gestion des mots de passe",
+    "version": "1.0",
+    "seuil": 80,
+    "nbQuestions": 5,
+    "date": "2024-12-10",
+    "site": "NANTES",
+    "animateur": "Paul DÉMO",
+    "format": "presentiel",
+    "duree": 45,
+    "lieu": "Salle de réunion",
+    "notes": "",
+    "participants": [
+     {
+      "personne": "p3",
+      "present": true,
+      "score": 5
+     },
+     {
+      "personne": "p8",
+      "present": true,
+      "score": 4
+     },
+     {
+      "personne": "p13",
+      "present": true,
+      "score": 4
+     }
+    ]
+   },
+   {
+    "id": "s4",
+    "formation": "f3",
+    "code": "ACA-USB",
+    "titre": "Usage des clés USB et supports amovibles",
+    "version": "1.0",
+    "seuil": 80,
+    "nbQuestions": 4,
+    "date": "2026-06-23",
+    "site": "LYON",
+    "animateur": "Léa DÉMO",
+    "format": "presentiel",
+    "duree": 30,
+    "lieu": "Atelier, poste de décontamination",
+    "notes": "",
+    "participants": [
+     {
+      "personne": "p6",
+      "present": true,
+      "score": 4
+     },
+     {
+      "personne": "p7",
+      "present": false,
+      "score": null
+     },
+     {
+      "personne": "p12",
+      "present": true,
+      "score": 2
+     },
+     {
+      "personne": "p5",
+      "present": true,
+      "score": 4
+     },
+     {
+      "personne": "p2",
+      "present": true,
+      "score": 3
+     }
+    ]
+   },
+   {
+    "id": "s5",
+    "formation": "f2",
+    "code": "ACA-IA",
+    "titre": "Usage de l'intelligence artificielle",
+    "version": "1.0",
+    "seuil": 80,
+    "nbQuestions": 5,
+    "date": "2026-11-19",
+    "site": "GROUPE",
+    "animateur": "Paul DÉMO",
+    "format": "distanciel",
+    "duree": 45,
+    "lieu": "Visioconférence",
+    "notes": "",
+    "participants": [
+     {
+      "personne": "p1",
+      "present": false,
+      "score": null
+     },
+     {
+      "personne": "p10",
+      "present": false,
+      "score": null
+     },
+     {
+      "personne": "p11",
+      "present": false,
+      "score": null
+     }
+    ]
+   },
+   {
+    "id": "s6",
+    "formation": "f6",
+    "code": "ACA-DIR",
+    "titre": "Cybersécurité : le rôle des dirigeants",
+    "version": "1.0",
+    "seuil": 80,
+    "nbQuestions": 4,
+    "date": "2026-02-05",
+    "site": "GROUPE",
+    "animateur": "RSSI groupe (fictif)",
+    "format": "presentiel",
+    "duree": 60,
+    "lieu": "Salle du conseil",
+    "notes": "",
+    "participants": [
+     {
+      "personne": "p1",
+      "present": true,
+      "score": 4
+     },
+     {
+      "personne": "p2",
+      "present": true,
+      "score": 2
+     },
+     {
+      "personne": "p3",
+      "present": true,
+      "score": 4
+     }
+    ]
+   }
+  ],
+  "parametres": {
+   "conservationMois": 36
+  },
+  "logo": {
+   "nom": "Logo_entreprise_fictif.png",
+   "type": "image/png",
+   "base64": "iVBORw0KGgoAAAANSUhEUgAAAPAAAABQCAIAAACoK28rAAABsklEQVR42u3dQQ4BQRBAUTdxA2vHcAgHckwreyskEgsRZrqrhi7vpy9AvchkpqetLlKhVr4CAS0BLQEtAS2gJaAloCWgpRDQ6+1+uGWoQAMtoIEW0EALaKAFtIAGWkADLaCBFtBAC2gBDbSAHhT0iB/wz9ePgj6ezkBbRUDfNN8X0NbwoB+ak0wDDfRy837SnGEaaKAXmvdLzeGmgQZ6iXm/0RxrGmig0+f9UXOgaaCBzp33RM1RpoEGOnHeszSHmAYa6Kx5N2juNw000CnzbtbcaRpooOPn3am5x7QNOjYnBYMO0dxs2lCBjgQdqLnNtKECHQY6XHODaUMFOgZ0kua5pg0V6ADQqZpnmTZUoHtBL6B5umlDBdovtIB2DS13Odzl0Eigh7sPvdkdrLb1L6DHelLIJdCl9nJwCXSp3XZcAl1qPzSXQJd6Y4VLoEu9U8gl0KXe+uYS6FLncnAJdKmTk7gEutTZdvLou9TpowK61PnQArrUCf4C2p8GCWigBTTQAhpooIEW0EALaKAFNNACWkADLaCBFtBA6zugJaAloCWgJaAFtAS0BLQEtAS0SnYF5hocGaJt3TYAAAAASUVORK5CYII=",
+   "ajouteLe": "2026-10-31",
+   "ajoutePar": "Exemple"
+  },
+  "recus": {
+   "sites": {
+    "items": [
+     {
+      "code": "LYON",
+      "nom": "Usine de Lyon (fictive)"
+     },
+     {
+      "code": "NANTES",
+      "nom": "Usine de Nantes (fictive)"
+     }
+    ],
+    "majLe": "2026-10-31T08:00:00.000Z"
+   }
+  },
+  "largeurs": {}
+ }
+}

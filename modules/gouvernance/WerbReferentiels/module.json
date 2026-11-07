@@ -1,0 +1,37 @@
+{
+  "charte": "1.0",
+  "id": "werbreferentiels",
+  "produit": "WerbReferentiels",
+  "version": "1.5.1",
+  "dateVersion": "2026-11",
+  "auteur": "@WerbHat",
+  "signature": "Développé par @WerbHat",
+  "description": "Référentiels cyber à lire et à relier : ANSSI, NIST, NIS2, ISO 27001, CRA, RGPD — cartes, synthèses, sources officielles, tableau de correspondances",
+  "rubrique": "gouvernance",
+  "portees": [
+    "groupe"
+  ],
+  "entree": "application/WerbReferentiels.html",
+  "empreinte": {
+    "algo": "SHA-256",
+    "valeur": "b65eb6bf5e4a13a517835413dfa547028f4a5f91e72effe42c7a4f1512854e99"
+  },
+  "echanges": {
+    "publie": [],
+    "consomme": []
+  },
+  "compatPortail": ">=1.1.1",
+  "licence": "MIT",
+  "navigateurs": [
+    "edge",
+    "chrome",
+    "firefox"
+  ],
+  "guides": "referentiels",
+  "sources": [
+    "signature.js",
+    "socle.js",
+    "guides.js",
+    "app.js"
+  ]
+}
