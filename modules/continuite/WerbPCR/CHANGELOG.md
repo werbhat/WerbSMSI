@@ -3,6 +3,12 @@
 Toutes les évolutions notables de WerbPCR sont consignées ici.
 Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/), numérotation [SemVer](https://semver.org/lang/fr/).
 
+## [1.7.0] — 2026-11
+
+### Ajouts
+- **Guide « Approfondir la continuité et la reprise »** (`guides/3-Approfondir_continuite_et_reprise.md`) : indicateurs de temps et leurs relations (durée maximale tolérable d'interruption, RTO, temps de remise en service métier, RPO, niveau minimal de continuité ; règle RTO + remise en service ≤ durée maximale tolérable ; MTBF, MTTR, disponibilité et arrêt admis par an) ; conduite du bilan d'impact (étapes, impact dans le temps, pièges) ; du RPO à la stratégie de sauvegarde (complète, incrémentale, différentielle, instantané, réplication ; règle 3-2-1 et copie hors ligne ; conservation ; ce qu'il faut sauvegarder dans un site industriel) ; du RTO à la stratégie de reprise (redondance, secours chaud, tiède, froid, pièces de rechange ; équilibre coût de la stratégie et coût de l'arrêt ; reprise après une cyberattaque) ; points uniques de défaillance ; six types de tests et leur conduite ; crise, communication et notifications ; indicateurs ; références (ISO 22301, ISO 22313, ISO/IEC 27031, ISO/IEC 27001:2022, NIS2, NIST SP 800-34) ; correspondance avec les écrans de WerbPCR.
+- Renvois depuis les guides « Continuité et reprise en clair » et « Établir le Plan PRI ».
+
 ## [1.6.0] — 2026-11
 
 ### Ajouts

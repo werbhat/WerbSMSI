@@ -86,3 +86,5 @@ Une sauvegarde **jamais restaurée** reste une hypothèse. Une sauvegarde **joig
 - Le **document Word** présente le PRI en partie 2 (chapitres PRI 1 à 5), après le PCI.
 - Revoyez le PRI **à chaque changement** de l'architecture (nouveau système, nouvelle dépendance), **après chaque exercice** de reprise et **après chaque incident**.
 - Un PRI n'a de valeur que **testé** : un exercice de restauration par an et par système critique est un minimum.
+
+La relation entre RTO, durée maximale tolérable et temps de remise en service, le choix des stratégies de sauvegarde et de reprise, et les différents types de tests sont détaillés dans le guide [Approfondir la continuité et la reprise](3-Approfondir_continuite_et_reprise.md).

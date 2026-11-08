@@ -5,6 +5,12 @@ Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/), num
 
 
 
+## [1.13.0] — 2026-11
+
+### Ajouts
+- **Guide « Les rôles de la sécurité : qui fait quoi, et comment »** (`guides/4-Les_roles_de_la_securite.md`) : principes de conduite communs (la sécurité au service de l'entreprise, les personnes d'abord, décider selon le risque, le risque appartient à la direction ; disponibilité, intégrité, confidentialité, défense en profondeur, moindre privilège, besoin d'en connaître, séparation des tâches, sécurité dès la conception ; prudence, diligence et preuve ; NIS2 article 20 ; quatre façons de traiter un risque et qui décide ; déontologie) ; pour chaque rôle du groupe (direction, comité de sécurité, RSSI, DPO, acheteur, RH), du site (directeur, correspondant, exploitation OT, administrateurs, propriétaire d'un système, utilisateurs) et transverse (propriétaire de procédure, responsable d'action, auditeur interne, cellule de crise) : mission, tâches clés par rythme, décisions, pièges, outils de WerbSMSI ; cumuls à éviter ; matrice RACI des activités clés.
+- Écran **🏛️ Cadre › Rôles** : renvoi au guide ; guide « Piloter la sécurité du groupe » : renvoi au guide.
+
 ## [1.12.1] — 2026-11
 
 ### Changements

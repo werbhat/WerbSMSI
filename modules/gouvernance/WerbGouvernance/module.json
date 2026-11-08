@@ -2,7 +2,7 @@
   "charte": "1.0",
   "id": "werbgouvernance",
   "produit": "WerbGouvernance",
-  "version": "1.12.1",
+  "version": "1.13.0",
   "dateVersion": "2026-11",
   "auteur": "@WerbHat",
   "signature": "Développé par @WerbHat",
@@ -14,7 +14,7 @@
   "entree": "application/WerbGouvernance.html",
   "empreinte": {
     "algo": "SHA-256",
-    "valeur": "554dd59fd05cc820fe7e5d4df471467456e752eb79295279ef5f8d9c28ca20e1"
+    "valeur": "0b40a088b9dce22c3165957229ec31c470eeb038b494c2561296e89e886cb40b"
   },
   "donnees": {
     "format": "WERBGOUVERNANCE",

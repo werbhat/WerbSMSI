@@ -1,7 +1,7 @@
 # WerbPCR
 
 > Plan de cybersécurité et de reprise d'un site : PCI (périmètre métier EBIOS, approche systémique, SI, fiches par SI, plan d'actions) et PRI (bilan d'impact, RTO / RPO, dépendances, ordre et procédures de reprise, contrôle des sauvegardes)
-> Version **1.6.0** — Développé par **@WerbHat**
+> Version **1.7.0** — Développé par **@WerbHat**
 
 ---
 
@@ -37,7 +37,8 @@ WerbPCR/
 └── guides/                      ← guides d'accompagnement (menu ❓ Aide)
     ├── 0-Continuite_et_reprise_en_clair.md ← guide de débutant, lu dans ❓ Aide
     ├── 1-Etablir_le_plan.md
-    └── 2-Etablir_le_PRI.md
+    ├── 2-Etablir_le_PRI.md
+    └── 3-Approfondir_continuite_et_reprise.md
 ```
 
 ---
@@ -171,7 +172,7 @@ python <WerbSMSI>\charte\outils\werb_charte.py publier .
 
 ## Historique des versions
 
-Version courante : **1.6.0** de novembre 2026 — guide de débutant « Continuité et reprise en clair » ; rubrique **c — Valeurs métier** dans les fiches par SI (proposées depuis les biens supports de l'analyse EBIOS, saisie libre), rubriques renumérotées a à g. Versions précédentes : **1.5.0** de novembre 2026 — rubrique f du PCI recentrée sur les **mesures de continuité** (réponse immédiate et mode dégradé), renvoi au PRI pour le retour au fonctionnement normal ; guides PCI et PRI : « qui fait quoi ». Versions précédentes : **1.4.0** d'octobre 2026 — indicateurs de formation du site reçus de WerbAcademie sous l'objectif R#1 et dans le document Word ; **1.3.0** — prestataires de WerbPresta proposés en dépendances externes du PRI ; **1.2.0** d'octobre 2026 — **Plan PRI** (plan de reprise informatique, PCR-7) : bilan d'impact (RTO, RPO, mode dégradé), dépendances, ordre de reprise calculé, procédures de reprise, contrôle RPO ↔ sauvegardes ; partie 2 du document Word ; guide « Établir le Plan PRI ». Version précédente : **1.1.1** d'octobre 2026 — PCI (plan de continuité informatique) et PRI (plan de reprise informatique) distingués : menu « Plan PCI », définitions dans le tableau de bord, l'aide, le guide et le document Word. Versions précédentes : **1.1.0** d'octobre 2026 — fiches d'analyse par SI, plan d'actions R#1 à R#10, document Word ; **1.0.0** d'octobre 2026 — première version : périmètre métier (événements redoutés de l'analyse EBIOS du site), approche systémique, systèmes d'information (WerbMap). Détail dans [CHANGELOG.md](CHANGELOG.md).
+Version courante : **1.7.0** de novembre 2026 — guide « Approfondir la continuité et la reprise » (indicateurs de temps et leurs relations, bilan d'impact, stratégies de sauvegarde et de reprise, points uniques de défaillance, tests, indicateurs, normes). Versions précédentes : **1.6.0** de novembre 2026 — guide de débutant « Continuité et reprise en clair » ; rubrique **c — Valeurs métier** dans les fiches par SI (proposées depuis les biens supports de l'analyse EBIOS, saisie libre), rubriques renumérotées a à g. Versions précédentes : **1.5.0** de novembre 2026 — rubrique f du PCI recentrée sur les **mesures de continuité** (réponse immédiate et mode dégradé), renvoi au PRI pour le retour au fonctionnement normal ; guides PCI et PRI : « qui fait quoi ». Versions précédentes : **1.4.0** d'octobre 2026 — indicateurs de formation du site reçus de WerbAcademie sous l'objectif R#1 et dans le document Word ; **1.3.0** — prestataires de WerbPresta proposés en dépendances externes du PRI ; **1.2.0** d'octobre 2026 — **Plan PRI** (plan de reprise informatique, PCR-7) : bilan d'impact (RTO, RPO, mode dégradé), dépendances, ordre de reprise calculé, procédures de reprise, contrôle RPO ↔ sauvegardes ; partie 2 du document Word ; guide « Établir le Plan PRI ». Version précédente : **1.1.1** d'octobre 2026 — PCI (plan de continuité informatique) et PRI (plan de reprise informatique) distingués : menu « Plan PCI », définitions dans le tableau de bord, l'aide, le guide et le document Word. Versions précédentes : **1.1.0** d'octobre 2026 — fiches d'analyse par SI, plan d'actions R#1 à R#10, document Word ; **1.0.0** d'octobre 2026 — première version : périmètre métier (événements redoutés de l'analyse EBIOS du site), approche systémique, systèmes d'information (WerbMap). Détail dans [CHANGELOG.md](CHANGELOG.md).
 
 ---
 

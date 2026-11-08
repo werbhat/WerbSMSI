@@ -145,7 +145,7 @@
       "chemin": "modules/gouvernance/WerbGouvernance",
       "depot": "../WerbGouvernance",
       "etat": "publie",
-      "version": "1.12.1",
+      "version": "1.13.0",
       "etape": "gouverner"
     },
     {
@@ -249,7 +249,7 @@
       "chemin": "modules/continuite/WerbPCR",
       "depot": "../WerbPCR",
       "etat": "publie",
-      "version": "1.6.0",
+      "version": "1.7.0",
       "etape": "resilience"
     },
     {

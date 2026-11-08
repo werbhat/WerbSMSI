@@ -1,7 +1,7 @@
 # WerbGouvernance
 
 > Gouvernance du SMSI du groupe : politique, rôles, socle de mesures, procédures, revues et plan d'actions
-> Version **1.12.1** — Développé par **@WerbHat**
+> Version **1.13.0** — Développé par **@WerbHat**
 
 ---
 
@@ -29,7 +29,8 @@ WerbGouvernance/
 ├── guides/                      ← guides d'accompagnement (Markdown), lus dans ❓ Aide
 │   ├── 1-Piloter_le_SMSI.md
 │   ├── 2-Elaborer_la_PSSI.md
-│   └── 3-Accompagner_les_phases_de_la_PSSI.md
+│   ├── 3-Accompagner_les_phases_de_la_PSSI.md
+│   └── 4-Les_roles_de_la_securite.md
 ├── sources/src/                      ← index.html, style.css, signature.js, socle.js, guides.js, xlsx.js, modele-word.js, impression.js, pssi-catalogue.js, pssi-document.js, app.js
 ├── sources/vendor/bibliotheques.js   ← JSZip 3.10.1 et docx 9.8.1 (documents Word), figés
 └── tests/                            ← test_menu.py (menu commun, Edge)
@@ -203,7 +204,7 @@ python <WerbSMSI>\charte\outils\werb_charte.py publier .
 
 ## Historique des versions
 
-Version courante : **1.12.1** de novembre 2026 — choix du mode de la phase 2 mis en évidence, badge « nouveau · ANSSI ». Versions précédentes : **1.12.0** de novembre 2026 — catalogue PSSI confronté au référentiel de principes de l'ANSSI (références ANSSI, 10 principes ajoutés, 61 au total). Versions précédentes : **1.11.1** de novembre 2026 — guides PSSI complétés d'après la méthodologie de l'ANSSI (fiches de synthèse des phases, détail des tâches, conseils et écueils). Versions précédentes : **1.11.0** de novembre 2026 — aide de chaque phase de l'assistant PSSI (guide « Accompagner chaque phase de la PSSI » dans une fenêtre à part). Versions précédentes : **1.10.0** de novembre 2026 — finalisation de la PSSI (document en PDF et en Word au modèle, approbation, plan d'actions) et charte utilisateur. Versions précédentes : **1.9.0** de novembre 2026 — assistant PSSI (cadrage, éléments stratégiques, principes et règles, règle → socle de mesures). Versions précédentes : **1.8.0** de novembre 2026 — guide « Élaborer la politique de sécurité (PSSI) ». Versions précédentes : **1.7.0** de novembre 2026 — guide de débutant « Piloter la sécurité du groupe sans être expert ». Versions précédentes : **1.6.0** d'octobre 2026 — indicateurs de formation de WerbAcademie au tableau de bord et en élément d'entrée de la revue de direction. Versions précédentes : **1.5.0** d'octobre 2026 — sélection multiple et archivage, chercher / remplacer, largeur des colonnes (socle 1.9.0) ; **1.4.0** d'octobre 2026 — bandeau commun (socle 1.8.0, TRV-7) ; **1.3.0** d'octobre 2026 — thème clair / sombre (socle 1.7.1) ; **1.2.0** d'octobre 2026 — verrou commun des bases (lecture seule ou prise de main, bandeau « Ouvert par … ») ; **1.1.0** — menu latéral commun WerbSMSI (catégories repliables sur fond de couleur). Détail dans [CHANGELOG.md](CHANGELOG.md).
+Version courante : **1.13.0** de novembre 2026 — guide « Les rôles de la sécurité » (principes de conduite, tâches clés de chaque rôle, séparation des tâches, matrice qui fait quoi), relié à l'écran Rôles. Versions précédentes : **1.12.1** de novembre 2026 — choix du mode de la phase 2 mis en évidence, badge « nouveau · ANSSI ». Versions précédentes : **1.12.0** de novembre 2026 — catalogue PSSI confronté au référentiel de principes de l'ANSSI (références ANSSI, 10 principes ajoutés, 61 au total). Versions précédentes : **1.11.1** de novembre 2026 — guides PSSI complétés d'après la méthodologie de l'ANSSI (fiches de synthèse des phases, détail des tâches, conseils et écueils). Versions précédentes : **1.11.0** de novembre 2026 — aide de chaque phase de l'assistant PSSI (guide « Accompagner chaque phase de la PSSI » dans une fenêtre à part). Versions précédentes : **1.10.0** de novembre 2026 — finalisation de la PSSI (document en PDF et en Word au modèle, approbation, plan d'actions) et charte utilisateur. Versions précédentes : **1.9.0** de novembre 2026 — assistant PSSI (cadrage, éléments stratégiques, principes et règles, règle → socle de mesures). Versions précédentes : **1.8.0** de novembre 2026 — guide « Élaborer la politique de sécurité (PSSI) ». Versions précédentes : **1.7.0** de novembre 2026 — guide de débutant « Piloter la sécurité du groupe sans être expert ». Versions précédentes : **1.6.0** d'octobre 2026 — indicateurs de formation de WerbAcademie au tableau de bord et en élément d'entrée de la revue de direction. Versions précédentes : **1.5.0** d'octobre 2026 — sélection multiple et archivage, chercher / remplacer, largeur des colonnes (socle 1.9.0) ; **1.4.0** d'octobre 2026 — bandeau commun (socle 1.8.0, TRV-7) ; **1.3.0** d'octobre 2026 — thème clair / sombre (socle 1.7.1) ; **1.2.0** d'octobre 2026 — verrou commun des bases (lecture seule ou prise de main, bandeau « Ouvert par … ») ; **1.1.0** — menu latéral commun WerbSMSI (catégories repliables sur fond de couleur). Détail dans [CHANGELOG.md](CHANGELOG.md).
 
 ---
 

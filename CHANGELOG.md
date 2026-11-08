@@ -7,6 +7,8 @@ Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/), num
 ## [0.28.0] — 2026-11
 
 ### Changements
+- **WerbPCR 1.7.0 publié** : guide « Approfondir la continuité et la reprise » (durée maximale tolérable, RTO, temps de remise en service, RPO, disponibilité ; bilan d'impact ; stratégies de sauvegarde et de reprise ; points uniques de défaillance ; types de tests ; indicateurs ; normes ISO 22301, ISO/IEC 27031, NIS2, NIST SP 800-34).
+- **WerbGouvernance 1.13.0 publié** : guide « Les rôles de la sécurité : qui fait quoi, et comment » (principes de conduite communs, tâches clés de chaque rôle du groupe, du site et transverse, séparation des tâches, matrice qui fait quoi), relié à l'écran Rôles.
 - **WerbPresta 1.6.1 publié** : guide du prestataire renommé « Répondre aux exigences de cybersécurité du client » (intitulé plus sobre, vocabulaire de mise en œuvre et de plan d'actions).
 - **WerbPresta 1.6.0 publié** : bouton « 📘 Guide du prestataire (Word) » — le guide d'accompagnement à remettre au prestataire, à son nom, exigences de son cahier signalées, habillé du modèle de l'entreprise.
 - **WerbPresta 1.5.0 publié** : guide « Accompagner le prestataire dans sa montée en maturité », à remettre au prestataire avec le questionnaire (réponses et preuves, niveaux de maturité de l'IEC 62443-2-4, quatre paliers couvrant les 37 exigences, comment y arriver exigence par exigence, plan de progrès).

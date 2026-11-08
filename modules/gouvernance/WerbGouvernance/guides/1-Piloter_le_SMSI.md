@@ -32,6 +32,8 @@ Puis la roue repart : chaque année, on fait un peu mieux que l'année précéde
 
 Un rôle sans titulaire est un trou : le tableau de bord le signale. Un titulaire sans suppléant est un risque : prévoyez-en un pour les rôles clés.
 
+Les tâches clés de chaque rôle, les principes de conduite communs et la matrice « qui fait quoi » sont détaillés dans le guide [Les rôles de la sécurité](4-Les_roles_de_la_securite.md).
+
 ---
 
 ## 3. La politique et le périmètre

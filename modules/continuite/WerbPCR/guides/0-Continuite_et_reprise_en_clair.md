@@ -109,4 +109,6 @@ Après une **cyberattaque**, une règle de plus : on ne redémarre qu'une fois l
 
 WerbPCR reprend ce que les autres modules connaissent déjà : l'analyse de risques (WerbEBIOS), les systèmes d'information (WerbMap), le registre des sauvegardes (WerbExploitation), les rôles (WerbGouvernance), les prestataires (WerbPresta). Le document Word réunit les deux plans, au modèle de l'entreprise.
 
+Pour aller plus loin (durée maximale tolérable, temps de remise en service, disponibilité, stratégies de sauvegarde et de reprise, points uniques de défaillance, types de tests, indicateurs, normes) : guide [Approfondir la continuité et la reprise](3-Approfondir_continuite_et_reprise.md).
+
 > **En résumé** : la continuité, c'est tenir pendant l'incident ; la reprise, c'est revenir à la normale. Les deux se mesurent en heures (RTO, RPO), se fixent avec le métier, et se préparent avant — sauvegardes testées, documentation accessible, décisions et ordre de reprise écrits.
