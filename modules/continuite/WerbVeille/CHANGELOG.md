@@ -3,6 +3,26 @@
 Toutes les évolutions notables de WerbVeille sont consignées ici.
 Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/), numérotation [SemVer](https://semver.org/lang/fr/).
 
+## [1.5.0] — 2026-11
+
+### Ajouts
+- **Logiciels installés en mots-clés** : `site:plm` publié par WerbExploitation est lu au rattachement et sur ⟳ Actualiser, copié dans la base (identifiant, nature, éditeur ou fabricant, produit, version, TAG ; ni statut, ni stock, ni fournisseur), réception tracée au journal ; données reçues complétées.
+- *Mots-clés › Proposer depuis l'inventaire* : en plus des actifs WerbMap, produit, éditeur + produit et produit + version des logiciels et applicatifs installés (OS compris), avec les TAG des machines et une colonne **Origine** (WerbMap, WerbExploitation) ; l'éditeur seul n'est pas proposé (trop général). Les alertes, y compris celles du catalogue KEV, sont ainsi reliées aux machines qui portent l'applicatif.
+
+### Changements
+- `site:plm` ajouté aux objets lus (`module.json`).
+
+## [1.4.0] — 2026-11
+
+### Ajouts
+- **Sources spécialisées** (VEI-4), réglées dans *Sources* et exportées dans `config.json` du kit (collecteur 1.3.0) :
+  - **catalogue KEV de la CISA** (vulnérabilités exploitées), activé par défaut, croisé avec les mots-clés ; alertes « Vulnérabilités exploitées » avec action demandée, échéance et usage par des rançongiciels ;
+  - **revendications de rançongiciels ransomware.live** (API api-pro), désactivé par défaut : pays, secteurs facultatifs, noms surveillés (organisation, filiales, fournisseurs) ; alertes « Rançongiciels ». Jeton personnel dans `secrets.ini` (section `[ransomware_live]`), jamais dans la base ni dans le kit ; avertissement sur les conditions d'utilisation de ransomware.live.
+- Catégories « Vulnérabilités exploitées » et « Rançongiciels » ; `secrets.ini.exemple` et LISEZMOI complétés.
+
+### Format de données
+- Ajout sans changement de schéma : `speciales` (`kev`, `rancongiciels`, `pays`, `secteurs`, `noms`). Une veille 1.3.0 s'ouvre avec le KEV activé : le kit est signalé à régénérer.
+
 ## [1.3.0] — 2026-11
 
 ### Ajouts

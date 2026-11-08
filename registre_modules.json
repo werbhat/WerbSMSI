@@ -145,7 +145,7 @@
       "chemin": "modules/gouvernance/WerbGouvernance",
       "depot": "../WerbGouvernance",
       "etat": "publie",
-      "version": "1.8.0",
+      "version": "1.12.1",
       "etape": "gouverner"
     },
     {
@@ -193,7 +193,7 @@
       "chemin": "modules/conformite/WerbNIS2",
       "depot": "../WerbNIS2",
       "etat": "publie",
-      "version": "1.7.0",
+      "version": "1.8.0",
       "etape": "exigences"
     },
     {
@@ -209,7 +209,7 @@
       "chemin": "modules/conformite/WerbPresta",
       "depot": "../WerbPresta",
       "etat": "publie",
-      "version": "1.4.0",
+      "version": "1.6.1",
       "etape": "exigences"
     },
     {
@@ -257,7 +257,7 @@
       "chemin": "modules/continuite/WerbVeille",
       "depot": "../WerbVeille",
       "etat": "publie",
-      "version": "1.3.0",
+      "version": "1.5.0",
       "etape": "resilience"
     },
     {

@@ -161,6 +161,8 @@ Il ne s'agit pas de lister les failles, mais **qui ou quoi** pourrait nuire, et 
 
 Les menaces **non retenues** sont écrites aussi, avec la raison : c'est ce qui rend la PSSI défendable.
 
+Pour chaque menace retenue, l'ANSSI demande de préciser les **critères** qu'elle peut affecter (disponibilité, intégrité, confidentialité) et de caractériser l'élément menaçant : son **type** (naturel, humain, environnemental), sa **cause** (accidentelle : exposition et ressources ; délibérée : expertise, ressources et motivation) et son **potentiel d'attaque**. Le détail est dans le guide [Accompagner chaque phase de la PSSI](3-Accompagner_les_phases_de_la_PSSI.md).
+
 ### La note de stratégie
 
 Elle reprend les six tâches sur quelques pages et devient la **partie I** de la PSSI. Faites-la valider par le comité, puis par la direction, avant d'écrire la moindre règle.
@@ -175,13 +177,14 @@ Un **principe** est une orientation (« les accès sont nominatifs ») ; une **r
 
 Partez du catalogue ci-dessous et, pour chaque principe :
 
-1. **écartez-le** s'il n'existe rien de concerné chez vous, s'il est hors périmètre, ou si aucune menace retenue ne le justifie ;
+1. **écartez-le** s'il n'existe rien de concerné chez vous, s'il est hors périmètre, s'il ne porte sur rien d'important pour vos besoins de sécurité, ou si aucune menace retenue ne le justifie (les quatre filtres de l'ANSSI) ;
 2. **en cas de doute, gardez-le** ;
-3. **justifiez par écrit** chaque principe écarté.
+3. **justifiez par écrit** chaque principe écarté ;
+4. faites **statuer le comité de pilotage** sur la liste retenue.
 
 ### Le catalogue, par domaine
 
-Catalogue de départ, aligné sur l'ISO/IEC 27002:2022, l'hygiène informatique de l'ANSSI, NIS2 et l'IEC 62443 pour les systèmes industriels.
+Catalogue de départ (**61 principes**, dont 28 « essentiels »), qui reprend le référentiel de principes de l'ANSSI (voir la correspondance ci-dessous) et l'aligne sur l'ISO/IEC 27002:2022, NIS2 et l'IEC 62443 pour les systèmes industriels. Les dix principes ajoutés en version 1.12.0, d'après l'ANSSI, sont proposés en mode complet : documentation de sécurité (GOV-5), vérification et homologation avant mise en service (RSK-4), conservation et destruction (INV-4), postes sensibles (RH-4), verrouillage des sessions (ACC-5), procédures d'exploitation et de maintenance (SYS-6), messagerie (SYS-7), veille (LOG-3), visiteurs (PHY-3), réseaux sans fil (NET-4).
 
 | Domaine | Principes clés |
 |---|---|
@@ -201,6 +204,39 @@ Catalogue de départ, aligné sur l'ISO/IEC 27002:2022, l'hygiène informatique 
 | **Sécurité physique** | Accès aux locaux techniques contrôlés ; protection contre l'incendie et les coupures électriques |
 | **Cryptographie** | Chiffrement des postes nomades et des échanges sensibles ; gestion des certificats et des clés |
 | **Conformité et contrôle** | Respect des obligations légales ; audits périodiques ; indicateurs suivis en revue de direction |
+
+### Correspondance avec le référentiel de l'ANSSI
+
+Le guide de l'ANSSI (section 3, 2004) propose **166 principes en 16 domaines**. Le catalogue de WerbGouvernance les reprend sous une forme modernisée et regroupée : chaque principe du catalogue indique, dans l'assistant, le document PSSI (annexe B) et l'export Excel, les **principes de l'ANSSI** qu'il reprend. **161 principes de l'ANSSI sont repris** ; **5 sont écartés**, avec leur justification.
+
+| Domaine de l'ANSSI | Principes | Repris par (catalogue WerbGouvernance) | Non repris |
+|---|---|---|---|
+| PSI — Politique de sécurité | 12 | CTL-1, CTL-2, GOV-1, INV-2, INV-3, RSK-1 | — |
+| ORG — Organisation de la sécurité | 17 | CON-3, CRY-1, CTL-3, FOU-1, GOV-2, GOV-3, INC-3, INV-2, LOG-3, NET-3 | — |
+| GER — Gestion des risques SSI | 6 | CRY-1, NET-1, NET-2, RSK-1, RSK-2 | — |
+| CDV — Sécurité et cycle de vie | 11 | CTL-2, FOU-2, OT-3, OT-4, RSK-3, RSK-4, SYS-1, SYS-3 | — |
+| ACR — Assurance et certification | 14 | CTL-2, FOU-3, GOV-5, OT-4, RSK-3, RSK-4, SYS-1 | ACR-10 |
+| ASH — Aspects humains | 10 | ACC-1, RH-1, RH-3, RH-4 | ASH-01 |
+| PSS — Planification de la continuité des activités | 6 | CON-1, CON-2 | — |
+| INC — Gestion des incidents | 7 | CON-3, INC-1, INC-2, INC-4, LOG-2 | — |
+| FOR — Sensibilisation et formation | 11 | CON-3, CTL-1, GOV-1, GOV-2, INC-1, RH-1, RH-2 | — |
+| EXP — Exploitation | 25 | ADM-2, CRY-1, FOU-1, FOU-2, INV-3, INV-4, LOG-2, LOG-3, NET-2, OT-2, RSK-3, SYS-2, SYS-3, SYS-4, SYS-6, SYS-7 | — |
+| ENV — Aspects physiques et environnement | 16 | ACC-5, CON-1, CRY-1, GOV-5, INV-1, INV-4, NET-1, PHY-1, PHY-2, PHY-3 | — |
+| AUT — Identification / authentification | 4 | ACC-1, ACC-3 | — |
+| CAL — Contrôle d'accès logique aux biens | 14 | ACC-2, ACC-3, ACC-5, ADM-1, FOU-2, NET-1, NET-2, NET-3, NET-4, OT-2 | — |
+| JRN — Journalisation | 6 | ADM-3, LOG-1, LOG-2 | — |
+| IGC — Infrastructures de gestion des clés | 3 | CRY-2 | — |
+| SCP — Signaux compromettants | 4 | NET-4 | SCP-01, SCP-02, SCP-03 |
+
+**Principes de l'ANSSI non repris, et pourquoi :**
+
+- **ASH-01** : Attestation de reconnaissance de responsabilité pour le secret de défense : informations classifiées de défense, hors du périmètre d'une entreprise industrielle non habilitée. Les engagements de tous sont couverts par RH-1.
+- **ACR-10** : Agrément d'un système traitant des informations classifiées de défense : même raison. L'homologation, plus générale, est reprise en RSK-4.
+- **SCP-01, SCP-02, SCP-03** : Signaux compromettants (zonage, matériel TEMPEST, cages de Faraday) : protections réservées aux informations classifiées de défense. Les transmissions sans fil (SCP-04) sont reprises en NET-4.
+
+Si votre organisation traite des informations classifiées de défense, ces principes redeviennent applicables : reportez-vous au guide de l'ANSSI et à l'IGI 1300.
+
+Quatre principes du catalogue n'ont pas d'équivalent dans le référentiel de 2004 et répondent à des pratiques ou obligations plus récentes : **GOV-4** (dérogations), **ACC-4** (mots de passe par défaut), **SYS-5** (équipements en fin de support) et **OT-1** (inventaire des systèmes industriels).
 
 ### Rédiger les règles
 
@@ -247,7 +283,9 @@ L'analyse des coûts reste **macroscopique** : l'objectif est que la direction d
 
 ### Le plan type
 
-**Partie I — Éléments stratégiques**
+Le plan type de l'ANSSI comporte **deux parties** : les éléments stratégiques (six chapitres) et les règles de sécurité classées par thème. WerbGouvernance y ajoute une **partie III**, qui regroupe ce que la norme ISO/IEC 27001 attend d'une politique (organisation, responsabilités, revue) et ce que l'ANSSI recommande ailleurs dans sa méthode (comité de sécurité, diffusion, sensibilisation).
+
+**Partie I — Éléments stratégiques** (plan type de l'ANSSI)
 
 1. Objet, périmètre et domaine d'application
 2. Enjeux et orientations stratégiques
@@ -256,14 +294,14 @@ L'analyse des coûts reste **macroscopique** : l'objectif est que la direction d
 5. Besoins de sécurité des domaines d'activité
 6. Origines des menaces, retenues et non retenues
 
-**Partie II — Règles de sécurité**, classées par domaine (catalogue du § 5), avec leur niveau (essentiel, renforcé).
+**Partie II — Règles de sécurité** (plan type de l'ANSSI), classées par domaine (catalogue du § 5), avec leur niveau (essentiel, renforcé).
 
-**Partie III — Vie de la politique**
+**Partie III — Vie de la politique** (complément WerbGouvernance)
 
 - Organisation et responsabilités (rôles, comité de sécurité)
 - Gestion des dérogations : qui peut accorder une exception, pour combien de temps, avec quelle compensation
 - Diffusion et sensibilisation
-- Révision : au moins une fois par an, et après tout incident majeur ou changement important
+- Révision : après tout événement majeur, et au moins tous les cinq ans selon le guide de l'ANSSI (2004) ; WerbGouvernance recommande une revue **annuelle**, avec la revue de direction du SMSI (ISO/IEC 27001 : revue à intervalles planifiés)
 - Documents d'application : procédures, charte utilisateur, PSSI de site
 
 ### Signer et faire connaître
@@ -274,7 +312,7 @@ L'analyse des coûts reste **macroscopique** : l'objectif est que la direction d
 
 ### Le plan d'action
 
-La PSSI fixe la cible ; le plan d'action dit comment l'atteindre depuis la situation actuelle. Pour chaque action : objectif, responsable, tâches, dépendances, échéance, budget, critère de fin. Priorisez selon les risques les plus significatifs, puis inscrivez les actions dans WerbGouvernance › *Plan d'actions*.
+La PSSI fixe la cible ; le plan d'action dit comment l'atteindre depuis la situation actuelle. Selon l'ANSSI, chaque responsable d'unité (site, service) et le RSSI (pour les actions générales) établissent les actions prioritaires, en commençant par les **risques les plus significatifs**. Pour chaque action : **objectif et responsable**, **tâches**, **dépendances**, **planning et budget**, **modalités de validation** (comment on vérifie qu'elle est faite). Le plan réunit des actions **organisationnelles ou procédurales** et des actions **techniques** ; il est validé par le comité de sécurité et tenu à jour. Inscrivez les actions dans WerbGouvernance › *Plan d'actions*.
 
 ---
 
@@ -286,13 +324,23 @@ La PSSI fixe la cible ; le plan d'action dit comment l'atteindre depuis la situa
 | **Piloter** | Le comité de sécurité suit le plan d'action et les indicateurs | WerbGouvernance › Revues de direction, Plan d'actions |
 | **Contrôler** | Audits et contrôles réguliers de l'application | WerbNIS2, WerbIEC62443, WerbPentest |
 | **Veiller** | Suivre les menaces et vulnérabilités, adapter les règles | WerbVeille |
-| **Réviser** | Revue annuelle, et après tout incident majeur | WerbGouvernance › Politique et périmètre (prochaine revue) |
+| **Réviser** | Après tout événement majeur ; revue annuelle recommandée (l'ANSSI fixe un minimum de cinq ans en 2004) | WerbGouvernance › Politique et périmètre (prochaine revue) |
 
 Dans un **groupe multi-sites**, la PSSI du groupe pose le cadre commun ; chaque site écrit un **plan de sécurité** (ou une PSSI de site) qui applique les règles à ses moyens et à son environnement, notamment aux systèmes industriels. Le socle de mesures de WerbGouvernance est l'outil de cette déclinaison.
 
 ---
 
-## 8. Les erreurs les plus fréquentes
+## 8. L'assistant de WerbGouvernance
+
+**📜 PSSI › Assistant PSSI** suit cette démarche à l'écran : une page par phase, avec le « pourquoi » et un exemple industriel, et une **validation** du comité à la fin de chaque phase. Le bouton **❓ Aide de la phase** ouvre à côté le guide [Accompagner chaque phase de la PSSI](3-Accompagner_les_phases_de_la_PSSI.md) : méthode d'atelier, questions à poser, pièges et critères de validation.
+
+- **Phase 0 et phase 1** sont pré-remplies : périmètre et rôles de la base, échelle de gravité et sources de risque de l'analyse EBIOS du groupe (espace ouvert). Les notes de cadrage et de stratégie s'impriment à tout moment.
+- **Phase 2** propose le catalogue de la section 5 en deux modes : **essentiel** (28 principes pré-sélectionnés, pour une première PSSI en quelques séances) ou **complet**. Pour chaque principe : retenu, écarté (justification obligatoire) ou déjà couvert ; la règle proposée existe en niveau essentiel et renforcé, et reste modifiable.
+- Chaque règle retenue devient, d'un clic, une **mesure du socle** publiée aux sites : la PSSI pilote ce que les sites appliquent.
+- **Phase 3** rassemble le tout dans le **document PSSI** selon le plan type ci-dessus, en PDF et en Word au modèle de l'entreprise. La relecture en cinq points et la validation des phases 0 à 2 précèdent l'**approbation**, qui inscrit la PSSI dans *Politique et périmètre* (prochaine revue à un an). Les règles retenues qui ne sont pas encore en place deviennent des actions du *Plan d'actions*.
+- **PSSI › Charte utilisateur** produit la version courte pour tous, à partir des règles retenues qui concernent les utilisateurs : textes à la première personne, modifiables, en PDF et en Word.
+
+## 9. Les erreurs les plus fréquentes
 
 | Erreur | Conséquence | À faire |
 |---|---|---|
@@ -305,7 +353,7 @@ Dans un **groupe multi-sites**, la PSSI du groupe pose le cadre commun ; chaque 
 
 ---
 
-## 9. Check-list de la PSSI
+## 10. Check-list de la PSSI
 
 - [ ] Lettre de mission et note de cadrage validées par la direction
 - [ ] Comité de pilotage constitué, avec la production et le juridique

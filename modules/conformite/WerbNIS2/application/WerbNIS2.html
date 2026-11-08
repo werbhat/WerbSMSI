@@ -1,5 +1,5 @@
 <!doctype html>
-<!-- WerbNIS2 v1.7.0 – Développé par @WerbHat – build novembre 2026 -->
+<!-- WerbNIS2 v1.8.0 – Développé par @WerbHat – build novembre 2026 -->
 <html lang="fr">
 <head>
 <meta charset="utf-8">
@@ -9,7 +9,7 @@
 <title>WerbNIS2</title>
 <meta name="application-name" content="WerbNIS2">
 <meta name="author" content="@WerbHat">
-<meta name="generator" content="WerbNIS2 v1.7.0 – Développé par @WerbHat">
+<meta name="generator" content="WerbNIS2 v1.8.0 – Développé par @WerbHat">
 <meta name="description" content="Conformité NIS2 d'une entité ou d'un site : 20 règles, audit de 152 points en 28 thématiques, couverture, plan d'actions, rapport">
 <style>/*! WerbNIS2 – Développé par @WerbHat */
 :root {
@@ -184,7 +184,7 @@ const WERB = Object.freeze((() => {
   const bytes = [68, 195, 169, 118, 101, 108, 111, 112, 112, 195, 169, 32, 112, 97, 114, 32, 64, 87, 101, 114, 98, 72, 97, 116];
   const signature = new TextDecoder("utf-8").decode(new Uint8Array(bytes));
   const produit = "WerbNIS2";
-  const version = "1.7.0";
+  const version = "1.8.0";
   return {
     id: "werbnis2",
     produit, version, auteur: "@WerbHat", signature,
@@ -2970,7 +2970,9 @@ const WerbXlsx = (() => {
    NIS2_THEMES). Indicateurs de formation reçus de WerbAcademie (groupe:formations, copiés dans la base) proposés comme preuves
    des points RH.b (sensibilisation), ROLE.a (dirigeant) et EXERCICES.a. Base de site : couverture des schémas d'architecture reçue de
    WerbCartoSI (site:cartographies, copiée dans la base) proposée en preuve des points de cartographie, cloisonnement, filtrage, accès
-   distants, administration, continuité et accès physiques (table POINTS_CARTO) ; jamais de cotation automatique. La base vit en mémoire et dans son fichier (.werbnis2.json) : rien n'est conservé dans le navigateur. */
+   distants, administration, continuité et accès physiques (table POINTS_CARTO) ; registre des sauvegardes reçu de WerbExploitation
+   (site:sauvegardes, copié dans la base, 1.8.0) proposé en preuve de CONTINUITE_ACTIVITE.a, c, d (sauvegardes actives, tests de restauration,
+   copie hors ligne) ; jamais de cotation automatique. La base vit en mémoire et dans son fichier (.werbnis2.json) : rien n'est conservé dans le navigateur. */
 "use strict";
 (() => {
   const { esc } = WerbSocle;
@@ -3059,6 +3061,8 @@ const WerbXlsx = (() => {
     if (rf && typeof rf === "object") b.recus.formations = normFormations(rf);
     const rc = (d.recus && typeof d.recus === "object" ? d.recus : {}).cartographies;
     if (rc && typeof rc === "object" && Array.isArray(rc.exigences)) b.recus.cartographies = normCarto(rc);
+    const rs = (d.recus && typeof d.recus === "object" ? d.recus : {}).sauvegardes;
+    if (rs && typeof rs === "object" && Array.isArray(rs.liste)) b.recus.sauvegardes = normSauv(rs);
     Object.entries(d.largeurs && typeof d.largeurs === "object" ? d.largeurs : {}).forEach(([k, o]) => {
       const l = Object.fromEntries(Object.entries(o && typeof o === "object" ? o : {}).filter(([, w]) => Number.isFinite(+w) && +w >= 40).map(([col, w]) => [col, Math.round(+w)]));
       if (Object.keys(l).length) b.largeurs[k] = l;
@@ -3091,6 +3095,32 @@ const WerbXlsx = (() => {
   const texteExigCarto = x => `${x.id} ${x.libelle} : ${ETAT_CARTO[x.etat]}` + (x.schemas.length ? ` — ${x.schemas.map(s => `${s.id} ${s.titre} v${s.version}${s.approuveLe ? `, approuvé le ${frDate(s.approuveLe)}` : ""}${s.prochaineRevue ? `, prochaine revue le ${frDate(s.prochaineRevue)}` : ""}${s.etat === "arevoir" ? " (revue dépassée)" : s.etat === "encours" ? " (non approuvé)" : ""}`).join(" ; ")}` : "");
   const texteCarto = id => { const c = S.recus.cartographies, l = cartoPoint(id);
     return l.length ? `WerbCartoSI (site ${c.site}, couverture publiée le ${frDate(c.publieLe)}) : ${l.map(texteExigCarto).join(" | ")}.` : ""; };
+  /* Registre des sauvegardes (site:sauvegardes de WerbExploitation, NIS-1) : copié dans la base, sans chemin, support, chiffrement ni
+     procédure (jamais publiés). Le schéma EX-REPRISE prouve la conception ; le registre prouve le fonctionnement. Seules les sauvegardes
+     à l'état ACTIF comptent ; copie hors ligne = catégorie BCK_3 (ou « offline », « hors ligne ») ; test à jour = moins d'un an. */
+  const STATUTS_TEST = { "a-jour": "testée il y a moins d'un an", echu: "test de plus d'un an", jamais: "jamais testée" };
+  const normSauv = s => ({ site: str(s.site), publieLe: str(s.publieLe), majLe: str(s.majLe),
+    liste: (Array.isArray(s.liste) ? s.liste : []).filter(x => x && x.id).map(x => Object.fromEntries(["id", "etat", "categorie", "typeDonnees", "donnees", "actifSource", "actifDestination",
+      "periodicite", "mode", "dernierTest", "statutTest"].map(k => [k, str(x[k])]))) });
+  const POINTS_SAUV = { "CONTINUITE_ACTIVITE.a": "sauvegardes en place", "CONTINUITE_ACTIVITE.c": "tests de restauration", "CONTINUITE_ACTIVITE.d": "copie hors ligne" };
+  const horsLigne = x => /^BCK_3|offline|hors[ -]?ligne/i.test(x.categorie);
+  const sauvActives = () => S.recus.sauvegardes ? S.recus.sauvegardes.liste.filter(x => x.etat.toUpperCase() === "ACTIF") : [];
+  const statutTest = x => STATUTS_TEST[x.statutTest] ? x.statutTest : (x.dernierTest ? ((Date.now() - new Date(x.dernierTest).getTime()) > 365 * 86400000 ? "echu" : "a-jour") : "jamais");
+  const descSauv = x => `${x.id} ${x.donnees || x.typeDonnees}${x.actifSource ? ` (${x.actifSource}${x.actifDestination ? " → " + x.actifDestination : ""})` : ""}`;
+  // Pour un point : [lignes de preuve, couverture faible ?]
+  function preuveSauv(id) {
+    const s = S.recus.sauvegardes; if (!s || LIAISON.portee === "groupe" || !POINTS_SAUV[id]) return null;
+    const l = sauvActives(), n = s.liste.length - l.length;
+    if (id === "CONTINUITE_ACTIVITE.a") return [[`${l.length} sauvegarde(s) active(s)${n ? `, ${n} inactive(s)` : ""}`, ...l.map(x => `${descSauv(x)} — ${[x.categorie, x.periodicite, x.mode].filter(Boolean).join(", ")}`)], !l.length];
+    if (id === "CONTINUITE_ACTIVITE.c") {
+      const c = k => l.filter(x => statutTest(x) === k);
+      return [[`tests de restauration : ${c("a-jour").length} / ${l.length} à jour (moins d'un an), ${c("echu").length} de plus d'un an, ${c("jamais").length} jamais testée(s)`,
+        ...l.map(x => `${x.id} : ${x.dernierTest ? `dernier test le ${frDate(x.dernierTest)}` : "jamais testée"}${statutTest(x) === "echu" ? " (plus d'un an)" : ""}`)], !l.length || l.some(x => statutTest(x) !== "a-jour")];
+    }
+    const h = l.filter(horsLigne);
+    return [[h.length ? `copie(s) hors ligne : ${h.length}` : "aucune copie hors ligne déclarée (catégorie BCK_3)", ...h.map(x => `${descSauv(x)} — ${[x.categorie, x.periodicite, x.mode].filter(Boolean).join(", ")}`)], !h.length];
+  }
+  const texteSauv = id => { const r = preuveSauv(id), s = S.recus.sauvegardes; return r ? `WerbExploitation (site ${s.site}, registre des sauvegardes publié le ${frDate(s.publieLe)}) : ${r[0].join(" ; ")}.` : ""; };
   // Points de la grille auxquels les indicateurs de formation servent de preuve
   const POINTS_FORMATION = { "RH.b": "programme de sensibilisation de l'ensemble des utilisateurs", "ROLE.a": "formation des dirigeants (directive NIS2, article 20)", "EXERCICES.a": "sensibilisation des personnes mobilisables en crise" };
   const texteFormation = f => {
@@ -3280,11 +3310,19 @@ const WerbXlsx = (() => {
       <ul style="margin:4px 0">${l.map(x => `<li>${esc(texteExigCarto(x))}</li>`).join("")}</ul>${faible ? `<div>Couverture incomplète : à prendre en compte dans la cotation.</div>` : ""}
       <button class="small noprint" data-act="citerCarto" data-p="${esc(id)}"${(ev(id).preuves || "").includes(txt) ? " disabled" : ""}>Citer dans les preuves</button></div>`;
   };
+  // Élément de preuve reçu de WerbExploitation : registre des sauvegardes, jamais une cotation
+  const preuveSauvHtml = id => {
+    const r = preuveSauv(id); if (!r) return "";
+    const s = S.recus.sauvegardes, vieux = cartoAncienne(s), txt = texteSauv(id);
+    return `<div class="${r[1] || vieux ? "warnbox" : "infobox"} small" data-preuve-sauv="${esc(id)}">💾 <b>Élément de preuve reçu</b> (registre des sauvegardes du site ${esc(s.site)}, ${esc(POINTS_SAUV[id])}, publié le ${esc(frDate(s.publieLe))})${vieux ? ` — <b>publication de plus de 12 mois</b>` : ""} :
+      <ul style="margin:4px 0">${r[0].map(x => `<li>${esc(x)}</li>`).join("")}</ul>${r[1] ? `<div>Élément incomplet : à prendre en compte dans la cotation.</div>` : ""}
+      <button class="small noprint" data-act="citerSauv" data-p="${esc(id)}"${(ev(id).preuves || "").includes(txt) ? " disabled" : ""}>Citer dans les preuves</button></div>`;
+  };
   const pointHtml = p => {
     const e = ev(p.id), h = hors(p), cl = e.statut ? COTE[e.statut].cl : "";
     return `<div class="point ${cl}${h ? " horsee" : ""}" id="pt-${esc(p.id)}"><div><div class="pid">${esc(p.id)}</div>${p.ee ? `<span class="ee" title="Point propre aux entités essentielles">EE</span>` : ""}</div>
       <div class="txt">${esc(p.texte)}${POINTS_FORMATION[p.id] && S.recus.formations ? `<div class="infobox small" data-preuve-formation="${esc(p.id)}">🎓 <b>Élément de preuve reçu</b> (${esc(POINTS_FORMATION[p.id])}) : ${esc(texteFormation(S.recus.formations))}
-        <button class="small noprint" data-act="citerFormation" data-p="${esc(p.id)}"${(ev(p.id).preuves || "").includes(texteFormation(S.recus.formations)) ? " disabled" : ""}>Citer dans les preuves</button></div>` : ""}${preuveCartoHtml(p.id)}</div>
+        <button class="small noprint" data-act="citerFormation" data-p="${esc(p.id)}"${(ev(p.id).preuves || "").includes(texteFormation(S.recus.formations)) ? " disabled" : ""}>Citer dans les preuves</button></div>` : ""}${preuveCartoHtml(p.id)}${preuveSauvHtml(p.id)}</div>
       <div class="eval">${h ? `<div class="small muted">Hors périmètre : point réservé aux entités essentielles (l'entité est déclarée importante).</div>` : `<div class="row"><span class="cot" role="group" aria-label="Cotation ${esc(p.id)}">${COTES.map(x => `<button type="button" class="${x.cl}${e.statut === x.c ? " on" : ""}" data-act="coter" data-p="${esc(p.id)}" data-s="${x.c}" title="${esc(x.t)}" aria-pressed="${e.statut === x.c}">${esc(x.l)}</button>`).join("")}</span>
         ${e.majLe ? `<span class="small muted">coté le ${esc(frDate(e.majLe))}${e.par ? " par " + esc(e.par) : ""}</span>` : ""}<span class="spacer"></span>${["PL+", "PL-", "NC"].includes(e.statut) ? `<button class="small" data-act="actionPoint" data-p="${esc(p.id)}">${S.actions.some(a => a.point === p.id) ? "✓ Action au plan" : "➕ Action"}</button>` : ""}</div>
         <div class="row"><div style="flex:1"><label>Commentaire, justification</label><textarea data-p="${esc(p.id)}" data-pf="commentaire" rows="2">${esc(e.commentaire)}</textarea></div><div style="flex:1"><label>Preuves, sources</label><textarea data-p="${esc(p.id)}" data-pf="preuves" rows="2">${esc(e.preuves)}</textarea></div></div>`}</div></div>`;
@@ -3353,8 +3391,10 @@ const WerbXlsx = (() => {
       <p class="small muted">Au rattachement, la raison sociale et le site vides de la fiche sont repris de l'espace (organisation, nom du site).</p></div>
       <div class="card" data-recus><h2>Données reçues</h2><table class="t"><tbody><tr><td style="width:200px"><code>groupe:formations</code></td><td>${S.recus.formations ? `${esc(texteFormation(S.recus.formations))} Reçus le ${esc(frDate(S.recus.formations.majLe))}.` : "non reçus (WerbAcademie, niveau groupe › Publier)"}</td></tr>
         <tr data-recus-carto><td><code>site:cartographies</code></td><td>${LIAISON.portee === "groupe" ? "non lue au niveau du groupe (base de site seulement)" : S.recus.cartographies ? (c => `WerbCartoSI, site ${esc(c.site)}, publiée le ${esc(frDate(c.publieLe))} : ${c.exigences.filter(x => x.etat === "couverte").length} / ${c.exigences.length} catégorie(s) d'exigence couverte(s). Reçue le ${esc(frDate(c.majLe))}.`)(S.recus.cartographies)
-          : "non reçue (WerbCartoSI du site › Intégration WerbSMSI › Publier la couverture)"}</td></tr></tbody></table>
-        <p class="small muted">Copiés dans la base. Formation : preuves des points RH.b, ROLE.a et EXERCICES.a. Schémas d'architecture : preuves des points ${esc(Object.keys(POINTS_CARTO).join(", "))}. Bouton « Citer dans les preuves » sous chaque point : la cotation reste celle de l'auditeur.</p>${ok ? `<button data-act="recevoir">⟳ Actualiser</button>` : ""}</div>
+          : "non reçue (WerbCartoSI du site › Intégration WerbSMSI › Publier la couverture)"}</td></tr>
+        <tr data-recus-sauv><td><code>site:sauvegardes</code></td><td>${LIAISON.portee === "groupe" ? "non lu au niveau du groupe (base de site seulement)" : S.recus.sauvegardes ? (s => `WerbExploitation, site ${esc(s.site)}, publié le ${esc(frDate(s.publieLe))} : ${sauvActives().length} sauvegarde(s) active(s), ${sauvActives().filter(horsLigne).length} copie(s) hors ligne, ${sauvActives().filter(x => statutTest(x) === "a-jour").length} testée(s) depuis moins d'un an. Reçu le ${esc(frDate(s.majLe))}.`)(S.recus.sauvegardes)
+          : "non reçu (WerbExploitation du site › Intégration WerbSMSI › Publier)"}</td></tr></tbody></table>
+        <p class="small muted">Copiés dans la base. Formation : preuves des points RH.b, ROLE.a et EXERCICES.a. Schémas d'architecture : preuves des points ${esc(Object.keys(POINTS_CARTO).join(", "))}. Registre des sauvegardes : preuves des points ${esc(Object.keys(POINTS_SAUV).join(", "))}. Bouton « Citer dans les preuves » sous chaque point : la cotation reste celle de l'auditeur.</p>${ok ? `<button data-act="recevoir">⟳ Actualiser</button>` : ""}</div>
       <div class="card"><h2>Publication</h2><p class="muted">Cette version ne publie rien : l'audit NIS2 reste dans la base du site ou du groupe. La synthèse de conformité d'un site (<code>site:syntheseConformite</code>) est aujourd'hui publiée par WerbIEC62443 ; une remontée NIS2 au groupe demandera un objet d'échange dédié dans la charte.</p></div>`;
   };
 
@@ -3528,6 +3568,12 @@ const WerbXlsx = (() => {
       e.preuves = av ? `${av}\n${t}` : t; e.majLe = new Date().toISOString(); e.par = user;
       journaliser("Modification", "Point", id, "preuves", av, e.preuves); marquer(); render();
     },
+    citerSauv(el) {
+      const id = el.dataset.p, t = texteSauv(id); if (!t) return;
+      const e = S.evaluations[id] || (S.evaluations[id] = { statut: "", commentaire: "", preuves: "", majLe: "", par: "" }), av = e.preuves;
+      e.preuves = av ? `${av}\n${t}` : t; e.majLe = new Date().toISOString(); e.par = user;
+      journaliser("Modification", "Point", id, "preuves", av, e.preuves); marquer(); render();
+    },
     citerCarto(el) {
       const id = el.dataset.p, t = texteCarto(id); if (!t) return;
       const e = S.evaluations[id] || (S.evaluations[id] = { statut: "", commentaire: "", preuves: "", majLe: "", par: "" }), av = e.preuves;
@@ -3546,7 +3592,25 @@ const WerbXlsx = (() => {
     async smsiUnlink() { if (!(await confirmer("Détacher la base de l'espace WerbSMSI ?", "Détacher"))) return; journaliser("Détachement", "WerbSMSI"); LIAISON = {}; marquer(); render(); },
   };
 
-  async function recevoir() { const a = await recevoirFormations(), b = await recevoirCarto(); return a || b; }
+  async function recevoir() { const a = await recevoirFormations(), b = await recevoirCarto(), c = await recevoirSauv(); return a || b || c; }
+  // Réception de site:sauvegardes (WerbExploitation, NIS-1) : base de site seulement ; sans publication lisible, la copie de la base est gardée
+  async function recevoirSauv() {
+    if (!S || !E.ouvert || LIAISON.portee !== "site" || LIAISON.groupeId !== (E.groupe || {}).groupeId) return false;
+    let pub;
+    try { pub = await E.publications("site", LIAISON.site); } catch (e) { SMSI.err = e.message; return false; }
+    const l = (pub.objets || {}).sauvegardes;
+    if (!Array.isArray(l)) return false;
+    const f = (pub.fichiers || []).find(x => x.module === "werbexploitation") || {};
+    if (!f.publieLe && !l.length) return false;
+    const e = normSauv({ site: LIAISON.site, publieLe: f.publieLe, liste: l });
+    const av = S.recus.sauvegardes;
+    if (av && JSON.stringify(Object.assign({}, av, { majLe: "" })) === JSON.stringify(Object.assign({}, e, { majLe: "" }))) return false;
+    S.recus.sauvegardes = Object.assign(e, { majLe: new Date().toISOString() });
+    const resume = s => `${s.liste.filter(x => x.etat.toUpperCase() === "ACTIF").length} active(s) sur ${s.liste.length}`;
+    journaliser("Réception", "WerbSMSI", "site:sauvegardes", "", av ? resume(av) : "", `site ${e.site} : ${resume(e)}`);
+    if (!WerbSocle.verrou.lectureSeule) marquer();
+    return true;
+  }
   // Réception de site:cartographies (WerbCartoSI) : base de site seulement ; sans publication lisible, la copie de la base est gardée
   async function recevoirCarto() {
     if (!S || !E.ouvert || LIAISON.portee !== "site" || LIAISON.groupeId !== (E.groupe || {}).groupeId) return false;

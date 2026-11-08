@@ -1,0 +1,87 @@
+{
+ "format": "WERBSMSI-MODELES",
+ "schema": 1,
+ "description": "Inventaire des modèles de documents (référence : Modeles_docs/) — lu par le portail WerbSMSI (page Modèles de documents) et par synchroniser.py. Développé par @WerbHat",
+ "modeles": [
+  {
+   "fichier": "Word/Modele_entete.docx",
+   "type": "Word",
+   "titre": "Modèle d'en-tête de l'entreprise",
+   "role": "En-tête (logo, devise), pied de page, marges et styles des documents produits par les modules (charte §7.2). Version réelle de l'entreprise, à déposer dans l'espace de production.",
+   "espace": "modeles/Modele_entete.docx",
+   "modules": ["WerbGouvernance", "WerbEBIOS", "WerbIEC62443", "WerbPresta", "WerbPCR", "WerbAcademie", "WerbMap", "WerbExploitation"],
+   "balises": ["TITRE", "PROJET", "REFERENCE", "VERSION", "DATE", "CLASSIFICATION", "ORGANISATION", "SITE", "MOA", "PRESTATAIRE", "MODULE"],
+   "copies": []
+  },
+  {
+   "fichier": "Word/Modele_entete_exemple_fictif.docx",
+   "type": "Word",
+   "titre": "Modèle d'en-tête fictif (démonstration)",
+   "role": "Modèle minimal fictif de l'espace de démonstration et des tests automatisés. À ne pas utiliser en production.",
+   "espace": "",
+   "modules": ["WerbGouvernance", "WerbEBIOS", "WerbIEC62443", "WerbPresta", "WerbPCR", "WerbAcademie", "WerbMap", "WerbExploitation"],
+   "balises": ["TITRE", "PROJET", "REFERENCE", "VERSION", "DATE", "CLASSIFICATION", "PRESTATAIRE"],
+   "copies": ["WerbSMSI/demo/SMSI_GROUPE_DEMO/modeles/Modele_entete.docx", "WerbIEC62443/exemples/Modele_entete_exemple.docx"]
+  },
+  {
+   "fichier": "Visio/Modele_schema_A3_cartouche.vstx",
+   "type": "Visio",
+   "titre": "Schéma A3 avec cartouche",
+   "role": "Tout schéma : une zone de dessin libre et le cartouche à balises (WerbCartoSI remplit le cartouche à la création du schéma).",
+   "espace": "modeles/schemas/Modele_schema_A3_cartouche.vstx",
+   "modules": ["WerbCartoSI"],
+   "balises": ["TITRE", "ID", "SITE", "SITE_NOM", "ORGANISATION", "TYPE", "EXIGENCES", "VERSION", "DATE", "STATUT", "AUTEUR", "PROPRIETAIRE", "CLASSIFICATION"],
+   "copies": ["WerbCartoSI/exemples/modeles/Modele_schema_A3_cartouche.vstx", "WerbSMSI/demo/SMSI_GROUPE_DEMO/modeles/schemas/Modele_schema_A3_cartouche.vstx"]
+  },
+  {
+   "fichier": "Visio/Modele_zones_conduits_A3.vstx",
+   "type": "Visio",
+   "titre": "Zones et conduits A3 (EX-ZONES, EX-CARTO)",
+   "role": "Zones par criticité avec leur SL-T, conduits et équipements de filtrage, tableau des conduits (cloisonnement, filtrage, IEC 62443-3-2).",
+   "espace": "modeles/schemas/Modele_zones_conduits_A3.vstx",
+   "modules": ["WerbCartoSI"],
+   "balises": ["TITRE", "ID", "SITE", "SITE_NOM", "ORGANISATION", "TYPE", "EXIGENCES", "VERSION", "DATE", "STATUT", "AUTEUR", "PROPRIETAIRE", "CLASSIFICATION"],
+   "copies": ["WerbCartoSI/exemples/modeles/Modele_zones_conduits_A3.vstx", "WerbSMSI/demo/SMSI_GROUPE_DEMO/modeles/schemas/Modele_zones_conduits_A3.vstx"]
+  },
+  {
+   "fichier": "Visio/Modele_acces_distants_A3.vstx",
+   "type": "Visio",
+   "titre": "Accès distants et interconnexions A3 (EX-ACCES)",
+   "role": "Tiers et sites extérieurs, point d'entrée unique (VPN, bastion, MFA), zones atteintes, chemins interdits, tableau des accès externes.",
+   "espace": "modeles/schemas/Modele_acces_distants_A3.vstx",
+   "modules": ["WerbCartoSI"],
+   "balises": ["TITRE", "ID", "SITE", "SITE_NOM", "ORGANISATION", "TYPE", "EXIGENCES", "VERSION", "DATE", "STATUT", "AUTEUR", "PROPRIETAIRE", "CLASSIFICATION"],
+   "copies": ["WerbCartoSI/exemples/modeles/Modele_acces_distants_A3.vstx", "WerbSMSI/demo/SMSI_GROUPE_DEMO/modeles/schemas/Modele_acces_distants_A3.vstx"]
+  },
+  {
+   "fichier": "Visio/Modele_administration_A3.vstx",
+   "type": "Visio",
+   "titre": "Architecture d'administration A3 (EX-ADMIN)",
+   "role": "Poste et réseau d'administration dédiés, bastion, ressources administrées par zone, exceptions justifiées, tableau des ressources administrées.",
+   "espace": "modeles/schemas/Modele_administration_A3.vstx",
+   "modules": ["WerbCartoSI"],
+   "balises": ["TITRE", "ID", "SITE", "SITE_NOM", "ORGANISATION", "TYPE", "EXIGENCES", "VERSION", "DATE", "STATUT", "AUTEUR", "PROPRIETAIRE", "CLASSIFICATION"],
+   "copies": ["WerbCartoSI/exemples/modeles/Modele_administration_A3.vstx", "WerbSMSI/demo/SMSI_GROUPE_DEMO/modeles/schemas/Modele_administration_A3.vstx"]
+  },
+  {
+   "fichier": "Visio/Modele_sauvegarde_reprise_A3.vstx",
+   "type": "Visio",
+   "titre": "Sauvegarde et reprise A3 (EX-REPRISE)",
+   "role": "Flux de sauvegarde, copie hors ligne, restauration testée, ordre de redémarrage avec RTO et RPO.",
+   "espace": "modeles/schemas/Modele_sauvegarde_reprise_A3.vstx",
+   "modules": ["WerbCartoSI"],
+   "balises": ["TITRE", "ID", "SITE", "SITE_NOM", "ORGANISATION", "TYPE", "EXIGENCES", "VERSION", "DATE", "STATUT", "AUTEUR", "PROPRIETAIRE", "CLASSIFICATION"],
+   "copies": ["WerbCartoSI/exemples/modeles/Modele_sauvegarde_reprise_A3.vstx", "WerbSMSI/demo/SMSI_GROUPE_DEMO/modeles/schemas/Modele_sauvegarde_reprise_A3.vstx"]
+  },
+  {
+   "fichier": "Excel/Modele_Etat_Lieux_Tests_Reseau.xlsx",
+   "type": "Excel",
+   "titre": "État des lieux des tests réseau",
+   "role": "Relevé des tests de connectivité (source, destination, DNS, ping, NTP, SMB, HTTPS, RDP, SSH…) et aide aux commandes Windows de chaque test ; par exemple pour vérifier les flux ouverts après une demande de flux.",
+   "espace": "",
+   "modules": ["WerbExploitation"],
+   "balises": [],
+   "copies": []
+  }
+ ]
+}

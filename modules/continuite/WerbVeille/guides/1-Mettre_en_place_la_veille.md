@@ -13,9 +13,14 @@ WerbVeille surveille les sources de sécurité (CERT, éditeurs, actualités) et
 
 « **Tout garder** » : chaque nouvel article de la source devient une alerte, même sans mot-clé. À réserver aux sources peu bavardes et toujours pertinentes (alertes d'un CERT).
 
+**Sources spécialisées** (en tête de la page *Sources*) :
+
+- **Catalogue KEV de la CISA**, activé par défaut : la liste des vulnérabilités que des attaquants exploitent déjà. Une entrée récente qui cite un de vos mots-clés devient une alerte « Vulnérabilités exploitées », avec l'action demandée et l'échéance de la CISA. C'est souvent l'alerte la plus urgente : traitez-la en premier.
+- **Revendications de rançongiciels** (ransomware.live), désactivé par défaut : les victimes revendiquées dans les pays choisis, et celles dont le nom cite votre organisation ou un fournisseur surveillé (une attaque chez un fournisseur peut vous toucher). Il faut un **jeton personnel** (gratuit, sur my.ransomware.live), à coller dans `secrets.ini` de la machine de collecte, section `[ransomware_live]`. Les conditions de ransomware.live soumettent l'usage commercial et la redistribution à leur accord écrit et demandent de citer la source : **faites valider l'usage par votre entreprise avant d'activer**.
+
 ## 3. Choisir les mots-clés
 
-*📡 Veille › Mots-clés* : **Proposer depuis l'inventaire WerbMap** liste les marques, modèles, systèmes et firmwares des actifs du site, avec leurs TAG. Cochez ce qui est utile ; un terme trop général (« Windows ») produit beaucoup d'alertes. Vous pouvez aussi **importer un target_list.txt** (un mot par ligne).
+*📡 Veille › Mots-clés* : **Proposer depuis l'inventaire** liste les marques, modèles, systèmes et firmwares des actifs du site (WerbMap), et les **logiciels et applicatifs installés** sur les machines, OS compris, avec leur version (WerbExploitation), chacun avec ses TAG. Un applicatif n'est proposé que s'il a une référence dans le registre « Logiciels » de WerbExploitation : créez les références signalées « sans référence », puis republiez depuis WerbExploitation. Cochez ce qui est utile ; un terme trop général (« Windows ») produit beaucoup d'alertes. Vous pouvez aussi **importer un target_list.txt** (un mot par ligne).
 
 Un mot-clé est cherché **en mot entier**, sans tenir compte des majuscules, des accents ni des tirets : « S7-300 » trouve « s7 300 », mais « S7 » ne trouve pas « MS700 ». Les **exclusions** écartent un article qui cite un terme parasite (« webinaire »).
 

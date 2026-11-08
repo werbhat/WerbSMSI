@@ -1,7 +1,7 @@
 # WerbGouvernance
 
 > Gouvernance du SMSI du groupe : politique, rôles, socle de mesures, procédures, revues et plan d'actions
-> Version **1.8.0** — Développé par **@WerbHat**
+> Version **1.12.1** — Développé par **@WerbHat**
 
 ---
 
@@ -23,13 +23,15 @@ WerbGouvernance/
 ├── module.json                       ← manifeste lu par le portail WerbSMSI
 ├── WerbGouvernance.sha256            ← empreinte de l'application
 ├── application/
-│   └── WerbGouvernance.html          ← l'outil (fichier unique, ~65 Ko, sans bibliothèque externe)
+│   └── WerbGouvernance.html          ← l'outil (fichier unique, ~1,7 Mo avec les bibliothèques Word embarquées, sans ressource externe)
 ├── exemples/
 │   └── Exemple.werbgouvernance.json  ← base de démonstration fictive (aussi intégrée à l'outil : bouton « Base d'exemple »)
 ├── guides/                      ← guides d'accompagnement (Markdown), lus dans ❓ Aide
 │   ├── 1-Piloter_le_SMSI.md
-│   └── 2-Elaborer_la_PSSI.md
-├── sources/src/                      ← index.html, style.css, signature.js, socle.js, guides.js, xlsx.js, app.js
+│   ├── 2-Elaborer_la_PSSI.md
+│   └── 3-Accompagner_les_phases_de_la_PSSI.md
+├── sources/src/                      ← index.html, style.css, signature.js, socle.js, guides.js, xlsx.js, modele-word.js, impression.js, pssi-catalogue.js, pssi-document.js, app.js
+├── sources/vendor/bibliotheques.js   ← JSZip 3.10.1 et docx 9.8.1 (documents Word), figés
 └── tests/                            ← test_menu.py (menu commun, Edge)
     └── test_parcours.py              ← parcours de non-régression dans Edge
 ```
@@ -50,6 +52,25 @@ Le paquet publié dans WerbSMSI (`modules/gouvernance/WerbGouvernance/`) ne cont
 ---
 
 ## Fonctionnalités
+
+### 📜 Assistant PSSI (1.9.0)
+
+Élaborer la politique de sécurité du groupe pas à pas, selon la méthode du guide d'élaboration de PSSI de l'ANSSI : quatre phases, chacune close par une **validation** du comité de pilotage (qui, quand, commentaire ; une modification après validation est signalée). Barre de progression et état de chaque phase.
+
+| Phase | Ce que l'assistant demande | Livrable imprimable |
+|---|---|---|
+| **0 — Cadrage** | Objectifs, pourquoi maintenant, périmètre pressenti, commanditaire et chef de projet (proposés parmi les rôles), comité, experts, calendrier, moyens, livrables ; référentiel documentaire à rassembler (cases à cocher) | Note de cadrage |
+| **1 — Éléments stratégiques** | Périmètre (domaines d'activité, systèmes, OT, interfaces), enjeux, obligations (NIS2, RGPD, CRA, IEC 62443, contrats, assurance ; applicable, responsable), échelle de besoins (libellés de l'échelle de gravité de **WerbEBIOS**), besoins D / I / C par domaine, origines des menaces (**sources de risque de WerbEBIOS** ajoutées), retenues ou non avec justification | Note de stratégie (partie I de la PSSI) |
+| **2 — Principes et règles** | Catalogue de **61 principes en 16 domaines** (`sources/src/pssi-catalogue.js`, qui reprend le référentiel de 166 principes de l'ANSSI — références ANSSI de chaque principe, 161 repris, 5 écartés avec justification — aligné sur ISO/IEC 27001:2022, NIS2 article 21, IEC 62443-3-3) ; **mode essentiel** (28 principes pré-sélectionnés) ou **complet** ; chaque principe retenu, écarté (justification obligatoire) ou déjà couvert ; règle proposée à **deux niveaux** (essentiel, renforcé : conseillé quand un besoin atteint 3 ou 4), modifiable ; impacts (coût, effort, impact, échéance) | Synthèses des règles et des impacts |
+| **3 — Finalisation** (1.10.0) | Référence, version, classification ; partie III « vie de la politique » (organisation, dérogations, diffusion, révision, documents d'application ; textes proposés) ; **relecture** en 5 points du guide ; **approbation** par la direction (refusée tant que les phases 0 à 2 ne sont pas validées et la relecture incomplète), inscrite dans **Politique et périmètre** (référence, version, approbateur, date, prochaine revue à un an) ; règles retenues pas encore en place → **plan d'actions** (origine « PSSI », échéance « 6 mois » / « 1 an » comptée depuis l'approbation) | **Document PSSI** selon le plan type (parties I, II, III, annexes : principes écartés, correspondance avec le socle), en **PDF** et en **Word** au modèle de l'entreprise |
+
+**Charte utilisateur** (1.10.0, PSSI › Charte utilisateur) : version courte de la PSSI pour tous les collaborateurs, à la première personne, tirée des règles retenues qui concernent les utilisateurs (16 engagements possibles en 5 thèmes : compte et mots de passe, poste et supports, informations, locaux et systèmes industriels, incidents), sections communes (objet, messagerie, contrôle, sanctions, contact) et bloc d'engagement signé ; textes modifiables ; aperçu, **PDF** et **Word** au modèle. Diffusion conseillée avec une formation WerbAcademie.
+
+**❓ Aide de la phase** (1.11.0) : un bouton en haut à droite de chaque phase de l'assistant (et de la charte utilisateur) ouvre le guide **« Accompagner chaque phase de la PSSI »** dans une **fenêtre à part**, placée sur la phase en cours : but et livrable, qui mobiliser et combien de temps, pas à pas dans l'assistant, animation de l'atelier (questions à poser), exemple de site de production, pièges, critères de validation. On lit en saisissant, sans quitter l'assistant ; la même fenêtre sert d'une phase à l'autre. Document autonome (sans script ni ressource externe) ; si le navigateur bloque la fenêtre, l'aide s'affiche dans un panneau au-dessus de la page. Le guide est aussi dans ❓ Aide.
+
+**Modèle de l'entreprise** : le document Word commun du groupe (`SMSI_<SIGLE>/modeles/Modele_entete.docx`, ou un fichier choisi) est copié dans la base et habille la PSSI et la charte (en-tête et logo, pied de page, marges, balises `{{TITRE}}`, `{{REFERENCE}}`, `{{VERSION}}`…).
+
+**Règle → socle de mesures** : chaque règle retenue devient, sur demande (bouton **→ socle** ou envoi groupé), une **mesure du socle** publié aux sites (domaine, références et preuve attendue repris du catalogue) ; une règle modifiée ensuite propose **↻ Mettre à jour la mesure**. Alertes au tableau de bord : principe écarté sans justification, règle absente du socle, phase modifiée depuis sa validation. L'export Excel de la base ajoute la feuille « PSSI principes et règles ».
 
 ### Outils des tables : sélection, archivage, chercher / remplacer, largeur des colonnes
 
@@ -98,6 +119,8 @@ Dans **❓ Aide**, dans la page *Guide du module* et sur l'accueil, même sans b
 - Une base est un fichier **`*.werbgouvernance.json`** à l'enveloppe commune WerbSMSI : `format` `WERBGOUVERNANCE`, **schéma 1**, `famille` `WERBSMSI`.
 - `meta` : version de l'outil, `generateur` signé, dates et auteur ; `portee` `groupe` et `groupeId` quand la base est rattachée à l'espace.
 - `journal` : `date`, `par`, `action`, `objet`, `element`, `champ`, `avant`, `apres`.
+- `data.pssi` (1.9.0, facultatif) : assistant PSSI — `cadrage`, `strategie` (domaines, obligations, échelle, menaces…), `regles` (`mode`, `items` par identifiant de principe : décision, justification, niveau, règle, impacts, mesure du socle liée) ; chaque phase porte sa `validation` (`par`, `le`, `commentaire`). Depuis 1.10.0 : `finalisation` (référence, version, classification, textes de la partie III, `relecture`, `validation` = approbation), `charte` (sections, `contact`, `textes` adaptés par principe) ; dans `items`, `applique` (« oui » : règle déjà en place) et `actionId` (action du plan).
+- `data.modeles.word` (1.10.0, facultatif) : modèle de l'entreprise (`nom`, `taille`, `sha256`, `base64`, `info`, `ajouteLe`, `ajoutePar`).
 - `data` :
 
 | Clé | Contenu |
@@ -162,19 +185,25 @@ python <WerbSMSI>\charte\outils\werb_charte.py construire . --date AAAA-MM-JJ
 python tests\test_menu.py                          # Playwright pour Python, Edge installé
 python tests\test_guides.py
 python tests\test_theme.py
+python tests\test_pssi.py
+python tests\test_pssi_finalisation.py
+python tests\test_pssi_aide.py
 python <WerbSMSI>\charte\outils\werb_charte.py empreinte .
 python <WerbSMSI>\charte\outils\werb_charte.py audit .
 python <WerbSMSI>\charte\outils\werb_charte.py publier .
 ```
 
 - `tests/test_formation.py` contrôle les indicateurs de formation de WerbAcademie (1.6.0) : rien sans espace ouvert ; carte du tableau de bord (sites, groupe, dirigeants) ; élément d'entrée proposé, ajouté à la revue la plus récente, signalé « déjà », journalisé et enregistré.
+- `tests/test_pssi.py` contrôle l'assistant PSSI (1.9.0) : démarrage pré-rempli (rôles, périmètre, échelle et sources de risque de WerbEBIOS), phase 0 (référentiel, validation, note de cadrage, modification après validation), phase 1 (domaines, besoins, note de stratégie), phase 2 (modes essentiel et complet, règle proposée et niveau renforcé, texte adapté, écarté sans justification et validation refusée, règle → mesure du socle et mise à jour, envoi groupé), synthèses, journal, enregistrement et relecture.
+- `tests/test_pssi_finalisation.py` contrôle la phase 3 et la charte (1.10.0) : document selon le plan type, approbation refusée tant que la relecture est incomplète puis inscrite dans Politique et périmètre, plan d'actions (règle déjà en place exclue, échéance « 6 mois », pas de doublon), modèle commun de l'espace, PDF et Word au modèle (balises remplacées), charte utilisateur (engagements tirés des règles retenues, texte adapté, retour au texte proposé, Word), enregistrement et relecture.
+- `tests/test_pssi_aide.py` contrôle l'aide de chaque phase (1.11.0) : bouton sur les quatre phases et la charte, fenêtre à part ouverte sur la section de la phase (ancre, section visible), fenêtre réutilisée, document sans script, assistant et saisie intacts, panneau de repli quand la fenêtre est bloquée, guide dans ❓ Aide.
 - `tests/test_theme.py` contrôle le thème avec Windows en sombre puis en clair : chaque entrée du menu sans fond clair ni texte sombre en sombre, valeurs claires inchangées, bouton du bandeau, impression en clair ; captures `tests/sortie/theme_*.png`.
 
 ---
 
 ## Historique des versions
 
-Version courante : **1.8.0** de novembre 2026 — guide « Élaborer la politique de sécurité (PSSI) ». Versions précédentes : **1.7.0** de novembre 2026 — guide de débutant « Piloter la sécurité du groupe sans être expert ». Versions précédentes : **1.6.0** d'octobre 2026 — indicateurs de formation de WerbAcademie au tableau de bord et en élément d'entrée de la revue de direction. Versions précédentes : **1.5.0** d'octobre 2026 — sélection multiple et archivage, chercher / remplacer, largeur des colonnes (socle 1.9.0) ; **1.4.0** d'octobre 2026 — bandeau commun (socle 1.8.0, TRV-7) ; **1.3.0** d'octobre 2026 — thème clair / sombre (socle 1.7.1) ; **1.2.0** d'octobre 2026 — verrou commun des bases (lecture seule ou prise de main, bandeau « Ouvert par … ») ; **1.1.0** — menu latéral commun WerbSMSI (catégories repliables sur fond de couleur). Détail dans [CHANGELOG.md](CHANGELOG.md).
+Version courante : **1.12.1** de novembre 2026 — choix du mode de la phase 2 mis en évidence, badge « nouveau · ANSSI ». Versions précédentes : **1.12.0** de novembre 2026 — catalogue PSSI confronté au référentiel de principes de l'ANSSI (références ANSSI, 10 principes ajoutés, 61 au total). Versions précédentes : **1.11.1** de novembre 2026 — guides PSSI complétés d'après la méthodologie de l'ANSSI (fiches de synthèse des phases, détail des tâches, conseils et écueils). Versions précédentes : **1.11.0** de novembre 2026 — aide de chaque phase de l'assistant PSSI (guide « Accompagner chaque phase de la PSSI » dans une fenêtre à part). Versions précédentes : **1.10.0** de novembre 2026 — finalisation de la PSSI (document en PDF et en Word au modèle, approbation, plan d'actions) et charte utilisateur. Versions précédentes : **1.9.0** de novembre 2026 — assistant PSSI (cadrage, éléments stratégiques, principes et règles, règle → socle de mesures). Versions précédentes : **1.8.0** de novembre 2026 — guide « Élaborer la politique de sécurité (PSSI) ». Versions précédentes : **1.7.0** de novembre 2026 — guide de débutant « Piloter la sécurité du groupe sans être expert ». Versions précédentes : **1.6.0** d'octobre 2026 — indicateurs de formation de WerbAcademie au tableau de bord et en élément d'entrée de la revue de direction. Versions précédentes : **1.5.0** d'octobre 2026 — sélection multiple et archivage, chercher / remplacer, largeur des colonnes (socle 1.9.0) ; **1.4.0** d'octobre 2026 — bandeau commun (socle 1.8.0, TRV-7) ; **1.3.0** d'octobre 2026 — thème clair / sombre (socle 1.7.1) ; **1.2.0** d'octobre 2026 — verrou commun des bases (lecture seule ou prise de main, bandeau « Ouvert par … ») ; **1.1.0** — menu latéral commun WerbSMSI (catégories repliables sur fond de couleur). Détail dans [CHANGELOG.md](CHANGELOG.md).
 
 ---
 

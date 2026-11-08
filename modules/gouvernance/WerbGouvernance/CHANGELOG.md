@@ -5,6 +5,59 @@ Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/), num
 
 
 
+## [1.12.1] — 2026-11
+
+### Changements
+- Assistant PSSI, phase 2 : le **choix du mode** (essentiel ou complet) est mis en évidence en tête de la phase (encadré « Quels principes afficher ? », deux cartes) ; en mode essentiel, un bandeau indique le nombre de principes masqués, dont ceux ajoutés d'après l'ANSSI ; badge **« nouveau · ANSSI »** sur les 10 principes ajoutés en 1.12.0.
+
+## [1.12.0] — 2026-11
+
+### Ajouts
+- **Catalogue PSSI confronté au référentiel de principes de l'ANSSI** (*Guide pour l'élaboration d'une PSSI*, section 3, DCSSI, 3 mars 2004 : 166 principes en 16 domaines) : chaque principe du catalogue porte ses **références ANSSI**, affichées dans l'assistant (phase 2), le document PSSI (règles de la partie II, annexe B) et l'export Excel. **161 principes de l'ANSSI repris, 5 écartés avec justification** (secret de défense, agrément, signaux compromettants TEMPEST) ; contrôle automatique à la génération du catalogue.
+- **10 principes ajoutés** d'après l'ANSSI, proposés en mode complet (catalogue : 61 principes, mode essentiel inchangé à 28) : documentation de sécurité (GOV-5), vérification et homologation avant mise en service (RSK-4), conservation et destruction des informations (INV-4), postes sensibles (RH-4), verrouillage des sessions (ACC-5), procédures d'exploitation et de maintenance (SYS-6), messagerie (SYS-7), veille sur les menaces et vulnérabilités (LOG-3), visiteurs (PHY-3), réseaux sans fil (NET-4) ; règles aux niveaux essentiel et renforcé, références ISO/IEC 27001:2022, NIS2, IEC 62443-3-3.
+- Guide « Élaborer la PSSI » : tableau de correspondance par domaine de l'ANSSI, principes non repris et leur justification.
+
+### Format de données
+- Aucun changement : les décisions des bases existantes sont conservées ; les nouveaux principes apparaissent « à décider » en mode complet.
+
+## [1.11.1] — 2026-11
+
+### Changements
+- **Guides PSSI complétés d'après le texte de l'ANSSI** (*Guide pour l'élaboration d'une PSSI*, DCSSI, section 2 « Méthodologie », 3 mars 2004) :
+  - « Accompagner chaque phase de la PSSI » : conditions de réussite de la démarche ; pour chaque phase, la fiche de synthèse de l'ANSSI (objectifs, acteurs, entrées, sorties, tâches, validateurs) ; le détail de chaque tâche (étape préliminaire du projet, contenu du référentiel, échelle de 0 à 4 et 1 à 3 impacts, valeur la plus élevée retenue, caractérisation des menaces, quatre filtres du choix des principes, consolidation des règles avec les responsables de la mise en œuvre, deux notes de synthèse, revue de cohérence en quatre points, contenu d'une action du plan) ; conseils et écueils de l'ANSSI ; les quatre suites d'une PSSI. Ce qui relève de l'ANSSI et ce qui est proposé par WerbSMSI (durées, exemples, questions, critères) est distingué.
+  - « Élaborer la PSSI » : le plan type de l'ANSSI a deux parties, la partie III est présentée comme un complément ; révision : au moins tous les cinq ans selon l'ANSSI (2004), revue annuelle recommandée ; plan d'action : modalités de validation et deux volets ; quatre filtres du choix des principes ; caractérisation des menaces.
+- Assistant, phase 3 : texte du plan type corrigé (plan type de l'ANSSI en deux parties, complété d'une partie III).
+
+## [1.11.0] — 2026-11
+
+### Ajouts
+- **❓ Aide de la phase** dans l'assistant PSSI : bouton en haut à droite de chaque phase et de la charte utilisateur ; ouvre, dans une fenêtre à part placée sur la phase en cours, le nouveau guide **« Accompagner chaque phase de la PSSI »** (`guides/3-…`) : but et livrable, qui et combien de temps, pas à pas dans l'assistant, animation de l'atelier, exemple industriel, pièges, critères de validation. Même fenêtre réutilisée d'une phase à l'autre ; document autonome sans script ; panneau de repli si la fenêtre est bloquée.
+
+## [1.10.0] — 2026-11
+
+### Ajouts
+- **Finalisation de la PSSI** (GOU-4, phase 3) : document PSSI selon le **plan type** du guide (page de garde, historique des validations, partie I éléments stratégiques, partie II règles par domaine avec leur niveau, partie III vie de la politique, annexes : principes écartés, correspondance avec le socle ; bloc de signature), en aperçu, en **PDF** et en **Word** habillés du **modèle de l'entreprise**.
+- Partie III éditable (organisation, dérogations, diffusion, révision, documents d'application ; textes proposés), **relecture** en 5 points, **approbation** (phases 0 à 2 validées et relecture complète exigées) inscrite dans **Politique et périmètre** (référence, version, approbateur, date, prochaine revue à un an).
+- **Plan d'actions** : chaque règle retenue qui n'est pas « déjà en place » devient une action (nouvelle origine **PSSI**), échéance déduite des impacts (« 6 mois », « 1 an », date) ; alerte si une règle n'est ni en place ni planifiée après l'approbation.
+- **Charte utilisateur** (GOU-5, PSSI › Charte utilisateur) : engagements à la première personne tirés des règles retenues qui concernent les utilisateurs (catalogue 1.1), sections communes modifiables, bloc d'engagement ; PDF et Word au modèle ; diffusion avec WerbAcademie conseillée.
+- **Modèle de l'entreprise** : carte de chargement (modèle commun de l'espace ou fichier), copié dans la base.
+- Composants : `modele-word.js` (charte §7.2), `impression.js` (PDF au modèle), `pssi-document.js` (contenu commun aperçu / PDF / Word), bibliothèques JSZip 3.10.1 et docx 9.8.1 embarquées (`sources/vendor/`).
+
+### Format de données
+- Ajouts sans changement de schéma : `pssi.finalisation`, `pssi.charte`, `items[].applique`, `items[].actionId`, `modeles.word`. Les bases 1.9.0 s'ouvrent avec les textes proposés.
+
+## [1.9.0] — 2026-11
+
+### Ajouts
+- **Assistant PSSI** (GOU-1 à GOU-3, lots A et B) : nouvelle catégorie **📜 PSSI** (Assistant PSSI, Synthèses des règles). Quatre phases selon la méthode du guide de l'ANSSI, barre de progression, validation de chaque phase par le comité (qui, quand, commentaire ; modification après validation signalée).
+- Phase 0 **cadrage** (organisation du projet, référentiel documentaire) et phase 1 **éléments stratégiques** (périmètre et OT, enjeux, obligations, échelle de besoins, besoins D / I / C, origines des menaces), **pré-remplies** : périmètre et rôles de la base, échelle de gravité et sources de risque publiées par WerbEBIOS (`groupe:echelles`, `groupe:sourcesRisque`). Notes de cadrage et de stratégie rédigées, imprimables.
+- Phase 2 **principes et règles** : catalogue de 51 principes en 16 domaines (`pssi-catalogue.js`, reformulé et aligné sur ISO/IEC 27001:2022, NIS2, IEC 62443-3-3), mode essentiel (28) ou complet, décision par principe (retenu, écarté avec justification obligatoire, déjà couvert), règle à deux niveaux modifiable, impacts ; synthèses des règles et des impacts imprimables.
+- **Règle → socle de mesures**, règle par règle ou envoi groupé, avec mise à jour de la mesure quand la règle change.
+- Alertes du tableau de bord, feuille Excel « PSSI principes et règles », rubrique d'aide.
+
+### Format de données
+- Ajout sans changement de schéma : `pssi`.
+
 ## [1.8.0] — 2026-11
 
 ### Ajouts

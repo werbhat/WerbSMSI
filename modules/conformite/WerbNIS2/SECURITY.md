@@ -1,6 +1,6 @@
 # Sécurité — WerbNIS2
 
-> Version **1.0.0** — Développé par **@WerbHat**
+> Version **1.8.0** — Développé par **@WerbHat**
 
 ## Modèle de sécurité
 

@@ -2,7 +2,7 @@
   "charte": "1.0",
   "id": "werbgouvernance",
   "produit": "WerbGouvernance",
-  "version": "1.8.0",
+  "version": "1.12.1",
   "dateVersion": "2026-11",
   "auteur": "@WerbHat",
   "signature": "Développé par @WerbHat",
@@ -14,7 +14,7 @@
   "entree": "application/WerbGouvernance.html",
   "empreinte": {
     "algo": "SHA-256",
-    "valeur": "2f0cda7443fbb278a705397300f050c6498379beeb685324bfccada127274201"
+    "valeur": "554dd59fd05cc820fe7e5d4df471467456e752eb79295279ef5f8d9c28ca20e1"
   },
   "donnees": {
     "format": "WERBGOUVERNANCE",
@@ -49,6 +49,11 @@
     "socle.js",
     "guides.js",
     "xlsx.js",
+    "../vendor/bibliotheques.js",
+    "modele-word.js",
+    "impression.js",
+    "pssi-catalogue.js",
+    "pssi-document.js",
     "app.js"
   ]
 }

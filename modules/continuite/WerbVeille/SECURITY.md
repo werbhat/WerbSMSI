@@ -1,6 +1,6 @@
 # Sécurité — WerbVeille
 
-> Version **1.0.0** — Développé par **@WerbHat**
+> Version **1.4.0** — Développé par **@WerbHat**
 
 ## Modèle de sécurité
 
@@ -11,8 +11,8 @@ WerbVeille est une page HTML autonome exécutée uniquement dans le navigateur. 
 | Fuite de données vers Internet | CSP `default-src 'none'`, aucune ressource externe, bibliothèques embarquées ; la page ne lance jamais la collecte |
 | Lien malveillant dans un flux | Seules les adresses http / https sont cliquables, ouvertes dans un nouvel onglet sur clic (`noopener noreferrer`, pas de référent) ; titre et résumé échappés |
 | Résultat de collecte altéré | Format et taille contrôlés, champs relus un par un et tronqués, collecte d'un autre site refusée |
-| Fuite d'un secret de notification | Webhooks seulement dans `secrets.ini`, sur la machine de collecte ; jamais saisis ni enregistrés dans WerbVeille, absents du kit |
-| Collecteur détourné | Bibliothèque standard seulement ; lit uniquement les adresses de `config.json` (http, https, file) ; taille et délai limités par flux |
+| Fuite d'un secret de notification ou du jeton ransomware.live | Webhooks et jeton seulement dans `secrets.ini`, sur la machine de collecte ; jamais saisis ni enregistrés dans WerbVeille, absents du kit, des résultats et de `collecte.log` |
+| Collecteur détourné | Bibliothèque standard seulement ; lit uniquement les adresses de `config.json` (http, https, file), le catalogue KEV de la CISA et, si activé, l'API de ransomware.live (seuls pays et noms surveillés envoyés) ; taille et délai limités |
 | Données laissées sur le poste | Aucun stockage navigateur des données ; purge des clés `werb.werbveille.` à l'ouverture et à la fermeture |
 | Accès non autorisé à une base | Droits du dossier sur le drive protégé (hors du périmètre de l'outil) |
 | Outil modifié | Livrable sur partage en lecture seule, empreinte SHA-256 publiée et vérifiée par le portail |
@@ -32,6 +32,7 @@ default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-s
 
 - Toute personne qui peut lire le fichier de base peut en lire le contenu : il n'est pas chiffré.
 - `'unsafe-inline'` est nécessaire, l'application tenant dans un seul fichier.
+- Rançongiciels : les noms surveillés (organisation, fournisseurs) sont envoyés à ransomware.live comme termes de recherche ; ne les activer qu'après validation de l'usage de ce service (conditions d'utilisation : usage commercial et redistribution soumis à accord écrit).
 
 ## Composants tiers
 

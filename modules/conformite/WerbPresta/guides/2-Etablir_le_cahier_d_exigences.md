@@ -39,6 +39,7 @@ Gardez la fiche à jour : si le prestataire obtient un accès à distance, les e
 ## 3. Les documents
 
 - **📄 Cahier d'exigences (Word)** : objet, périmètre de la prestation (SI, zones, actifs, accès, données), niveau d'exigence et sa justification, exigences retenues par domaine, modalités (réponse au questionnaire, écarts, vérification, échange des secrets). À annexer au contrat.
+- **📘 Guide du prestataire (Word)** : le guide « Répondre aux exigences de cybersécurité du client », à son nom, avec les exigences de son cahier surlignées : à remettre avec le questionnaire.
 - **📝 Questionnaire à remettre (Word)** : les mêmes exigences, avec pour chacune une réponse à cocher (**oui, partiel, non, sans objet**) et une colonne **commentaire et preuve** ; un engagement signé en fin de document.
 
 Les deux documents s'habillent du **modèle Word de l'entreprise** (*📋 Exigences › Modèle Word* : modèle commun du dossier `modeles/` de l'espace, ou fichier chargé).

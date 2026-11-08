@@ -64,6 +64,18 @@
   const modulesEtape = e => REG.modules.filter(m => e.id ? etapeDe(m) === e.id : !ETAPES.some(x => x.id === etapeDe(m)));
   const nomModule = m => m.manifeste ? m.manifeste.produit : m.produit || m.id;
 
+  /* ===================================================== modèles de documents (1.13.0, MOD)
+     Inventaire de WerbSMSI/Modeles_docs/modeles.json, intégré à l'assemblage (window.WERB_MODELES) : rôle de chaque modèle, modules
+     qui l'utilisent, emplacement dans l'espace. Espace ouvert : présence de chaque modèle dans modeles/ et modeles/schemas/ (lecture seule). */
+  const MODELES = Array.isArray(window.WERB_MODELES) ? window.WERB_MODELES : [];
+  async function chargerModeles() {
+    const r = { lu: false, fichiers: {} };
+    for (const d of ["modeles", "modeles/schemas"]) {
+      const l = await E.lister(d).catch(() => null);
+      if (l) { r.lu = true; l.filter(f => f.type === "file").forEach(f => { r.fichiers[`${d}/${f.nom}`] = f; }); }
+    }
+    return r;
+  }
   /* ===================================================== chargement de l'espace */
   async function chargerEspace() {
     P.chargement = true; render();
@@ -76,6 +88,7 @@
       P.basesGroupe = await chargerBases("groupe", "", P.groupe.bases || []);
       P.sites = {};
       for (const s of P.groupe.sites || []) P.sites[s.code] = await chargerSite(s.code);
+      P.modeles = await chargerModeles();
     } finally { P.chargement = false; }
   }
 
@@ -553,6 +566,25 @@ ${sites.map(s => `    ├── ${s.code || "?"}/  (werbsmsi.site.json, ${DOSSIE
     return true;
   }
 
+  VUES.modeles = () => {
+    const m = P.modeles, types = [...new Set(MODELES.map(x => x.type))];
+    const etat = x => !x.espace ? `<span class="small muted">pas à déposer</span>` : !E.ouvert || !m ? `<span class="small muted">espace non ouvert</span>`
+      : m.fichiers[x.espace] ? `${badge("présent", "b-ok")} <span class="small muted">${esc(frDate(new Date(m.fichiers[x.espace].modifie).toISOString()))}</span>` : badge("absent", "b-warn");
+    const connus = new Set(MODELES.map(x => x.espace).filter(Boolean));
+    const autres = m ? Object.keys(m.fichiers).filter(f => !connus.has(f) && !/^modeles\/[^/]+\.(png|jpe?g|svg)$/i.test(f)) : [];
+    const absents = m && E.ouvert ? MODELES.filter(x => x.espace && !m.fichiers[x.espace]) : [];
+    return `<h1>📄 Modèles de documents</h1><p class="sub">Les modèles Word, Visio et Excel de l'environnement : à quoi ils servent, quels modules les utilisent et où les déposer dans l'espace.</p>
+      <div class="infobox small">Référence des modèles : dossier <code>WerbSMSI/Modeles_docs/</code> de l'environnement (inventaire <code>README.md</code>). Dans l'espace du groupe, déposez le modèle Word dans <code>modeles/</code> et les modèles Visio dans <code>modeles/schemas/</code> : lecture pour tous, écriture pour l'équipe SMSI du groupe. Les modules copient le modèle Word dans leur base (« Modèle commun de l'espace ») ; WerbCartoSI lit les modèles Visio sans les copier.</div>
+      ${E.ouvert && m ? (absents.length ? `<div class="warnbox small">${absents.length} modèle(s) à déposer dans l'espace « ${esc((P.groupe || {}).organisation || "")} » : ${absents.map(x => `<code>${esc(x.espace)}</code>`).join(", ")}.</div>` : `<div class="infobox small">Tous les modèles à déposer sont présents dans l'espace « ${esc((P.groupe || {}).organisation || "")} ».</div>`)
+        : `<p class="small muted">Ouvrez l'espace (🏢 Groupe) pour vérifier la présence des modèles dans <code>modeles/</code>.</p>`}
+      ${types.map(ty => `<div class="card" data-modeles-type="${esc(ty)}">${titre({ Word: "📝", Visio: "🗺️", Excel: "📊" }[ty] || "📄", `Modèles ${ty}`, { Word: "bleu", Visio: "cyan", Excel: "vert" }[ty] || "ardoise")}
+        <div class="tablewrap"><table class="t"><thead><tr><th style="width:24%">Modèle</th><th>À quoi il sert</th><th style="width:18%">Modules</th><th style="width:20%">Emplacement dans l'espace</th><th style="width:12%">Espace ouvert</th></tr></thead><tbody>
+        ${MODELES.filter(x => x.type === ty).map(x => `<tr data-modele="${esc(x.fichier)}"><td><b>${esc(x.titre)}</b><div class="small mono muted">Modeles_docs/${esc(x.fichier)}</div></td>
+          <td>${esc(x.role)}${x.balises && x.balises.length ? `<div class="small muted">Balises : ${x.balises.map(b => `{{${esc(b)}}}`).join(" ")}</div>` : ""}</td>
+          <td class="small">${esc((x.modules || []).join(", "))}</td><td class="small mono">${x.espace ? esc(x.espace) : "—"}</td><td>${etat(x)}</td></tr>`).join("")}</tbody></table></div></div>`).join("")
+        || `<div class="infobox">Aucun inventaire de modèles dans ce portail (Modeles_docs/modeles.json absent à l'assemblage).</div>`}
+      ${autres.length ? `<div class="card"><h2>Autres fichiers des dossiers de modèles</h2><p class="small muted">Présents dans l'espace, absents de l'inventaire : modèles propres au groupe, ou fichiers à ranger.</p><ul>${autres.map(f => `<li class="mono small">${esc(f)}</li>`).join("")}</ul></div>` : ""}`;
+  };
   VUES.verif = () => {
     const v = P.verif;
     let h = `<h1>🔏 Vérification des modules</h1><p class="sub">Compare l'empreinte SHA-256 de chaque livrable publié à celle enregistrée dans le portail lors de son assemblage.</p>
@@ -662,7 +694,7 @@ ${sites.map(s => `    ├── ${s.code || "?"}/  (werbsmsi.site.json, ${DOSSIE
     MENU.splice(0, MENU.length, { g: "accueil", i: "🏠", l: "Accueil", c: "bleu", t: [["accueil", "Rubriques et modules"]] },
       ...(P.groupe ? [{ g: "groupe", i: "🏢", l: "Groupe", c: "violet", t: [["groupe", P.groupe.sigle || "Vue groupe"]] },
         { g: "sites", i: "📍", l: "Sites", c: "vert", t: sites.map(s => ["site:" + s.code, s.code]) }] : []),
-      { g: "outils", i: "🛠️", l: "Outils", c: "orange", t: [["assistant", "Mise en place"], ["verif", "Vérifier les modules"]] },
+      { g: "outils", i: "🛠️", l: "Outils", c: "orange", t: [["assistant", "Mise en place"], ["verif", "Vérifier les modules"], ["modeles", "Modèles de documents"]] },
       { g: "admin", i: "⚙️", l: "Administration", c: "ardoise", t: [["sauvegarde", "Sauvegarde et restauration"], ["listes", "Listes de choix du groupe"], ["parametres", "Paramètres"]] },
       { g: "aide", i: "❓", l: "Aide", c: "olive", t: [...WerbGuides.entrees(), ...((window.WERB_MEDIAS || {}).infographie_demarrer ? [["infographie", "Infographie : démarrer"]] : []), ["aide", "Créer la base d'un site"], ["apropos", "À propos"]] });
     const cnt = Object.fromEntries(sites.filter(s => !(P.sites[s.code] || {}).accessible).map(s => ["site:" + s.code, "🔒"]));

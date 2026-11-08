@@ -1,7 +1,7 @@
 # WerbPresta
 
 > Prestataires d'un site : fiche, périmètre et actifs où ils interviennent, accès, criticité, questionnaire et cahier d'exigences cyber (IEC 62443-2-4, NIS2)
-> Version **1.4.0** — Développé par **@WerbHat**
+> Version **1.6.1** — Développé par **@WerbHat**
 
 ---
 
@@ -30,7 +30,8 @@ WerbPresta/
 │   └── Exemple_LYON.werbpresta.json     ← base d'exemple fictive (intégrée au livrable)
 ├── guides/
 │   ├── 1-Recenser_les_prestataires.md   ← guides lus dans ❓ Aide
-│   └── 2-Etablir_le_cahier_d_exigences.md
+│   ├── 2-Etablir_le_cahier_d_exigences.md
+│   └── 3-Repondre_aux_exigences.md       ← guide du prestataire, à lui remettre avec le questionnaire
 ├── outils/
 │   └── exemples.py              ← produit la base d'exemple (et la range dans l'espace de démonstration)
 ├── sources/
@@ -146,6 +147,7 @@ python <WerbSMSI>\charte\outils\werb_charte.py publier .
 
 - `tests/test_parcours.py` : rattachement et réception (WerbMap, WerbGouvernance, WerbIEC62443), prestataires proposés puis ajoutés, fiche (identité, certifications, interventions, SI, zone et actifs, actifs hérités, filtre), criticité calculée, points d'attention (accès permanent, modem, moyen manquant, contrat terminé, actif plus publié), couverture des actifs, enregistrement et relecture, suppression, base d'exemple, rien dans le navigateur.
 - `tests/test_cahier.py` (1.1.0) : modèle proposé (13 domaines, références, conditions), modifié (texte, exigence ajoutée, supprimée puis rétablie, version) ; cahier d'un prestataire (niveau automatique et justification, exigences proposées selon la situation, retirée, ajoutée, niveau choisi, retour à la proposition) ; cahier et questionnaire Word (exigences retenues seulement, habillage du modèle de l'entreprise) ; export Excel ; enregistrement et relecture.
+- `tests/test_cahier.py` (1.6.0) : guide du prestataire en Word — page de garde à son nom, les 37 exigences, exigences de son cahier signalées, passages destinés au site retirés, aucune syntaxe Markdown brute, habillage du modèle de l'entreprise.
 - `tests/test_evaluation.py` (1.2.0) : score de l'évaluation d'exemple et par domaine, écarts (en retard), vue des écarts, saisie (date posée, écart créé par un « non », clos), rapport d'évaluation Word, archivage et historique, documents (expiré) et incidents, points d'attention, export Excel, enregistrement et relecture.
 - `tests/test_groupe.py` (1.4.0) : base rattachée au groupe, consolidation de deux sites (prestataire regroupé, score par site, criticité la plus forte, accès permanent, écarts en retard), vues de site signalées, modèle publié (`groupe:modeleQuestionnaire`, déclaré par la charte), reprise du modèle par une base de site.
 - `tests/test_publication.py` (1.3.0) : objet déclaré par la charte et le schéma, publication impossible avant l'enregistrement, fichier du site, éléments publiés (périmètre, actifs couverts, accès, niveau d'exigence, score et scores par domaine, écarts), aucun interlocuteur, compte, commentaire ni réponse détaillée, republication qui remplace.
@@ -156,7 +158,7 @@ python <WerbSMSI>\charte\outils\werb_charte.py publier .
 
 ## Historique des versions
 
-Version courante : **1.4.0** d'octobre 2026 — niveau groupe : consolidation des évaluations des sites, modèle de questionnaire commun publié et repris par les sites. Version précédente : **1.3.0** d'octobre 2026 — publication `site:evaluationsPrestataires` pour WerbEBIOS, WerbMap et WerbPCR. Version précédente : **1.2.0** d'octobre 2026 — évaluation des prestataires (réponses, score par domaine, écarts, historique, rapport Word), documents reçus et incidents. Version précédente : **1.1.0** d'octobre 2026 — modèle de questionnaire (13 domaines, IEC 62443-2-4, NIS2, ISO 27001), cahier d'exigences cyber et questionnaire Word par prestataire. Version précédente : **1.0.0** d'octobre 2026 — première version : liste de référence des prestataires du site, fiche (périmètre et actifs, accès, données), criticité, couverture des actifs. Détail dans [CHANGELOG.md](CHANGELOG.md).
+Version courante : **1.6.1** de novembre 2026 — intitulé du guide du prestataire : « Répondre aux exigences de cybersécurité du client ». Versions précédentes : **1.6.0** de novembre 2026 — bouton « 📘 Guide du prestataire (Word) » (guide d'accompagnement à son nom, exigences de son cahier signalées). Versions précédentes : **1.5.0** de novembre 2026 — guide « Accompagner le prestataire dans sa montée en maturité » (paliers, exigence par exigence, plan de progrès). Version précédente : **1.4.0** d'octobre 2026 — niveau groupe : consolidation des évaluations des sites, modèle de questionnaire commun publié et repris par les sites. Version précédente : **1.3.0** d'octobre 2026 — publication `site:evaluationsPrestataires` pour WerbEBIOS, WerbMap et WerbPCR. Version précédente : **1.2.0** d'octobre 2026 — évaluation des prestataires (réponses, score par domaine, écarts, historique, rapport Word), documents reçus et incidents. Version précédente : **1.1.0** d'octobre 2026 — modèle de questionnaire (13 domaines, IEC 62443-2-4, NIS2, ISO 27001), cahier d'exigences cyber et questionnaire Word par prestataire. Version précédente : **1.0.0** d'octobre 2026 — première version : liste de référence des prestataires du site, fiche (périmètre et actifs, accès, données), criticité, couverture des actifs. Détail dans [CHANGELOG.md](CHANGELOG.md).
 
 ---
 

@@ -5,6 +5,14 @@ Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/), num
 
 
 
+## [1.8.0] — 2026-11
+
+### Ajouts
+- **Registre des sauvegardes en preuve** (NIS-1) : base de site — `site:sauvegardes` (WerbExploitation) lu au rattachement et sur ⟳ Actualiser, copié dans la base (sans chemin, support, chiffrement ni procédure), réception tracée au journal ; données reçues complétées. Encadré « Élément de preuve reçu » sous CONTINUITE_ACTIVITE.a (sauvegardes actives), .c (tests de restauration de moins d'un an) et .d (copie hors ligne, catégorie BCK_3), à côté de la couverture du schéma EX-REPRISE ; élément incomplet et publication de plus de 12 mois signalés ; bouton « Citer dans les preuves ». Aucune cotation automatique ; rien au niveau du groupe.
+
+### Changements
+- `site:sauvegardes` ajouté aux objets lus (`module.json`).
+
 ## [1.7.0] — 2026-11
 
 ### Ajouts

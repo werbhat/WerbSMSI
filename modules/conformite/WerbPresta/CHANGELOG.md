@@ -3,6 +3,21 @@
 Toutes les évolutions notables de WerbPresta sont consignées ici.
 Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/), numérotation [SemVer](https://semver.org/lang/fr/).
 
+## [1.6.1] — 2026-11
+
+### Changements
+- Guide du prestataire renommé **« Répondre aux exigences de cybersécurité du client »** (`guides/3-Repondre_aux_exigences.md`) ; page de garde Word : « Guide du prestataire — Répondre aux exigences de cybersécurité » ; vocabulaire de mise en œuvre et de plan d'actions (« Une mise en œuvre en quatre paliers », « Établir votre plan d'actions »). Les niveaux de maturité restent nommés ainsi : c'est le terme de l'IEC 62443-2-4.
+
+## [1.6.0] — 2026-11
+
+### Ajouts
+- **📘 Guide du prestataire (Word)**, carte *Cahier d'exigences cyber* de la fiche, à côté du questionnaire : le guide « Accompagner le prestataire dans sa montée en maturité » converti en document Word à remettre au prestataire — page de garde à son nom (site, niveau d'exigence, nombre d'exigences de son cahier, organisation), exigences de son cahier surlignées et signalées « demandée dans votre cahier », passages destinés à l'équipe du site retirés ; habillé du modèle de l'entreprise si l'option est cochée ; export tracé au journal.
+
+## [1.5.0] — 2026-11
+
+### Ajouts
+- **Guide « Accompagner le prestataire dans sa montée en maturité »** (`guides/3-Accompagner_le_prestataire.md`, ❓ Aide), à remettre au prestataire avec le questionnaire : pourquoi le client pose ces questions (chaîne d'approvisionnement, NIS2) ; comment répondre (oui, partiel, non, sans objet, preuves, barème) ; niveaux de maturité de l'IEC 62443-2-4 (initial, maîtrisé, défini, en amélioration) ; progression proposée en quatre paliers couvrant les 37 exigences du modèle (26 essentielles en paliers 1 à 3, 11 renforcées en palier 4) ; pour chaque exigence, comment y arriver et la preuve à fournir ; modèle de plan de progrès et priorités ; ressources (ANSSI, Cybermalveillance.gouv.fr, CNIL, IEC 62443-2-4, ISO/IEC 27001).
+
 ## [1.4.0] — 2026-10
 
 ### Ajouts
