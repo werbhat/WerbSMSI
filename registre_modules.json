@@ -161,7 +161,7 @@
       "chemin": "modules/inventaires/WerbMap",
       "depot": "../WerbMap",
       "etat": "publie",
-      "version": "1.26.0",
+      "version": "1.27.0",
       "etape": "connaitre"
     },
     {
@@ -225,7 +225,7 @@
       "chemin": "modules/exploitation/WerbExploitation",
       "depot": "../WerbExploitation",
       "etat": "publie",
-      "version": "1.20.0",
+      "version": "1.24.0",
       "etape": "controler"
     },
     {
@@ -257,7 +257,7 @@
       "chemin": "modules/continuite/WerbVeille",
       "depot": "../WerbVeille",
       "etat": "publie",
-      "version": "1.5.0",
+      "version": "1.6.0",
       "etape": "resilience"
     },
     {

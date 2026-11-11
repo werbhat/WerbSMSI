@@ -7,6 +7,13 @@ Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/), num
 ## [0.28.0] — 2026-11
 
 ### Changements
+- **WerbVeille 1.6.0 publié** (VEI-7) : source **CVE du NVD** (API du NIST, désactivée par défaut) — CVE des logiciels et matériels du site par CPE, CPE proposés, vue Logiciels et CVE, badges CVSS / KEV ; clé d'API facultative dans `secrets.ini`.
+- **WerbExploitation 1.24.0 publié** (EXP-20) : champ **CPE (NVD)** des références logicielles et matérielles, publié dans `site:plm`. Charte : `site:plm` cite le CPE ; publication de démonstration LYON : CPE des systèmes Microsoft.
+- **Charte** : nouvel objet **`site:inventaires`** (relevés d'inventaire des machines : TAG, système, matériel, date, nombre d'applications ; ni applications ni réseau), publié par WerbExploitation, lu par WerbMap. Publication de démonstration LYON complétée (relevés fictifs de PC_ING01 et SRV_NTP01).
+- **WerbMap 1.27.0 publié** (MAP-15) : colonne **Inventaire** des machines physiques et virtuelles, consolidation proposée des champs système et matériel depuis les relevés.
+- **WerbExploitation 1.23.0 publié** (EXP-19) : publication de `site:inventaires`, colonne Inventaire des actifs WerbMap.
+- **WerbExploitation 1.22.0 publié** (EXP-18) : **inventaires de machines** — scripts d'inventaire en lecture seule à télécharger (Windows PowerShell, Linux sh), import des fichiers JSON rattachés au TAG WerbMap, sélection et reprise dans le registre Applicatifs.
+- **WerbExploitation 1.21.0 publié** : export **JSON** de la liste des applicatifs utilisés (registre Applicatifs, bouton ⇩ JSON) — produit, éditeur, version, machines, état du référentiel logiciel.
 - **WerbPCR 1.7.0 publié** : guide « Approfondir la continuité et la reprise » (durée maximale tolérable, RTO, temps de remise en service, RPO, disponibilité ; bilan d'impact ; stratégies de sauvegarde et de reprise ; points uniques de défaillance ; types de tests ; indicateurs ; normes ISO 22301, ISO/IEC 27031, NIS2, NIST SP 800-34).
 - **WerbGouvernance 1.13.0 publié** : guide « Les rôles de la sécurité : qui fait quoi, et comment » (principes de conduite communs, tâches clés de chaque rôle du groupe, du site et transverse, séparation des tâches, matrice qui fait quoi), relié à l'écran Rôles.
 - **WerbPresta 1.6.1 publié** : guide du prestataire renommé « Répondre aux exigences de cybersécurité du client » (intitulé plus sobre, vocabulaire de mise en œuvre et de plan d'actions).

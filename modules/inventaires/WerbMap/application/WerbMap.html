@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- WerbMap v1.26.0 – Développé par @WerbHat – build novembre 2026 -->
+<!-- WerbMap v1.27.0 – Développé par @WerbHat – build novembre 2026 -->
 <!--
   WerbMap – Cartographie VLAN / Adressage IP / Actifs / Flux
   Module « Inventaires ICS » de WerbSMSI (niveau site). Version : sources/src/signature.js.
@@ -21,7 +21,7 @@
 <title>WerbMap</title>
 <meta name="application-name" content="WerbMap">
 <meta name="author" content="@WerbHat">
-<meta name="generator" content="WerbMap v1.26.0 – Développé par @WerbHat">
+<meta name="generator" content="WerbMap v1.27.0 – Développé par @WerbHat">
 <meta name="description" content="Cartographie VLAN, adressage IP, actifs et flux d'un site">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22%3E%3Crect width=%2232%22 height=%2232%22 rx=%226%22 fill=%22%230d2238%22/%3E%3Cpath d=%22M6 9h20M6 16h20M6 23h20M11 6v20M21 6v20%22 stroke=%22%23ffd27a%22 stroke-width=%222%22/%3E%3Ccircle cx=%2221%22 cy=%2216%22 r=%223.5%22 fill=%22%238fd16a%22/%3E%3C/svg%3E">
 <style>
@@ -36665,7 +36665,7 @@ const WERB = Object.freeze((() => {
   const bytes = [68, 195, 169, 118, 101, 108, 111, 112, 112, 195, 169, 32, 112, 97, 114, 32, 64, 87, 101, 114, 98, 72, 97, 116];
   const signature = new TextDecoder("utf-8").decode(new Uint8Array(bytes));
   const produit = "WerbMap";
-  const version = "1.26.0";
+  const version = "1.27.0";
   return {
     id: "werbmap",
     produit, version, auteur: "@WerbHat", signature,
@@ -38407,7 +38407,7 @@ const TBL={
    {f:'coffret',l:'Coffret',x:'Coffret',t:L,dl:'dlCof'},{f:'type',l:'Type actif',x:'Type Actif',t:SEL,opts:()=>S.refs.typesActif},{f:'marque',l:'Marque',x:'Marque'},{f:'reference',l:'Modèle',x:'Modèle',xa:['Référence']},
    {f:'serie',l:'N° série',x:'N°Série',cls:'mono'},{f:'fw',l:'Version firmware',x:'Version firmware'},{f:'lienFw',l:'Lien site MAJ FW',x:'Lien Site MAJ FW',t:U},{f:'lienSuivi',l:'Lien fichier suivi gestion',x:'Lien Fichier Suivi gestion',t:U},{f:'comment',l:'Commentaire',x:'commentaire',cls:'lg'}]},
  machines:{title:'Machines physiques',sheet:'Lst_MachinePhysique',hk:'TAG equipement',obj:'Machine physique',label:r=>r.tag||r.libelle||'(nouvelle)',
-  cols:[{f:'crit',l:'Critique',x:'Machine\nCritique',t:B},{f:'tag',l:'TAG équipement',x:'TAG equipement',cls:'b'},{f:'libelle',l:'Libellé',x:'Libellé',cls:'lg'},{f:'_ips',l:'IP (ID VLAN)',t:C,fn:r=>ipsOfTag(r.tag)},{f:'_rn',l:'Routes / NAT',t:C,fn:r=>linksOf(r.tag)},{f:'emplacement',l:'Emplacement',x:'Emplacement'},
+  cols:[{f:'crit',l:'Critique',x:'Machine\nCritique',t:B},{f:'tag',l:'TAG équipement',x:'TAG equipement',cls:'b'},{f:'libelle',l:'Libellé',x:'Libellé',cls:'lg'},{f:'_ips',l:'IP (ID VLAN)',t:C,fn:r=>ipsOfTag(r.tag)},{f:'_rn',l:'Routes / NAT',t:C,fn:r=>linksOf(r.tag)},{f:'_inv',l:'Inventaire',t:C,fn:r=>invCol(r.tag)},{f:'emplacement',l:'Emplacement',x:'Emplacement'},
    {f:'coffret',l:'Coffret',x:'Coffret',t:L,dl:'dlCof'},{f:'fonction',l:'Fonction du poste',x:'Fonction du Poste'},{f:'type',l:'Type machine',x:'Type Machine',t:SEL,opts:()=>S.refs.typesMachine},
    {f:'os',l:'Système OS',x:'Système OS'},{f:'licences',l:'Licences',x:'Licences'},{f:'vos',l:'Version OS',x:'Version OS'},{f:'condMaj',l:'Condition MAJ',x:'Condition MAJ'},
    {f:'marque',l:'Marque',x:'Marque'},{f:'modele',l:'Modèle',x:'Modèle'},{f:'serie',l:'N° série',x:'N°Série',cls:'mono'},{f:'mes',l:'Date mise en service',x:'Date Mise en service',t:D},
@@ -38415,7 +38415,7 @@ const TBL={
    {f:'disques',l:'Disques durs',x:'Disques durs'},{f:'raid',l:'Description RAID',x:'Description RAID'},{f:'infoVm',l:'Information VM',x:'Information VM'},{f:'alim',l:"Type d'alimentation",x:"Type d'alimentation"},
    {f:'specs',l:'Spécificités matériels',x:'Spécificités Materiels'},{f:'comment',l:'Commentaires',x:'Commentaires',cls:'lg'}]},
  vms:{title:'Machines virtuelles',sheet:'Lst_MachineVirtuelle',hk:'TAG equipement',obj:'Machine virtuelle',label:r=>r.tag||r.libelle||'(nouvelle)',
-  cols:[{f:'crit',l:'Critique',x:'Actif Critique',t:B},{f:'tag',l:'TAG équipement',x:'TAG equipement',cls:'b'},{f:'libelle',l:'Libellé',x:'Libellé',cls:'lg'},{f:'_ips',l:'IP (ID VLAN)',t:C,fn:r=>ipsOfTag(r.tag)},{f:'_rn',l:'Routes / NAT',t:C,fn:r=>linksOf(r.tag)},{f:'hyperv',l:'Hyperviseur',x:'Hyperviseur',t:L,dl:'dlHyp'},
+  cols:[{f:'crit',l:'Critique',x:'Actif Critique',t:B},{f:'tag',l:'TAG équipement',x:'TAG equipement',cls:'b'},{f:'libelle',l:'Libellé',x:'Libellé',cls:'lg'},{f:'_ips',l:'IP (ID VLAN)',t:C,fn:r=>ipsOfTag(r.tag)},{f:'_rn',l:'Routes / NAT',t:C,fn:r=>linksOf(r.tag)},{f:'_inv',l:'Inventaire',t:C,fn:r=>invCol(r.tag)},{f:'hyperv',l:'Hyperviseur',x:'Hyperviseur',t:L,dl:'dlHyp'},
    {f:'fonction',l:'Fonction du poste',x:'Fonction du Poste'},{f:'type',l:'Type machine',x:'Type Machine',t:SEL,opts:()=>S.refs.typesMachine},{f:'os',l:'Système OS',x:'Système OS'},{f:'licences',l:'Licences',x:'Licences'},
    {f:'vos',l:'Version OS',x:'Version OS'},{f:'cpu',l:'CPU+threads',x:'CPU+threads',cls:'sm'},{f:'ram',l:'RAM (Go)',x:'RAM \nen Go',cls:'sm'},{f:'dd1',l:'Volume DD 1 (Go)',x:'Volume DD 1 en Go',cls:'sm'},{f:'dd2',l:'Volume DD 2 (Go)',x:'Volume DD 2 en Go',cls:'sm'},
    {f:'eth',l:'Config interface Eth',x:'Config Interface Eth'},{f:'specs',l:'Spécificités matériels',x:'Spécificités Materiels'},{f:'arret',l:'Précaution arrêt',x:'Précaution Arrêt'},{f:'lienDoc',l:'Lien framework ou doc',x:'Lien Framework ou doc',t:U},{f:'comment',l:'Commentaires',x:'Commentaires',cls:'lg'}]},
@@ -38855,6 +38855,11 @@ function renderSmsi(){const E=WerbSocle.espace,L=liaison(),g=E.groupe,ed=can('ed
   <div class="panel"><h3>Conduits déduits de la matrice de flux</h3><p class="hint">Un conduit par couple de zones reliées par au moins un flux autorisé (actions block / reset et règles « off » exclues). Sources et destinations reconnues par nom de réseau, nom de VLAN ou TAG d'actif.</p>
   <div class="wrap" style="max-height:none"><table class="grid"><thead><tr><th>ID</th><th>De</th><th>Vers</th><th>Description</th></tr></thead><tbody>
   ${cs.map(c=>`<tr><td class="b">${esc(c.id)}</td><td>${esc(c.de)}</td><td>${esc(c.vers)}</td><td>${esc(c.description)}</td></tr>`).join('')||'<tr><td colspan="4" class="hint">Aucun flux entre zones différentes.</td></tr>'}</tbody></table></div></div>
+  ${(()=>{const invs=((recus('inventaires')||{}).items)||[],ec=can('edit')?invEcarts():[],liees=invs.filter(i=>S.machines.some(r=>upT(r.tag)===upT(i.tag))||S.vms.some(r=>upT(r.tag)===upT(i.tag))).length;
+    return `<div class="panel" data-inv-panel><h3>Inventaires de machines ${recu('inventaires','WerbExploitation')}</h3>
+  <p class="hint">Relevés faits avec les scripts d'inventaire de WerbExploitation (<i>Maintien en sécurité › Inventaires de machines</i>) et publiés dans <code>site:inventaires</code> : ${invs.length} machine(s) relevée(s), ${liees} reconnue(s) par leur TAG (colonne <b>Inventaire</b> des listes Machines physiques et Machines virtuelles). Les écarts entre le relevé et la fiche sont proposés ci-dessous — Système OS et Version OS toujours, marque, modèle et n° de série seulement quand le champ est vide : rien n'est modifié sans <b>Appliquer</b>.</p>
+  ${invs.length?`<table class="grid"><thead><tr><th>Machine</th><th>Champ</th><th>Valeur actuelle</th><th>Valeur relevée</th><th></th></tr></thead><tbody>${ec.map((e,i)=>`<tr><td class="b">${esc(e.r.tag)}</td><td>${esc(e.l)}</td><td>${esc(e.avant)||'<span class="hint">vide</span>'}</td><td>${esc(e.apres)}</td><td><button data-invapp="${i}"${ed}>Appliquer</button></td></tr>`).join('')||`<tr><td colspan="5" class="hint">${can('edit')?'Aucun écart : les fiches des machines relevées sont à jour.':'Lecture seule : les écarts s\'appliquent avec un compte éditeur.'}</td></tr>`}</tbody></table>
+  ${ec.length>1?`<p><button id="invAppAll"${ed}>Appliquer les ${ec.length} écarts</button></p>`:''}`:''}</div>`;})()}
   <div class="panel"><h3>Publier vers le site</h3><p>${zs.length} zone(s), ${cs.length} conduit(s), ${as.length} actif(s) (TAG, type, famille, zone, libellé, criticité, emplacement, coffret, OS, hyperviseur, fonction, marque, modèle, version firmware, commentaire) et ${sis.length} système(s) d'information (nom, fonction, D / I / C, ID des VLAN, TAG des actifs : WerbEBIOS les reprend comme biens supports), ainsi que ${vls.length} VLAN (ID, nom, réseau, zone, statut, couche : WerbAssets les propose dans les fiches pare-feu et switch). Les adresses IP (y compris l'adressage des VLAN), numéros de série, la matrice de flux et le contenu des fiches SI (RACI, saisies) ne sont pas publiés.</p>
   ${pending.length?'<p class="warn">Des modifications ne sont pas enregistrées : enregistre une version avant de publier.</p>':''}
   <button class="pri" id="smPub"${ok&&can('edit')&&!pending.length?'':' disabled'}>Publier dans sites/${esc(L.site||'…')}/publications/werbmap.json</button>
@@ -38862,6 +38867,8 @@ function renderSmsi(){const E=WerbSocle.espace,L=liaison(),g=E.groupe,ed=can('ed
   <p class="hint">Poste isolé, Firefox, espace inaccessible : exporte le même contenu dans un fichier, puis importe-le dans <b>WerbExploitation › Inventaire WerbMap › Importer une publication WerbMap…</b>.${pending.length?' Les modifications non enregistrées sont incluses.':''}</p>
   <button id="smExp"${as.length||zs.length?'':' disabled'}>⬇ Exporter la publication (fichier pour WerbExploitation)</button></div>`;
   $('#s-smsi').innerHTML=h;
+  document.querySelectorAll('#s-smsi [data-invapp]').forEach(b=>b.onclick=()=>{const e=invEcarts()[+b.dataset.invapp];if(!e||!can('edit'))return;invAppliquer(e);render();setStatus(`${e.r.tag} · ${e.l} : « ${e.avant||'vide'} » → « ${e.apres} » (enregistre une version).`);});
+  if($('#invAppAll'))$('#invAppAll').onclick=()=>{const l=invEcarts();if(!l.length||!can('edit')||!confirm(`Appliquer les ${l.length} écart(s) relevés aux fiches des machines ?`))return;l.forEach(invAppliquer);render();setStatus(`${l.length} champ(s) repris des relevés d'inventaire : enregistre une version.`);};
   $('#smExp').onclick=()=>{const now=new Date().toISOString().replace(/\.\d{3}Z$/,'Z'),sig=x=>Object.assign({},x,{source:WERB.id,majLe:now.slice(0,10)});
     const meta={produit:WERB.produit,appVersion:WERB.version,auteur:WERB.auteur,generateur:WERB.ligne,creeLe:now.slice(0,10),modifieLe:now,modifiePar:USER.login,
       module:WERB.id,portee:'site',publiePar:USER.login,publieLe:now};
@@ -38941,6 +38948,11 @@ async function recevoir(){const L=liaison(),E=WerbSocle.espace;if(!E.ouvert||!L.
   if(JSON.stringify(avantPlm)!==JSON.stringify(plm)){
     S.recus=Object.assign({},S.recus,{plm:{items:plm,majLe:maj,source:'site:plm'}});ch=true;
     log('Fiche SI','recus','Données reçues','Cycle de vie WerbExploitation (site:plm)',avantPlm.length+" référence(s)",plm.length+' référence(s), reçues le '+fmtD(maj));}
+  const inv=(Array.isArray(ps.inventaires)?ps.inventaires:[]).filter(x=>x&&x.tag).map(x=>{const o={};INV_CHAMPS.forEach(k=>{o[k]=String(x[k]??'');});return o;});
+  const avantI=((recus('inventaires')||{}).items)||[];
+  if(JSON.stringify(avantI)!==JSON.stringify(inv)){
+    S.recus=Object.assign({},S.recus,{inventaires:{items:inv,majLe:maj,source:'site:inventaires'}});ch=true;
+    log('Fiche SI','recus','Données reçues','Inventaires de machines WerbExploitation (site:inventaires)',avantI.length+' machine(s)',inv.length+' machine(s), reçues le '+fmtD(maj));}
   const rem=(Array.isArray(ps.remediations)?ps.remediations:[]).filter(r=>r&&r.id&&r.actif).map(r=>{const o={};REM_CHAMPS.forEach(k=>{o[k]=REM_NOMBRES.includes(k)?Math.max(0,Math.round(+r[k]||0)):String(r[k]??'');});return o;});
   const avantR=((recus('remediations')||{}).items)||[];
   if(JSON.stringify(avantR)!==JSON.stringify(rem)){
@@ -39001,6 +39013,15 @@ const DISTANT_TXT={aucun:'—',demande:'à la demande',permanent:'permanent'};
 /* Cycle de vie (site:plm, WerbExploitation 1.18.0, MAP-14) : références installées (matériel, logiciel, OS) avec leur statut PLM et leurs TAG.
    Copié dans la base comme les sauvegardes ; la fiche SI ne garde que les références dont un TAG est un actif du SI. */
 const PLM_CHAMPS=['id','nature','fabricant','produit','version','libelle','statut','gravite','finCommercialisation','finSupport','finSupportEtendu','finVie','versionCible'];
+/* Inventaires de machines (site:inventaires, WerbExploitation 1.23.0, MAP-15) : relevé par machine (TAG) fait avec les scripts d'inventaire. Copié dans la
+   base comme le PLM ; colonne « Inventaire » des machines physiques et virtuelles ; écarts proposés dans Intégration WerbSMSI, appliqués un à un ou tous. */
+const INV_CHAMPS=['id','tag','hostname','osNom','osVersion','osBuild','osArch','fabricant','modele','serie','collecteLe','nbApplications'];
+function invDe(t){const k=upT(t);return k?((((recus('inventaires')||{}).items)||[]).find(x=>upT(x.tag)===k)||null):null;}
+function invCol(t){const i=invDe(t);return i?'✓ '+fmtDay(i.collecteLe):'';}
+const INV_LIENS={machines:[['os','osNom',false],['vos','osVersion',false],['marque','fabricant',true],['modele','modele',true],['serie','serie',true]],vms:[['os','osNom',false],['vos','osVersion',false]]};
+function invEcarts(){const out=[];Object.entries(INV_LIENS).forEach(([key,ch])=>S[key].forEach(r=>{const i=invDe(r.tag);if(!i)return;
+  ch.forEach(([f,src,siVide])=>{const av=String(r[f]||'').trim(),ap=String(i[src]||'').trim();if(!ap||av===ap||(siVide&&av))return;out.push({key,r,f,l:TBL[key].cols.find(c=>c.f===f).l,avant:av,apres:ap});});}));return out;}
+function invAppliquer(e){const T=TBL[e.key];e.r[e.f]=e.apres;log(T.obj,e.r.id,T.label(e.r),e.l+' (relevé d\'inventaire)',e.avant,e.apres);}
 const PLM_ORDRE={ko:0,warn:1,ok:2,'':3};
 const BCK_CHAMPS=['id','etat','categorie','typeDonnees','donnees','actifSource','actifDestination','periodicite','mode','dernierTest','statutTest'];
 const BCK_TEST={'a-jour':'à jour',echu:'échu',jamais:'jamais testé'};

@@ -35,6 +35,17 @@ Un mot-clé est cherché **en mot entier**, sans tenir compte des majuscules, de
 
 Après toute modification des sources, des mots-clés ou des options, le tableau de bord demande de **régénérer le kit** : remplacez alors `config.json` sur la machine de collecte.
 
+### Les CVE de vos logiciels (NVD)
+
+Les mots-clés trouvent les articles qui parlent de vos produits ; la source **CVE du NVD** va plus loin : elle interroge la base des vulnérabilités du NIST pour chaque logiciel du site publié par WerbExploitation. Elle est **désactivée par défaut**, car le nom et la version de vos logiciels partent alors vers un service public américain.
+
+1. Dans **WerbExploitation › Référentiel logiciel**, renseignez le champ **CPE (NVD)** de chaque logiciel suivi : la forme courte `cpe:2.3:a:éditeur:produit` couvre toutes les versions (`o` pour un système d'exploitation, par exemple `cpe:2.3:o:microsoft:windows_server_2022`). La fiche propose un lien de recherche vers le dictionnaire CPE du NVD. Republiez.
+2. Dans WerbVeille, **⟳ Actualiser** (Intégration WerbSMSI), puis **Sources › Sources spécialisées** : cochez **CVE du NVD** et choisissez le score CVSS minimal (7 : vulnérabilités élevées et critiques). Les CVE exploitées (catalogue KEV) sont toujours gardées.
+3. Régénérez le kit. Sans clé d'API, le NVD limite le débit (5 requêtes par 30 secondes) : demandez une clé gratuite et collez-la dans `secrets.ini`, section `[nvd]`.
+4. Après une collecte, **Veille › Logiciels et CVE** montre les CVE ouvertes de chaque produit et, pour ceux qui n'ont pas de CPE, les CPE proposés : vérifiez le titre, puis reportez la forme courte dans WerbExploitation.
+
+La recherche **par nom** (option) dépanne pour un produit sans CPE, mais trouve aussi des homonymes : ces alertes portent la mention « par nom, à vérifier ».
+
 ## 5. Importer et trier les alertes
 
 Rapportez les fichiers du dossier `resultats/` du kit, puis *🧰 Collecte › Importer des résultats* (plusieurs fichiers à la fois). Une alerte déjà importée n'est pas recréée ; le rapport signale les **flux en erreur** (adresse morte, flux mal formé).

@@ -3,6 +3,13 @@
 Toutes les évolutions notables de WerbMap sont consignées ici.
 Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/), numérotation [SemVer](https://semver.org/lang/fr/).
 
+## [1.27.0] — 2026-11
+
+### Ajouts
+- **Inventaires de machines reçus de WerbExploitation** (MAP-15) : `site:inventaires` (WerbExploitation 1.23.0) est copié dans la base à l'ouverture de l'espace, au rattachement et par ⟳ Actualiser. Colonne **Inventaire** (✓ et date du relevé) dans les listes *Machines physiques* et *Machines virtuelles*, par le TAG.
+- **Consolidation proposée** (*Administration › Intégration WerbSMSI › Inventaires de machines*) : écarts entre le relevé et la fiche — Système OS et Version OS toujours, Marque, Modèle et N° série seulement quand le champ est vide — avec **Appliquer** par ligne ou pour tous ; chaque modification est journalisée (champ « … (relevé d'inventaire) »). Rien n'est modifié sans action.
+- `site:inventaires` ajouté aux objets lus (`module.json`). Test `tests/test_inventaires_recus.py`.
+
 ## [1.26.0] — 2026-11
 
 ### Ajouts

@@ -3,6 +3,19 @@
 Toutes les évolutions notables de WerbVeille sont consignées ici.
 Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/), numérotation [SemVer](https://semver.org/lang/fr/).
 
+## [1.6.0] — 2026-11
+
+### Ajouts
+- **CVE du NVD** (VEI-7, collecteur 1.4.0) : nouvelle source spécialisée, **désactivée par défaut**. Pour chaque logiciel (et chaque matériel avec CPE) publié par WerbExploitation dans `site:plm`, le collecteur interroge l'API 2.0 du NVD (NIST) : CVE **par CPE** (`virtualMatchString` : toutes les versions concernées), ou **par nom** pour un produit sans CPE si l'option est cochée (rattachement signalé « à vérifier »). Fenêtre : CVE publiées, ou ajoutées au catalogue KEV, pendant la durée de mémoire (119 jours au plus, limite de l'API) ; **score CVSS minimal** réglable (7 par défaut) ; une CVE exploitée (KEV) ou pas encore notée est toujours gardée ; une CVE commune à plusieurs produits ne fait qu'une alerte. Catégorie « Vulnérabilités (NVD) ».
+- **Clé d'API NVD** facultative dans `secrets.ini`, section `[nvd]`, clé `cle` (débit de 50 requêtes par 30 secondes au lieu de 5) ; jamais saisie dans WerbVeille ni écrite dans un résultat.
+- **CPE proposés** : pour les logiciels sans CPE, le collecteur interroge l'API des produits du NVD et propose jusqu'à cinq formes courtes `cpe:2.3:a:éditeur:produit`, à reporter dans WerbExploitation (champ CPE, 1.24.0).
+- **Alertes** : badges CVSS, « exploitée (KEV) », « non noté », « par nom, à vérifier ».
+- **Veille › Logiciels et CVE** : chaque produit reçu, son CPE (ou les CPE proposés), ses machines, ses CVE ouvertes, le CVSS le plus élevé, les CVE exploitées et les liens vers le NVD.
+- Avertissement dans *Sources* : les noms, versions et CPE des produits du site sont envoyés au NIST (jamais les TAG ni le nom du site).
+
+### Format de données
+- `speciales.nvd`, `speciales.cvssMin`, `speciales.nvdParNom` ; `cpeProposes` (`le`, `items`) ; alertes : `cve`, `cvss`, `gravite`, `exploitee`, `fiabilite` ; `recus.plm.items[].cpe`. Résultats du collecteur : `cpeProposes`. Schéma inchangé.
+
 ## [1.5.0] — 2026-11
 
 ### Ajouts

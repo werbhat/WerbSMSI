@@ -2,7 +2,7 @@
   "charte": "1.0",
   "id": "werbmap",
   "produit": "WerbMap",
-  "version": "1.26.0",
+  "version": "1.27.0",
   "dateVersion": "2026-11",
   "auteur": "@WerbHat",
   "signature": "Développé par @WerbHat",
@@ -14,7 +14,7 @@
   "entree": "application/WerbMap.html",
   "empreinte": {
     "algo": "SHA-256",
-    "valeur": "cb32e2be1fd1d3cd0dfbdfc289fb7f816f77476125d14e9895ee5eb2735c3660"
+    "valeur": "0d984769ce5bc95e54096db8b7e092b824184d333e1ec9a23490d9ac2400b33a"
   },
   "donnees": {
     "format": "WERBMAP",
@@ -42,7 +42,8 @@
       "site:evaluationsPrestataires",
       "site:cartographies",
       "site:fluxRealises",
-      "site:plm"
+      "site:plm",
+      "site:inventaires"
     ]
   },
   "compatPortail": ">=1.0.0",

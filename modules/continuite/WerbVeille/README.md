@@ -1,7 +1,7 @@
 # WerbVeille
 
 > Veille sur les menaces et vulnérabilités d'un site : sources RSS, mots-clés tirés de l'inventaire WerbMap, kit de collecte, tri des alertes
-> Version **1.5.0** — Développé par **@WerbHat**
+> Version **1.6.0** — Développé par **@WerbHat**
 
 ---
 
@@ -74,6 +74,7 @@ Bandeau commun : 📂 Ouvrir, 💾 Enregistrer, 📑 Enregistrer sous…, 📊 E
 - Notifications **Discord ou Teams** facultatives (au plus 20 par collecte), adresses dans `secrets.ini` sur la machine de collecte ; jamais dans WerbVeille.
 - **Sources spécialisées** (1.4.0, collecteur 1.3.0, réglées dans *Sources › Sources spécialisées*) :
   - **catalogue KEV de la CISA** (vulnérabilités activement exploitées, JSON public), **activé par défaut** : les entrées ajoutées pendant la durée de mémoire des déjà-vus qui citent un mot-clé (fournisseur, produit, nom, description) deviennent des alertes « Vulnérabilités exploitées » (action demandée, échéance CISA, usage connu par des rançongiciels, TAG des actifs) ;
+  - **CVE du NVD** (API 2.0 du NIST, 1.6.0), **désactivé par défaut** : CVE des logiciels et matériels publiés par WerbExploitation (`site:plm`), par **CPE** (toutes versions concernées) ou par nom (option, « à vérifier ») ; CVE publiées ou ajoutées au catalogue KEV pendant la mémoire (119 jours au plus) ; score CVSS minimal (7 par défaut), CVE exploitées et non notées toujours gardées ; CPE proposés pour les produits sans CPE ; clé d'API facultative dans `secrets.ini` (`[nvd] cle`). Vue **Veille › Logiciels et CVE**.
   - **revendications de rançongiciels de ransomware.live** (API api-pro), **désactivé par défaut** : victimes des pays choisis (mois en cours et précédent, secteurs facultatifs) et victimes dont le nom ou le site cite un **nom surveillé** (organisation, filiales, fournisseurs) ; alertes « Rançongiciels ». Il faut un **jeton personnel** (my.ransomware.live), dans `secrets.ini`, section `[ransomware_live]`, sur la machine de collecte : jamais dans WerbVeille. Les conditions de ransomware.live soumettent l'usage commercial et la redistribution à leur accord écrit et demandent de citer la source : faire valider l'usage par l'entreprise avant d'activer.
 - `--essai` affiche le résultat sans rien écrire ni mémoriser.
 - `--tester` (1.2.0) **teste les sources sans rien collecter** (inactives comprises) : code HTTP, durée, redirection (une redirection **permanente** 301 / 308 = source **déplacée**, nouvelle adresse proposée), flux RSS / Atom valide ou non, nombre d'articles, date du plus récent (plus de 90 jours = source **muette**) ; rapport `resultats/AAAA-MM-JJ_HHMMSS.werbveille-test.json` (format `WERBVEILLE-TEST`) à importer dans WerbVeille. Les déjà-vus ne sont pas touchés.
@@ -103,6 +104,7 @@ Dans **❓ Aide**, dans la page *Guide du module* et sur l'accueil, même sans b
 | `kit` | objet | date et empreinte de la configuration du dernier kit |
 | `deploiements` | tableau | suivis importés : machine, installateur, kit utilisé, étapes faites, vérification de la collecte (1.1.0) |
 | `recus.actifs` | objet | copie de l'inventaire WerbMap reçu (`site:actifs`) |
+| `cpeProposes` | objet | CPE proposés par la dernière collecte NVD pour les produits sans CPE (1.6.0) : produit, éditeur, version, candidats (CPE, titre) |
 | `recus.plm` | objet | copie des références installées publiées par WerbExploitation (`site:plm`, 1.5.0) : identifiant, nature (matériel ou logiciel, OS compris), éditeur ou fabricant, produit, version, TAG ; ni statut, ni stock, ni fournisseur |
 
 - **Configuration du kit** (`config.json`, format `WERBVEILLE-CONFIG`), **résultats** (`WERBVEILLE-RESULTATS` : `meta` avec date, machine et site de collecte, `articles`, `erreurs`, `sources`) **suivi de déploiement** (`WERBVEILLE-DEPLOIEMENT` : machine, étapes, notes, vérification), **test des sources** (`WERBVEILLE-TEST`, 1.2.0 : `meta` avec date, machine et site, `sources` avec l'état de chacune) et **liste de sources** (`WERBVEILLE-SOURCES`, 1.2.0 : `meta`, `sources` ; un fichier `{ "sources": [...] }` comme `sources_defaut.json` est aussi accepté).
@@ -122,7 +124,8 @@ Dans **❓ Aide**, dans la page *Guide du module* et sur l'accueil, même sans b
 ## Confidentialité et sécurité
 
 - **Hors ligne par construction** : la CSP de la page bloque toute connexion sortante ; la page ne lance jamais la collecte. Un lien d'alerte s'ouvre dans un nouvel onglet sur clic de l'utilisateur (`noopener noreferrer`, `http` / `https` seulement : charte §1, *Liens externes*).
-- **Kit hors navigateur** (charte §1) : échanges par fichiers, secrets (webhooks) seulement sur la machine de collecte.
+- **Kit hors navigateur** (charte §1) : échanges par fichiers, secrets (webhooks, jeton ransomware.live, clé NVD) seulement sur la machine de collecte.
+- **Source NVD** (1.6.0) : quand elle est activée, le collecteur envoie au NIST le **nom, la version et le CPE** des logiciels et matériels du site — la liste du parc sort donc vers un service public. Jamais les TAG, le nom du site ni les numéros de série.
 - **Rien dans le navigateur** : les données restent en mémoire puis dans votre fichier.
 - **La protection réelle est celle du dossier** où vous rangez la base.
 - **Intégrité** : comparer l'empreinte du fichier à celle publiée dans `WerbVeille.sha256` :
@@ -149,6 +152,8 @@ python tests\test_deploiement.py
 python tests\test_sources.py
 python tests\test_speciales.py
 python tests\test_plm.py
+python tests\test_nvd_collecteur.py
+python tests\test_nvd.py
 python tests\test_theme.py
 python tests\test_bandeau.py
 python <WerbSMSI>\charte\outils\werb_charte.py publier .
@@ -157,6 +162,8 @@ python <WerbSMSI>\charte\outils\werb_charte.py publier .
 - `tests/test_collecteur.py` exécute le collecteur sur des flux locaux fictifs (RSS, Atom, flux cassé, date en 2122) : bibliothèque standard seulement, mot entier, accents et tirets, exclusions, « tout garder », TAG, date aberrante ignorée, flux en erreur sans arrêt, déjà-vus, mode essai, aucune notification sans secrets, configuration étrangère refusée ; **test des sources** (`--tester`, 1.2.0) sur un serveur HTTP local : flux valide, redirection 301 (déplacée) et 302 (gardée), 404, page web au lieu d'un flux, source muette, source inactive testée, rien collecté.
 - `tests/test_collecteur.py` (1.4.0) : sources spécialisées sur un serveur local — catalogue KEV (fenêtre de la mémoire, mots-clés, usage par des rançongiciels), ransomware.live (jeton absent ou refusé noté en erreur, en-tête `X-API-KEY`, pays et noms surveillés, victime ancienne écartée, jeton jamais écrit, déjà-vus).
 - `tests/test_speciales.py` (1.4.0) : réglages des sources spécialisées (KEV activé, ransomware.live désactivé par défaut, avertissement, pays contrôlés, noms surveillés, kit refusé sans pays ni nom), kit (config.json sans jeton, section `[ransomware_live]` de secrets.ini.exemple, LISEZMOI), import de résultats du collecteur 1.3.0, enregistrement et relecture.
+- `tests/test_nvd_collecteur.py` (1.6.0) : source NVD contre une API simulée — fenêtre de 119 jours, pagination, score minimal, KEV et non notées gardées, CVE ancienne écartée, fusion des produits, recherche par nom, CPE proposés, clé d'API (en-tête, jamais écrite), HTTP 403, déjà-vus.
+- `tests/test_nvd.py` (1.6.0) : réglages NVD, kit (produits, CPE, `[nvd]`), import d'un résultat NVD (badges), vue Logiciels et CVE, CPE proposés, enregistrement.
 - `tests/test_plm.py` (1.5.0) : `site:plm` de WerbExploitation reçu au rattachement ; propositions de mots-clés (produit, éditeur + produit, produit + version, avec les TAG des machines et l'origine ; l'éditeur seul n'est pas proposé ; mot-clé commun à WerbMap et WerbExploitation fusionné) ; publication modifiée relue ; copie dans la base sans statut, stock ni fournisseur.
 - `tests/test_parcours.py` parcourt la chaîne complète : rattachement et inventaire, mots-clés proposés et importés, Feed.csv, **kit téléchargé puis son collecteur exécuté** sur les flux locaux, import des résultats (doublons, autre site, fichier étranger), liens externes, statuts, kit à régénérer, enregistrement et relecture, veille d'exemple.
 - `tests/test_deploiement.py` (1.1.0, 1.2.0) : sources du Feed.csv d'origine (42, dont 3 inactives) ; page de déploiement du kit (CSP, résumé, 9 étapes, commandes, suivi, vérification d'un test des sources puis d'un résultat source par source, suivi enregistré puis repris, rien dans le navigateur) ; suivi importé dans WerbVeille, déploiement en cours et kit plus ancien signalés.
@@ -169,7 +176,7 @@ python <WerbSMSI>\charte\outils\werb_charte.py publier .
 
 ## Historique des versions
 
-Version courante : **1.5.0** de novembre 2026 — logiciels et applicatifs installés reçus de WerbExploitation (`site:plm`) proposés comme mots-clés. Versions précédentes : **1.4.0** de novembre 2026 — sources spécialisées du collecteur : catalogue KEV de la CISA et revendications de rançongiciels ransomware.live (désactivé par défaut, jeton personnel). Versions précédentes : **1.3.0** de novembre 2026 — guide de débutant « La veille de sécurité en clair ». Versions précédentes : **1.2.0** d'octobre 2026 — sources en JSON (export, import compléter / remplacer), test des sources (collecteur `--tester`, rapport importé : adresse déplacée adoptée, source morte désactivée), étape « Tester les sources » dans la page de déploiement. Version précédente : **1.1.0** d'octobre 2026 — page de déploiement dans le kit (guide et suivi sur la machine de collecte, suivi importable), sources par défaut = Feed.csv d'origine. Détail dans [CHANGELOG.md](CHANGELOG.md).
+Version courante : **1.6.0** de novembre 2026 — CVE du NVD par CPE (source spécialisée), CPE proposés, vue Logiciels et CVE. Versions précédentes : **1.5.0** de novembre 2026 — logiciels et applicatifs installés reçus de WerbExploitation (`site:plm`) proposés comme mots-clés. Versions précédentes : **1.4.0** de novembre 2026 — sources spécialisées du collecteur : catalogue KEV de la CISA et revendications de rançongiciels ransomware.live (désactivé par défaut, jeton personnel). Versions précédentes : **1.3.0** de novembre 2026 — guide de débutant « La veille de sécurité en clair ». Versions précédentes : **1.2.0** d'octobre 2026 — sources en JSON (export, import compléter / remplacer), test des sources (collecteur `--tester`, rapport importé : adresse déplacée adoptée, source morte désactivée), étape « Tester les sources » dans la page de déploiement. Version précédente : **1.1.0** d'octobre 2026 — page de déploiement dans le kit (guide et suivi sur la machine de collecte, suivi importable), sources par défaut = Feed.csv d'origine. Détail dans [CHANGELOG.md](CHANGELOG.md).
 
 ---
 
