@@ -3,6 +3,25 @@
 Toutes les évolutions notables de WerbMap sont consignées ici.
 Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/), numérotation [SemVer](https://semver.org/lang/fr/).
 
+## [1.29.1] — 2026-11
+
+### Changements
+- Renvois vers WerbExploitation mis à jour après la réorganisation de son menu (1.28.0) : *Parc & cycle de vie › Inventaires de machines* et *Parc & cycle de vie › Actifs du site (WerbMap) › Importer une publication WerbMap…*.
+
+## [1.29.0] — 2026-11
+
+### Ajouts
+- **Relevés de machines** (MAP-17) : *Intégration WerbSMSI › Relevés de machines* — **📥 Importer un relevé de machine (JSON)** : le fichier du script d'inventaire de WerbExploitation (1.27.0) est lu directement (rien de réseau ne passe par l'espace), rattaché au TAG par le hostname (ou saisi), et WerbMap n'en garde que le **matériel**, les **interfaces**, les **routes**, les **ports en écoute** et l'**heure** — jamais les comptes, la licence, les applications ni le durcissement. **Écarts proposés** : processeur, mémoire et disques des machines physiques et virtuelles (champs vides), **adresses IP absentes du plan d'adressage** (VLAN déduit du sous-réseau), **MAC manquantes**, **routes absentes** de la table Routes (route par défaut exclue) ; Appliquer par ligne ou tous, journalisé « (relevé d'inventaire) » ; un nouveau relevé de la même machine remplace le précédent.
+- **Ports et heure face à la matrice de flux** (MAP-18) : pour chaque machine relevée, ports en écoute (hors boucle locale) couverts ou non par un flux autorisé vers la machine (TAG, nom de réseau ou de VLAN, adresse, CIDR ; port en numéro, plage ou nom de service) — « aucun : service à justifier ou à fermer » ; **flux NTP** (UDP/123 ou flux marqué NTP) déclaré ou non entre la machine et sa source de temps (TAG retrouvé par l'adresse ou le nom).
+
+### Format de données
+- `releves` : un relevé par machine (`tag`, `hostname`, `collecteLe`, `materiel`, `interfaces`, `routes`, `ports`, `heure`, `fichier`, `importeLe`, `importePar`). Schéma inchangé.
+
+## [1.28.0] — 2026-11
+
+### Ajouts
+- **Publications relues sans fermer la page** (MAP-16) : au **retour sur la page** (après avoir publié dans un autre onglet) et **toutes les minutes**, WerbMap compare la date de chaque fichier `publications/*.json` du site à celle de la dernière lecture ; une publication plus récente est **relue** (copie dans la base, journal) et annoncée dans le bandeau d'état — plus besoin de fermer et rouvrir WerbMap. Rien n'est relu si rien n'a changé ; en lecture seule, la publication est signalée sans être copiée. *Intégration WerbSMSI* : panneau **Données reçues des autres modules** avec une **note explicative** (ce qui est reçu, quand la relecture a lieu, enregistrer une version ensuite), le bouton **⟳ Actualiser les données reçues** et la liste des publications lues (module, date, auteur).
+
 ## [1.27.0] — 2026-11
 
 ### Ajouts

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- WerbMap v1.27.0 – Développé par @WerbHat – build novembre 2026 -->
+<!-- WerbMap v1.29.1 – Développé par @WerbHat – build novembre 2026 -->
 <!--
   WerbMap – Cartographie VLAN / Adressage IP / Actifs / Flux
   Module « Inventaires ICS » de WerbSMSI (niveau site). Version : sources/src/signature.js.
@@ -21,7 +21,7 @@
 <title>WerbMap</title>
 <meta name="application-name" content="WerbMap">
 <meta name="author" content="@WerbHat">
-<meta name="generator" content="WerbMap v1.27.0 – Développé par @WerbHat">
+<meta name="generator" content="WerbMap v1.29.1 – Développé par @WerbHat">
 <meta name="description" content="Cartographie VLAN, adressage IP, actifs et flux d'un site">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22%3E%3Crect width=%2232%22 height=%2232%22 rx=%226%22 fill=%22%230d2238%22/%3E%3Cpath d=%22M6 9h20M6 16h20M6 23h20M11 6v20M21 6v20%22 stroke=%22%23ffd27a%22 stroke-width=%222%22/%3E%3Ccircle cx=%2221%22 cy=%2216%22 r=%223.5%22 fill=%22%238fd16a%22/%3E%3C/svg%3E">
 <style>
@@ -121,6 +121,7 @@ table.grid.mx{width:auto}
 table.grid.mdp-comptes{min-width:0;width:100%}table.grid.mdp-comptes td,table.grid.mdp-comptes th{white-space:normal;vertical-align:top}
 .lg-grp{display:block;padding:4px 8px;margin:2px 0;border-radius:5px;background:var(--info-bg);color:var(--navy);font-size:12px}.lg-ret{color:var(--warn);font-size:12px}.lg-msg{background:var(--info-bg);padding:6px 10px;border-radius:5px}.lg-prop{background:var(--proposition);padding:8px 10px;border-radius:5px;margin:6px 0}.lg-prop div{margin-top:4px}
 .warn{background:var(--alerte);border:1px solid var(--alerte-b);padding:8px;border-radius:5px}
+.note-recus{background:var(--info-bg);border:1px solid var(--line);padding:6px 12px;border-radius:5px;margin:6px 0 10px}.note-recus p{margin:6px 0}
 .err{color:var(--err);min-height:1em}
 .pend td{background:var(--pend)}
 footer{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px solid var(--line);padding:5px 16px;font-size:11px;color:var(--mut);display:flex;justify-content:space-between;z-index:5}
@@ -36665,7 +36666,7 @@ const WERB = Object.freeze((() => {
   const bytes = [68, 195, 169, 118, 101, 108, 111, 112, 112, 195, 169, 32, 112, 97, 114, 32, 64, 87, 101, 114, 98, 72, 97, 116];
   const signature = new TextDecoder("utf-8").decode(new Uint8Array(bytes));
   const produit = "WerbMap";
-  const version = "1.27.0";
+  const version = "1.29.1";
   return {
     id: "werbmap",
     produit, version, auteur: "@WerbHat", signature,
@@ -38243,6 +38244,7 @@ function merge(d){const b=blank();if(!d||typeof d!=='object')return b;Object.ass
   b.vlans=(d.vlans&&typeof d.vlans==='object')?d.vlans:{};
   b.si=Array.isArray(d.si)?d.si.map(siNorm):[];if(d.echelleDIC&&Array.isArray(d.echelleDIC.valeurs))b.echelleDIC=d.echelleDIC;if(d.modeles&&typeof d.modeles==='object')b.modeles=d.modeles;   // schéma 5 (MAP-7)
   if(d.recus&&typeof d.recus==='object')b.recus=d.recus;   // publications reçues des autres modules (MAP-7.4)
+  if(Array.isArray(d.releves))b.releves=d.releves.filter(r=>r&&typeof r==='object'&&r.tag);   // relevés de machines (1.29.0, MAP-17)
   if(d.archives&&typeof d.archives==='object')ARCH_TABLES.forEach(k=>{if(Array.isArray(d.archives[k])&&d.archives[k].length)b.archives[k]=d.archives[k].filter(r=>r&&typeof r==='object'&&r.id).map(r=>Object.assign({},r));});   // lignes archivées (TRV-4)
   if(d.largeurs&&typeof d.largeurs==='object')Object.keys(TBL).forEach(k=>{const l=d.largeurs[k];if(l&&typeof l==='object'){const o=Object.fromEntries(Object.entries(l).filter(([,w])=>+w>=40&&+w<=2000).map(([c,w])=>[c,Math.round(+w)]));if(Object.keys(o).length)b.largeurs[k]=o;}});   // largeurs des colonnes (TRV-6)
   if(d.refs)Object.keys(b.refs).forEach(k=>{if(Array.isArray(d.refs[k])&&d.refs[k].length)b.refs[k]=d.refs[k];});
@@ -38815,6 +38817,11 @@ function datalists(){const tags=[...allTags().values()],o=(id,arr)=>`<datalist i
    zones (SL-T saisi ici, criticité la plus forte des plages), conduits déduits de la matrice de flux, actifs des inventaires. */
 const CRIT_SMSI={Rouge:'process',Orange:'metier-critique',Jaune:'metier',Vert:'surete'};
 let SMSI_ERR='';
+/* Publications relues sans fermer la page (1.28.0, MAP-16) : signature (module + date de publication) des fichiers publications/*.json
+   du site à la dernière lecture ; au retour sur la page et toutes les minutes, une publication plus récente est relue. En mémoire seulement. */
+let PUBS_LUES=null,PUBS_VEILLE=false;
+const autresPubs=l=>(l||[]).filter(f=>f.module!==WERB.id);   // la publication de WerbMap lui-même n'est pas surveillée
+const sigPubs=l=>autresPubs(l).map(f=>f.module+'@'+(f.publieLe||'')).sort().join('|');
 function smsiZones(){const vl=vlanList(),codes=[...new Set([...S.refs.zones,...vl.map(v=>v.zone).filter(Boolean)])],sec=S.meta.zonesSec||{};
   return codes.map(code=>{const vs=vl.filter(v=>v.zone===code),crit=CRITS.find(c=>vs.some(v=>v.crit===c)),s=sec[code]||{};
     const z={id:code,nom:s.nom||code,criticite:crit?CRIT_SMSI[crit]:'autre'};if(+s.slt)z.slt=+s.slt;return Object.assign(z,{_vlans:vs.length});});}
@@ -38855,18 +38862,45 @@ function renderSmsi(){const E=WerbSocle.espace,L=liaison(),g=E.groupe,ed=can('ed
   <div class="panel"><h3>Conduits déduits de la matrice de flux</h3><p class="hint">Un conduit par couple de zones reliées par au moins un flux autorisé (actions block / reset et règles « off » exclues). Sources et destinations reconnues par nom de réseau, nom de VLAN ou TAG d'actif.</p>
   <div class="wrap" style="max-height:none"><table class="grid"><thead><tr><th>ID</th><th>De</th><th>Vers</th><th>Description</th></tr></thead><tbody>
   ${cs.map(c=>`<tr><td class="b">${esc(c.id)}</td><td>${esc(c.de)}</td><td>${esc(c.vers)}</td><td>${esc(c.description)}</td></tr>`).join('')||'<tr><td colspan="4" class="hint">Aucun flux entre zones différentes.</td></tr>'}</tbody></table></div></div>
+  ${(()=>{const pl=PUBS_LUES,ed2=can('edit')&&ok?'':' disabled';
+    return `<div class="panel" data-recus-panel><h3>Données reçues des autres modules</h3>
+  <div class="note-recus" data-recus-note><p><b>Comment WerbMap reçoit les publications.</b> Les autres modules du site (WerbExploitation, WerbEBIOS, WerbPentest, WerbPresta, WerbCartoSI) déposent leurs données dans <code>sites/${esc(L.site||'…')}/publications/</code> quand on clique sur <b>Publier</b> chez eux. WerbMap les relit et en garde une copie dans sa base : cycle de vie (PLM), sauvegardes, inventaires de machines, risques, remédiations, prestataires, schémas.</p>
+  <p><b>Quand la relecture a lieu</b> : à l'ouverture de l'espace, au rattachement du site, <b>au retour sur cette page</b> (après être allé publier dans un autre onglet) et <b>toutes les minutes</b> ; seule une publication plus récente que la dernière lue est reprise. Le bouton ci-dessous force la relecture. Inutile de fermer et de rouvrir WerbMap.</p>
+  <p><b>Après une relecture</b>, la copie reçue est une modification en cours : <b>enregistrez une version</b> pour la conserver. En lecture seule, la nouvelle publication est signalée mais pas copiée.</p></div>
+  <p><button id="smRecv"${ed2}>⟳ Actualiser les données reçues</button> <span class="hint">${pl?`Dernière lecture : ${esc(fmtD(pl.le))}`:'Aucune lecture depuis l\'ouverture de la page.'}</span></p>
+  ${pl&&pl.fichiers.length?`<table class="grid"><thead><tr><th>Publication</th><th>Publiée le</th><th>Par</th></tr></thead><tbody>${pl.fichiers.slice().sort((a,b)=>a.module.localeCompare(b.module)).map(f=>`<tr><td class="mono">${esc(f.module)}.json</td><td>${esc(fmtD(f.publieLe))}</td><td>${esc(f.publiePar||'')}</td></tr>`).join('')}</tbody></table>`:''}</div>`;})()}
   ${(()=>{const invs=((recus('inventaires')||{}).items)||[],ec=can('edit')?invEcarts():[],liees=invs.filter(i=>S.machines.some(r=>upT(r.tag)===upT(i.tag))||S.vms.some(r=>upT(r.tag)===upT(i.tag))).length;
     return `<div class="panel" data-inv-panel><h3>Inventaires de machines ${recu('inventaires','WerbExploitation')}</h3>
-  <p class="hint">Relevés faits avec les scripts d'inventaire de WerbExploitation (<i>Maintien en sécurité › Inventaires de machines</i>) et publiés dans <code>site:inventaires</code> : ${invs.length} machine(s) relevée(s), ${liees} reconnue(s) par leur TAG (colonne <b>Inventaire</b> des listes Machines physiques et Machines virtuelles). Les écarts entre le relevé et la fiche sont proposés ci-dessous — Système OS et Version OS toujours, marque, modèle et n° de série seulement quand le champ est vide : rien n'est modifié sans <b>Appliquer</b>.</p>
+  <p class="hint">Relevés faits avec les scripts d'inventaire de WerbExploitation (<i>Parc & cycle de vie › Inventaires de machines</i>) et publiés dans <code>site:inventaires</code> : ${invs.length} machine(s) relevée(s), ${liees} reconnue(s) par leur TAG (colonne <b>Inventaire</b> des listes Machines physiques et Machines virtuelles). Les écarts entre le relevé et la fiche sont proposés ci-dessous — Système OS et Version OS toujours, marque, modèle et n° de série seulement quand le champ est vide : rien n'est modifié sans <b>Appliquer</b>.</p>
   ${invs.length?`<table class="grid"><thead><tr><th>Machine</th><th>Champ</th><th>Valeur actuelle</th><th>Valeur relevée</th><th></th></tr></thead><tbody>${ec.map((e,i)=>`<tr><td class="b">${esc(e.r.tag)}</td><td>${esc(e.l)}</td><td>${esc(e.avant)||'<span class="hint">vide</span>'}</td><td>${esc(e.apres)}</td><td><button data-invapp="${i}"${ed}>Appliquer</button></td></tr>`).join('')||`<tr><td colspan="5" class="hint">${can('edit')?'Aucun écart : les fiches des machines relevées sont à jour.':'Lecture seule : les écarts s\'appliquent avec un compte éditeur.'}</td></tr>`}</tbody></table>
   ${ec.length>1?`<p><button id="invAppAll"${ed}>Appliquer les ${ec.length} écarts</button></p>`:''}`:''}</div>`;})()}
+  ${(()=>{const R=rels(),ec=can('edit')?relEcarts():[];
+    return `<div class="panel" data-releves-panel><h3>Relevés de machines (scripts d'inventaire)</h3>
+  <div class="note-recus"><p>Le fichier JSON produit sur une machine par le script d'inventaire de <b>WerbExploitation</b> (<i>Parc & cycle de vie › Inventaires de machines</i>) se lit aussi ici : WerbMap n'en garde que le <b>matériel</b>, les <b>adresses</b>, les <b>routes</b>, les <b>ports en écoute</b> et l'<b>heure</b> — jamais les comptes, la licence ni les applications. Les écarts avec les fiches sont proposés ci-dessous ; les ports en écoute et la source de temps sont rapprochés de la <b>matrice de flux</b>.</p></div>
+  <p><button id="relImp"${ed}>📥 Importer un relevé de machine (JSON)…</button><input type="file" id="relFichier" accept=".json,application/json" multiple hidden></p>
+  ${R.length?`<table class="grid"><thead><tr><th>Machine</th><th>Hostname</th><th>Relevé le</th><th>Ports en écoute</th><th>Heure (NTP)</th><th></th></tr></thead><tbody>${R.slice().sort((a,b)=>a.tag.localeCompare(b.tag)).map(rel=>{const P=relPorts(rel),sans=P.filter(p=>!p.flux.length).length,n=relNtp(rel);
+    return `<tr data-releve="${esc(rel.tag)}"><td class="b">${esc(rel.tag)}</td><td>${esc(rel.hostname)}</td><td>${esc(fmtDay(rel.collecteLe))}</td>
+      <td>${rel.ports?`${P.length} port(s)${sans?` · <span class="sev-warn">${sans} sans flux autorisé</span>`:` · <span class="sev-info">tous couverts</span>`}`:'<span class="hint">non relevés</span>'}</td>
+      <td>${n.etat?`<span class="${n.etat==='ok'?'sev-info':n.etat==='ko'?'sev-err':'sev-warn'}">${esc(n.texte)}</span>`:`<span class="hint">${esc(n.texte)}</span>`}</td>
+      <td><button class="icon" data-relretirer="${esc(rel.tag)}" title="Retirer ce relevé"${ed}>🗑</button></td></tr>
+      ${P.length?`<tr><td colspan="6"><details data-releve-ports="${esc(rel.tag)}"><summary class="hint">Ports en écoute de ${esc(rel.tag)} face à la matrice de flux</summary><table class="grid"><thead><tr><th>Protocole</th><th>Port</th><th>Adresse</th><th>Processus</th><th>Flux autorisé vers la machine</th></tr></thead><tbody>${P.map(p=>`<tr><td>${esc(p.proto)}</td><td class="num">${esc(p.port)}</td><td class="mono">${esc(p.adresse)}</td><td>${esc(p.processus)}</td><td>${p.flux.length?`<span class="sev-info">${esc(p.flux.slice(0,3).join(' ; '))}</span>`:'<span class="sev-warn">aucun : service à justifier ou à fermer</span>'}</td></tr>`).join('')}</tbody></table></details></td></tr>`:''}`;}).join('')}</tbody></table>
+  <h3 style="margin-top:12px">Écarts proposés</h3>
+  <table class="grid" data-releve-ecarts><thead><tr><th>Machine</th><th>Champ</th><th>Valeur actuelle</th><th>Valeur relevée</th><th></th></tr></thead><tbody>${ec.map((e,i)=>`<tr><td class="b">${esc(e.tag)}</td><td>${esc(e.l)}</td><td>${esc(e.avant)||'<span class="hint">vide</span>'}</td><td>${esc(e.apres)}</td><td><button data-relapp="${i}"${ed}>Appliquer</button></td></tr>`).join('')||`<tr><td colspan="5" class="hint">${can('edit')?'Aucun écart : fiches, plan d\'adressage et routes à jour.':'Lecture seule.'}</td></tr>`}</tbody></table>
+  ${ec.length>1?`<p><button id="relAppAll"${ed}>Appliquer les ${ec.length} écarts</button></p>`:''}`:'<p class="hint">Aucun relevé importé.</p>'}</div>`;})()}
   <div class="panel"><h3>Publier vers le site</h3><p>${zs.length} zone(s), ${cs.length} conduit(s), ${as.length} actif(s) (TAG, type, famille, zone, libellé, criticité, emplacement, coffret, OS, hyperviseur, fonction, marque, modèle, version firmware, commentaire) et ${sis.length} système(s) d'information (nom, fonction, D / I / C, ID des VLAN, TAG des actifs : WerbEBIOS les reprend comme biens supports), ainsi que ${vls.length} VLAN (ID, nom, réseau, zone, statut, couche : WerbAssets les propose dans les fiches pare-feu et switch). Les adresses IP (y compris l'adressage des VLAN), numéros de série, la matrice de flux et le contenu des fiches SI (RACI, saisies) ne sont pas publiés.</p>
   ${pending.length?'<p class="warn">Des modifications ne sont pas enregistrées : enregistre une version avant de publier.</p>':''}
   <button class="pri" id="smPub"${ok&&can('edit')&&!pending.length?'':' disabled'}>Publier dans sites/${esc(L.site||'…')}/publications/werbmap.json</button>
   <h3 style="margin-top:14px">Sans espace WerbSMSI : fichier de publication</h3>
-  <p class="hint">Poste isolé, Firefox, espace inaccessible : exporte le même contenu dans un fichier, puis importe-le dans <b>WerbExploitation › Inventaire WerbMap › Importer une publication WerbMap…</b>.${pending.length?' Les modifications non enregistrées sont incluses.':''}</p>
+  <p class="hint">Poste isolé, Firefox, espace inaccessible : exporte le même contenu dans un fichier, puis importe-le dans <b>WerbExploitation › Parc & cycle de vie › Actifs du site (WerbMap) › Importer une publication WerbMap…</b>.${pending.length?' Les modifications non enregistrées sont incluses.':''}</p>
   <button id="smExp"${as.length||zs.length?'':' disabled'}>⬇ Exporter la publication (fichier pour WerbExploitation)</button></div>`;
   $('#s-smsi').innerHTML=h;
+  if($('#relImp'))$('#relImp').onclick=()=>$('#relFichier').click();
+  if($('#relFichier'))$('#relFichier').onchange=async e=>{const fs=[...e.target.files];e.target.value='';if(fs.length&&can('edit'))await importerReleves(fs);};
+  document.querySelectorAll('#s-smsi [data-relapp]').forEach(b=>b.onclick=()=>{const e=relEcarts()[+b.dataset.relapp];if(!e||!can('edit'))return;e.appliquer();render();setStatus(`${e.tag} · ${e.l} : « ${e.apres} » repris du relevé (enregistre une version).`);});
+  if($('#relAppAll'))$('#relAppAll').onclick=()=>{const l=relEcarts();if(!l.length||!can('edit')||!confirm(`Appliquer les ${l.length} écart(s) des relevés de machines ?`))return;l.forEach(e=>e.appliquer());render();setStatus(`${l.length} écart(s) repris des relevés : enregistre une version.`);};
+  document.querySelectorAll('#s-smsi [data-relretirer]').forEach(b=>b.onclick=()=>{const t=b.dataset.relretirer;if(!can('edit')||!confirm(`Retirer le relevé de ${t} ? Les fiches ne sont pas modifiées.`))return;
+    const i=rels().findIndex(x=>x.tag===t);if(i>=0){const r=rels().splice(i,1)[0];log('Relevé de machine',t,t,'Retrait','relevé du '+fmtDay(r.collecteLe),'');}render();});
+  if($('#smRecv'))$('#smRecv').onclick=async()=>{if(!can('edit'))return;try{const ch=await recevoir();render();setStatus(ch?'Données reçues mises à jour : enregistrez une version.':'Données reçues déjà à jour.');}catch(e){alert('Lecture des publications impossible : '+e.message);}};
   document.querySelectorAll('#s-smsi [data-invapp]').forEach(b=>b.onclick=()=>{const e=invEcarts()[+b.dataset.invapp];if(!e||!can('edit'))return;invAppliquer(e);render();setStatus(`${e.r.tag} · ${e.l} : « ${e.avant||'vide'} » → « ${e.apres} » (enregistre une version).`);});
   if($('#invAppAll'))$('#invAppAll').onclick=()=>{const l=invEcarts();if(!l.length||!can('edit')||!confirm(`Appliquer les ${l.length} écart(s) relevés aux fiches des machines ?`))return;l.forEach(invAppliquer);render();setStatus(`${l.length} champ(s) repris des relevés d'inventaire : enregistre une version.`);};
   $('#smExp').onclick=()=>{const now=new Date().toISOString().replace(/\.\d{3}Z$/,'Z'),sig=x=>Object.assign({},x,{source:WERB.id,majLe:now.slice(0,10)});
@@ -38876,7 +38910,7 @@ function renderSmsi(){const E=WerbSocle.espace,L=liaison(),g=E.groupe,ed=can('ed
     const pub={format:'WERBSMSI-PUBLICATION',schema:1,famille:'WERBSMSI',meta,data:{zones:zs.map(({_vlans,...z})=>sig(z)),conduits:cs.map(sig),actifs:as.map(sig),si:sis.map(sig),vlans:vls.map(sig)}};
     const nom=`werbmap_publication_${L.site||'SITE'}_${stamp()}.json`;dl(nom,JSON.stringify(pub,null,1),'application/json');
     log('WerbSMSI','publication','Export de publication',nom,'',`${zs.length} zone(s), ${cs.length} conduit(s), ${as.length} actif(s)`);render();
-    setStatus('Fichier de publication exporté : à importer dans WerbExploitation (Inventaire WerbMap › Importer une publication WerbMap…).');};
+    setStatus('Fichier de publication exporté : à importer dans WerbExploitation (Parc & cycle de vie › Actifs du site (WerbMap) › Importer une publication WerbMap…).');};
   $('#smOpen').onclick=async()=>{SMSI_ERR='';try{await E.choisir();await listesGroupe();}catch(e){if(e.name!=='AbortError')SMSI_ERR=e.message;}render();};
   if($('#smLink'))$('#smLink').onclick=async()=>{const code=$('#smSite').value;if(!code){alert('Choisis un site.');return;}
     const avant=L.site||'',nv={groupeId:g.groupeId,site:code};S.meta.werbsmsi=nv;log('Base','werbsmsi','Intégration WerbSMSI','Site rattaché',avant,code+' – '+g.organisation);
@@ -38897,7 +38931,7 @@ function renderAide(){const P=(e,t,c)=>`<div class="panel"><h3>${e} ${t}</h3>${c
   ${P('🧭','À quoi sert WerbMap','<p>Cartographie réseau d\'un site : réservation des VLAN, plan d\'adressage IP, inventaires (coffrets, actifs réseau, machines physiques et virtuelles), routes, NAT, matrice de flux et procédures. Il remplace le classeur « Base_Inventaires_actifs » et l\'importe ou le remplit.</p>')}
   ${P('🚀','Démarrer','<ul><li><b>📂 Ouvrir une base…</b> ou <b>➕ Créer une nouvelle base…</b> (le compte administrateur est créé ensuite).</li><li><b>🧪 Base de démonstration</b> : données fictives, comptes <code>admin.demo</code> / <code>Demo-Admin-2026</code>, <code>tech.demo</code> / <code>Demo-Tech-2026</code>, <code>audit.demo</code> / <code>Demo-Audit-2026</code>.</li><li>Depuis le portail WerbSMSI : cliquer la puce 📍 du site sous WerbMap, puis <b>📂 Ouvrir la base demandée</b>.</li></ul>')}
   ${P('💾','Enregistrer','<ul><li><b>💾 Enregistrer</b> crée une nouvelle <b>version</b> (commentaire obligatoire), tracée dans l\'historique avec une chaîne d\'intégrité.</li><li><b>📑 Enregistrer sous…</b> écrit la version dans un autre fichier (copie, autre emplacement) : la base ouverte devient ce fichier, l\'ancien n\'est pas modifié.</li><li>Dans WerbSMSI, ranger la base dans <code>SMSI_&lt;SIGLE&gt;\\sites\\&lt;CODE&gt;\\inventaires\\</code> avec un nom qui finit par <code>.werbmap.json</code> : le portail affiche alors sa puce.</li><li>Si un collègue a enregistré entre-temps, tes modifications sont téléchargées en brouillon et la dernière version est rechargée.</li></ul>')}
-  ${P('🔗','Publier vers WerbSMSI (IEC 62443, WerbExploitation)','<ol><li><b>Administration › Intégration WerbSMSI</b> : <b>Choisir l\'espace…</b> (dossier <code>SMSI_&lt;SIGLE&gt;</code>), choisir le site, <b>Rattacher</b>, puis enregistrer une version.</li><li>Renseigner le <b>SL-T</b> de chaque zone (sans SL-T, la zone est ignorée par IEC 62443).</li><li><b>Publier</b> : écrit <code>sites/&lt;CODE&gt;/publications/werbmap.json</code> (zones, conduits, actifs avec famille, emplacement, OS). WerbExploitation le lit avec <b>⟳ Actualiser depuis l\'espace</b>, IEC 62443 avec <b>Importer dans le projet</b>.</li><li>Sans espace : <b>⬇ Exporter la publication</b> produit le même fichier, à importer dans WerbExploitation (<b>Inventaire WerbMap › Importer une publication WerbMap…</b>).</li></ol><p class="hint">Ni adresse IP, ni VLAN, ni numéro de série, ni matrice de flux ne sont publiés.</p>')}
+  ${P('🔗','Publier vers WerbSMSI (IEC 62443, WerbExploitation)','<ol><li><b>Administration › Intégration WerbSMSI</b> : <b>Choisir l\'espace…</b> (dossier <code>SMSI_&lt;SIGLE&gt;</code>), choisir le site, <b>Rattacher</b>, puis enregistrer une version.</li><li>Renseigner le <b>SL-T</b> de chaque zone (sans SL-T, la zone est ignorée par IEC 62443).</li><li><b>Publier</b> : écrit <code>sites/&lt;CODE&gt;/publications/werbmap.json</code> (zones, conduits, actifs avec famille, emplacement, OS). WerbExploitation le lit avec <b>⟳ Actualiser depuis l\'espace</b>, IEC 62443 avec <b>Importer dans le projet</b>.</li><li>Sans espace : <b>⬇ Exporter la publication</b> produit le même fichier, à importer dans WerbExploitation (<b>Parc & cycle de vie › Actifs du site (WerbMap) › Importer une publication WerbMap…</b>).</li></ol><p class="hint">Ni adresse IP, ni VLAN, ni numéro de série, ni matrice de flux ne sont publiés.</p>')}
   ${P('👥','Comptes et rôles','<p><b>Lecteur</b> : consulte et exporte. <b>Éditeur</b> : modifie et enregistre. <b>Administrateur</b> : gère aussi les comptes et les référentiels. L\'authentification trace qui fait quoi ; la protection réelle est celle du dossier.</p>')}
   ${P('📥','Excel','<p><b>📥 Import Excel</b> reprend un classeur Base_Inventaires_actifs (.xlsx / .xlsm). <b>📊 Export Excel</b> remplit le modèle (couleurs, listes, macros conservées) ou produit un classeur simple avec anomalies, versions et journal.</p>')}
   ${P('🧾','Saisie en masse','<p>Sur le <b>Plan IP</b>, les <b>coffrets</b>, les <b>actifs réseau</b> et les <b>machines physiques et virtuelles</b> : <b>⇩ Modèle de saisie</b> télécharge un classeur aux bonnes colonnes, avec des listes déroulantes des valeurs de la base (vierge, ou avec les lignes existantes pour les corriger). Remplis-le, puis <b>⇧ Importer des lignes</b> (classeur ou .csv aux mêmes titres).</p><ul><li>Modes : ajouter et mettre à jour (par TAG ; par adresse IP pour le Plan IP), ajouter seulement, remplacer la table.</li><li>Un rapport liste les ajouts, les mises à jour et les lignes rejetées avec leur motif : rien n\'est modifié avant « Appliquer ».</li><li>En mise à jour, une cellule vide ne modifie pas la valeur existante. Enregistre ensuite une version.</li></ul>')}
@@ -38929,7 +38963,7 @@ const recus=k=>(S.recus&&S.recus[k])||null;
 const libRisque=n=>{if(!+n)return '';const x=((S.recus&&S.recus.niveauxRisque)||[]).find(e=>+e.niveau===+n);return x&&x.libelle?n+' – '+x.libelle:String(n);};
 async function recevoir(){const L=liaison(),E=WerbSocle.espace;if(!E.ouvert||!L.site||!can('edit'))return false;
   let pg={},ps;try{pg=(await E.publications('groupe')).objets||{};}catch(e){}
-  try{ps=(await E.publications('site',L.site)).objets||{};}catch(e){return false;}
+  try{const rs=await E.publications('site',L.site);ps=rs.objets||{};PUBS_LUES={sig:sigPubs(rs.fichiers),le:new Date().toISOString(),fichiers:autresPubs(rs.fichiers),site:L.site};}catch(e){return false;}
   const items=(Array.isArray(ps.syntheseRisques)?ps.syntheseRisques:[]).filter(r=>r&&r.id).map(r=>({id:String(r.id),libelle:String(r.libelle||''),gravite:+r.gravite||0,vraisemblance:+r.vraisemblance||0,
     niveauBrut:+r.niveauBrut||0,niveauResiduel:+r.niveauResiduel||0,traitement:String(r.traitement||''),evenementRedoute:String(r.evenementRedoute||''),etude:String(r.etude||''),actifs:(Array.isArray(r.actifs)?r.actifs:[]).map(String)}));
   const ech=pg.echelles&&Array.isArray(pg.echelles.niveauxRisque)?pg.echelles.niveauxRisque.map(x=>({niveau:+x.niveau,libelle:String(x.libelle||'')})):((S.recus||{}).niveauxRisque||[]);
@@ -39013,6 +39047,81 @@ const DISTANT_TXT={aucun:'—',demande:'à la demande',permanent:'permanent'};
 /* Cycle de vie (site:plm, WerbExploitation 1.18.0, MAP-14) : références installées (matériel, logiciel, OS) avec leur statut PLM et leurs TAG.
    Copié dans la base comme les sauvegardes ; la fiche SI ne garde que les références dont un TAG est un actif du SI. */
 const PLM_CHAMPS=['id','nature','fabricant','produit','version','libelle','statut','gravite','finCommercialisation','finSupport','finSupportEtendu','finVie','versionCible'];
+/* Relevés de machines (1.29.0, lot L : MAP-17, MAP-18) : le fichier du script d'inventaire de WerbExploitation est lu directement ici (rien de
+   réseau ne passe par l'espace). Seuls matériel, interfaces, routes, ports en écoute et heure sont gardés — jamais les comptes, la licence,
+   les applications ni le durcissement. Consolidation proposée (Appliquer) ; ports et NTP rapprochés de la matrice de flux. */
+const rels=()=>S.releves||(S.releves=[]);
+const cleK=s=>upT(s).replace(/[^A-Z0-9]/g,'');
+function hostDe(tag){const k=upT(tag);for(const key of ['machines','vms']){const r=S[key].find(m=>upT(m.tag)===k);if(r)return {key,r};}return null;}
+function hostPourNom(h){const k=cleK(h);if(!k)return '';for(const key of ['machines','vms']){const r=S[key].find(m=>m.tag&&(cleK(m.tag)===k||cleK(m.libelle)===k));if(r)return r.tag.trim();}return '';}
+const nomNtp=s=>String(s||'').trim().toLowerCase().replace(/,0x[0-9a-f]+$/i,'').replace(/\s*\(.*\)$/,'');
+const NTP_LOCAL=/(local cmos clock|free-running system clock|vm ic time synchronization provider)/i;
+function releveDuFichier(j,nom){if(!j||typeof j!=='object'||!j.machine||typeof j.machine!=='object'||!j.machine.hostname)return null;
+  const s=v=>v==null?'':String(v).slice(0,300),n=v=>v==null||v===''||!Number.isFinite(+v)?null:+v,l=(v,k=500)=>(Array.isArray(v)?v:[]).filter(x=>x!=null).slice(0,k);
+  const hw=j.hardware||null,t=j.time||null;
+  return {tag:'',hostname:s(j.machine.hostname),collecteLe:s(j.collectedAt),generateur:s(j.generator),schema:s(j.schemaVersion),fichier:s(nom),importeLe:new Date().toISOString(),importePar:USER?USER.login:'',
+    materiel:hw?{cpu:s(hw.cpu),sockets:n(hw.sockets),coeurs:n(hw.cores),threads:n(hw.threads),ramGo:n(hw.ramGB),disques:l(hw.disks,30).map(d=>({nom:s(d.name),tailleGo:n(d.sizeGB)}))}:null,
+    interfaces:l(j.machine.network,20).map(x=>({nom:s(x.description),mac:s(x.mac),ipv4:l(x.ipv4,20).map(s),masques:l(x.masks||[],20).map(s),passerelles:l(x.gateways||[],5).map(s)})),
+    routes:Array.isArray(j.routes)?l(j.routes).map(r=>({destination:s(r.destination),passerelle:s(r.nextHop),interface:s(r.interface),metrique:n(r.metric),persistante:r.persistent===true})):null,
+    ports:Array.isArray(j.listeningPorts)?l(j.listeningPorts,2000).map(p=>({proto:s(p.protocol).toLowerCase(),adresse:s(p.address),port:n(p.port),processus:s(p.process)})):null,
+    heure:t?{type:s(t.type),source:s(t.source),serveurs:l(t.servers,20).map(s)}:null};}
+// Adresses de la machine : relevé + plan d'adressage
+const ipsRel=rel=>[...new Set([...rel.interfaces.flatMap(i=>i.ipv4),...((CTX.tagIps||{})[upT(rel.tag)]||[]).map(x=>x.ip)].filter(ip=>ip2i(ip)!==null))];
+const vlanDeIp=ip=>{const i=ip2i(ip);if(i===null)return null;return vlanList().find(v=>v.sn&&i>=v.sn.net&&i<=v.sn.bc)||null;};
+// Une extrémité de flux (TAG, nom de réseau ou VLAN, adresse, CIDR, any) couvre-t-elle la machine ?
+function couvre(ep,tag,ips){const e=String(ep||'').trim();if(!e||/^any$/i.test(e))return true;if(tag&&upT(e)===upT(tag))return true;
+  if(e.includes('/')||ip2i(e)!==null){const sn=subnet(e,e.includes('/')?null:'32');return !!sn&&ips.some(ip=>{const i=ip2i(ip);return i!==null&&i>=sn.net&&i<=sn.bc;});}
+  const v=vlanList().find(x=>[x.nom,x.vname,'VL'+x.id,String(x.id)].some(n=>n&&upT(n)===upT(e)));
+  return !!(v&&v.sn)&&ips.some(ip=>{const i=ip2i(ip);return i!==null&&i>=v.sn.net&&i<=v.sn.bc;});}
+const SVC_PORTS={ftp:'21',ssh:'22',telnet:'23',smtp:'25',dns:'53',domain:'53',http:'80',www:'80',kerberos:'88',ntp:'123',msrpc:'135',epmap:'135',netbios:'137-139',snmp:'161','snmp-trap':'162',
+  ldap:'389',https:'443',smb:'445','microsoft-ds':'445',syslog:'514',ldaps:'636',mssql:'1433',sql:'1433',mqtt:'1883',iec104:'2404',rdp:'3389','ms-wbt-server':'3389',opcua:'4840','opc-ua':'4840',
+  vnc:'5900',winrm:'5985','winrm-https':'5986','http-alt':'8080',wsus:'8530','https-alt':'8443',dnp3:'20000',ethernetip:'44818',enip:'44818',bacnet:'47808',modbus:'502',s7:'102','iso-tsap':'102'};
+function portOk(f,proto,port){const pr=String(f.proto||'').trim().toLowerCase();if(pr&&pr!=='any'&&pr!==proto)return false;
+  const toks=String(f.port||'').toLowerCase().split(/[,;\s]+/).filter(Boolean);if(!toks.length)return true;
+  return toks.some(t=>{if(t==='any')return true;const v=SVC_PORTS[t]||t;const m=/^(\d+)(?:-(\d+))?$/.exec(v);if(!m)return false;return port>=+m[1]&&port<=+(m[2]||m[1]);});}
+const fluxOuvert=f=>!f.archive&&!/^(block|reset)$/i.test(f.action||'')&&!/^off$/i.test(f.state||'');
+const portLocal=p=>/^(127\.|::1$|\[::1\]$|169\.254\.)/.test(p.adresse||'');
+// MAP-18 : ports en écoute (hors boucle locale) couverts par un flux autorisé vers la machine
+function relPorts(rel){const ips=ipsRel(rel);return (rel.ports||[]).filter(p=>p.port!==null&&!portLocal(p)).map(p=>{
+  const fl=S.flux.filter(f=>fluxOuvert(f)&&couvre(f.dst,rel.tag,ips)&&portOk(f,p.proto,p.port));return Object.assign({},p,{flux:fl.map(f=>f.comment||((f.src||'?')+' → '+(f.dst||'?')))});});}
+// MAP-18 : flux NTP déclaré entre la machine et sa source de temps
+function relNtp(rel){const h=rel.heure;if(!h)return {etat:'',texte:'heure non relevée'};
+  const src=nomNtp(h.source)||nomNtp(h.serveurs[0]);if(!src||NTP_LOCAL.test(h.source||''))return {etat:'ko',texte:'pas de source de temps externe ('+(h.source||h.type||'inconnue')+')'};
+  if(/^nt5ds$/i.test(h.type)&&!h.source)return {etat:'',texte:'hiérarchie du domaine (contrôleur de domaine) : à vérifier'};
+  const ips=ipsRel(rel),stag=hostPourNom(src)||Object.keys(CTX.tagIps||{}).find(t=>(CTX.tagIps[t]||[]).some(x=>x.ip===src))||'',sips=ip2i(src)!==null?[src]:((CTX.tagIps||{})[upT(stag)]||[]).map(x=>x.ip);
+  const serveur=ep=>couvre(ep,stag,sips)||upT(ep)===upT(src),ntp=f=>f.ntp===true||portOk(f,'udp',123);
+  const ok=S.flux.some(f=>fluxOuvert(f)&&ntp(f)&&((couvre(f.src,rel.tag,ips)&&serveur(f.dst))||(couvre(f.dst,rel.tag,ips)&&serveur(f.src))));
+  return {etat:ok?'ok':'warn',texte:(ok?'flux NTP déclaré vers ':'aucun flux NTP (UDP/123) déclaré vers ')+src+(stag?' ('+stag+')':'')};}
+// MAP-17 : écarts proposés depuis les relevés — matériel (champs vides), adresses IP absentes du plan, MAC manquantes, routes absentes
+function relEcarts(){const out=[];
+  rels().forEach(rel=>{const h=hostDe(rel.tag);if(!h)return;const r=h.r,T=TBL[h.key],o=rel.materiel;
+    const champ=(f,v)=>{v=String(v||'').trim();if(!v||String(r[f]||'').trim())return;const c=T.cols.find(x=>x.f===f);if(!c)return;
+      out.push({tag:r.tag,l:c.l,avant:'',apres:v,appliquer:()=>{r[f]=v;log(T.obj,r.id,T.label(r),c.l+' (relevé d\'inventaire)','',v);}});};
+    if(o){const go=x=>x===null?'':(x>=1000?(Math.round(x/100)/10).toString().replace('.',',')+' To':Math.round(x)+' Go');
+      if(h.key==='machines'){champ('cpuInfo',o.cpu);champ('cpu',o.coeurs?(o.sockets>1?o.sockets+'x'+Math.round(o.coeurs/o.sockets):o.coeurs)+'/'+(o.threads||'?'):'');
+        champ('ram',o.ramGo?Math.round(o.ramGo)+' Go':'');champ('disques',o.disques.map(d=>go(d.tailleGo)).filter(Boolean).join(' + '));}
+      else{champ('cpu',o.threads?String(o.threads):'');champ('ram',o.ramGo?String(Math.round(o.ramGo)):'');champ('dd1',o.disques[0]&&o.disques[0].tailleGo!==null?String(Math.round(o.disques[0].tailleGo)):'');
+        champ('dd2',o.disques[1]&&o.disques[1].tailleGo!==null?String(Math.round(o.disques[1].tailleGo)):'');}}
+    rel.interfaces.forEach(itf=>itf.ipv4.forEach(ip=>{if(ip2i(ip)===null||/^(127\.|169\.254\.)/.test(ip))return;
+      const ex=S.ips.find(a=>upT(a.tag)===upT(r.tag)&&String(a.ip||'').trim()===ip),v=vlanDeIp(ip);
+      if(!ex)out.push({tag:r.tag,l:'Adresse IP (plan d\'adressage)',avant:'absente',apres:ip+(v?' (VLAN '+v.id+' – '+v.nom+')':' (hors des VLAN déclarés)'),appliquer:()=>{
+        const n={id:uid(),vlan:v?v.key:'',type:'',tag:r.tag,ip,mac:itf.mac||'',produit:'',port:'',about:'',portAb:'',comment:'Relevé d\'inventaire du '+fmtDay(rel.collecteLe),migre:false,nat:''};
+        S.ips.push(n);log(TBL.ips.obj,n.id,TBL.ips.label(n),'Création (relevé d\'inventaire)','',ip);}});
+      else if(itf.mac&&!String(ex.mac||'').trim())out.push({tag:r.tag,l:'MAC de '+ip,avant:'',apres:itf.mac,appliquer:()=>{ex.mac=itf.mac;log(TBL.ips.obj,ex.id,TBL.ips.label(ex),'MAC (relevé d\'inventaire)','',itf.mac);}});}));
+    (rel.routes||[]).forEach(rt=>{const sn=subnet(rt.destination,null);if(!sn||sn.c===0)return;
+      if(S.routes.some(x=>upT(x.actif)===upT(r.tag)&&(()=>{const s2=routeNet(x);return s2&&s2.net===sn.net&&s2.c===sn.c;})()&&String(x.gw||'').trim()===rt.passerelle))return;
+      out.push({tag:r.tag,l:'Route',avant:'absente',apres:sn.cidr+' via '+rt.passerelle+(rt.interface?' ('+rt.interface+')':''),appliquer:()=>{
+        const n={id:uid(),actif:r.tag,dest:i2ip(sn.net),mask:i2ip(sn.m),gw:rt.passerelle,iface:rt.interface,metric:rt.metrique===null?'':String(rt.metrique),persist:!!rt.persistante,state:'',comment:'Relevé d\'inventaire du '+fmtDay(rel.collecteLe)};
+        S.routes.push(n);log(TBL.routes.obj,n.id,TBL.routes.label(n),'Création (relevé d\'inventaire)','',n.dest+'/'+sn.c+' via '+n.gw);}});});});
+  return out;}
+async function importerReleves(files){const ignores=[];let nb=0;
+  for(const f of files){let j;try{j=JSON.parse(await f.text());}catch(e){ignores.push(f.name+' : JSON illisible');continue;}
+    const rel=releveDuFichier(j,f.name);if(!rel){ignores.push(f.name+' : fichier d\'un script d\'inventaire attendu');continue;}
+    let tag=hostPourNom(rel.hostname);
+    if(!tag){const v=prompt(`Relevé de « ${rel.hostname} » : aucune machine de ce nom. TAG de la machine physique ou virtuelle (laisser vide pour ignorer) :`,'');if(!v||!hostDe(v)){ignores.push(f.name+' : ignoré');continue;}tag=hostDe(v).r.tag.trim();}
+    rel.tag=tag;const i=rels().findIndex(x=>upT(x.tag)===upT(tag)),av=i>=0?rels()[i]:null;if(i>=0)rels().splice(i,1);rels().push(rel);nb++;
+    log('Relevé de machine',tag,tag,'Import',av?'relevé du '+fmtDay(av.collecteLe):'','relevé du '+fmtDay(rel.collecteLe)+' ('+f.name+')');}
+  render();setStatus(`${nb} relevé(s) importé(s)${ignores.length?' · '+ignores.join(' · '):''}${nb?' : écarts proposés dans Intégration WerbSMSI, enregistrez une version.':''}`,!nb);}
 /* Inventaires de machines (site:inventaires, WerbExploitation 1.23.0, MAP-15) : relevé par machine (TAG) fait avec les scripts d'inventaire. Copié dans la
    base comme le PLM ; colonne « Inventaire » des machines physiques et virtuelles ; écarts proposés dans Intégration WerbSMSI, appliqués un à un ou tous. */
 const INV_CHAMPS=['id','tag','hostname','osNom','osVersion','osBuild','osArch','fabricant','modele','serie','collecteLe','nbApplications'];
@@ -39474,6 +39583,16 @@ async function reloadBase(force){if(MODE!=='fsa'||!HANDLE){alert('Mode télécha
 async function watch(){if(MODE!=='fsa'||!HANDLE||!USER||!DB)return;try{const c=await readRemote();
   if(c.format===FMT&&(c.version||0)>BASEV){banner(`⚠ <b>${esc(c.savedBy)}</b> a enregistré la version ${c.version} le ${fmtD(c.savedAt)}. ${pending.length?'<b>Tes modifications en cours ne pourront pas être enregistrées par-dessus.</b> ':''}<button id="bnR">🔄 Recharger</button>`);$('#bnR').onclick=()=>reloadBase();}}catch(e){}}
 setInterval(watch,60000);window.addEventListener('focus',watch);
+async function veillePubs(){const L=liaison(),E=WerbSocle.espace;
+  if(PUBS_VEILLE||!USER||!DB||!S||!E.ouvert||!L.site||!PUBS_LUES||PUBS_LUES.site!==L.site)return;
+  PUBS_VEILLE=true;
+  try{const rs=await E.publications('site',L.site),sig=sigPubs(rs.fichiers);if(sig===PUBS_LUES.sig)return;
+    const avant=new Map(PUBS_LUES.fichiers.map(f=>[f.module,f.publieLe||''])),nouv=autresPubs(rs.fichiers).filter(f=>avant.get(f.module)!==(f.publieLe||'')).map(f=>f.module);
+    if(can('edit')){const ch=await recevoir();render();
+      setStatus(`Nouvelle publication relue (${nouv.join(', ')||'publication retirée'})${ch?' : données reçues mises à jour, enregistrez une version.':' : rien de changé pour WerbMap.'}`);}
+    else{PUBS_LUES={sig,le:new Date().toISOString(),fichiers:autresPubs(rs.fichiers),site:L.site};render();setStatus(`Nouvelle publication dans l'espace (${nouv.join(', ')}) : lecture seule, elle n'est pas copiée dans la base.`);}}
+  catch(e){}finally{PUBS_VEILLE=false;}}
+setInterval(veillePubs,60000);window.addEventListener('focus',veillePubs);
 window.addEventListener('beforeunload',e=>{if(pending.length){e.preventDefault();e.returnValue='';}});
 
 $('#bSave').onclick=async()=>{if(!can('edit'))return;if(!pending.length&&!confirm('Aucune modification en cours. Créer quand même une nouvelle version ?'))return;
