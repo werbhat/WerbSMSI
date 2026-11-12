@@ -7,6 +7,7 @@ Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/), num
 ## [0.28.0] — 2026-11
 
 ### Changements
+- **WerbExploitation 1.29.1 publié** : guide « WerbExploitation : guide complet et correspondance avec les exigences » (NIS2, ISO 27001:2022, IEC 62443, ANSSI, CRA ; preuves d'audit).
 - **WerbExploitation 1.29.0 publié** (EXP-16) : **gestion des changements** — *Maintien opérationnel › Changements* : circuit tracé (impact, sauvegarde, retour arrière, validations, fenêtre, réalisation, clôture), types normal / standard / urgent, contrôles au tableau de bord, fiche PDF, interventions créées à la réalisation.
 - **WerbExploitation 1.28.1 publié** : Espaces de sauvegarde avant Sauvegardes dans le menu ; page « Déclaration des espaces de sauvegardes ».
 - **WerbExploitation 1.28.0 publié** : menu réorganisé en 8 sections — 🗂️ Parc & cycle de vie (actifs WerbMap, inventaires de machines, applicatifs, référentiel logiciel, références matériel), certificats en maintien en sécurité, licences en maintien opérationnel. **WerbMap 1.29.1** : renvois mis à jour.
