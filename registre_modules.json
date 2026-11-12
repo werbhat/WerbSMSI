@@ -225,7 +225,7 @@
       "chemin": "modules/exploitation/WerbExploitation",
       "depot": "../WerbExploitation",
       "etat": "publie",
-      "version": "1.29.1",
+      "version": "1.30.0",
       "etape": "controler"
     },
     {
