@@ -8,7 +8,10 @@ L'espace fictif SMSI_GROUPE_DEMO (JSON, DROITS.md, modèle Word) est copié dans
 les sélecteurs de dossier et de fichier y sont redirigés. Contrôles : archive complète et de site (contenu octet pour octet,
 manifeste, empreintes, versions des modules, auteur), vérification d'une archive intègre, altérée ou d'un autre espace,
 aperçu des écarts, restauration d'un fichier modifié et d'un fichier supprimé, refus sur une base verrouillée, copie
-préalable des fichiers remplacés, rien dans le stockage du navigateur.
+préalable des fichiers remplacés, rien dans le stockage du navigateur. Chiffrement (portail 1.14.0) : case proposée par défaut,
+mot de passe trop court ou mal confirmé refusé, archive zip AES-256 (WinZip AE-1) lue par pyzipper avec le mot de passe et
+refusée sans lui, archive AES produite par pyzipper relue par le portail, mot de passe demandé à la lecture (erreur si faux),
+restauration depuis une archive chiffrée avec copie préalable chiffrée, mot de passe jamais écrit dans le stockage.
 """
 import argparse
 import base64
@@ -90,7 +93,10 @@ def main() -> int:
             pg.click(selecteur)
             pg.wait_for_function("([r, v]) => { const e = document.getElementById('svEtat'); return e && e.dataset[r] !== v && !document.querySelector('[data-act=ouvrirSauvegarde][disabled]'); }", arg=[repere, avant])
 
-        print("Sauvegarde complète")
+        print("Sauvegarde complète (en clair)")
+        ok(pg.is_checked("#svChiffrer") and pg.locator("#svMdp").count() == 1, "chiffrement proposé par défaut (mot de passe et confirmation)")
+        pg.uncheck("#svChiffrer"); pg.wait_for_timeout(100)
+        ok(pg.locator("#svMdp").count() == 0 and "Archive en clair" in pg.inner_text("[data-sv-chiffre]"), "case décochée : avertissement « archive en clair »")
         pg.click("[data-act=sauvegarder]")
         ok("Réalisée par" in pg.inner_text("#toasts"), "auteur obligatoire")
         pg.fill("#svAuteur", "Alice MARTIN")
@@ -173,6 +179,87 @@ def main() -> int:
         ok(za is not None and za.namelist() == ["werbsmsi.sauvegarde.json", expl] and b"\"modifie\": 1" in za.read(expl),
            "copie préalable : la version remplacée est sauvegardée")
         ok("2 fichier(s) restauré(s)" in pg.inner_text("#main") and pg.locator(".svSel:checked").count() == 0, "compte rendu et aperçu à jour")
+        print("Sauvegarde chiffrée")
+        import pyzipper
+        MDP = "Coffre-Fort#2026!"
+        pg.check("#svChiffrer"); pg.wait_for_timeout(100)
+        pg.select_option("#svPerim", "complet")
+        pg.fill("#svMdp", "court"); pg.fill("#svMdp2", "court"); pg.click("[data-act=sauvegarder]")
+        ok("trop court" in pg.inner_text("#toasts"), "mot de passe trop court refusé")
+        pg.fill("#svMdp", MDP); pg.fill("#svMdp2", MDP + "x"); pg.click("[data-act=sauvegarder]")
+        ok("confirmation ne correspond pas" in pg.inner_text("#toasts"), "confirmation différente refusée")
+        pg.fill("#svMdp2", MDP)
+        action("[data-act=sauvegarder]", "sauv")
+        chiffree = pg.inner_text("#main .infobox b")   # même nom que l'archive en clair si la même minute : remplacée
+        ok(chiffree in opfs("lister", "SAUV") and chiffree.startswith("Sauvegarde_GDI_complet_"), f"archive chiffrée écrite : {chiffree}")
+        brut = lire(f"SAUV/{chiffree}")
+        ok("Mot de passe défini pour cette session" in pg.inner_text("[data-sv-chiffre]") and "chiffrée" in pg.inner_text("#main .infobox"),
+           "compte rendu : archive chiffrée, mot de passe gardé pour la session")
+        try:
+            zipfile.ZipFile(io.BytesIO(brut)).read("werbsmsi.sauvegarde.json"); clair = True
+        except RuntimeError:
+            clair = False
+        ok(not clair and b"Groupe D" not in brut and b'"format"' not in brut, "contenu illisible sans le mot de passe (zipfile refuse, aucun texte en clair)")
+        za = pyzipper.AESZipFile(io.BytesIO(brut)); za.setpassword(MDP.encode())
+        ok(za.testzip() is None and all(i.flag_bits & 1 for i in za.infolist()), "pyzipper : archive AES valide, tous les fichiers chiffrés (authentification, CRC)")
+        mc = json.loads(za.read("werbsmsi.sauvegarde.json"))
+        ok(all(za.read(n) == lire(f"SMSI/{n}") for n in demo) and mc["meta"].get("chiffrement", "").startswith("AES-256"), "pyzipper : contenu identique octet pour octet, manifeste « AES-256 »")
+        try:
+            zb = pyzipper.AESZipFile(io.BytesIO(brut)); zb.setpassword(b"mauvais-mot-de-passe"); zb.read("werbsmsi.sauvegarde.json"); faux = True
+        except RuntimeError:
+            faux = False
+        ok(not faux, "pyzipper : mauvais mot de passe refusé")
+        ok(MDP not in json.dumps(pg.evaluate("[Object.entries(localStorage), Object.entries(sessionStorage)]")), "mot de passe absent du stockage du navigateur")
+
+        print("Lecture d'une archive chiffrée")
+        pg.click("[data-act=svMdpChanger]"); pg.wait_for_timeout(100)
+        ok(pg.locator("#svMdp").count() == 1, "« Changer le mot de passe » : le mot de passe de la session est oublié")
+        pg.evaluate(f"window.__archive = {json.dumps(chiffree)}")
+        pg.click("[data-act=ouvrirSauvegarde]"); pg.wait_for_selector("[data-sv-attente]")
+        ok("est chiffrée" in pg.inner_text("[data-sv-attente]"), "mot de passe demandé à la lecture")
+        pg.fill("#svMdpLecture", "mauvais-mot-de-passe"); pg.click("[data-act=svDechiffrer]")
+        pg.wait_for_selector("[data-sv-attente]:has-text('Mot de passe incorrect')")
+        ok(True, "mauvais mot de passe : « Mot de passe incorrect »")
+
+        def dechiffrer(mdp, entree=False):
+            avant = pg.get_attribute("#svEtat", "data-archive")
+            pg.fill("#svMdpLecture", mdp)
+            if entree:
+                pg.press("#svMdpLecture", "Enter")
+            else:
+                pg.click("[data-act=svDechiffrer]")
+            pg.wait_for_function("v => document.getElementById('svEtat').dataset.archive !== v", arg=avant)
+
+        dechiffrer(MDP, entree=True)
+        ok(pg.locator("#main .badge:has-text('conformes au manifeste')").count() == 1 and pg.locator("#main .badge:has-text('chiffrée AES-256')").count() == 1,
+           "archive déchiffrée (touche Entrée), intègre, marquée chiffrée")
+
+        externe = io.BytesIO()
+        with pyzipper.AESZipFile(externe, "w", compression=pyzipper.ZIP_DEFLATED, encryption=pyzipper.WZ_AES) as zw:
+            zw.setpassword(b"Mot-de-passe-7zip")
+            for n in za.namelist():
+                zw.writestr(n, za.read(n))
+        opfs("ecrire", "SAUV/externe.zip", externe.getvalue())
+        pg.evaluate("window.__archive = 'externe.zip'")
+        pg.click("[data-act=ouvrirSauvegarde]"); pg.wait_for_selector("[data-sv-attente]")
+        dechiffrer("Mot-de-passe-7zip")
+        ok(pg.locator("#main .badge:has-text('conformes au manifeste')").count() == 1, "archive AES produite par un autre outil (pyzipper) relue et vérifiée")
+
+        print("Restauration depuis une archive chiffrée")
+        opfs("ecrire", f"SMSI/{expl}", demo[expl].replace(b"\"data\"", b"\"modifie\": 2, \"data\"", 1))
+        pg.evaluate(f"window.__archive = {json.dumps(chiffree)}")
+        pg.click("[data-act=ouvrirSauvegarde]"); pg.wait_for_selector("[data-sv-attente]")
+        dechiffrer(MDP)
+        ok(ligne(expl).locator(".svSel").is_checked() and "mot de passe de cette archive" in pg.inner_text("#main"), "fichier modifié coché ; copie préalable annoncée chiffrée")
+        pg.click("[data-act=restaurer]")
+        pg.wait_for_function("() => document.getElementById('main').innerText.includes('1 fichier(s) restauré(s)')")
+        ok(lire(f"SMSI/{expl}") == demo[expl], "fichier restauré à l'identique depuis l'archive chiffrée")
+        import re
+        copie = (re.search(r"copie préalable : (Avant_restauration_\S+\.zip)", pg.inner_text("#main")) or [None, None])[1]   # même minute : nom réutilisé
+        zc = pyzipper.AESZipFile(io.BytesIO(lire(f"SAUV/{copie}"))) if copie else None
+        if zc:
+            zc.setpassword(MDP.encode())
+        ok(zc is not None and b"\"modifie\": 2" in zc.read(expl), "copie préalable chiffrée avec le mot de passe de l'archive")
         ok(pg.evaluate("[localStorage.length, sessionStorage.length]")[1] == 0, "rien de conservé dans le stockage de session")
         ok(not erreurs, "aucune erreur JavaScript" + (f" : {erreurs}" if erreurs else ""))
         ctx.close()

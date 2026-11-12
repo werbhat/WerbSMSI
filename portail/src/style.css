@@ -115,3 +115,5 @@ h2.tc .pc-num { width: 22px; height: 22px; font-size: 12px; margin-right: 2px; }
 .pc-txt .pc-mods { color: inherit; font-size: 11.5px; opacity: .85; }
 .pc-chaine { font-style: italic; border-left: 3px solid var(--line); padding-left: 10px; }
 .card.infographie { text-align: center; } .card.infographie img { max-width: 100%; width: 900px; height: auto; border-radius: 6px; }
+/* Sauvegarde : chiffrement facultatif de l'archive (portail 1.14.0) */
+.sv-chiffre { margin: 10px 0; padding: 10px 12px; border: 1px solid var(--line); border-left: 3px solid var(--ok); border-radius: 6px; }

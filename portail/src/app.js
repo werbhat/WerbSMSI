@@ -718,7 +718,10 @@ ${sites.map(s => `    ├── ${s.code || "?"}/  (werbsmsi.site.json, ${DOSSIE
   // fichier qu'il choisit : rien n'est conservé dans le navigateur (charte §1). Restauration : fichier par fichier, jamais sur une
   // base verrouillée (§5.7), seulement dans l'espace d'origine (même groupeId), après contrôle des empreintes de l'archive.
   const MANIFESTE = "werbsmsi.sauvegarde.json";
-  const SV = { perimetre: "complet", auteur: "", derniere: null, archive: null, restauration: null, travail: false };
+  // chiffrer : case « Chiffrer l'archive » (proposée par défaut) ; mdp : mot de passe validé pour la session (mémoire seulement) ;
+  // saisie : champs en cours de frappe ; attente : archive chiffrée lue, en attente de son mot de passe
+  const SV = { perimetre: "complet", auteur: "", derniere: null, archive: null, restauration: null, travail: false,
+    chiffrer: true, mdp: "", saisie: { m: "", m2: "" }, attente: null };
   const TYPES_ZIP = [{ description: "Sauvegarde WerbSMSI", accept: { "application/zip": [".zip"] } }];
   const enOctets = s => new TextEncoder().encode(s);
   const enTexte = u => new TextDecoder().decode(u);
@@ -726,10 +729,97 @@ ${sites.map(s => `    ├── ${s.code || "?"}/  (werbsmsi.site.json, ${DOSSIE
   const CRC = (() => { const t = new Uint32Array(256); for (let n = 0; n < 256; n++) { let c = n; for (let k = 0; k < 8; k++) c = c & 1 ? 0xEDB88320 ^ (c >>> 1) : c >>> 1; t[n] = c >>> 0; } return t; })();
   const crc32 = u => { let c = 0xFFFFFFFF; for (let i = 0; i < u.length; i++) c = CRC[(c ^ u[i]) & 255] ^ (c >>> 8); return (c ^ 0xFFFFFFFF) >>> 0; };
   const flux = (u, t) => new Response(new Blob([u]).stream().pipeThrough(t)).arrayBuffer().then(b => new Uint8Array(b));
+  /* Chiffrement facultatif de l'archive : format zip AES-256 de WinZip (AE-1), lu par 7-Zip et WinZip. Par fichier : sel aléatoire
+     de 16 octets, PBKDF2-HMAC-SHA1 (1 000 itérations, valeur fixée par le format) → clé AES-256, clé HMAC et 2 octets de contrôle
+     du mot de passe ; AES en mode compteur (compteur petit-boutiste à partir de 1, imposé par le format, donc calculé ici : WebCrypto
+     ne le propose pas) ; code d'authentification HMAC-SHA1 tronqué à 10 octets. Les noms des fichiers restent lisibles, pas leur contenu.
+     Le mot de passe n'est gardé qu'en mémoire, le temps de la session ; il n'est écrit nulle part. */
+  const MDP_MIN = 12;
+  const AES = (() => {
+    const S = new Uint8Array(256), T = [0, 1, 2, 3].map(() => new Uint32Array(256));
+    const rotl8 = (x, s) => ((x << s) | (x >>> (8 - s))) & 255, xt = a => ((a << 1) ^ (a & 128 ? 0x1b : 0)) & 255;
+    let p = 1, q = 1;
+    do {
+      p = p ^ xt(p);
+      q ^= q << 1; q ^= q << 2; q ^= q << 4; q &= 255; if (q & 128) q ^= 0x09;
+      S[p] = (q ^ rotl8(q, 1) ^ rotl8(q, 2) ^ rotl8(q, 3) ^ rotl8(q, 4) ^ 0x63) & 255;
+    } while (p !== 1);
+    S[0] = 0x63;
+    for (let x = 0; x < 256; x++) {
+      const s = S[x], s2 = xt(s), w = ((s2 << 24) | (s << 16) | (s << 8) | (s2 ^ s)) >>> 0;
+      T[0][x] = w; T[1][x] = ((w >>> 8) | (w << 24)) >>> 0; T[2][x] = ((w >>> 16) | (w << 16)) >>> 0; T[3][x] = ((w >>> 24) | (w << 8)) >>> 0;
+    }
+    const sub = t => ((S[t >>> 24] << 24) | (S[(t >>> 16) & 255] << 16) | (S[(t >>> 8) & 255] << 8) | S[t & 255]) >>> 0;
+    function cle(k) {
+      const nk = k.length / 4, nr = nk + 6, w = new Uint32Array(4 * (nr + 1)); let rc = 1;
+      for (let i = 0; i < nk; i++) w[i] = ((k[4 * i] << 24) | (k[4 * i + 1] << 16) | (k[4 * i + 2] << 8) | k[4 * i + 3]) >>> 0;
+      for (let i = nk; i < w.length; i++) {
+        let t = w[i - 1];
+        if (i % nk === 0) { t = (sub(((t << 8) | (t >>> 24)) >>> 0) ^ (rc << 24)) >>> 0; rc = xt(rc); }
+        else if (nk > 6 && i % nk === 4) t = sub(t);
+        w[i] = (w[i - nk] ^ t) >>> 0;
+      }
+      return { w, nr };
+    }
+    // Chiffre un bloc donné en 4 mots gros-boutistes ; écrit les 16 octets dans out
+    function bloc({ w, nr }, a, b, c, d, out) {
+      const [T0, T1, T2, T3] = T;
+      let s0 = a ^ w[0], s1 = b ^ w[1], s2 = c ^ w[2], s3 = d ^ w[3];
+      for (let r = 1; r < nr; r++) {
+        const k = 4 * r;
+        const t0 = T0[s0 >>> 24] ^ T1[(s1 >>> 16) & 255] ^ T2[(s2 >>> 8) & 255] ^ T3[s3 & 255] ^ w[k];
+        const t1 = T0[s1 >>> 24] ^ T1[(s2 >>> 16) & 255] ^ T2[(s3 >>> 8) & 255] ^ T3[s0 & 255] ^ w[k + 1];
+        const t2 = T0[s2 >>> 24] ^ T1[(s3 >>> 16) & 255] ^ T2[(s0 >>> 8) & 255] ^ T3[s1 & 255] ^ w[k + 2];
+        const t3 = T0[s3 >>> 24] ^ T1[(s0 >>> 16) & 255] ^ T2[(s1 >>> 8) & 255] ^ T3[s2 & 255] ^ w[k + 3];
+        s0 = t0; s1 = t1; s2 = t2; s3 = t3;
+      }
+      const k = 4 * nr, f = (x, y, z, v, m) => ((S[x >>> 24] << 24) | (S[(y >>> 16) & 255] << 16) | (S[(z >>> 8) & 255] << 8) | S[v & 255]) ^ m;
+      const o = [f(s0, s1, s2, s3, w[k]), f(s1, s2, s3, s0, w[k + 1]), f(s2, s3, s0, s1, w[k + 2]), f(s3, s0, s1, s2, w[k + 3])];
+      for (let i = 0; i < 4; i++) { out[4 * i] = o[i] >>> 24; out[4 * i + 1] = (o[i] >>> 16) & 255; out[4 * i + 2] = (o[i] >>> 8) & 255; out[4 * i + 3] = o[i] & 255; }
+    }
+    // Mode compteur de WinZip : bloc n (à partir de 1) = n en petit-boutiste sur 16 octets ; chiffrer et déchiffrer sont la même opération
+    function ctr(k, u) {
+      const ks = cle(k), r = new Uint8Array(u.length), flux = new Uint8Array(16);
+      for (let i = 0, n = 1; i < u.length; i += 16, n++) {
+        const lo = n >>> 0, hi = Math.floor(n / 4294967296) >>> 0, be = x => ((x & 255) << 24 | ((x >>> 8) & 255) << 16 | ((x >>> 16) & 255) << 8 | (x >>> 24)) >>> 0;
+        bloc(ks, be(lo), be(hi), 0, 0, flux);
+        for (let j = 0; j < 16 && i + j < u.length; j++) r[i + j] = u[i + j] ^ flux[j];
+      }
+      return r;
+    }
+    return { cle, bloc, ctr };
+  })();
+  // Clés d'un fichier : 32 octets AES, 32 octets HMAC, 2 octets de contrôle du mot de passe (AES-256)
+  async function clesAes(mdp, sel) {
+    const base = await crypto.subtle.importKey("raw", enOctets(mdp), "PBKDF2", false, ["deriveBits"]);
+    const b = new Uint8Array(await crypto.subtle.deriveBits({ name: "PBKDF2", salt: sel, iterations: 1000, hash: "SHA-1" }, base, 66 * 8));
+    return { aes: b.slice(0, 32), mac: b.slice(32, 64), controle: b.slice(64, 66) };
+  }
+  const hmac10 = async (cle, u) => new Uint8Array(await crypto.subtle.sign("HMAC", await crypto.subtle.importKey("raw", cle, { name: "HMAC", hash: "SHA-1" }, false, ["sign"]), u)).slice(0, 10);
+  // Données d'un fichier chiffré : sel (16) + contrôle (2) + données chiffrées + code d'authentification (10)
+  async function chiffrerAes(mdp, u) {
+    const sel = crypto.getRandomValues(new Uint8Array(16)), k = await clesAes(mdp, sel), c = AES.ctr(k.aes, u), m = await hmac10(k.mac, c);
+    const r = new Uint8Array(16 + 2 + c.length + 10);
+    r.set(sel, 0); r.set(k.controle, 16); r.set(c, 18); r.set(m, 18 + c.length);
+    return r;
+  }
+  async function dechiffrerAes(mdp, u, nom) {
+    if (!mdp) { const e = new Error("Archive chiffrée : mot de passe nécessaire."); e.code = "MDP"; throw e; }
+    if (u.length < 28) throw new Error(`${nom} : contenu chiffré tronqué.`);
+    const k = await clesAes(mdp, u.subarray(0, 16));
+    if (k.controle[0] !== u[16] || k.controle[1] !== u[17]) { const e = new Error("Mot de passe incorrect."); e.code = "MDP"; throw e; }
+    const c = u.subarray(18, u.length - 10), m = await hmac10(k.mac, c);
+    if (m.some((x, i) => x !== u[u.length - 10 + i])) throw new Error(`${nom} : contenu chiffré endommagé (code d'authentification).`);
+    return AES.ctr(k.aes, c);
+  }
+  // Champ extra 0x9901 : version AE-1, éditeur « AE », AES-256, méthode de compression réelle
+  const extraAes = meth => { const x = new DataView(new ArrayBuffer(11)); x.setUint16(0, 0x9901, true); x.setUint16(2, 7, true); x.setUint16(4, 1, true); x.setUint8(6, 0x41); x.setUint8(7, 0x45); x.setUint8(8, 3); x.setUint16(9, meth, true); return new Uint8Array(x.buffer); };
+  const controleMdp = (m, m2) => !m ? "Saisissez le mot de passe de chiffrement." : m.length < MDP_MIN ? `Mot de passe trop court : ${MDP_MIN} caractères au moins.` : m !== m2 ? "La confirmation ne correspond pas au mot de passe." : "";
   const heureDos = ms => { const d = new Date(ms || Date.now()); return [(d.getHours() << 11) | (d.getMinutes() << 5) | (d.getSeconds() >> 1), Math.max(0, d.getFullYear() - 1980) << 9 | (d.getMonth() + 1) << 5 | d.getDate()]; };
 
-  // Archive zip (noms UTF-8, compression deflate si le navigateur la fournit et qu'elle réduit le fichier) : [{ chemin, data, modifie }]
-  async function zipper(entrees) {
+  // Archive zip (noms UTF-8, compression deflate si le navigateur la fournit et qu'elle réduit le fichier) : [{ chemin, data, modifie }] ;
+  // avec un mot de passe, chaque fichier est chiffré en AES-256 (méthode 99, champ extra 0x9901, CRC conservé : AE-1)
+  async function zipper(entrees, mdp = "") {
     const parts = [], central = []; let pos = 0;
     for (const e of entrees) {
       const nom = enOctets(e.chemin), crc = crc32(e.data);
@@ -737,23 +827,26 @@ ${sites.map(s => `    ├── ${s.code || "?"}/  (werbsmsi.site.json, ${DOSSIE
       if (typeof CompressionStream === "function" && e.data.length > 64) {
         try { const z = await flux(e.data, new CompressionStream("deflate-raw")); if (z.length < e.data.length) { data = z; meth = 8; } } catch (x) { /* sans compression */ }
       }
+      const extra = mdp ? extraAes(meth) : new Uint8Array(0), methZip = mdp ? 99 : meth, drapeaux = 0x0800 | (mdp ? 1 : 0), vers = mdp ? 51 : 20;
+      if (mdp) data = await chiffrerAes(mdp, data);
       const [heure, jour] = heureDos(e.modifie);
       const l = new DataView(new ArrayBuffer(30));
-      l.setUint32(0, 0x04034b50, true); l.setUint16(4, 20, true); l.setUint16(6, 0x0800, true); l.setUint16(8, meth, true); l.setUint16(10, heure, true); l.setUint16(12, jour, true);
-      l.setUint32(14, crc, true); l.setUint32(18, data.length, true); l.setUint32(22, e.data.length, true); l.setUint16(26, nom.length, true);
-      parts.push(l.buffer, nom, data);
+      l.setUint32(0, 0x04034b50, true); l.setUint16(4, vers, true); l.setUint16(6, drapeaux, true); l.setUint16(8, methZip, true); l.setUint16(10, heure, true); l.setUint16(12, jour, true);
+      l.setUint32(14, crc, true); l.setUint32(18, data.length, true); l.setUint32(22, e.data.length, true); l.setUint16(26, nom.length, true); l.setUint16(28, extra.length, true);
+      parts.push(l.buffer, nom, extra, data);
       const c = new DataView(new ArrayBuffer(46));
-      c.setUint32(0, 0x02014b50, true); c.setUint16(4, 20, true); c.setUint16(6, 20, true); c.setUint16(8, 0x0800, true); c.setUint16(10, meth, true); c.setUint16(12, heure, true); c.setUint16(14, jour, true);
-      c.setUint32(16, crc, true); c.setUint32(20, data.length, true); c.setUint32(24, e.data.length, true); c.setUint16(28, nom.length, true); c.setUint32(42, pos, true);
-      central.push(c.buffer, nom);
-      pos += 30 + nom.length + data.length;
+      c.setUint32(0, 0x02014b50, true); c.setUint16(4, vers, true); c.setUint16(6, vers, true); c.setUint16(8, drapeaux, true); c.setUint16(10, methZip, true); c.setUint16(12, heure, true); c.setUint16(14, jour, true);
+      c.setUint32(16, crc, true); c.setUint32(20, data.length, true); c.setUint32(24, e.data.length, true); c.setUint16(28, nom.length, true); c.setUint16(30, extra.length, true); c.setUint32(42, pos, true);
+      central.push(c.buffer, nom, extra);
+      pos += 30 + nom.length + extra.length + data.length;
     }
     const tc = central.reduce((s, x) => s + (x.byteLength ?? x.length), 0), f = new DataView(new ArrayBuffer(22));
     f.setUint32(0, 0x06054b50, true); f.setUint16(8, entrees.length, true); f.setUint16(10, entrees.length, true); f.setUint32(12, tc, true); f.setUint32(16, pos, true);
     return new Blob([...parts, ...central, f.buffer], { type: "application/zip" });
   }
-  // Lecture d'une archive zip : { noms, contient(nom), donnees(nom) → Uint8Array } (méthodes 0 et 8, contrôle CRC)
-  function dezipper(buf) {
+  // Lecture d'une archive zip : { noms, contient(nom), chiffree, donnees(nom) → Uint8Array } (méthodes 0 et 8, contrôle CRC ;
+  // fichiers chiffrés en AES de WinZip, méthode 99, avec le mot de passe)
+  function dezipper(buf, mdp = "") {
     const dv = new DataView(buf); let e = buf.byteLength - 22;
     while (e >= 0 && dv.getUint32(e, true) !== 0x06054b50) e--;
     if (e < 0) throw new Error("Ce fichier n'est pas une archive .zip.");
@@ -761,17 +854,25 @@ ${sites.map(s => `    ├── ${s.code || "?"}/  (werbsmsi.site.json, ${DOSSIE
     for (let i = 0; i < n; i++) {
       if (dv.getUint32(o, true) !== 0x02014b50) throw new Error("Archive endommagée (répertoire central).");
       const nl = dv.getUint16(o + 28, true), xl = dv.getUint16(o + 30, true), cl = dv.getUint16(o + 32, true);
-      table.set(enTexte(new Uint8Array(buf, o + 46, nl)), { meth: dv.getUint16(o + 10, true), crc: dv.getUint32(o + 16, true), csz: dv.getUint32(o + 20, true), usz: dv.getUint32(o + 24, true), lo: dv.getUint32(o + 42, true) });
+      const ent = { meth: dv.getUint16(o + 10, true), crc: dv.getUint32(o + 16, true), csz: dv.getUint32(o + 20, true), usz: dv.getUint32(o + 24, true), lo: dv.getUint32(o + 42, true) };
+      for (let x = o + 46 + nl, fin = x + xl; x + 4 <= fin; x += 4 + dv.getUint16(x + 2, true)) {
+        if (dv.getUint16(x, true) === 0x9901) ent.aes = { version: dv.getUint16(x + 4, true), force: dv.getUint8(x + 8), meth: dv.getUint16(x + 9, true) };
+      }
+      table.set(enTexte(new Uint8Array(buf, o + 46, nl)), ent);
       o += 46 + nl + xl + cl;
     }
     return {
-      noms: [...table.keys()], contient: nom => table.has(nom),
+      noms: [...table.keys()], contient: nom => table.has(nom), chiffree: [...table.values()].some(f => f.meth === 99),
       async donnees(nom) {
         const f = table.get(nom); if (!f) return null;
-        const brut = new Uint8Array(buf, f.lo + 30 + dv.getUint16(f.lo + 26, true) + dv.getUint16(f.lo + 28, true), f.csz);
-        const u = f.meth === 0 ? brut.slice() : f.meth === 8 ? await flux(brut, new DecompressionStream("deflate-raw")) : null;
+        let brut = new Uint8Array(buf, f.lo + 30 + dv.getUint16(f.lo + 26, true) + dv.getUint16(f.lo + 28, true), f.csz), meth = f.meth;
+        if (meth === 99) {
+          if (!f.aes || f.aes.force !== 3) throw new Error(`${nom} : chiffrement non pris en charge (AES-256 de WinZip attendu).`);
+          brut = await dechiffrerAes(mdp, brut, nom); meth = f.aes.meth;
+        }
+        const u = meth === 0 ? brut.slice() : meth === 8 ? await flux(brut, new DecompressionStream("deflate-raw")) : null;
         if (!u) throw new Error(`${nom} : méthode de compression non prise en charge.`);
-        if (u.length !== f.usz || crc32(u) !== f.crc) throw new Error(`${nom} : contenu endommagé dans l'archive.`);
+        if (u.length !== f.usz || ((f.meth !== 99 || f.aes.version === 1) && crc32(u) !== f.crc)) throw new Error(`${nom} : contenu endommagé dans l'archive.`);
         return u;
       },
     };
@@ -801,10 +902,11 @@ ${sites.map(s => `    ├── ${s.code || "?"}/  (werbsmsi.site.json, ${DOSSIE
   const versionsModules = () => REG.modules.filter(m => m.manifeste).map(m => ({ id: m.id, produit: m.manifeste.produit, version: m.manifeste.version }));
 
   // Écrit l'archive : sélecteur d'Edge (écriture directe dans le fichier choisi), téléchargement à défaut
-  async function ecrireArchive(nom, entrees, manifeste) {
+  async function ecrireArchive(nom, entrees, manifeste, mdp = "") {
     let poignee = null;
     if (typeof showSaveFilePicker === "function") poignee = await showSaveFilePicker({ suggestedName: nom, types: TYPES_ZIP });   // AbortError si annulé
-    const blob = await zipper([{ chemin: MANIFESTE, data: enOctets(JSON.stringify(manifeste, null, 1)), modifie: Date.now() }, ...entrees]);
+    if (mdp) manifeste.meta.chiffrement = "AES-256 (zip WinZip AE-1)";
+    const blob = await zipper([{ chemin: MANIFESTE, data: enOctets(JSON.stringify(manifeste, null, 1)), modifie: Date.now() }, ...entrees], mdp);
     if (poignee) { const w = await poignee.createWritable(); await w.write(blob); await w.close(); } else WerbSocle.telecharger(blob, nom);
     return { nom: poignee ? poignee.name : nom, taille: blob.size };
   }
@@ -839,10 +941,10 @@ ${sites.map(s => `    ├── ${s.code || "?"}/  (werbsmsi.site.json, ${DOSSIE
     return sha === f.sha256 ? { etat: "identique", libelle: "identique", verrou }
       : { etat: "different", libelle: `différent : modifié le ${frDate(file.lastModified)}${meta && meta.modifiePar ? ` par ${meta.modifiePar}` : ""}`, verrou, taille: data.length };
   }
-  async function analyserArchive(nom, buf) {
-    const z = dezipper(buf);
+  async function analyserArchive(nom, buf, mdp = "") {
+    const z = dezipper(buf, mdp);
     if (!z.contient(MANIFESTE)) throw new Error(`${nom} n'est pas une sauvegarde WerbSMSI (manifeste ${MANIFESTE} absent).`);
-    let m; try { m = JSON.parse(enTexte(await z.donnees(MANIFESTE))); } catch (e) { throw new Error("Manifeste illisible : " + e.message); }
+    let m; try { m = JSON.parse(enTexte(await z.donnees(MANIFESTE))); } catch (e) { if (e.code === "MDP") throw e; throw new Error("Manifeste illisible : " + e.message); }
     if (!m || m.format !== "WERBSMSI-SAUVEGARDE" || !m.data || !Array.isArray(m.data.fichiers)) throw new Error("Manifeste de sauvegarde invalide.");
     if (m.schema > 1) throw new Error("Sauvegarde créée par une version plus récente du portail.");
     const fichiers = [];
@@ -856,7 +958,7 @@ ${sites.map(s => `    ├── ${s.code || "?"}/  (werbsmsi.site.json, ${DOSSIE
       fichiers.push(r);
     }
     const connus = new Set([MANIFESTE, ...m.data.fichiers.map(f => f.chemin)]);
-    const archive = { nom, manifeste: m, fichiers, horsManifeste: z.noms.filter(x => !connus.has(x) && !x.endsWith("/")), le: Date.now() };
+    const archive = { nom, manifeste: m, fichiers, horsManifeste: z.noms.filter(x => !connus.has(x) && !x.endsWith("/")), le: Date.now(), chiffree: z.chiffree, mdp: z.chiffree ? mdp : "" };
     archive.integre = fichiers.every(f => f.ok) && !archive.horsManifeste.length;
     archive.memeEspace = !!(E.ouvert && P.groupe && m.meta && m.meta.groupeId === P.groupe.groupeId);
     if (archive.memeEspace) for (const f of fichiers) if (f.ok) f.espace = await comparer(f);
@@ -920,17 +1022,26 @@ ${sites.map(s => `    ├── ${s.code || "?"}/  (werbsmsi.site.json, ${DOSSIE
           .map(([v, l]) => `<option value="${esc(v)}"${v === SV.perimetre ? " selected" : ""}>${esc(l)}</option>`).join("")}</select></label>
         <label class="f">Réalisée par<input id="svAuteur" value="${esc(SV.auteur)}" placeholder="Prénom NOM"></label></div>
         <p class="small muted">L'archive contient les fichiers tels qu'ils sont sur le drive et le manifeste <code>${MANIFESTE}</code> : chemin, taille, date et empreinte SHA-256 de chaque fichier, versions des modules, date et auteur. Seuls les dossiers que vos droits permettent de lire sont sauvegardés : une sauvegarde de site respecte le cloisonnement entre sites.</p>
+        <div class="sv-chiffre" data-sv-chiffre><label class="row"><input type="checkbox" id="svChiffrer"${SV.chiffrer ? " checked" : ""} style="width:auto"> <b>🔐 Chiffrer l'archive avec un mot de passe</b> <span class="small muted">(AES-256, zip standard : s'ouvre aussi avec 7-Zip ou WinZip)</span></label>
+          ${!SV.chiffrer ? `<p class="small" style="color:var(--warn)">⚠ Archive en clair : toute personne qui obtient le fichier lit les bases (vulnérabilités, comptes, architecture). À réserver à un support lui-même protégé.</p>`
+            : SV.mdp ? `<div class="row small">${badge("🔒 Mot de passe défini pour cette session", "b-ok")}<button class="small" data-act="svMdpChanger">Changer le mot de passe</button></div>`
+            : `<div class="grid g2"><label class="f">Mot de passe (${MDP_MIN} caractères au moins)<input type="password" id="svMdp" autocomplete="new-password" spellcheck="false"></label>
+              <label class="f">Confirmation<input type="password" id="svMdp2" autocomplete="new-password" spellcheck="false"></label></div>`}
+          ${SV.chiffrer ? `<p class="small muted">Le mot de passe est gardé en mémoire le temps de la session, jamais enregistré. <b>Sans lui, l'archive est irrécupérable</b> : rangez-le dans le coffre-fort de mots de passe, jamais à côté de l'archive. Le contenu des fichiers est chiffré ; leurs noms restent lisibles.</p>` : ""}</div>
         <div class="row"><button class="primary" data-act="sauvegarder"${SV.travail ? " disabled" : ""}>💾 Créer l'archive…</button></div>
-        ${d ? `<div class="infobox small" style="margin-top:10px">Dernière sauvegarde : <b>${esc(d.nom)}</b> · ${esc(libellePerimetre(d.perimetre))} · ${d.n} fichier(s), ${esc(taille(d.taille))} · ${esc(frDate(d.le))}${d.illisibles.length ? `<br>⚠ Non lisibles, donc non sauvegardés : ${esc(d.illisibles.join(", "))}` : ""}</div>` : ""}`;
+        ${d ? `<div class="infobox small" style="margin-top:10px">Dernière sauvegarde : <b>${esc(d.nom)}</b>${d.chiffree ? " 🔐 chiffrée" : " (en clair)"} · ${esc(libellePerimetre(d.perimetre))} · ${d.n} fichier(s), ${esc(taille(d.taille))} · ${esc(frDate(d.le))}${d.illisibles.length ? `<br>⚠ Non lisibles, donc non sauvegardés : ${esc(d.illisibles.join(", "))}` : ""}</div>` : ""}`;
     }
     h += `</div><div class="card">${titre("🔎", "Vérifier ou restaurer une archive", "ardoise")}
       <p class="small muted">L'archive est lue en mémoire ; chaque empreinte est recalculée et comparée au manifeste. Rien n'est écrit sans votre choix.</p>
       <div class="row"><button data-act="ouvrirSauvegarde"${SV.travail ? " disabled" : ""}>📂 Choisir une archive…</button></div>`;
-    const a = SV.archive;
+    const a = SV.archive, at = SV.attente;
+    if (at) h += `<div class="infobox" style="margin-top:10px" data-sv-attente><b>🔐 ${esc(at.nom)}</b> est chiffrée${at.erreur ? ` — <span style="color:var(--ko)">${esc(at.erreur)}</span>` : ""}.
+      <div class="row" style="margin-top:6px"><input type="password" id="svMdpLecture" placeholder="Mot de passe de l'archive" autocomplete="off" spellcheck="false" style="max-width:320px">
+      <button class="primary" data-act="svDechiffrer"${SV.travail ? " disabled" : ""}>Déchiffrer et vérifier</button><button data-act="svAttenteAnnuler">Annuler</button></div></div>`;
     if (a) {
       const m = a.manifeste.meta || {}, ko = a.fichiers.filter(f => !f.ok);
       h += `<table class="t" style="margin-top:10px"><tbody>
-        <tr><td class="muted" style="width:200px">Archive</td><td><b>${esc(a.nom)}</b></td></tr>
+        <tr><td class="muted" style="width:200px">Archive</td><td><b>${esc(a.nom)}</b> ${a.chiffree ? badge("🔐 chiffrée AES-256", "b-ok") : badge("en clair", "b-warn")}</td></tr>
         <tr><td class="muted">Organisation</td><td>${esc(m.organisation || "")}${m.sigle ? ` (${esc(m.sigle)})` : ""} · dossier ${esc(m.espace || "")}</td></tr>
         <tr><td class="muted">Périmètre</td><td>${esc(m.perimetre ? (m.perimetre.type === "site" ? "site " + m.perimetre.site : libellePerimetre(m.perimetre.type)) : "")}${m.motif ? ` · ${esc(m.motif)}` : ""}</td></tr>
         <tr><td class="muted">Créée</td><td>le ${esc(frDate(m.creeLe))} par ${esc(m.creePar || "")} · portail ${esc(m.appVersion || "")}</td></tr>
@@ -950,7 +1061,7 @@ ${sites.map(s => `    ├── ${s.code || "?"}/  (werbsmsi.site.json, ${DOSSIE
               <td class="mono">${esc(f.chemin)}</td><td class="small">${esc(taille(f.taille || 0))} · ${esc(frDate(f.modifie))}</td><td>${etat(f)}</td>
               <td class="small">${v ? `🔒 ${esc(v.par)} ${esc(WerbSocle.verrou.quand(v.depuis))}` : ""}</td></tr>`; }).join("")}
           </tbody></table></div>
-          <label class="row small" style="margin-top:10px"><input type="checkbox" id="svAvant" checked style="width:auto"> Sauvegarder d'abord les fichiers qui seront remplacés (recommandé)</label>
+          <label class="row small" style="margin-top:10px"><input type="checkbox" id="svAvant" checked style="width:auto"> Sauvegarder d'abord les fichiers qui seront remplacés (recommandé${a.chiffree ? " ; copie chiffrée avec le mot de passe de cette archive" : SV.chiffrer && SV.mdp ? " ; copie chiffrée avec le mot de passe de la session" : ""})</label>
           <div class="row" style="margin-top:8px"><button class="primary danger" data-act="restaurer"${a.integre && !SV.travail ? "" : " disabled"}>♻️ Restaurer la sélection…</button></div>
           ${a.integre ? "" : `<p class="small muted">Restauration impossible : l'archive n'est pas intègre.</p>`}`;
       }
@@ -965,23 +1076,29 @@ ${sites.map(s => `    ├── ${s.code || "?"}/  (werbsmsi.site.json, ${DOSSIE
     async sauvegarderBandeau() {
       if (!E.ouvert || SV.travail) return;
       P.vue = "sauvegarde"; render(); $("#main").scrollTop = 0;
-      if (SV.auteur) { await ACTIONS_SAUVEGARDE.sauvegarder(); return; }
-      const a = $("#svAuteur"); if (a) a.focus();
-      toast("Indiquez qui réalise la sauvegarde, puis « Créer l'archive ».", "");
+      if (SV.auteur && (!SV.chiffrer || SV.mdp)) { await ACTIONS_SAUVEGARDE.sauvegarder(); return; }
+      const a = $(SV.auteur ? "#svMdp" : "#svAuteur"); if (a) a.focus();
+      toast(SV.auteur ? "Saisissez le mot de passe de chiffrement, puis « Créer l'archive »." : "Indiquez qui réalise la sauvegarde, puis « Créer l'archive ».", "");
     },
     async sauvegarder() {
       const perimetre = $("#svPerim").value, auteur = $("#svAuteur").value.trim();
       Object.assign(SV, { perimetre, auteur });
       if (!auteur) { toast("Indiquez qui réalise la sauvegarde (Réalisée par).", "err"); $("#svAuteur").focus(); return; }
+      if (SV.chiffrer && !SV.mdp) {
+        const err = controleMdp(SV.saisie.m, SV.saisie.m2);
+        if (err) { toast(err, "err"); const c = $(SV.saisie.m && SV.saisie.m.length >= MDP_MIN ? "#svMdp2" : "#svMdp"); if (c) c.focus(); return; }
+        SV.mdp = SV.saisie.m; SV.saisie = { m: "", m2: "" };
+      }
+      const mdp = SV.chiffrer ? SV.mdp : "";
       const nom = `Sauvegarde_${(P.groupe.sigle || "SMSI").replace(/[^\w-]+/g, "_")}_${perimetre === "complet" ? "complet" : perimetre === "groupe" ? "groupe" : perimetre.slice(5)}_${new Date().toISOString().slice(0, 16).replace(/[-:]/g, "").replace("T", "_")}.zip`;
       SV.travail = true; render();
       try {
         const { fichiers, illisibles } = await collecter(perimetre);
         const entrees = await lireFichiers(fichiers, illisibles);
         const lus = fichiers.filter(f => f.sha256);
-        const r = await ecrireArchive(nom, entrees, manifesteDe(perimetre, auteur, lus, illisibles));
-        SV.derniere = { ...r, perimetre, n: lus.length, illisibles, le: Date.now() };
-        toast(`Sauvegarde créée : ${lus.length} fichier(s).`, "ok");
+        const r = await ecrireArchive(nom, entrees, manifesteDe(perimetre, auteur, lus, illisibles), mdp);
+        SV.derniere = { ...r, perimetre, n: lus.length, illisibles, le: Date.now(), chiffree: !!mdp };
+        toast(`Sauvegarde créée${mdp ? ", chiffrée" : " en clair"} : ${lus.length} fichier(s).`, "ok");
       } catch (e) { if (e.name !== "AbortError") toast("Sauvegarde impossible : " + e.message, "err"); }
       finally { SV.travail = false; render(); }
     },
@@ -991,11 +1108,29 @@ ${sites.map(s => `    ├── ${s.code || "?"}/  (werbsmsi.site.json, ${DOSSIE
         if (typeof showOpenFilePicker === "function") { const [h] = await showOpenFilePicker({ types: TYPES_ZIP, multiple: false }); f = await h.getFile(); }
         else f = await new Promise((ok, ko) => { const i = Object.assign(document.createElement("input"), { type: "file", accept: ".zip" }); i.onchange = () => i.files[0] ? ok(i.files[0]) : ko(new DOMException("", "AbortError")); i.click(); });
       } catch (e) { if (e.name !== "AbortError") toast(e.message, "err"); return; }
-      SV.travail = true; SV.restauration = null; render();
-      try { SV.archive = await analyserArchive(f.name, await f.arrayBuffer()); toast(SV.archive.integre ? "Archive vérifiée : intègre." : "Archive non intègre : voir le détail.", SV.archive.integre ? "ok" : "err"); }
-      catch (e) { SV.archive = null; toast("Lecture impossible : " + e.message, "err"); }
-      finally { SV.travail = false; render(); }
+      SV.travail = true; SV.restauration = null; SV.attente = null; render();
+      const buf = await f.arrayBuffer();
+      // Archive chiffrée : le mot de passe de la session est essayé d'abord, puis demandé
+      try { SV.archive = await analyserArchive(f.name, buf, SV.mdp); toast(SV.archive.integre ? "Archive vérifiée : intègre." : "Archive non intègre : voir le détail.", SV.archive.integre ? "ok" : "err"); }
+      catch (e) {
+        SV.archive = null;
+        if (e.code === "MDP") SV.attente = { nom: f.name, buf, erreur: "" }; else toast("Lecture impossible : " + e.message, "err");
+      }
+      finally { SV.travail = false; render(); const c = $("#svMdpLecture"); if (c) c.focus(); }
     },
+    async svDechiffrer() {
+      const at = SV.attente, c = $("#svMdpLecture"), mdp = c ? c.value : "";
+      if (!at) return;
+      if (!mdp) { toast("Saisissez le mot de passe de l'archive.", "err"); if (c) c.focus(); return; }
+      SV.travail = true; render();
+      try {
+        SV.archive = await analyserArchive(at.nom, at.buf, mdp); SV.attente = null;
+        toast(SV.archive.integre ? "Archive déchiffrée et vérifiée : intègre." : "Archive non intègre : voir le détail.", SV.archive.integre ? "ok" : "err");
+      } catch (e) { if (e.code === "MDP") at.erreur = e.message; else { SV.attente = null; toast("Lecture impossible : " + e.message, "err"); } }
+      finally { SV.travail = false; render(); const x = $("#svMdpLecture"); if (x) x.focus(); }
+    },
+    svAttenteAnnuler() { SV.attente = null; render(); },
+    svMdpChanger() { SV.mdp = ""; SV.saisie = { m: "", m2: "" }; render(); const c = $("#svMdp"); if (c) c.focus(); },
     svCocher(el) { document.querySelectorAll(".svSel:not(:disabled)").forEach(c => { const f = SV.archive.fichiers[+c.dataset.i]; c.checked = el.dataset.v === "diff" && f.espace.etat !== "identique"; }); },
     async restaurer() {
       const a = SV.archive;
@@ -1014,7 +1149,7 @@ ${sites.map(s => `    ├── ${s.code || "?"}/  (werbsmsi.site.json, ${DOSSIE
         if (avant && remplaces.length) {
           const ill = [], entrees = await lireFichiers(remplaces, ill);
           const r = await ecrireArchive(`Avant_restauration_${(P.groupe.sigle || "SMSI").replace(/[^\w-]+/g, "_")}_${new Date().toISOString().slice(0, 16).replace(/[-:]/g, "").replace("T", "_")}.zip`, entrees,
-            manifesteDe("complet", SV.auteur || "portail", remplaces.filter(x => x.sha256), ill, `copie avant restauration de ${a.nom}`));
+            manifesteDe("complet", SV.auteur || "portail", remplaces.filter(x => x.sha256), ill, `copie avant restauration de ${a.nom}`), a.chiffree ? a.mdp : SV.chiffrer ? SV.mdp : "");
           res.avant = r.nom;
         }
         for (const { f } of aEcrire) {
@@ -1236,6 +1371,8 @@ ${sites.map(s => `    ├── ${s.code || "?"}/  (werbsmsi.site.json, ${DOSSIE
   // Saisie dans une liste : le brouillon suit chaque frappe ; à la sortie du champ, rendu (contrôles, écarts) en gardant le champ
   // actif, sauf si l'utilisateur clique un bouton (son action relance le rendu : le bouton n'est pas remplacé sous le clic).
   document.addEventListener("input", e => {
+    if (e.target.id === "svMdp") { SV.saisie.m = e.target.value; return; }
+    if (e.target.id === "svMdp2") { SV.saisie.m2 = e.target.value; return; }
     if (e.target.id === "lgAuteur") { LG.auteur = e.target.value.trim(); return; }
     if (!e.target.matches(".lg-v")) return;
     const d = e.target.dataset, ligne = LG.brouillon[d.l][+d.i];
@@ -1245,6 +1382,9 @@ ${sites.map(s => `    ├── ${s.code || "?"}/  (werbsmsi.site.json, ${DOSSIE
   let clicBouton = false;
   document.addEventListener("mousedown", e => { clicBouton = !!e.target.closest("button"); }, true);
   document.addEventListener("mouseup", () => { setTimeout(() => { clicBouton = false; }, 0); }, true);
+  // Sauvegarde : case « Chiffrer l'archive » ; Entrée dans le mot de passe d'une archive lance le déchiffrement
+  document.addEventListener("change", e => { if (e.target.id === "svChiffrer") { SV.chiffrer = e.target.checked; render(); } });
+  document.addEventListener("keydown", e => { if (e.key === "Enter" && e.target.id === "svMdpLecture") { e.preventDefault(); ACTIONS_SAUVEGARDE.svDechiffrer(); } });
   document.addEventListener("change", e => {
     if (!e.target.matches(".lg-v")) return;
     setTimeout(() => {

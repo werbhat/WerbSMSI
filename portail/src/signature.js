@@ -4,7 +4,7 @@ const WERB = Object.freeze((() => {
   const bytes = [68, 195, 169, 118, 101, 108, 111, 112, 112, 195, 169, 32, 112, 97, 114, 32, 64, 87, 101, 114, 98, 72, 97, 116];
   const signature = new TextDecoder("utf-8").decode(new Uint8Array(bytes));
   const produit = "WerbSMSI";
-  const version = "1.13.0";
+  const version = "1.14.0";
   return {
     id: "werbsmsi",
     produit, version, auteur: "@WerbHat", signature,
