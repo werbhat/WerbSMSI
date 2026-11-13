@@ -1,7 +1,7 @@
 <!-- WerbSMSI – Développé par @WerbHat -->
-# Prendre en main WerbSMSI — guide du technicien
+# Prendre en main WerbSMSI — guide technique
 
-Ce guide accompagne la présentation au technicien qui installera WerbSMSI et le fera vivre au quotidien. Il explique **comment le système est organisé**, **comment sécuriser le dossier des données**, **à quoi sert chaque module**, **comment les modules échangent leurs informations**, puis **comment travailler au quotidien** et **se dépanner**.
+Ce guide accompagne la présentation technique de WerbSMSI. Il s'adresse à ceux qui l'installeront et le feront vivre au quotidien : technicien, informaticien de site, intégrateur, référent cyber. Il explique **comment le système est organisé**, **comment sécuriser le dossier des données**, **à quoi sert chaque module**, **comment les modules échangent leurs informations**, puis **comment travailler au quotidien** et **se dépanner**.
 
 Toutes les captures d'écran viennent de l'**espace de démonstration** livré avec WerbSMSI (groupe fictif, sites LYON et NANTES) et des **bases d'exemple** des modules : aucune donnée réelle.
 
@@ -83,7 +83,7 @@ L'espace `SMSI_<SIGLE>` décrit **comment attaquer l'entreprise** : plan réseau
 ### Le principe
 
 ```
- Dossier partagé (NAS ou cloud)            Poste du technicien
+ Dossier partagé (NAS ou cloud)            Poste de travail    
  ┌──────────────────────────────┐          ┌──────────────────────────────────────┐
  │  \\NAS\SMSI\                  │  lien    │  Raccourci « Conteneur SMSI »         │
  │   └─ SMSI_GDI.hc  (chiffré)   │◄─────────│                                      │
