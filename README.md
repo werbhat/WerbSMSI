@@ -85,6 +85,7 @@ WerbSMSI/                       ← code : partage en lecture seule
 ├── portail/                    ← WerbSMSI.html (assemblé), WerbSMSI.sha256, src/, tests/, guides/
 ├── demo/SMSI_GROUPE_DEMO/      ← espace de démonstration fictif (1 groupe + 2 sites, modèles), ouvert depuis le portail
 ├── Modeles_docs/               ← référence des modèles Word, Visio et Excel, avec leur inventaire (README.md) et synchroniser.py (copies)
+├── docs/                       ← supports de prise en main publics (présentations, guide du technicien, cartographie des échanges) ; produits par docs_build/ (non versionné)
 └── modules/<rubrique>/<Produit>/   ← paquets publiés (livrable, documentation, empreinte, exemples)
 
 SMSI_<GROUPE>/                  ← données : drive protégé

@@ -1,6 +1,8 @@
 # WerbSMSI – Développé par @WerbHat
 # Dossier de travail temporaire (sources à intégrer, exports) : jamais versionné
 /Temp/
+# Atelier des supports (scripts, captures pleine définition, vidéo et son montage) : jamais versionné ; les supports finis vont dans docs/
+/docs_build/
 /charte/
 # Sorties des tests (documents générés) : jamais versionnées
 **/tests/sortie/
