@@ -85,6 +85,7 @@ WerbSMSI/                       ← code : partage en lecture seule
 ├── portail/                    ← WerbSMSI.html (assemblé), WerbSMSI.sha256, src/, tests/, guides/
 ├── demo/SMSI_GROUPE_DEMO/      ← espace de démonstration fictif (1 groupe + 2 sites, modèles), ouvert depuis le portail
 ├── Modeles_docs/               ← référence des modèles Word, Visio et Excel, avec leur inventaire (README.md) et synchroniser.py (copies)
+├── APK/                        ← application Android WerbVeille Droid signée, son empreinte et un README (mise à disposition ; projet ../WerbVeilleDroid, outils/publier_apk.sh)
 ├── docs/                       ← supports de prise en main publics (présentations, guide technique, cartographie des échanges) ; produits par docs_build/ (non versionné)
 └── modules/<rubrique>/<Produit>/   ← paquets publiés (livrable, documentation, empreinte, exemples)
 

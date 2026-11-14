@@ -59,6 +59,16 @@ Dans *📊 Pilotage › Alertes*, chaque alerte montre la source, les mots-clés
 
 Cochez plusieurs alertes pour leur donner le même statut d'un coup.
 
+## 6. Être prévenu sur son téléphone (facultatif)
+
+L'application Android **WerbVeille Droid** (projet distinct de WerbSMSI) surveille elle-même le catalogue KEV de la CISA, les CVE du NVD et les actualités des sources de la veille (onglet *Actu*), et prévient par une notification **sans détail** quand une vulnérabilité ou une actualité concerne le parc. Elle ne reçoit qu'un **parc réduit** : mots-clés, exclusions, produits (éditeur, produit, version, CPE) et sources d'actualités publiques en HTTPS — jamais le site, les TAG des actifs ni les sources internes.
+
+1. **Une fois** : *Collecte › Export pour téléphone › Créer la clé d'émetteur*. Choisir un mot de passe long, l'enregistrer dans le coffre-fort, et y ranger aussi le fichier `.wvkey.json` téléchargé.
+2. **Pour chaque téléphone** : dans l'application, *Réglages › Enregistrer le certificat* ; puis dans WerbVeille, *Ajouter un téléphone…*, en vérifiant que l'empreinte affichée est la même des deux côtés.
+3. **À chaque mise à jour du parc** : *Exporter…* sur la ligne du téléphone (fichier de clé et mot de passe demandés), transmettre le fichier `.wvdroid.json` (il est chiffré), l'importer dans l'application. Au premier import, **comparer l'empreinte de l'émetteur** affichée par le téléphone avec celle de WerbVeille.
+
+Un téléphone perdu : le retirer de la liste (plus d'export possible) et, dans l'application, *Tout effacer* à distance si la gestion de flotte le permet.
+
 ## Bonnes pratiques
 
 - Importez les résultats au moins une fois par semaine : le tableau de bord signale une collecte de plus de 7 jours.

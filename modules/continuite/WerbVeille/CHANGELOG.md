@@ -3,6 +3,87 @@
 Toutes les évolutions notables de WerbVeille sont consignées ici.
 Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/), numérotation [SemVer](https://semver.org/lang/fr/).
 
+## [1.10.4] — 2026-11
+
+### Changements
+- Guide « WerbVeille Droid : la veille sur téléphone » à jour de l'application 0.8.1 : actualités regroupées par jour, titre et site d'origine en couleur.
+
+## [1.10.3] — 2026-11
+
+### Changements
+- Guide « WerbVeille Droid : la veille sur téléphone » à jour de l'application 0.8.0 : taille du texte, KEV et NVD gardés au verrouillage, fonctionnement de la vérification en arrière-plan.
+- **Sources par défaut révisées** (`sources_defaut.json`, 35 sources dont 3 inactives, au lieu de 42) : flux morts retirés (Binary Defense, SentinelOne, ATT, ENISA Publications, Microsoft Sentinel, MSRC Security Update, CERT-FR Avis) ; adresses mises à jour : FR-CERT Alertes → `https://www.cert.cyber.gouv.fr/feed/` (flux général du CERT-FR, « tout garder »), VirusBulletin, Microsoft Security, Cyber-News. Ne concerne que les nouvelles veilles : une veille existante garde ses sources (à corriger dans *Sources*, ou par le test des sources). Tests `test_deploiement` et `test_parcours` adaptés.
+
+## [1.10.2] — 2026-11
+
+### Changements
+- *Export pour téléphone* : **Exporter…** affiche d'abord une fenêtre qui explique les trois étapes (choisir le fichier de la **clé d'émetteur** `.wvkey.json`, saisir son mot de passe, fichier `.wvdroid.json` téléchargé) avant d'ouvrir le sélecteur de fichiers ; nom du fichier choisi rappelé dans la saisie du mot de passe ; empreinte attendue rappelée si le fichier n'est pas la bonne clé ; rappel des étapes sous la liste des téléphones. Guide du téléphone : étape 4.5 et dépannage complétés.
+
+## [1.10.1] — 2026-11
+
+### Changements
+- Guide « WerbVeille Droid : la veille sur téléphone » : schéma du circuit **redessiné** (lecture de haut en bas, sans cadres qui se décalaient selon la police) et **tableau des étapes** (où, ce qui se passe, ce qui circule) ; téléphone du RSSI du groupe (§ 5.8) ; réglages désignés par l'icône ⚙ partout.
+
+## [1.10.0] — 2026-11
+
+### Ajouts
+- **Veille du groupe** (VEI-9) : une veille **rattachée au groupe** (*Intégration WerbSMSI* › « 🏢 Groupe », base dans `groupe/continuite/`) relit la publication `site:veille` de chaque site, **en lecture seule** (rien n'est recopié, aucun statut modifié). Menu du groupe :
+  - **Tableau des sites** : publication (date, auteur), dernière collecte (retard au-delà de 7 jours), alertes par statut, « Concerné » ouvertes et la plus ancienne, sources en erreur ; site sans publication signalé ;
+  - **Alertes des sites** : regroupées par article (même lien) ou par CVE, avec le statut, les actifs et la référence d'action de chaque site ; filtres site et statut, recherche (titre, CVE, mot-clé, site, TAG) ;
+  - **Produits et mots-clés** : matrices produits × sites (version de chacun) et mots-clés × sites, produits communs en tête.
+- **Export groupe pour le téléphone** du RSSI (VEI-10) : clé d'émetteur et téléphones **du groupe**, parc **schéma 3** — un parc minimal par site, **revalidé** avec les règles de l'export de site, sous son **alias** ; sources d'actualités unies sans doublon. **Alias des sites** : « Site 1 », « Site 2 »… attribués une fois, jamais réattribués, renommables ; un alias qui contient le code ou le nom d'un site, ou déjà pris, est refusé ; la table reste dans la base du groupe et n'est **jamais exportée**.
+- Une veille de site (avec alertes) ne peut pas être rattachée au groupe : créer une nouvelle veille.
+- Test `tests/test_groupe.py` (34 contrôles) ; vecteur `tests/sortie/export_werbveille_groupe.json` pour WerbVeille Droid 0.7.0.
+
+## [1.9.0] — 2026-11
+
+### Ajouts
+- **Publication `site:veille`** (VEI-5) : bouton **Publier** dans *⚙️ Base › Intégration WerbSMSI* (veille rattachée à son site et enregistrée), qui écrit `sites/<CODE>/publications/werbveille.json`. Contenu : **indicateurs** (alertes par statut, « Concerné » ouvertes et la plus ancienne, dernière collecte, sources actives et en erreur, mots-clés actifs), **parc minimal** (mêmes règles que l'export pour téléphone : ni TAG, ni source interne, ni jeton) et **alertes suivies** (À analyser, Concerné, Traitée ; 365 jours, 500 au plus) avec titre et lien de l'article, CVE, actifs concernés (TAG), statut et référence d'action. **Jamais** : commentaires, résumés, journal, alertes Nouvelle et Non concerné (seulement comptées), clé d'émetteur, téléphones. Aperçu avant publication ; date et auteur de la dernière publication gardés dans la base ; journal.
+- Première brique de la **veille au niveau groupe** (étude `Etude_NEW_WerbVeille_Groupe.md`) : WerbVeille groupe lira ces publications (VEI-9), puis préparera l'export groupe pour le téléphone du RSSI (VEI-10).
+- Test `tests/test_publication.py` (20 contrôles).
+
+## [1.8.2] — 2026-11
+
+### Changements
+- Guide « WerbVeille Droid : la veille sur téléphone » à jour de l'application 0.6.0 : page *Parc › Détail des sources*, noms des applications du parc et mots-clés mis en évidence.
+
+## [1.8.1] — 2026-11
+
+### Changements
+- Guide « WerbVeille Droid : la veille sur téléphone » à jour de l'application 0.5.0 : mémoire chiffrée des flux KEV et NVD (plus besoin de revérifier pour les revoir), réglage **Conservation** (1, 2, 3 ou 6 mois), première vérification plus longue (un mois de NVD).
+
+## [1.8.0] — 2026-11
+
+### Ajouts
+- *Collecte › Export pour téléphone* : l'export transmet aussi les **sources d'actualités** de la veille (parc minimal **schéma 2**, champ `sources` : nom, adresse, catégorie), pour l'onglet **Actu** de WerbVeille Droid 0.4.0. Seules les sources **actives** en **HTTPS sur un domaine public** partent : ni adresse IP, ni port particulier, ni nom interne (`.local`, `.lan`, `.intranet`, `.corp`…), sans doublon, 100 au plus ; les autres sont écartées et comptées dans la carte *Contenu de l'export*. Même règle que l'outil Python et l'application.
+- Guide « WerbVeille Droid : la veille sur téléphone » à jour de l'application 0.4.0 : onglet Actu, réglages sous l'icône ⚙, notification des actualités, sources en erreur.
+
+### Compatibilité
+- Les téléphones en 0.3.0 refusent un parc de schéma 2 : mettre l'application à jour (0.4.0) avant le prochain export. Un parc de schéma 1 reste lisible par la 0.4.0.
+
+## [1.7.3] — 2026-11
+
+### Changements
+- Guide « WerbVeille Droid : la veille sur téléphone » à jour de l'application 0.3.0 : réglage de la vérification automatique (fréquence, Wi-Fi uniquement, notifications), rattrapage sur 30 jours, dépannage.
+
+## [1.7.2] — 2026-11
+
+### Ajouts
+- *Collecte › Export pour téléphone* : **lien vers le dossier `APK` du kit WerbSMSI** (application WerbVeille Droid signée, son empreinte SHA-256 et un README), déduit de l'emplacement du module publié ; ailleurs, l'emplacement est indiqué en clair. Guide « WerbVeille Droid : la veille sur téléphone » : installation depuis ce dossier, avec vérification de l'empreinte.
+
+## [1.7.1] — 2026-11
+
+### Ajouts
+- **Guide « WerbVeille Droid : la veille sur téléphone »** (`guides/2-WerbVeille_Droid_sur_telephone.md`, menu ❓ Aide, lien depuis *Collecte › Export pour téléphone*) : circuit, rôle de chaque clé et certificat (clé de l'appareil, clé d'émetteur, clé de signature de l'APK, coffre du téléphone) et contrôle des empreintes, mise en service pas à pas, usage quotidien (notifications, onglets, alertes, filtres, recherche, suite à donner), mise à jour du parc, gestion des clés dans la durée (nouveau téléphone, remplacement, perte, renouvellement de la clé d'émetteur), sécurité, messages et solutions, listes de contrôle, glossaire. Recopié du projet WerbVeilleDroid (`outils/synchroniser_guide_werbveille.py`).
+
+## [1.7.0] — 2026-11
+
+### Ajouts
+- **Export pour téléphone** (VEI-8) : page **🧰 Collecte › Export pour téléphone**, pour l'application Android **WerbVeille Droid** (projet distinct de WerbSMSI). **Clé d'émetteur** créée dans la page (ECDSA P-256, WebCrypto) : la partie publique et son empreinte sont gardées dans la base, la clé privée est téléchargée dans un fichier `.wvkey.json` chiffré par mot de passe (PBKDF2-SHA256, 600 000 itérations, AES-256-GCM), à ranger dans le coffre-fort, demandé à chaque export. **Téléphones** : certificat enregistré depuis l'application (empreinte affichée à comparer), doublon refusé, retrait = plus d'export possible. **Export** : le parc minimal (mots-clés actifs, exclusions, produits du parc reçus de WerbExploitation — éditeur, produit, version, CPE — et réglages CISA KEV / NVD) est chiffré pour le certificat du téléphone (RSA-OAEP SHA-1 + AES-256-GCM) et signé ; jamais le site, les TAG, les adresses des sources, les jetons, les alertes ni le journal. Option (cochée par défaut) : inclure les produits du parc et la veille NVD sur le téléphone même si la source NVD du collecteur est désactivée — le téléphone télécharge le flux NVD complet et compare en local, aucun nom de produit ne sort. Format `WERBVEILLE-DROID-EXPORT` (WerbVeilleDroid › docs/FORMAT_EXPORT.md), vérifié par l'application.
+
+### Format de données
+- Base : `telephones` (`id`, `nom`, `empreinte` SHA-256 du certificat, `certificat` DER en Base64 — public —, `ajouteLe`, `ajoutePar`, `dernierExport`) et `emetteur` (`empreinte`, `cle` publique SPKI en Base64, `creeLe`) ; jamais de clé privée ni de mot de passe. Champs ignorés par les versions antérieures. Fichier de clé : format `WERBVEILLE-CLE-EMETTEUR` (schéma 1).
+
 ## [1.6.0] — 2026-11
 
 ### Ajouts

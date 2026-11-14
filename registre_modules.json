@@ -257,7 +257,7 @@
       "chemin": "modules/continuite/WerbVeille",
       "depot": "../WerbVeille",
       "etat": "publie",
-      "version": "1.6.0",
+      "version": "1.10.4",
       "etape": "resilience"
     },
     {
