@@ -7,6 +7,7 @@ Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/), num
 ## [0.28.0] — 2026-11
 
 ### Changements
+- WerbVeille Droid **0.9.0** (projet distinct) : favoris, mots-clés perso, barres de date partout ; **WerbVeille 1.10.5 publié** (guide à jour).
 - WerbVeille Droid **0.8.1** (projet distinct) : actualités regroupées par jour, titre et site d'origine en couleur ; **WerbVeille 1.10.4 publié** (guide à jour).
 - WerbVeille Droid **0.8.0** (projet distinct) : taille du texte réglable, KEV et NVD gardés au verrouillage, vérification en arrière-plan contrôlée téléphone verrouillé ; **WerbVeille 1.10.3 publié** (guide à jour ; sources par défaut révisées : 35 sources, adresses du CERT-FR mises à jour).
 - WerbVeille Droid **0.7.1** (projet distinct) : icône de l'application agrandie (icône adaptative) — à signer et publier dans `APK`.

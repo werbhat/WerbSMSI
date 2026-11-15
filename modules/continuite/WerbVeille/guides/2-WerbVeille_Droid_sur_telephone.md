@@ -162,9 +162,26 @@ Dans les onglets Alertes, Actu, KEV et NVD, les **noms des applications du parc*
 
 ### 5.4 Trier et rechercher
 
-- Filtres **Toutes**, **Parc** (produits du parc), **Mots-clés** ; avec *Mots-clés*, une seconde ligne permet de n'afficher **qu'un mot-clé**.
+- Filtres **Toutes**, **Parc** (produits du parc), **Mots-clés** ; avec *Mots-clés*, une seconde ligne permet de n'afficher **qu'un mot-clé** ; **Mots perso** : alertes trouvées par vos mots-clés perso (§ 5.4 ter).
+- Les alertes, les vulnérabilités KEV et NVD, les actualités et les favoris sont **regroupés par jour** sous une barre verte (« Aujourd'hui », « Hier », puis la date).
 - **Recherche** : plusieurs termes, tous exigés, sans accents ni majuscules, sur la CVE, le titre, le résumé et la raison. Exemples : `chrome exploitee`, `fortios critical`, `CVE-2026-1234`, `rancongiciel`.
 - Filtres et recherche s'effacent au verrouillage.
+
+### 5.4 bis Les favoris (★)
+
+- **Appui prolongé** sur une vignette (alerte, actualité, KEV, NVD) : elle est mise en **favori** (petite vibration, étoile jaune en haut à droite) ; un nouvel appui prolongé la retire.
+- L'**étoile jaune** de l'en-tête, à gauche de ⚙, ouvre la page **Favoris** : filtres *Tous*, *Alertes*, *Actu*, *KEV*, *NVD* (avec leur nombre), vignettes regroupées par jour ; appui court pour ouvrir l'article ou la fiche, appui prolongé pour retirer.
+- Un favori garde une **copie** de la vignette : il reste visible même si l'élément sort de la durée de conservation ou disparaît après un nouvel import. 500 favoris au plus, dans le coffre chiffré ; *Tout effacer* les supprime.
+
+### 5.4 ter Les mots-clés perso (onglet Parc)
+
+Section **Liste de mots-clés complémentaire**, sous le bouton d'import :
+
+- **Ajouter** : un mot, ou plusieurs séparés par des virgules ou des retours à la ligne (« citrix, fortigate ») ; doublons ignorés, 120 caractères par mot, 200 mots au plus.
+- **Afficher** : la liste, avec des cases à cocher (une, plusieurs, ou *Tout sélectionner*) et **Supprimer (n)**.
+- **Vider** : supprime toute la liste, après confirmation.
+
+Ces mots sont rapprochés **comme les mots-clés du parc** (vulnérabilités KEV et NVD, actualités), avec les exclusions du parc, et aussitôt sur ce qui est déjà gardé (sans retélécharger) ; la raison affichée est « **Mot-clé perso : …** » et le filtre *Mots perso* les regroupe. Avec un export du groupe, ils valent pour tous les sites. Ils restent **sur ce téléphone** : jamais exportés, gardés dans le coffre chiffré, conservés par un nouvel import du parc. Pour un mot utile à tous, ajoutez-le plutôt dans WerbVeille.
 
 ### 5.5 Les actualités (onglet Actu)
 

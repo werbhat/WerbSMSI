@@ -3,6 +3,11 @@
 Toutes les évolutions notables de WerbVeille sont consignées ici.
 Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/), numérotation [SemVer](https://semver.org/lang/fr/).
 
+## [1.10.5] — 2026-11
+
+### Changements
+- Guide « WerbVeille Droid : la veille sur téléphone » à jour de l'application 0.9.0 : favoris, mots-clés perso (propres au téléphone, jamais exportés), barres de date.
+
 ## [1.10.4] — 2026-11
 
 ### Changements
