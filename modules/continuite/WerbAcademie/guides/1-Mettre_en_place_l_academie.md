@@ -9,7 +9,7 @@ L'académie est **une seule base pour tout le groupe** : le catalogue est conçu
 
 ## 1. Créer l'académie et la rattacher au groupe
 
-1. **✨ Nouvelle académie** : elle contient d'emblée les **six formations proposées** (hygiène numérique, usage de l'IA, clés USB, QR codes, mots de passe, et le rôle des dirigeants, réservée à la population « Dirigeants »).
+1. **✨ Nouvelle académie** : elle contient d'emblée les **sept formations proposées** (hygiène numérique, usage de l'IA, clés USB, QR codes, mots de passe, le rôle des dirigeants, réservée à la population « Dirigeants », et la sensibilisation « Cyber : à la maison comme à l'usine », proposée en brouillon).
 2. *⚙️ Base › Intégration WerbSMSI* : **Choisir l'espace…** (dossier `SMSI_<SIGLE>`), puis **Rattacher au groupe**. La liste des sites du groupe est copiée dans l'académie.
 3. **💾 Enregistrer** dans `groupe/continuite/` de l'espace (par exemple `Academie_<SIGLE>.werbacademie.json`). Déclarez la base dans le portail pour qu'elle apparaisse dans la liste des bases du groupe.
 
@@ -30,6 +30,8 @@ Les formations proposées sont **génériques**. Avant de les donner, complétez
 - le **contact de signalement** de l'entreprise (support informatique, correspondant cybersécurité) ;
 - les **outils autorisés** (IA, partage de fichiers, gestionnaire de mots de passe, partage de secrets) ;
 - les **procédures** propres au site (station de décontamination des clés USB, validation des virements).
+
+**Échanger des formations entre académies** (par exemple entre deux groupes, ou depuis une académie de référence) : **⬇** sur la ligne d'une formation, ou **⬇ Exporter le catalogue**, produit un fichier `.werbformation.json` qui ne contient **ni personnes ni sessions**. Dans l'autre académie, **⇩ Importer des formations…** lit ce fichier (ou directement une autre base WerbAcademie) et montre un **aperçu** : formations nouvelles, identiques ou dont le code existe déjà. Pour chacune, choisissez : *ajouter* (en brouillon), *remplacer le contenu* (la formation garde son statut et ses sessions ; passez une nouvelle version si elle a déjà été suivie), *ajouter en copie* ou *ignorer*. Relisez les formations ajoutées, adaptez les contacts et procédures, puis publiez-les.
 
 **⧉ Dupliquer** une formation permet d'en créer une variante (par exemple pour les opérateurs OT) ; **↺ Ajouter les formations proposées manquantes** remet une formation proposée supprimée par erreur.
 

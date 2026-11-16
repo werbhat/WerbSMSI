@@ -3,6 +3,29 @@
 Toutes les évolutions notables de WerbAcademie sont consignées ici.
 Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/), numérotation [SemVer](https://semver.org/lang/fr/).
 
+## [1.7.0] — 2026-11
+
+### Ajouts
+- **Échange de formations entre académies**, depuis le catalogue :
+  - **⬇** sur chaque ligne du catalogue et **⬇ Exporter (JSON)** dans la fiche : une formation ; **⬇ Exporter le catalogue** : toutes les formations. Fichier `*.werbformation.json` (format `WERBACADEMIE-FORMATIONS`, schéma 1) : formations sans identifiants, avec l'académie, la date et l'auteur de l'export ; **aucune personne ni session**.
+  - **⇩ Importer des formations…** : ce fichier, une base WerbAcademie (son catalogue seulement), un objet `{ formations: [...] }`, une liste ou une formation seule. **Aperçu** avant d'appliquer : formation nouvelle, identique, code existant (version, statut, sessions), en double dans le fichier, liens invalides, éléments ignorés ; **choix par formation** : ajouter, remplacer le contenu, ajouter en copie, ignorer (formations identiques ou de code existant ignorées par défaut).
+  - Ajout et copie : formation en **brouillon** (à relire puis publier), copie au code libre (`-IMPORT`). Remplacement, après confirmation : contenu et version repris, identifiant, statut et sessions gardés ; si la version est la même alors que des sessions existent, l'aperçu invite à passer une nouvelle version. Exports et imports tracés au journal.
+  - Fichiers refusés : JSON invalide, format inconnu, schéma plus récent, plus de 200 formations, aucune formation exploitable. Contenu borné et contrôlé comme à l'ouverture d'une base.
+
+### Format de données
+- Aucun champ nouveau dans la base. Nouveau fichier d'échange `*.werbformation.json` (README, « Échange de formations »).
+
+### Développement
+- Test `tests/test_echange.py`.
+
+## [1.6.0] — 2026-11
+
+### Ajouts
+- **Septième formation proposée** : *Cyber : à la maison comme à l'usine* (ACA-CYB), sensibilisation d'une heure pour les collaborateurs et les opérateurs OT peu à l'aise avec l'informatique. Fil rouge : une situation vécue à la maison, la même à l'usine, un seul réflexe. 11 chapitres, 28 diapos avec les notes de l'animateur (durée indiquée par chapitre) : pouvoir repartir après une attaque ou une panne ; données précieuses et copie ailleurs (incendie, vol, panne) ; l'histoire de « Julien », des informations banales (réseaux sociaux, fuite du numéro de sécurité sociale, IBAN) jusqu'au crédit à son nom, et le même escalier à l'usine (faux RIB fournisseur, élévation de privilèges) ; menaces communes ; incidents fréquents en industrie (clés USB et erreurs, internes ou de prestataires) ; clés USB et smartphones (OTG, recharge sur une machine) ; QR codes ; faux Wi-Fi, faux portails et passerelles 4G posées sur les machines ; mails piégés ; intelligence artificielle (données confiées, voix imitées) ; carte réflexe. Quiz de 9 questions (seuil 75 %). Proposée en **brouillon** : elle recoupe en partie ACA-HYG, ACA-USB, ACA-QR et ACA-IA et ne devient exigée qu'une fois publiée. « ↺ Ajouter les formations proposées manquantes » l'ajoute à une académie existante.
+
+### Développement
+- `tests/test_parcours.py` : sept formations de départ, ACA-CYB en brouillon.
+
 ## [1.5.0] — 2026-11
 
 ### Ajouts

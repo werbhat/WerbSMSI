@@ -4,9 +4,9 @@
  "famille": "WERBSMSI",
  "meta": {
   "produit": "WerbAcademie",
-  "appVersion": "1.4.0",
+  "appVersion": "1.7.0",
   "auteur": "@WerbHat",
-  "generateur": "WerbAcademie v1.4.0 – Développé par @WerbHat",
+  "generateur": "WerbAcademie v1.7.0 – Développé par @WerbHat",
   "modifieLe": "2026-10-31T08:00:00Z",
   "modifiePar": "Exemple",
   "creeLe": "2026-10-31",
@@ -909,6 +909,492 @@
      ]
     },
     "id": "f6"
+   },
+   {
+    "code": "ACA-CYB",
+    "titre": "Cyber : à la maison comme à l'usine",
+    "objectif": "Comprendre que la cybersécurité sert à continuer à fonctionner après une attaque ou une panne ; reconnaître les risques du quotidien (données précieuses, usurpation d'identité, clés USB et smartphones, QR codes, Wi-Fi, messages piégés, intelligence artificielle) ; adopter les mêmes réflexes à la maison et à l'usine. Pour un public peu à l'aise avec l'informatique : chaque sujet part d'une situation vécue à la maison, montre la même situation à l'usine et se termine par un seul réflexe.",
+    "populations": [
+     "collaborateurs",
+     "operateurs"
+    ],
+    "duree": 60,
+    "version": "1.0",
+    "statut": "brouillon",
+    "periodiciteMois": 24,
+    "chapitres": [
+     {
+      "titre": "La cyber, c'est pouvoir repartir",
+      "diapos": [
+       {
+        "titre": "Qui a déjà perdu des données ?",
+        "points": [
+         "Le téléphone tombé à l'eau : les photos des enfants ont-elles disparu ?",
+         "L'ordinateur qui ne démarre plus le jour de la déclaration d'impôts",
+         "À l'usine : une ligne arrêtée par une attaque… ou par une simple panne de disque"
+        ],
+        "notes": "5 minutes pour ce chapitre. Tour de salle à main levée ; faire raconter une ou deux histoires vécues. La salle doit se sentir concernée avant tout discours. Fil rouge de toute la séance : 🏠 à la maison, 🏭 à l'usine, ✅ un seul réflexe."
+       },
+       {
+        "titre": "Se protéger et savoir redémarrer",
+        "points": [
+         "Attaque, panne, incendie ou erreur : le résultat est le même, on ne peut plus travailler",
+         "La cybersécurité sert à éviter l'incident, mais surtout à repartir vite",
+         "Combien d'heures pour redémarrer ma ligne ? Qui sait où sont les sauvegardes ?",
+         "Je connais le mode dégradé de mon poste et la personne à appeler"
+        ],
+        "notes": "Préciser le mode dégradé de la ligne (procédure manuelle, papier) et le contact d'astreinte (à compléter)."
+       }
+      ],
+      "liens": []
+     },
+     {
+      "titre": "Mes données précieuses et comment ne pas les perdre",
+      "diapos": [
+       {
+        "titre": "Ce qui est précieux",
+        "points": [
+         "À la maison : papiers d'identité, photos, relevés bancaires, mots de passe",
+         "À l'usine : programmes des automates, recettes et réglages machine, plans, données clients, fichiers qualité",
+         "La bonne question : si je le perds demain, qu'est-ce qui me manque ?"
+        ],
+        "notes": "6 minutes pour ce chapitre. Faire citer par la salle trois données précieuses à la maison et trois au poste de travail. Les recettes et réglages machine sont souvent oubliés alors qu'ils représentent des années de mise au point."
+       },
+       {
+        "titre": "Incendie, vol, panne : une copie ailleurs",
+        "points": [
+         "Ce qui n'existe qu'à un seul endroit est déjà à moitié perdu",
+         "Une copie dans un autre lieu : cloud, disque rangé chez un proche, autre bâtiment",
+         "Une copie qui fonctionne : on vérifie de temps en temps qu'on sait la restaurer",
+         "À l'usine : avant toute modification d'un programme ou d'une recette, on sauvegarde"
+        ],
+        "notes": "Règle simple : 3 copies, sur 2 supports, dont 1 hors du lieu. À la maison : synchroniser les photos du téléphone, garder un disque externe chez un proche. Indiquer où sont rangées les sauvegardes des machines du site (à compléter)."
+       }
+      ],
+      "liens": []
+     },
+     {
+      "titre": "Le puzzle : des petites infos au crédit à mon nom",
+      "diapos": [
+       {
+        "titre": "Marche 1 : ce que tout le monde voit",
+        "points": [
+         "Julien, opérateur de ligne, publie sur les réseaux sociaux",
+         "Gâteau d'anniversaire : sa date de naissance. Photo du chien : son nom. Profil : son employeur",
+         "« C'est grave ? » Non, tout le monde le voit"
+        ],
+        "notes": "6 minutes pour ce chapitre. Julien est un personnage fictif. Raconter l'histoire une marche à la fois et demander chaque fois à la salle : « Est-ce que c'est grave, ça ? ». La réponse sera presque toujours non : c'est précisément le message."
+       },
+       {
+        "titre": "Marche 2 : une fuite de données",
+        "points": [
+         "Une mutuelle ou un organisme se fait pirater",
+         "L'escroc obtient l'adresse, le téléphone et le numéro de sécurité sociale de Julien",
+         "« C'est grave ? » Julien n'y est pour rien"
+        ],
+        "notes": "En 2024, des fuites massives (organismes de tiers payant, France Travail) ont concerné des dizaines de millions de personnes. Personne n'est à l'abri : il faut s'attendre à être contacté par des escrocs bien renseignés."
+       },
+       {
+        "titre": "Marche 3 : un faux SMS",
+        "points": [
+         "« Ameli : renouvelez votre carte Vitale »",
+         "Julien saisit son IBAN et envoie la photo de sa carte d'identité",
+         "« C'est grave ? » Ce n'est qu'un RIB…"
+        ],
+        "notes": "Variante : une copie de pièce d'identité envoyée pour une location, restée dans une boîte mail piratée."
+       },
+       {
+        "titre": "Marche 4 : la confiance",
+        "points": [
+         "Un « conseiller bancaire » appelle : il connaît le nom, l'adresse, le numéro de sécurité sociale et l'IBAN de Julien",
+         "Julien le croit : « il savait tout, c'était forcément la banque »",
+         "Il lui fait valider une « annulation de fraude » : c'est en réalité un virement"
+        ],
+        "notes": "Point clé : connaître vos informations ne prouve pas que la personne est légitime. Les escrocs achètent ces informations."
+       },
+       {
+        "titre": "Marche 5 : un crédit à son nom",
+        "points": [
+         "Pièce d'identité, IBAN et faux justificatif de domicile : crédit en ligne, paiement en 4 fois, forfait téléphonique",
+         "Des prélèvements arrivent sur le compte de Julien",
+         "Il le découvre trois mois plus tard, par une lettre de recouvrement, voire un fichage à la Banque de France"
+        ],
+        "notes": "Message à faire dire par la salle : un IBAN seul ne vide pas un compte, un numéro de sécurité sociale seul ne fait rien ; ensemble, c'est votre identité."
+       },
+       {
+        "titre": "Le même escalier à l'usine",
+        "points": [
+         "Organigramme et fournisseurs : réseaux sociaux, offres d'emploi, photos de salon",
+         "Boîte mail d'un fournisseur piratée : signature, factures, habitudes de paiement",
+         "Un mail parfait, dans une vraie conversation : « voici notre nouveau RIB »",
+         "Résultat : un virement de dizaines de milliers d'euros, ou un accès qui grimpe jusqu'à toute l'usine"
+        ],
+        "notes": "Faire dire par la salle : « c'est l'histoire de Julien, avec l'entreprise à sa place ». Expliquer simplement l'élévation de privilèges : le compte d'un opérateur donne un poste, le poste donne un compte administrateur, le compte administrateur donne tout."
+       },
+       {
+        "titre": "Se protéger",
+        "points": [
+         "Publier moins : date de naissance, documents, badge, intérieur de l'usine",
+         "Jamais de pièce d'identité sans filigrane (« Copie pour location, le … »)",
+         "Celui qui connaît mes informations n'est pas forcément légitime : je raccroche et je rappelle",
+         "Victime : opposition bancaire, plainte, Cybermalveillance.gouv.fr ; au travail, je préviens tout de suite"
+        ],
+        "notes": "Montrer le service gratuit de filigrane de l'État. Rappeler le contact de signalement de l'entreprise (à compléter)."
+       }
+      ],
+      "liens": [
+       {
+        "libelle": "FiligraneFacile — filigrane gratuit sur les pièces justificatives",
+        "url": "https://filigrane.beta.gouv.fr/",
+        "type": "site"
+       },
+       {
+        "libelle": "Cybermalveillance.gouv.fr — assistance et prévention",
+        "url": "https://www.cybermalveillance.gouv.fr/",
+        "type": "site"
+       }
+      ]
+     },
+     {
+      "titre": "Les menaces sont les mêmes partout",
+      "diapos": [
+       {
+        "titre": "Maison et usine : le même escroc",
+        "points": [
+         "Faux conseiller bancaire à la maison, faux fournisseur ou faux directeur à l'usine",
+         "Compte Facebook volé à la maison, messagerie professionnelle volée à l'usine",
+         "Photos bloquées contre rançon à la maison, production arrêtée contre rançon à l'usine",
+         "Les mêmes ficelles partout : urgence, peur, autorité, gain"
+        ],
+        "notes": "3 minutes pour ce chapitre. Faire compléter par la salle : pour chaque menace à la maison, trouver son équivalent à l'usine."
+       }
+      ],
+      "liens": []
+     },
+     {
+      "titre": "Ce qui arrive vraiment en industrie",
+      "diapos": [
+       {
+        "titre": "Pas besoin de pirate",
+        "points": [
+         "La plupart des incidents en atelier ne viennent pas d'un pirate",
+         "La clé USB d'un collègue ou d'un prestataire qui apporte un virus sur une machine",
+         "Une erreur de manipulation, interne ou d'un prestataire : recette écrasée, programme remplacé, dossier effacé",
+         "Une panne, sans sauvegarde récente"
+        ],
+        "notes": "7 minutes pour ce chapitre. À la maison : qui a déjà écrasé un dossier en copiant au mauvais endroit ? Si possible, citer un incident du site, sans nommer personne."
+       },
+       {
+        "titre": "Les clés USB des prestataires",
+        "points": [
+         "Le prestataire passe d'usine en usine avec la même clé",
+         "Sa clé peut transporter un virus d'un client à l'autre sans qu'il le sache",
+         "Toute clé passe par la station de décontamination avant une machine",
+         "Demander au prestataire s'il l'a fait est normal : c'est mon rôle"
+        ],
+        "notes": "Indiquer l'emplacement de la station de décontamination du site (à compléter). Les opérateurs craignent souvent de froisser le prestataire : les rassurer, la règle vient de la direction."
+       },
+       {
+        "titre": "Les erreurs : sauvegarder avant, le dire après",
+        "points": [
+         "Avant de modifier un programme, une recette ou un réglage : je sauvegarde",
+         "Le prestataire aussi : sauvegarde exigée avant toute intervention",
+         "Après une erreur : je le dis tout de suite, chaque minute compte pour récupérer",
+         "On ne reproche jamais une erreur, on reproche un silence"
+        ],
+        "notes": "Une erreur signalée en cinq minutes se répare ; découverte une semaine plus tard, la sauvegarde a parfois déjà été écrasée."
+       }
+      ],
+      "liens": []
+     },
+     {
+      "titre": "Clés USB et smartphones",
+      "diapos": [
+       {
+        "titre": "Une prise USB n'est pas qu'une prise",
+        "points": [
+         "Une clé, un téléphone ou un câble peut se faire passer pour un clavier et taper des commandes tout seul",
+         "Câble OTG : le téléphone devient une clé USB ou un clavier branché sur la machine",
+         "Une clé trouvée sur le parking est souvent un appât"
+        ],
+        "notes": "6 minutes pour ce chapitre. OTG (« On-The-Go ») : un adaptateur qui permet au téléphone de lire une clé USB ou d'être vu comme un périphérique. Montrer un câble OTG et un câble de recharge : ils se ressemblent."
+       },
+       {
+        "titre": "Recharger son téléphone",
+        "points": [
+         "À la maison : bornes de recharge publiques (gare, aéroport), préférer sa prise et son chargeur",
+         "À l'usine : jamais de téléphone sur le PC ou le pupitre d'une machine, même pour recharger",
+         "Le téléphone apporte à la machine ce qu'il a ramassé ailleurs, et inversement"
+        ],
+        "notes": "Le geste « je recharge sur le PC de la ligne » est très courant : le nommer sans culpabiliser. Indiquer où recharger sur le site (à compléter)."
+       },
+       {
+        "titre": "Les réflexes",
+        "points": [
+         "Rien de personnel sur une machine : ni clé, ni téléphone, ni câble",
+         "Toute clé passe par la station de décontamination",
+         "Une clé trouvée : je la remets au support sans la brancher"
+        ],
+        "notes": "Renvoyer vers la formation ACA-USB pour approfondir."
+       }
+      ],
+      "liens": []
+     },
+     {
+      "titre": "QR codes",
+      "diapos": [
+       {
+        "titre": "Un QR code est un lien caché",
+        "points": [
+         "À la maison : faux QR code collé sur un horodateur, un menu, un faux avis de passage",
+         "À l'usine : QR code sur une affiche, un colis, un faux courrier de fournisseur",
+         "Il mène souvent à une fausse page de connexion ou de paiement"
+        ],
+        "notes": "4 minutes pour ce chapitre. Montrer un autocollant collé par-dessus le QR code d'un parking."
+       },
+       {
+        "titre": "Avant et après avoir scanné",
+        "points": [
+         "Je lis l'adresse affichée avant d'ouvrir",
+         "Jamais de mot de passe ni de carte bancaire sur une page ouverte par QR code",
+         "Un QR code collé par-dessus un autre : je ne le scanne pas"
+        ],
+        "notes": "Renvoyer vers la formation ACA-QR pour approfondir."
+       }
+      ],
+      "liens": []
+     },
+     {
+      "titre": "Wi-Fi, faux portails et passerelles",
+      "diapos": [
+       {
+        "titre": "Le faux Wi-Fi gratuit",
+        "points": [
+         "À la gare ou à l'hôtel, un réseau « Wifi_Gratuit » peut être tenu par un escroc",
+         "Un faux portail demande de se connecter avec Facebook, Google ou sa messagerie : il vole le mot de passe",
+         "Même piège près de l'usine : un faux réseau « Invités » au nom de l'entreprise"
+        ],
+        "notes": "4 minutes pour ce chapitre. Faux portail (« evil portal ») : un faux point d'accès qui copie le nom d'un vrai réseau. En déplacement, préférer le partage de connexion de son téléphone."
+       },
+       {
+        "titre": "Les passerelles posées sur les machines",
+        "points": [
+         "Un boîtier 4G ou une passerelle Wi-Fi posée sur une machine pour la télémaintenance ouvre une porte directe vers Internet",
+         "Elle contourne toutes les protections du site",
+         "Un boîtier inconnu sur une machine ou dans une armoire : je le signale"
+        ],
+        "notes": "Rappeler la règle du site : aucune télémaintenance ni aucun boîtier sans validation (à compléter). Montrer à quoi ressemble un routeur 4G industriel."
+       }
+      ],
+      "liens": []
+     },
+     {
+      "titre": "Les mails de plus en plus durs à démasquer",
+      "diapos": [
+       {
+        "titre": "Les faux sont devenus parfaits",
+        "points": [
+         "Plus de fautes d'orthographe : l'intelligence artificielle écrit les faux mails",
+         "Vrais logos, vraies signatures, parfois une vraie conversation piratée",
+         "À la maison : banque, Ameli, impôts, colis. Au travail : fournisseur, ressources humaines, direction"
+        ],
+        "notes": "6 minutes pour ce chapitre. Montrer deux exemples récents, l'un personnel, l'autre professionnel (anonymisés). Faire voter la salle : vrai ou faux ?"
+       },
+       {
+        "titre": "Juger la demande, pas l'apparence",
+        "points": [
+         "Me demande-t-on de l'argent, un code, d'ouvrir une pièce jointe, d'agir vite ?",
+         "Si oui : je vérifie par un autre moyen, en rappelant un numéro que je connais",
+         "Changement de RIB d'un fournisseur : toujours un appel de vérification",
+         "Un doute : je signale le mail sans cliquer"
+        ],
+        "notes": "Indiquer la procédure de changement de RIB et le moyen de signaler un mail suspect (à compléter)."
+       }
+      ],
+      "liens": []
+     },
+     {
+      "titre": "L'intelligence artificielle",
+      "diapos": [
+       {
+        "titre": "Ce que je donne à une IA ne m'appartient plus",
+        "points": [
+         "Coller un plan, une recette ou un mail client dans une IA publique revient à le publier",
+         "Pour le travail, seuls les outils d'IA autorisés par l'entreprise",
+         "À la maison aussi : pas de papiers d'identité, de bulletins de paie ni de données de santé"
+        ],
+        "notes": "4 minutes pour ce chapitre. Préciser les outils d'IA autorisés dans l'entreprise (à compléter). Renvoyer vers la formation ACA-IA pour approfondir."
+       },
+       {
+        "titre": "Une voix ou une vidéo ne prouve plus rien",
+        "points": [
+         "« Maman, j'ai eu un accident, envoie de l'argent » : la voix peut être imitée",
+         "Au travail : un appel avec la voix du directeur qui demande un virement",
+         "Le réflexe : je raccroche et je rappelle sur un numéro connu"
+        ],
+        "notes": "Astuce simple et appréciée : convenir en famille d'un mot secret pour les vraies urgences."
+       }
+      ],
+      "liens": []
+     },
+     {
+      "titre": "La carte réflexe",
+      "diapos": [
+       {
+        "titre": "Ma carte réflexe (1/2)",
+        "points": [
+         "STOP : urgence, peur, gain, autorité ? C'est peut-être une arnaque",
+         "Je vérifie par un autre moyen : je rappelle un numéro que je connais",
+         "Mes infos sont un puzzle : je publie moins, je mets un filigrane sur mes papiers",
+         "Rien de personnel sur une machine : ni clé, ni téléphone, ni câble"
+        ],
+        "notes": "7 minutes pour ce chapitre et le quiz. Distribuer la carte réflexe au format carte bancaire, l'afficher en atelier avec le contact de signalement de l'entreprise (à compléter). Inviter chacun à la montrer en famille."
+       },
+       {
+        "titre": "Ma carte réflexe (2/2)",
+        "points": [
+         "Toute clé USB passe par la station de décontamination",
+         "QR code ou Wi-Fi inconnu : jamais de mot de passe ni de carte bancaire",
+         "Rien de l'entreprise dans une IA non autorisée",
+         "Une copie ailleurs, à la maison comme à l'usine",
+         "Un doute, une erreur, un clic : je le dis tout de suite"
+        ],
+        "notes": "Distribuer ensuite le quiz papier (5 minutes) et le corriger ensemble. Garder 2 minutes pour les questions."
+       }
+      ],
+      "liens": [
+       {
+        "libelle": "Cybermalveillance.gouv.fr — assistance et prévention",
+        "url": "https://www.cybermalveillance.gouv.fr/",
+        "type": "site"
+       },
+       {
+        "libelle": "33700 — signaler un SMS ou un appel d'arnaque",
+        "url": "https://www.33700.fr/",
+        "type": "site"
+       }
+      ]
+     }
+    ],
+    "quiz": {
+     "seuil": 75,
+     "questions": [
+      {
+       "texte": "À quoi sert d'abord la cybersécurité ?",
+       "choix": [
+        "Seulement à empêcher les pirates d'entrer",
+        "À se protéger et à pouvoir redémarrer vite après une attaque ou une panne",
+        "À surveiller les salariés"
+       ],
+       "bonnes": [
+        1
+       ],
+       "explication": "Attaque, panne, incendie ou erreur : l'objectif est de continuer à produire, ou de repartir vite."
+      },
+      {
+       "texte": "Quelles données sont précieuses pour l'usine ? (plusieurs réponses)",
+       "choix": [
+        "Les recettes et réglages machine",
+        "Les programmes des automates",
+        "Les données clients",
+        "Le menu de la cantine"
+       ],
+       "bonnes": [
+        0,
+        1,
+        2
+       ],
+       "explication": "Recettes, programmes et données clients représentent des années de travail et la confiance des clients."
+      },
+      {
+       "texte": "Où garder une copie de ses données importantes ?",
+       "choix": [
+        "Sur le même ordinateur, dans un autre dossier",
+        "Dans un autre lieu, en vérifiant qu'on sait la restaurer",
+        "Nulle part, les pannes sont rares"
+       ],
+       "bonnes": [
+        1
+       ],
+       "explication": "Après un incendie, un vol ou une panne, seule une copie rangée ailleurs, et vérifiée, permet de récupérer."
+      },
+      {
+       "texte": "Un escroc a votre IBAN, votre numéro de sécurité sociale et une photo de votre carte d'identité. Que peut-il faire ? (plusieurs réponses)",
+       "choix": [
+        "Rien, ces informations ne sont pas secrètes",
+        "Ouvrir un crédit ou un abonnement à votre nom",
+        "Vous appeler en se faisant passer pour votre banque, de façon crédible",
+        "Seulement vous envoyer de la publicité"
+       ],
+       "bonnes": [
+        1,
+        2
+       ],
+       "explication": "Chaque information seule semble anodine ; ensemble, elles permettent d'usurper votre identité."
+      },
+      {
+       "texte": "Un prestataire veut brancher sa clé USB sur une machine. Que faites-vous ?",
+       "choix": [
+        "Je le laisse faire, c'est un professionnel",
+        "Je lui demande de la passer d'abord à la station de décontamination",
+        "Je la branche sur mon PC pour vérifier"
+       ],
+       "bonnes": [
+        1
+       ],
+       "explication": "Sa clé passe d'usine en usine : elle peut transporter un virus sans qu'il le sache."
+      },
+      {
+       "texte": "Votre téléphone est déchargé. Pouvez-vous le recharger sur le PC de la ligne ?",
+       "choix": [
+        "Oui, si c'est rapide",
+        "Non, jamais rien de personnel sur une machine",
+        "Oui, si le téléphone est récent"
+       ],
+       "bonnes": [
+        1
+       ],
+       "explication": "Une prise USB échange aussi des données : le téléphone peut apporter un virus ou se faire passer pour un clavier."
+      },
+      {
+       "texte": "Un QR code ou un Wi-Fi gratuit ouvre une page qui demande votre mot de passe. Que faites-vous ?",
+       "choix": [
+        "Je saisis mon mot de passe",
+        "Je ferme la page sans rien saisir",
+        "Je saisis le mot de passe d'un collègue"
+       ],
+       "bonnes": [
+        1
+       ],
+       "explication": "Les faux portails et les faux QR codes servent à voler les mots de passe."
+      },
+      {
+       "texte": "Un fournisseur habituel annonce par mail son nouveau RIB. Le mail est parfait, sans faute. Que faites-vous ?",
+       "choix": [
+        "Je mets à jour le RIB",
+        "Je réponds au mail pour confirmer",
+        "Je vérifie en appelant le fournisseur à un numéro connu"
+       ],
+       "bonnes": [
+        2
+       ],
+       "explication": "Si sa boîte mail est piratée, répondre au mail, c'est répondre à l'escroc. On juge la demande, pas l'apparence."
+      },
+      {
+       "texte": "Vous avez effacé un fichier par erreur, ou cliqué sur un lien douteux. Que faites-vous en premier ?",
+       "choix": [
+        "J'attends de voir s'il se passe quelque chose",
+        "Je préviens tout de suite le contact de signalement",
+        "J'éteins tout et je n'en parle pas"
+       ],
+       "bonnes": [
+        1
+       ],
+       "explication": "Chaque minute compte pour récupérer. On ne reproche jamais une erreur, on reproche un silence."
+      }
+     ]
+    },
+    "id": "f7"
    }
   ],
   "personnes": [

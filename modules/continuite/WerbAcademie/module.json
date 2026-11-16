@@ -2,7 +2,7 @@
   "charte": "1.0",
   "id": "werbacademie",
   "produit": "WerbAcademie",
-  "version": "1.5.0",
+  "version": "1.7.0",
   "dateVersion": "2026-11",
   "auteur": "@WerbHat",
   "signature": "Développé par @WerbHat",
@@ -14,7 +14,7 @@
   "entree": "application/WerbAcademie.html",
   "empreinte": {
     "algo": "SHA-256",
-    "valeur": "f752cc742518762505e354d797b6ce848f3f28214ced642219f4e13ca6d18d3b"
+    "valeur": "73e103bb08fea54a65bad0be9828297480cd855a57c36ff7735979f008c6e8bb"
   },
   "donnees": {
     "format": "WERBACADEMIE",
