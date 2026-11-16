@@ -10,6 +10,7 @@ Des schémas dessinés chacun à sa façon se relisent mal : on ne sait plus que
 3. Dans WerbCartoSI, chaque modèle est **décrit** une fois (nom, type et exigences proposés).
 4. **▶ Créer un schéma** : le module copie le modèle, remplit le cartouche, donne au fichier un **nom normalisé** et crée la fiche du schéma en brouillon, déjà liée au fichier.
 
+
 ## 2. Écrire le cartouche
 
 Dans Visio, ouvrez le modèle et écrivez les balises **telles quelles** dans le texte des formes du cartouche, par exemple `Version : {{VERSION}}`.
@@ -95,7 +96,18 @@ En remplissant la planche :
 
 Le schéma montre l'architecture voulue. La preuve que les sauvegardes tournent et sont testées reste le registre des sauvegardes de WerbExploitation.
 
-## 6. Ouvrir directement dans Visio (essai)
+## 6. Partir d'une ébauche générée depuis WerbMap
+
+Pour un premier schéma « Zones et conduits », inutile de partir d'une page blanche : *Modèles de schémas › Ébauche « Zones et conduits » depuis WerbMap* dessine les **zones** du site (couleur de criticité, SL-T), leurs **actifs** (TAG) et les **conduits** entre zones, avec le **pare-feu** que désigne la matrice de flux. Un conduit sans pare-feu est tracé en rouge pointillé : c'est un point à traiter, dans la matrice ou sur le terrain.
+
+1. Choisissez le **périmètre** : tout le site, ou un SI (ses actifs et leurs zones) si le site a beaucoup de zones.
+2. Donnez le **titre** et le **propriétaire** ; relisez l'aperçu.
+3. **✨ Créer le schéma** : le fichier Visio est enregistré dans le dossier des schémas et sa fiche est créée en brouillon (EX-ZONES, EX-CARTO, SI et zones liés).
+4. Ouvrez-le dans Visio et **reprenez-le** : disposition, regroupements, libellés, contre-mesures des conduits. Comparez-le au terrain, puis faites-le approuver (contrôles avant approbation).
+
+L'ébauche ne remplace pas le dessin : elle évite la saisie et garantit que les TAG et les zones sont ceux de l'inventaire.
+
+## 7. Ouvrir directement dans Visio (essai)
 
 *Référentiels et paramètres* › **Ouverture directe dans Visio (essai)** ajoute un bouton « 🖉 Ouvrir dans Visio » aux fiches des schémas Visio. Il utilise le lien `ms-visio:` d'Office : Edge demande l'autorisation d'ouvrir Visio. Selon la version d'Office, cela fonctionne pour un fichier sur SharePoint ou OneDrive, et pas toujours pour un fichier d'un lecteur réseau. Essayez sur votre poste avant de le recommander ; la copie du chemin reste la méthode sûre.
 

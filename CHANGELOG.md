@@ -4,6 +4,11 @@ Toutes les évolutions notables de l'environnement WerbSMSI (charte, portail, ou
 Les modules ont chacun leur propre CHANGELOG.
 Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/), numérotation [SemVer](https://semver.org/lang/fr/).
 
+## [0.29.0] — 2026-11
+
+### Changements
+- **WerbCartoSI 1.10.0 publié** : **ébauche « Zones et conduits » générée depuis WerbMap** (*Modèles de schémas*, tout le site ou un SI) — zones colorées par criticité avec leur SL-T, actifs (TAG), conduits avec le pare-feu de la matrice de flux (sans pare-feu : rouge pointillé), tableau des conduits, légende, cartouche rempli ; aperçu SVG dans le module ; dessin Visio `.vsdx` A3 enregistré dans le dossier des schémas (vérifié à l'ouverture par Visio) et fiche brouillon liée aux SI et aux zones. Démonstration LYON : publication de la couverture régénérée.
+
 ## [0.28.0] — 2026-11
 
 ### Changements

@@ -3,6 +3,15 @@
 Toutes les évolutions notables de WerbCartoSI sont consignées ici.
 Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/), numérotation [SemVer](https://semver.org/lang/fr/).
 
+## [1.10.0] — 2026-11
+
+### Ajouts
+- **Ébauche « Zones et conduits » depuis WerbMap** (*Modèles de schémas*) : premier schéma dessiné à partir des données publiées par WerbMap, pour tout le site ou pour un SI — zones rangées du moins au plus critique (couleurs de WerbMap, SL-T, nombre d'actifs), actifs de chaque zone (TAG · libellé, « … et n autres » au-delà de la place), conduits entre zones (sens publié, pare-feu tiré de la matrice de flux ; conduit sans pare-feu en rouge pointillé ; tracé à angles droits), tableau des conduits (pare-feu, flux autorisés, règles à examiner), légende, cartouche rempli (identifiant, site, exigences, version 0.1, propriétaire, auteur, classification). **Aperçu** dans le module, **⬇ Aperçu SVG**, **✨ Créer le schéma** : dessin Visio `.vsdx` A3 paysage (mêmes conventions que les modèles), nom normalisé, enregistré dans le dossier des schémas ; fiche créée en brouillon (type « Zones et conduits », EX-ZONES, EX-CARTO, SI et zones liés, historique). Une ébauche se reprend à la main : elle se compare au terrain avant approbation (contrôles avant approbation).
+- `visio.js` : paquet `.vsdx` complet d'une page (dessin), à partir de formes. Nouveau composant `ebauche.js`.
+
+### Tests
+- `tests/test_ebauche.py` (`--visio` : le fichier produit est ouvert par Visio, automation COM).
+
 ## [1.9.0] — 2026-11
 
 ### Ajouts

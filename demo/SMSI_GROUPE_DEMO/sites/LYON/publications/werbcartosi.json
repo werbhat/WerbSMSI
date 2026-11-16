@@ -4,17 +4,17 @@
  "famille": "WERBSMSI",
  "meta": {
   "produit": "WerbCartoSI",
-  "appVersion": "1.9.0",
+  "appVersion": "1.10.0",
   "auteur": "@WerbHat",
-  "generateur": "WerbCartoSI v1.9.0 – Développé par @WerbHat",
+  "generateur": "WerbCartoSI v1.10.0 – Développé par @WerbHat",
   "creeLe": "2026-11-16",
-  "modifieLe": "2026-11-16T18:04:32Z",
+  "modifieLe": "2026-11-16T19:01:58Z",
   "modifiePar": "Exemple",
   "groupeId": "e6a47cd7-77fe-463f-b6ea-b50ff390bfc7",
   "module": "werbcartosi",
   "portee": "site",
   "publiePar": "Exemple",
-  "publieLe": "2026-11-16T18:04:32Z",
+  "publieLe": "2026-11-16T19:01:58Z",
   "site": "LYON"
  },
  "data": {
