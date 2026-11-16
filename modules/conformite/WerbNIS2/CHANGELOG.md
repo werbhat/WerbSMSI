@@ -5,6 +5,14 @@ Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/), num
 
 
 
+## [1.8.1] — 2026-11
+
+### Modifications
+- **Schémas d'architecture non applicables** : une catégorie d'exigence déclarée non applicable par WerbCartoSI 1.7.0 (état `na` de `site:cartographies`) est lue avec sa décision (justification, fonction, date de décision et de revue) ; l'élément de preuve l'affiche et la citation la reprend ; elle n'est plus signalée « couverture incomplète ». Données reçues : nombre de catégories non applicables.
+
+### Développement
+- Lecteur de guides 1.3.0 (composant de la charte : images dans les guides).
+
 ## [1.8.0] — 2026-11
 
 ### Ajouts

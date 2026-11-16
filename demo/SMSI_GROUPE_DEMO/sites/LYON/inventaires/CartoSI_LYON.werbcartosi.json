@@ -334,7 +334,7 @@
     ],
     [
      "EX-FLUX",
-     "Flux et cloisonnement"
+     "Flux et filtrage"
     ],
     [
      "EX-RESEAU",
@@ -599,11 +599,11 @@
    }
   },
   "publication": {
-   "le": "2026-11-05T17:24:32.980Z",
+   "le": "2026-11-16T18:04:32.769Z",
    "par": "Exemple",
    "exigences": 8,
    "schemas": 5,
-   "empreinte": "1a1c3d3f"
+   "empreinte": "e6e16e15"
   }
  }
 }

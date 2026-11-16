@@ -3,6 +3,14 @@
 Toutes les évolutions notables de WerbMap sont consignées ici.
 Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/), numérotation [SemVer](https://semver.org/lang/fr/).
 
+## [1.30.0] — 2026-11
+
+### Ajouts
+- **Matrice de flux publiée** (`site:flux`, pour WerbCartoSI 1.9.0 : annexe « Matrice des flux » des schémas de flux et dossier de preuve) : règles actives seulement — identifiant, source et destination (TAG ou nom de réseau) avec leur zone, protocole, port, action (autorisé ou refus), pare-feu, justification (commentaire), interconnexion. Une adresse IP saisie en source ou en destination est remplacée par « adresse non publiée », une adresse citée dans le commentaire par « [adresse] » ; règles désactivées non publiées. Aussi dans le fichier de publication exporté sans espace.
+
+### Développement
+- Lecteur de guides 1.3.0 (composant de la charte : images dans les guides).
+
 ## [1.29.1] — 2026-11
 
 ### Changements

@@ -1,7 +1,7 @@
 # WerbNIS2
 
 > Conformité NIS2 d'une entité ou d'un site : 20 règles, audit de 152 points en 28 thématiques, couverture, plan d'actions, rapport
-> Version **1.8.0** — Développé par **@WerbHat**
+> Version **1.8.1** — Développé par **@WerbHat**
 
 ---
 
@@ -167,7 +167,7 @@ L'extraction ne reprend que le référentiel (règles, thématiques, points) : j
 
 ## Historique des versions
 
-Version courante : **1.8.0** de novembre 2026 — registre des sauvegardes de WerbExploitation proposé en preuve de la continuité (CONTINUITE_ACTIVITE.a, c, d). Versions précédentes : **1.7.0** de novembre 2026 — couverture des schémas d'architecture de WerbCartoSI proposée en preuve. Versions précédentes : **1.6.0** de novembre 2026 — guide de débutant « NIS2 en clair » ; **1.5.0** d'octobre 2026 — indicateurs de formation de WerbAcademie reçus et proposés comme preuves (RH.b, ROLE.a, EXERCICES.a). Versions précédentes : **1.4.0** d'octobre 2026 — sélection multiple et archivage, chercher / remplacer, largeur des colonnes (socle 1.9.0) ; **1.3.0** d'octobre 2026 — bandeau commun (socle 1.8.0, TRV-7) ; **1.2.0** d'octobre 2026 — thème clair / sombre (socle 1.7.1) ; **1.1.0** d'octobre 2026 — verrou commun des bases (lecture seule ou prise de main, bandeau « Ouvert par … ») ; **1.0.0**. Détail dans [CHANGELOG.md](CHANGELOG.md).
+Version courante : **1.8.1** de novembre 2026 — catégorie de schéma déclarée non applicable par WerbCartoSI lue avec sa justification. **1.8.0** : registre des sauvegardes de WerbExploitation proposé en preuve de la continuité (CONTINUITE_ACTIVITE.a, c, d). Versions précédentes : **1.7.0** de novembre 2026 — couverture des schémas d'architecture de WerbCartoSI proposée en preuve. Versions précédentes : **1.6.0** de novembre 2026 — guide de débutant « NIS2 en clair » ; **1.5.0** d'octobre 2026 — indicateurs de formation de WerbAcademie reçus et proposés comme preuves (RH.b, ROLE.a, EXERCICES.a). Versions précédentes : **1.4.0** d'octobre 2026 — sélection multiple et archivage, chercher / remplacer, largeur des colonnes (socle 1.9.0) ; **1.3.0** d'octobre 2026 — bandeau commun (socle 1.8.0, TRV-7) ; **1.2.0** d'octobre 2026 — thème clair / sombre (socle 1.7.1) ; **1.1.0** d'octobre 2026 — verrou commun des bases (lecture seule ou prise de main, bandeau « Ouvert par … ») ; **1.0.0**. Détail dans [CHANGELOG.md](CHANGELOG.md).
 
 ---
 

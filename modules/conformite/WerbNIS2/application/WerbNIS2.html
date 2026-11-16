@@ -1,5 +1,5 @@
 <!doctype html>
-<!-- WerbNIS2 v1.8.0 – Développé par @WerbHat – build novembre 2026 -->
+<!-- WerbNIS2 v1.8.1 – Développé par @WerbHat – build novembre 2026 -->
 <html lang="fr">
 <head>
 <meta charset="utf-8">
@@ -9,7 +9,7 @@
 <title>WerbNIS2</title>
 <meta name="application-name" content="WerbNIS2">
 <meta name="author" content="@WerbHat">
-<meta name="generator" content="WerbNIS2 v1.8.0 – Développé par @WerbHat">
+<meta name="generator" content="WerbNIS2 v1.8.1 – Développé par @WerbHat">
 <meta name="description" content="Conformité NIS2 d'une entité ou d'un site : 20 règles, audit de 152 points en 28 thématiques, couverture, plan d'actions, rapport">
 <style>/*! WerbNIS2 – Développé par @WerbHat */
 :root {
@@ -184,7 +184,7 @@ const WERB = Object.freeze((() => {
   const bytes = [68, 195, 169, 118, 101, 108, 111, 112, 112, 195, 169, 32, 112, 97, 114, 32, 64, 87, 101, 114, 98, 72, 97, 116];
   const signature = new TextDecoder("utf-8").decode(new Uint8Array(bytes));
   const produit = "WerbNIS2";
-  const version = "1.8.0";
+  const version = "1.8.1";
   return {
     id: "werbnis2",
     produit, version, auteur: "@WerbHat", signature,
@@ -1317,7 +1317,7 @@ body.wt-glisse{cursor:col-resize!important;user-select:none!important}
 })());
 window.WerbSocle = WerbSocle;
 
-/*! WerbSMSI guides 1.2.0 – Développé par @WerbHat */
+/*! WerbSMSI guides 1.3.0 – Développé par @WerbHat */
 /* Guides d'accompagnement des modules WerbSMSI (charte §7.4) : documents Markdown rangés dans le dossier guides/ du module,
    intégrés au livrable par le build (window.WERB_GUIDES = [{ fichier, texte }]) et affichés en mode lecture dans le menu ❓ Aide.
    Un fichier peut être rangé dans un sous-dossier (« 1-ANSSI/0-carte.md ») : les guides sont alors regroupés par dossier
@@ -1329,9 +1329,14 @@ window.WerbSocle = WerbSocle;
    interne, ancre ignorée). Tout le HTML du texte est échappé, sauf les commentaires
    <!-- … --> placés entre deux blocs, qui ne sont pas affichés ; le premier porte la signature du guide (charte §7.4).
    Thème clair / sombre (charte §7.5, 1.2.0) : fonds sur les variables communes (--card, --info-bg…, repli clair), valeurs sombres
-   propres au lecteur à l'écran seulement ; titres sous texte blanc sur --navy-fond ; impression en clair. */
+   propres au lecteur à l'écran seulement ; titres sous texte blanc sur --navy-fond ; impression en clair.
+   Images (1.3.0) : une ligne seule « ![légende](images/schema.svg) » affiche une figure légendée, agrandie au clic. L'image est
+   rangée dans le dossier des guides (images/ par exemple) et intégrée au livrable par le build en data: URI
+   (window.WERB_GUIDES_IMAGES = { "images/schema.svg": "data:image/svg+xml;base64,…" }) : rien n'est chargé hors de la page
+   (CSP img-src data:). Seuls les formats SVG, PNG, JPEG et WebP sont acceptés ; une image absente est signalée à sa place.
+   L'image porte son propre fond (opaque) : le lecteur n'en ajoute pas, et l'atténue légèrement en thème sombre. */
 const WerbGuides = Object.freeze((() => {
-  const VERSION = "1.1.0";
+  const VERSION = "1.3.0";
   const esc = s => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
   const sansAccent = s => s.normalize("NFD").replace(/[̀-ͯ]/g, "");
 
@@ -1346,6 +1351,18 @@ const WerbGuides = Object.freeze((() => {
       if (p === "..") parts.pop(); else if (p && p !== ".") parts.push(p);
     }
     return parts.join("/");
+  }
+  // Image d'un guide, intégrée par le build : data: URI d'une image (SVG, PNG, JPEG, WebP), sinon null
+  const RE_IMAGE = /^data:image\/(?:svg\+xml|png|jpeg|webp);base64,[A-Za-z0-9+/]+=*$/;
+  function image(url) {
+    const imgs = globalThis.WERB_GUIDES_IMAGES && typeof globalThis.WERB_GUIDES_IMAGES === "object" ? globalThis.WERB_GUIDES_IMAGES : {};
+    const v = Object.prototype.hasOwnProperty.call(imgs, cheminRelatif(url)) ? imgs[cheminRelatif(url)] : null;
+    return typeof v === "string" && RE_IMAGE.test(v) ? v : null;
+  }
+  function figure(lib, url) {
+    const src = image(url);
+    if (!src) return `<p class="wg-absent-img" title="Image absente : ${esc(cheminRelatif(url))}">🖼 ${esc(lib || cheminRelatif(url))} (image absente)</p>`;
+    return `<figure class="wg-fig"><img src="${src}" alt="${esc(lib)}" data-werb-zoom title="Cliquer pour agrandir">${lib ? `<figcaption>${enLigne(lib)}</figcaption>` : ""}</figure>`;
   }
   function enLigne(s, liens = true) {
     const gardes = [];
@@ -1411,6 +1428,7 @@ const WerbGuides = Object.freeze((() => {
         continue;
       }
       if (/^\s*([-*_])(\s*\1){2,}\s*$/.test(l)) { html.push("<hr>"); i++; continue; } // filet
+      if ((m = l.match(/^\s*!\[([^\]]*)\]\(([^)\s]+)\)\s*$/))) { html.push(figure(m[1], m[2])); i++; continue; } // image seule sur sa ligne
       if (l.includes("|") && i + 1 < lignes.length && estSeparateur(lignes[i + 1])) { // tableau
         const tete = cellules(l), alig = cellules(lignes[i + 1]).map(c => c.endsWith(":") ? (c.startsWith(":") ? "center" : "right") : "");
         const st = k => alig[k] ? ` style="text-align:${alig[k]}"` : "";
@@ -1587,6 +1605,13 @@ const WerbGuides = Object.freeze((() => {
 .wg-som .wg-s1{font-weight:600;margin-top:3px}
 .wg-som .wg-s2{padding-left:16px;color:var(--wg-m);font-size:12.5px}
 .wg-pied{display:flex;justify-content:space-between;gap:10px;margin-top:28px;padding-top:14px;border-top:1px solid var(--wg-l)}
+.wg-fig{margin:16px 0 18px;text-align:center}
+.wg-fig img{max-width:100%;height:auto;border:1px solid var(--wg-l);border-radius:8px;cursor:zoom-in}
+@media screen{:root[data-theme=sombre] .wg-fig img{filter:brightness(.88)}}
+.wg-fig figcaption{font-size:13px;color:var(--wg-m);margin-top:6px;font-style:italic}
+.wg-absent-img{color:var(--wg-m);border:1px dashed var(--wg-l);border-radius:6px;padding:8px 10px}
+.wg-zoom{position:fixed;inset:0;z-index:10000;background:rgba(10,14,20,.86);display:flex;align-items:center;justify-content:center;padding:2vh 2vw;cursor:zoom-out}
+.wg-zoom img{max-width:100%;max-height:100%;background:#fff;border-radius:6px;box-shadow:0 8px 40px rgba(0,0,0,.5)}
 .wg-cartes{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px;margin:8px 0}
 .wg-carte{display:flex;gap:10px;align-items:center;text-align:left;border:1px solid var(--line,#dfe3ea);border-left:5px solid var(--navy-2,#2e5090);background:var(--card,#fff);border-radius:8px;padding:10px 12px;cursor:pointer;font:inherit;color:inherit;white-space:normal}
 .wg-carte:hover{background:var(--wg-f,#f6f8fc)}
@@ -1595,7 +1620,7 @@ const WerbGuides = Object.freeze((() => {
 .wg-ct small{color:var(--muted,#5d6676)}
 .wmenu .wm-it[data-wnav^="guide:"],.wmenu .wm-it[data-wnav^="guide:"] span{white-space:normal;line-height:1.3}
 @media (max-width:1100px){.wg-corps{grid-template-columns:minmax(0,1fr)}.wg-som{position:static;max-height:none;order:-1}}
-@media print{.wg-tete,.wg-som,.wg-pied{display:none}.wg-doc{border:0;padding:0;max-width:none}}`;
+@media print{.wg-tete,.wg-som,.wg-pied,.wg-zoom{display:none}.wg-doc{border:0;padding:0;max-width:none}.wg-fig{break-inside:avoid}.wg-fig img{border:0}}`;
 
   if (typeof document !== "undefined" && document.head && !document.getElementById("werb-guides-style")) {
     const st = document.createElement("style");
@@ -1604,12 +1629,27 @@ const WerbGuides = Object.freeze((() => {
     document.head.appendChild(st);
     // Sommaire : défilement vers la section sans toucher à l'adresse de la page
     document.addEventListener("click", e => {
+      // Image agrandie : un clic l'ouvre en plein écran, un second clic (ou Échap) la referme
+      const z = document.querySelector(".wg-zoom");
+      if (z && (e.target === z || z.contains(e.target))) { z.remove(); return; }
+      const im = e.target.closest && e.target.closest("img[data-werb-zoom]");
+      if (im) {
+        const fond = document.createElement("div");
+        fond.className = "wg-zoom";
+        fond.setAttribute("role", "dialog");
+        const grand = document.createElement("img");
+        grand.src = im.src; grand.alt = im.alt;
+        fond.appendChild(grand);
+        document.body.appendChild(fond);
+        return;
+      }
       const a = e.target.closest && e.target.closest("[data-werb-ancre]");
       if (!a) return;
       e.preventDefault();
       const cible = document.getElementById(a.dataset.werbAncre);
       if (cible) cible.scrollIntoView({ behavior: "smooth", block: "start" });
     });
+    document.addEventListener("keydown", e => { if (e.key === "Escape") { const z = document.querySelector(".wg-zoom"); if (z) z.remove(); } });
   }
 
   return { VERSION, rendre, guides: liste_guides, trouver, entrees, dossiers, cartes, vue };
@@ -2972,7 +3012,8 @@ const WerbXlsx = (() => {
    WerbCartoSI (site:cartographies, copiée dans la base) proposée en preuve des points de cartographie, cloisonnement, filtrage, accès
    distants, administration, continuité et accès physiques (table POINTS_CARTO) ; registre des sauvegardes reçu de WerbExploitation
    (site:sauvegardes, copié dans la base, 1.8.0) proposé en preuve de CONTINUITE_ACTIVITE.a, c, d (sauvegardes actives, tests de restauration,
-   copie hors ligne) ; jamais de cotation automatique. La base vit en mémoire et dans son fichier (.werbnis2.json) : rien n'est conservé dans le navigateur. */
+   copie hors ligne) ; 1.8.1 : catégorie déclarée non applicable par WerbCartoSI (état « na », justification) affichée, sans
+   avertissement de couverture incomplète ; jamais de cotation automatique. La base vit en mémoire et dans son fichier (.werbnis2.json) : rien n'est conservé dans le navigateur. */
 "use strict";
 (() => {
   const { esc } = WerbSocle;
@@ -3077,9 +3118,12 @@ const WerbXlsx = (() => {
     sessions12Mois: nb(f.sessions12Mois), publieLe: str(f.publieLe), majLe: str(f.majLe) });
   /* Schémas d'architecture (site:cartographies de WerbCartoSI) : couverture par catégorie d'exigence du site, copiée dans la base.
      Correspondance fixe catégorie → points de la grille (validée le 2026-11-05) ; une catégorie hors table n'est proposée nulle part. */
-  const ETAT_CARTO = { couverte: "couverte", arevoir: "à revoir (revue dépassée)", encours: "en cours (schéma non approuvé)", non: "non couverte" };
+  const ETAT_CARTO = { couverte: "couverte", arevoir: "à revoir (revue dépassée)", encours: "en cours (schéma non approuvé)", non: "non couverte", na: "non applicable (décision justifiée)" };
+  // État « na » (WerbCartoSI 1.7.0) : catégorie déclarée non applicable au site, avec sa justification ; ce n'est pas une faiblesse
+  const naCarto = x => x.nonApplicable ? { justification: str(x.nonApplicable.justification), decidePar: str(x.nonApplicable.decidePar), decideLe: str(x.nonApplicable.decideLe), revueLe: str(x.nonApplicable.revueLe) } : null;
   const normCarto = c => ({ site: str(c.site), publieLe: str(c.publieLe), majLe: str(c.majLe),
     exigences: (Array.isArray(c.exigences) ? c.exigences : []).filter(x => x && x.id).map(x => ({ id: str(x.id), libelle: str(x.libelle), etat: ETAT_CARTO[x.etat] ? x.etat : "non",
+      nonApplicable: x.etat === "na" && x.nonApplicable && typeof x.nonApplicable === "object" ? naCarto(x) : null,
       schemas: (Array.isArray(x.schemas) ? x.schemas : []).filter(s => s && s.id).map(s => ({ id: str(s.id), titre: str(s.titre), version: str(s.version), etat: str(s.etat), approuveLe: str(s.approuveLe), prochaineRevue: str(s.prochaineRevue) })) })) });
   const POINTS_CARTO = {
     "CARTOGRAPHIE.a": ["EX-CARTO", "EX-RESEAU"],
@@ -3092,7 +3136,7 @@ const WerbXlsx = (() => {
   };
   const cartoPoint = id => { const c = S.recus.cartographies; return c && LIAISON.portee !== "groupe" && POINTS_CARTO[id] ? POINTS_CARTO[id].map(k => c.exigences.find(x => x.id === k)).filter(Boolean) : []; };
   const cartoAncienne = c => !!c.publieLe && (Date.now() - new Date(c.publieLe).getTime()) > 365 * 86400000;
-  const texteExigCarto = x => `${x.id} ${x.libelle} : ${ETAT_CARTO[x.etat]}` + (x.schemas.length ? ` — ${x.schemas.map(s => `${s.id} ${s.titre} v${s.version}${s.approuveLe ? `, approuvé le ${frDate(s.approuveLe)}` : ""}${s.prochaineRevue ? `, prochaine revue le ${frDate(s.prochaineRevue)}` : ""}${s.etat === "arevoir" ? " (revue dépassée)" : s.etat === "encours" ? " (non approuvé)" : ""}`).join(" ; ")}` : "");
+  const texteExigCarto = x => `${x.id} ${x.libelle} : ${ETAT_CARTO[x.etat]}` + (x.etat === "na" && x.nonApplicable ? ` — ${x.nonApplicable.justification} (décidée par ${x.nonApplicable.decidePar}${x.nonApplicable.decideLe ? ` le ${frDate(x.nonApplicable.decideLe)}` : ""}${x.nonApplicable.revueLe ? `, revue le ${frDate(x.nonApplicable.revueLe)}` : ""})` : "") + (x.schemas.length ? ` — ${x.schemas.map(s => `${s.id} ${s.titre} v${s.version}${s.approuveLe ? `, approuvé le ${frDate(s.approuveLe)}` : ""}${s.prochaineRevue ? `, prochaine revue le ${frDate(s.prochaineRevue)}` : ""}${s.etat === "arevoir" ? " (revue dépassée)" : s.etat === "encours" ? " (non approuvé)" : ""}`).join(" ; ")}` : "");
   const texteCarto = id => { const c = S.recus.cartographies, l = cartoPoint(id);
     return l.length ? `WerbCartoSI (site ${c.site}, couverture publiée le ${frDate(c.publieLe)}) : ${l.map(texteExigCarto).join(" | ")}.` : ""; };
   /* Registre des sauvegardes (site:sauvegardes de WerbExploitation, NIS-1) : copié dans la base, sans chemin, support, chiffrement ni
@@ -3305,7 +3349,7 @@ const WerbXlsx = (() => {
   // Élément de preuve reçu de WerbCartoSI : état de couverture et schémas, jamais une cotation ; avertissement si non couverte ou ancienne
   const preuveCartoHtml = id => {
     const l = cartoPoint(id); if (!l.length) return "";
-    const c = S.recus.cartographies, faible = l.some(x => x.etat !== "couverte"), vieux = cartoAncienne(c), txt = texteCarto(id);
+    const c = S.recus.cartographies, faible = l.some(x => !["couverte", "na"].includes(x.etat)), vieux = cartoAncienne(c), txt = texteCarto(id);
     return `<div class="${faible || vieux ? "warnbox" : "infobox"} small" data-preuve-carto="${esc(id)}">🗺️ <b>Élément de preuve reçu</b> (schémas d'architecture du site ${esc(c.site)}, publiés le ${esc(frDate(c.publieLe))})${vieux ? ` — <b>publication de plus de 12 mois</b>` : ""} :
       <ul style="margin:4px 0">${l.map(x => `<li>${esc(texteExigCarto(x))}</li>`).join("")}</ul>${faible ? `<div>Couverture incomplète : à prendre en compte dans la cotation.</div>` : ""}
       <button class="small noprint" data-act="citerCarto" data-p="${esc(id)}"${(ev(id).preuves || "").includes(txt) ? " disabled" : ""}>Citer dans les preuves</button></div>`;
@@ -3390,7 +3434,7 @@ const WerbXlsx = (() => {
       ${LIAISON.portee ? `<button data-act="smsiUnlink">Détacher</button>` : ""}</div>
       <p class="small muted">Au rattachement, la raison sociale et le site vides de la fiche sont repris de l'espace (organisation, nom du site).</p></div>
       <div class="card" data-recus><h2>Données reçues</h2><table class="t"><tbody><tr><td style="width:200px"><code>groupe:formations</code></td><td>${S.recus.formations ? `${esc(texteFormation(S.recus.formations))} Reçus le ${esc(frDate(S.recus.formations.majLe))}.` : "non reçus (WerbAcademie, niveau groupe › Publier)"}</td></tr>
-        <tr data-recus-carto><td><code>site:cartographies</code></td><td>${LIAISON.portee === "groupe" ? "non lue au niveau du groupe (base de site seulement)" : S.recus.cartographies ? (c => `WerbCartoSI, site ${esc(c.site)}, publiée le ${esc(frDate(c.publieLe))} : ${c.exigences.filter(x => x.etat === "couverte").length} / ${c.exigences.length} catégorie(s) d'exigence couverte(s). Reçue le ${esc(frDate(c.majLe))}.`)(S.recus.cartographies)
+        <tr data-recus-carto><td><code>site:cartographies</code></td><td>${LIAISON.portee === "groupe" ? "non lue au niveau du groupe (base de site seulement)" : S.recus.cartographies ? (c => `WerbCartoSI, site ${esc(c.site)}, publiée le ${esc(frDate(c.publieLe))} : ${c.exigences.filter(x => x.etat === "couverte").length} / ${c.exigences.length} catégorie(s) d'exigence couverte(s)${(n => n ? `, ${n} non applicable(s)` : "")(c.exigences.filter(x => x.etat === "na").length)}. Reçue le ${esc(frDate(c.majLe))}.`)(S.recus.cartographies)
           : "non reçue (WerbCartoSI du site › Intégration WerbSMSI › Publier la couverture)"}</td></tr>
         <tr data-recus-sauv><td><code>site:sauvegardes</code></td><td>${LIAISON.portee === "groupe" ? "non lu au niveau du groupe (base de site seulement)" : S.recus.sauvegardes ? (s => `WerbExploitation, site ${esc(s.site)}, publié le ${esc(frDate(s.publieLe))} : ${sauvActives().length} sauvegarde(s) active(s), ${sauvActives().filter(horsLigne).length} copie(s) hors ligne, ${sauvActives().filter(x => statutTest(x) === "a-jour").length} testée(s) depuis moins d'un an. Reçu le ${esc(frDate(s.majLe))}.`)(S.recus.sauvegardes)
           : "non reçu (WerbExploitation du site › Intégration WerbSMSI › Publier)"}</td></tr></tbody></table>

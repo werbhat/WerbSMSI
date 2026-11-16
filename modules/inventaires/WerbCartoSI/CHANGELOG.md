@@ -3,6 +3,65 @@
 Toutes les évolutions notables de WerbCartoSI sont consignées ici.
 Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/), numérotation [SemVer](https://semver.org/lang/fr/).
 
+## [1.9.0] — 2026-11
+
+### Ajouts
+- **Annexe « Matrice des flux »** : dans la fiche d'un schéma `EX-FLUX` ou `EX-ZONES`, les règles actives de la matrice de flux de WerbMap (`site:flux`, WerbMap 1.30.0, copiées dans la base) dont une extrémité est représentée par le schéma (actifs liés, des SI et des zones liés) : source et destination avec leur zone, protocole, port, action, pare-feu, justification. Points **à examiner** (jamais corrigés ici : la matrice se corrige dans WerbMap) : flux autorisé entre zones sans pare-feu désigné, sans justification, « any », adresse saisie au lieu d'un TAG. Point d'attention pour un schéma de flux en vigueur. **📊 Annexe Excel** (informations du schéma et matrice), classée Diffusion restreinte.
+- **Dossier de preuve** (📊 Pilotage) : document imprimable à remettre à l'auditeur — en-tête (site, date, auteur, base, classification, couverture), synthèse, puis une page par catégorie d'exigence : objectif, repères, portée, décision de non-applicabilité, schémas en vigueur (version, statut et raisons de revoir, propriétaire, approbateur et date, contrôles faits, dernière et prochaine revue, **empreinte SHA-256**), couverture par SI, matrice des flux pour `EX-FLUX`. Filtre par exigence, matrice facultative, 🖨 Imprimer / PDF.
+
+### Tests
+- `tests/test_flux_dossier.py`.
+
+## [1.8.0] — 2026-11
+
+### Ajouts
+- **Empreinte du fichier approuvé** : à l'approbation, l'empreinte SHA-256 du fichier du schéma est relevée dans l'espace (ou, pour un lien web ou réseau, depuis le fichier du poste : 📂). Elle est revérifiée à l'ouverture de l'espace, à la revue et sur demande (🔎) ; un **fichier modifié depuis l'approbation** fait passer le schéma « à revoir » (point d'attention, badge), la **revue sans changement est refusée** ; « Approuver à nouveau » ou 📌 Nouvelle version. Empreinte gardée dans l'historique (colonne Empreinte) ; rien du fichier n'est copié dans la base.
+- **Contrôles avant approbation** : passer un schéma à « Approuvé » ouvre la liste du guide (cartouche, légende, TAG, chemins interdits, exceptions, aucun secret, comparaison au terrain, exigences) ; les 8 contrôles sont exigés et inscrits dans l'historique avec l'approbation.
+- **Revue déclenchée par WerbMap** : instantané du périmètre (actifs représentés : liés, des SI liés, des zones liées ; conduits qui touchent leurs zones) pris à l'approbation et à chaque revue ; quand la publication de WerbMap change (actif ou conduit ajouté ou retiré), le schéma passe « à revoir » avec la liste des écarts (fiche, point d'attention) ; ✔ Revue faite reprend l'instantané et trace les écarts examinés. `site:conduits` lu et copié dans la base.
+- **Échéances** (📊 Pilotage) : revues des schémas approuvés et des non-applicabilités — en retard, dans l'horizon (30, 60, 90 ou 180 jours), au-delà ; indicateur « Revues dans les 60 jours » au tableau de bord ; menu signalé pour les revues à moins de 30 jours ; feuille Excel *Échéances*.
+- Portail : colonne « Revues à venir (60 j) » dans les schémas d'architecture par site (dates de revue déjà publiées).
+
+### Modifications
+- Un schéma approuvé est « à revoir » pour l'une de ces raisons, affichées en badges : revue dépassée, WerbMap a changé, fichier modifié.
+- Une nouvelle version efface l'empreinte et l'instantané (relevés à la prochaine approbation ; les précédents restent dans l'historique).
+
+### Tests
+- `tests/test_revues.py` ; tests du parcours, des liens et de la publication : approbation par les contrôles.
+
+## [1.7.0] — 2026-11
+
+### Ajouts
+- **Non applicable, justifié** : une catégorie d'exigence se déclare non applicable pour le site (*Couverture des exigences*, colonne Applicabilité) ou pour un SI (case du tableau par SI). Justification, fonction qui décide et date exigées ; revue à la même fréquence que les schémas (✔ Revue faite, point d'attention quand elle est dépassée), retrait ; journal. Une exigence non applicable sort du décompte des exigences couvertes et n'est plus signalée « non couverte ».
+- **Couverture par SI** (*Couverture des exigences*) : pour chaque SI publié par WerbMap, une case par catégorie attendue — couverte, à revoir, en cours, absente, non applicable — selon la **portée** de la catégorie (chaque SI, SI sensibles, le site : réglable dans *Référentiels et paramètres*, `EX-CARTO` pour chaque SI, `EX-ZONES`, `EX-FLUX`, `EX-ADMIN`, `EX-REPRISE` pour les SI sensibles par défaut) et la **sensibilité** du SI (D, I ou C au seuil réglable, zone process ou métier critique, SL-T 2 et plus, actif critique ; D, I, C non cotés : sensible par prudence). Une case est couverte par un schéma approuvé et à jour lié au SI ou à l'une de ses zones. Détail au clic (raison, schémas, non-applicabilité). Point d'attention « schéma attendu absent » et indicateur au tableau de bord.
+- Publication `site:cartographies` : état `na` et décision `nonApplicable` (justification, fonction, dates) ; schéma de publication de la charte mis à jour. Lu par le portail et WerbNIS2 1.8.1.
+- Export Excel : portée et non-applicabilité dans *Couverture des exigences* ; sensibilité et une colonne par catégorie attendue dans *Couverture des SI* ; feuille *Non-applicabilités*.
+- Données reçues de WerbMap : D, I, C des SI, criticité et SL-T des zones, criticité des actifs.
+
+### Modifications
+- **Ancien libellé renommé** : une base qui propose encore « Flux et cloisonnement » pour `EX-FLUX` passe à « Flux et filtrage » à l'ouverture (journal ; base à enregistrer). Si la liste publiée par le groupe garde l'ancien libellé, elle reste prioritaire : à corriger dans le portail (*Administration › Listes de choix du groupe*).
+- Guide « Tenir le registre des schémas » : nouvelle section *Couverture par SI et exigences non applicables*.
+
+### Tests
+- `tests/test_applicabilite.py` : renommage, sensibilité, matrice, non-applicabilité (SI et site, champs exigés, revue, retrait), portée et seuil, publication, export, relecture.
+
+## [1.6.0] — 2026-11
+
+### Ajouts
+- **Guide « Les schémas attendus, un par un »** (❓ Aide) : pour chacune des 8 catégories d'exigence, l'objectif du schéma, les questions de l'auditeur, un **exemple annoté** (image), ce que montre l'exemple point par point, ce qu'il ne faut pas mettre dans le schéma, et un tableau de repères ; correspondance entre types de schémas et catégories ; ordre conseillé ; liste de contrôle avant approbation.
+- **Huit exemples annotés** (`guides/images/*.svg`) dessinés sur une usine fictive (« Site EXEMPLE ») : cartographie, zones et conduits, flux et filtrage, plan d'adressage et réseau physique, administration, accès distants, sauvegarde et reprise, locaux techniques. Repères numérotés, conventions des modèles Visio (couleurs de criticité de WerbMap, filtrage en sarcelle, chemins interdits en rouge pointillé), cartouche. Agrandis au clic. Produits par `outils/generer_illustrations.py`.
+- **Codes « EX- » expliqués** : EX = exigence (catégorie de ce que le schéma démontre, ni un exemple ni un numéro de schéma) — encadré dans *Couverture des exigences*, rappel dans *Référentiels et paramètres* et dans la fiche (objectif de chaque exigence au survol), lien vers le guide.
+
+### Corrections
+- **Repères des catégories d'exigence** revus et précisés : codes des objectifs de sécurité NIS2 de l'ANSSI (ceux de WerbNIS2 : RECENSEMENT_SI, CARTOGRAPHIE.a, CLOISONNEMENT.a à d, g, h, FILTRAGE.a et b, COMPTES_ADMIN, ADMINISTRATION.a, g, h, ACCES_DISTANTS.a, ECOSYSTEME.a, CONTINUITE_ACTIVITE.a, c, d, f, ACCES_PHYSIQUES.b) ; ISO/IEC 27001:2022 complétée (A.8.5, A.8.14, A.8.15, A.5.19 à A.5.22, A.6.7, A.7.11, A.7.12) ; IEC 62443 précisé (ZCR 1, ZCR 3, SR 1.1, SR 2.1, SR 2.8, SR 7.3, SR 7.4, SR 7.8 au lieu de « SR 1.x ») ; guide d'hygiène de l'ANSSI : cartographie = **mesure 4** (et non 3), mesures 7, 19, 22, 23, 25 à 29, 37 citées. Objectif de chaque catégorie réécrit.
+- Libellé proposé de `EX-FLUX` : « Flux et filtrage » (au lieu de « Flux et cloisonnement », le cloisonnement relevant de `EX-ZONES`). Les bases existantes gardent leur libellé ; les codes ne changent pas.
+
+### Développement
+- Lecteur de guides **1.3.0** (composant de la charte) : images des guides intégrées en `data:` par `werb_charte.py construire`.
+
+### Outils
+- **Générateur des modèles Visio** dans le dépôt (CSI-18) : `outils/generer_modeles.py` produit les 5 modèles d'exemple (cartouche, zones et conduits, accès distants, administration, sauvegarde et reprise) dans la référence `WerbSMSI/Modeles_docs/Visio/`, à l'octet près identiques aux modèles livrés ; option `--apercu` (aperçu SVG pour relire sans Visio). Test `tests/test_generateur.py`. Paquet publié inchangé (le dossier `outils/` n'est pas livré).
+- **Générateur des exemples annotés** : `outils/generer_illustrations.py`.
+
 ## [1.5.0] — 2026-11
 
 ### Ajouts

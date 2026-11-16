@@ -4,17 +4,17 @@
  "famille": "WERBSMSI",
  "meta": {
   "produit": "WerbCartoSI",
-  "appVersion": "1.3.0",
+  "appVersion": "1.9.0",
   "auteur": "@WerbHat",
-  "generateur": "WerbCartoSI v1.3.0 – Développé par @WerbHat",
-  "creeLe": "2026-11-05",
-  "modifieLe": "2026-11-05T17:24:32Z",
+  "generateur": "WerbCartoSI v1.9.0 – Développé par @WerbHat",
+  "creeLe": "2026-11-16",
+  "modifieLe": "2026-11-16T18:04:32Z",
   "modifiePar": "Exemple",
   "groupeId": "e6a47cd7-77fe-463f-b6ea-b50ff390bfc7",
   "module": "werbcartosi",
   "portee": "site",
   "publiePar": "Exemple",
-  "publieLe": "2026-11-05T17:24:32Z",
+  "publieLe": "2026-11-16T18:04:32Z",
   "site": "LYON"
  },
  "data": {
@@ -47,7 +47,7 @@
      }
     ],
     "source": "werbcartosi",
-    "majLe": "2026-11-05"
+    "majLe": "2026-11-16"
    },
    {
     "id": "EX-ZONES",
@@ -77,11 +77,11 @@
      }
     ],
     "source": "werbcartosi",
-    "majLe": "2026-11-05"
+    "majLe": "2026-11-16"
    },
    {
     "id": "EX-FLUX",
-    "libelle": "Flux et cloisonnement",
+    "libelle": "Flux et filtrage",
     "etat": "arevoir",
     "groupe": false,
     "schemas": [
@@ -107,7 +107,7 @@
      }
     ],
     "source": "werbcartosi",
-    "majLe": "2026-11-05"
+    "majLe": "2026-11-16"
    },
    {
     "id": "EX-RESEAU",
@@ -137,7 +137,7 @@
      }
     ],
     "source": "werbcartosi",
-    "majLe": "2026-11-05"
+    "majLe": "2026-11-16"
    },
    {
     "id": "EX-ADMIN",
@@ -162,7 +162,7 @@
      }
     ],
     "source": "werbcartosi",
-    "majLe": "2026-11-05"
+    "majLe": "2026-11-16"
    },
    {
     "id": "EX-ACCES",
@@ -187,7 +187,7 @@
      }
     ],
     "source": "werbcartosi",
-    "majLe": "2026-11-05"
+    "majLe": "2026-11-16"
    },
    {
     "id": "EX-REPRISE",
@@ -217,7 +217,7 @@
      }
     ],
     "source": "werbcartosi",
-    "majLe": "2026-11-05"
+    "majLe": "2026-11-16"
    },
    {
     "id": "EX-LOCAUX",
@@ -226,7 +226,7 @@
     "groupe": false,
     "schemas": [],
     "source": "werbcartosi",
-    "majLe": "2026-11-05"
+    "majLe": "2026-11-16"
    }
   ]
  }

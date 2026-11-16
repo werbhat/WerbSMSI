@@ -10,10 +10,12 @@ WerbCartoSI tient le **registre** des schémas d'un site. Il ne dessine pas : le
 | Notion | Ce que c'est | Exemple |
 |---|---|---|
 | **Type de schéma** | Sa nature | Réseau logique, zones et conduits, architecture d'administration |
-| **Catégorie d'exigence** | Ce qu'il permet de démontrer | « Zones et conduits » (IEC 62443-3-2), « Cartographie du SI » (NIS2, ISO A.5.9) |
+| **Catégorie d'exigence** (code `EX-…`) | Ce qu'il permet de démontrer | `EX-ZONES` « Zones et conduits » (NIS2 CLOISONNEMENT, IEC 62443-3-2), `EX-CARTO` « Cartographie du SI » (NIS2 CARTOGRAPHIE.a, ISO/IEC 27001 A.5.9) |
 | **Couverture** | L'exigence a-t-elle au moins un schéma approuvé et revu à temps ? | Couverte, à revoir, en cours, non couverte |
 
-Un même schéma peut couvrir plusieurs exigences : un schéma des zones et conduits sert aussi la cartographie du SI.
+**EX = exigence** : `EX-ZONES` se lit « exigence : zones et conduits ». Ce n'est ni un exemple, ni un numéro de schéma (les schémas sont numérotés `SCH-001`…).
+
+Un même schéma peut couvrir plusieurs exigences : un schéma des zones et conduits sert aussi la cartographie du SI. Ce que chaque catégorie attend, avec un exemple annoté : [Les schémas attendus, un par un](3-Les_schemas_attendus_un_par_un.md).
 
 Les catégories d'exigence et les types sont des **listes de choix du groupe** : le RSSI les ajuste une fois dans le portail (*Administration › Listes de choix du groupe*), tous les sites parlent le même langage. Chaque site peut ajouter ses propres valeurs.
 
@@ -65,14 +67,53 @@ Deux boutons de la fiche tiennent l'**historique des versions** :
 
 Chaque approbation y est aussi inscrite, avec l'approbateur. L'auditeur voit ainsi qui a validé quelle version, et quand.
 
+**Approuver, c'est contrôler.** Passer le statut à *Approuvé* ouvre la liste des contrôles avant approbation (cartouche, légende, TAG, chemins interdits, exceptions, aucun secret, comparaison au terrain, exigences ; détail au guide [Les schémas attendus, un par un](3-Les_schemas_attendus_un_par_un.md), §11). Les huit sont exigés ; ils sont gardés dans l'historique avec l'approbation.
+
+**Le fichier approuvé est figé par son empreinte.** À l'approbation, le module calcule l'empreinte SHA-256 du fichier rangé dans l'espace (pour un schéma sur SharePoint ou sur un partage : 📂 *Relever depuis un fichier du poste*). Si le fichier change ensuite sans nouvelle version, le schéma passe *à revoir* : le schéma montré en audit ne serait plus celui qui a été approuvé. Deux sorties : 📌 *Nouvelle version* si le dessin a changé, *Approuver à nouveau* si la modification est mineure (avec les contrôles). La revue « sans changement » est alors refusée.
+
+**WerbMap déclenche la revue.** À l'approbation et à chaque revue, le module prend un **instantané** du périmètre du schéma dans WerbMap : les actifs qu'il représente (liés, des SI liés, des zones liées) et les conduits entre zones qui les touchent. Quand WerbMap publie un actif ou un conduit ajouté ou retiré, le schéma passe *à revoir* et la fiche liste les écarts. Si le schéma reste juste, ✔ *Revue faite* (l'instantané est repris, les écarts examinés sont tracés) ; sinon 📌 *Nouvelle version*.
+
+**Préparer les revues.** *📊 Pilotage › Échéances* liste les revues des schémas et des non-applicabilités : en retard, dans les 30 à 180 jours, au-delà. Le menu signale celles à moins de 30 jours.
+
 Un schéma qui n'a plus lieu d'être : **Obsolète** (il reste visible et tracé) ou **archivage** (*Liste à plat*, sélection, 🗄 Archiver : il sort du registre, son identifiant n'est jamais réattribué).
 
-## 6. Suivre et prouver
+## 6. Couverture par SI et exigences non applicables
+
+Une exigence couverte « quelque part » ne suffit pas : l'auditeur choisit un système et demande **son** schéma. *Couverture des exigences › Couverture par SI* croise les SI publiés par WerbMap et les exigences.
+
+**Quelles exigences sont attendues pour un SI ?** Chaque catégorie a une **portée**, réglable dans *Référentiels et paramètres* :
+
+| Portée | Signification | Par défaut |
+|---|---|---|
+| **Chaque SI** | Un schéma par SI | `EX-CARTO` |
+| **Les SI sensibles** | Un schéma pour chaque SI sensible | `EX-ZONES`, `EX-FLUX`, `EX-ADMIN`, `EX-REPRISE` |
+| **Le site (une fois)** | Un schéma pour tout le site, hors tableau par SI | `EX-RESEAU`, `EX-ACCES`, `EX-LOCAUX` |
+
+Un SI est **sensible** quand WerbMap le dit : D, I ou C au seuil (3 par défaut, réglable), un actif dans une zone *process* ou *métier critique* (ou de SL-T 2 et plus), ou un actif critique. Un SI que WerbMap n'a pas encore coté en D, I, C est traité comme sensible, par prudence : cotez-le dans WerbMap.
+
+**Quand une case est-elle couverte ?** Un schéma approuvé et revu à temps vise l'exigence **et** il est lié au SI, ou à une zone où le SI a des actifs (fiche du schéma › *Périmètre WerbMap*). Une case « ✕ Absent » est un schéma à produire, ou un schéma existant qu'il faut lier. Le tableau de bord le signale.
+
+**Non applicable, justifié.** Certaines exigences ne concernent pas le site, ou un SI : pas d'accès distant, pas de local technique propre, un SI administré uniquement en local. Ne laissez pas l'exigence « non couverte » : déclarez-la **non applicable** (bouton *Non applicable…* de l'exigence, ou d'une case du tableau par SI). Trois éléments sont exigés, ceux qu'un auditeur attend :
+
+1. la **justification**, écrite pour être relue par quelqu'un qui ne connaît pas le site ;
+2. la **fonction** qui décide (RSSI du site, direction du site), pas un nom ;
+3. la **date** de la décision.
+
+La décision se **revoit** comme un schéma (même fréquence) : *✔ Revue faite* confirme qu'elle reste vraie ; un changement d'architecture (nouvel accès distant, nouvelle salle) peut la rendre fausse, retirez-la alors. Les exigences non applicables sortent du décompte des exigences couvertes, sont publiées avec leur justification et sont proposées dans WerbNIS2 comme élément de preuve.
+
+> Non applicable n'est pas « pas encore fait ». Une exigence qui s'applique mais n'a pas de schéma reste non couverte : c'est un écart à traiter, pas à masquer.
+
+## 7. Suivre et prouver
 
 - Le **tableau de bord** liste les points d'attention : exigence non couverte, schéma sans propriétaire, sans lien, introuvable dans l'espace, revue dépassée.
 - *Couverture des exigences* donne, pour chaque catégorie, l'état et les schémas qui la couvrent, avec les **repères** (articles NIS2, mesures ISO, exigences IEC 62443) qui la demandent.
 - **📤 Publier la couverture** (*Intégration WerbSMSI*) : le portail affiche alors, pour le site et pour le groupe, les exigences couvertes par des schémas. Seules des métadonnées sont publiées (titres, versions, dates), jamais l'emplacement des fichiers ni la description de l'architecture. Quand la couverture change, le module signale qu'il faut publier à nouveau. La fiche SI de WerbMap affiche les schémas de chaque SI, et l'audit NIS2 du site (WerbNIS2) les propose comme preuves des points de cartographie, de cloisonnement, de filtrage, d'administration, d'accès distants, de continuité et d'accès physiques.
 - **📊 Export Excel** : couverture des exigences, schémas par exigence, liste complète. C'est la preuve à fournir en audit ou à verser dans WerbNIS2 et WerbIEC62443. Le classeur décrit l'architecture du site : rangez-le avec les mêmes droits que les schémas.
+
+### Matrice des flux et dossier de preuve
+
+- Un schéma de flux montre les conduits ; l'auditeur demande aussi **chaque flux** : source, destination, port, qui le filtre, pourquoi. La fiche d'un schéma `EX-FLUX` ou `EX-ZONES` reprend en **annexe** les règles de la matrice de flux de WerbMap qui touchent son périmètre, et signale celles à examiner : flux entre zones sans pare-feu, sans justification, règle « any ». Corrigez-les dans WerbMap, publiez, puis 📊 *Annexe Excel* pour joindre la matrice au schéma.
+- *📊 Pilotage › Dossier de preuve* rassemble tout pour l'audit : une page par catégorie d'exigence, avec l'objectif, les repères, la décision de non-applicabilité, les schémas (approbation, contrôles, empreinte), la couverture par SI et la matrice des flux. 🖨 *Imprimer / PDF* ; le jour de l'audit, ouvrez les schémas depuis leur fichier : l'empreinte montre que c'est la version approuvée.
 
 ## Bonnes pratiques
 

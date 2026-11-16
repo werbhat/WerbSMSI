@@ -2,7 +2,7 @@
   "charte": "1.0",
   "id": "werbcartosi",
   "produit": "WerbCartoSI",
-  "version": "1.5.0",
+  "version": "1.9.0",
   "dateVersion": "2026-11",
   "auteur": "@WerbHat",
   "signature": "Développé par @WerbHat",
@@ -14,7 +14,7 @@
   "entree": "application/WerbCartoSI.html",
   "empreinte": {
     "algo": "SHA-256",
-    "valeur": "d318ce2685a8d3d1f1fab7f9b5a0718c15e6082962fcfd166253ce563c75f696"
+    "valeur": "3c8e7aa7c0cd4ce3b14e9c543de2cbcdfad2fd4abc240f01dcd455da876fac2e"
   },
   "donnees": {
     "format": "WERBCARTOSI",
@@ -31,7 +31,9 @@
       "groupe:listes",
       "site:si",
       "site:zones",
-      "site:actifs"
+      "site:actifs",
+      "site:conduits",
+      "site:flux"
     ]
   },
   "compatPortail": ">=1.1.1",
@@ -85,7 +87,7 @@
         ],
         [
           "EX-FLUX",
-          "Flux et cloisonnement"
+          "Flux et filtrage"
         ],
         [
           "EX-RESEAU",

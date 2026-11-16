@@ -245,6 +245,74 @@
     "source": "werbmap",
     "majLe": "2026-01-15"
    }
+  ],
+  "flux": [
+   {
+    "id": "FX-001",
+    "src": "SRV_SCADA01",
+    "dst": "API_L2_01",
+    "zoneSrc": "Z-SUP",
+    "zoneDst": "Z-PROC",
+    "proto": "tcp",
+    "port": "502",
+    "action": "autorise",
+    "fw": "FW_OT01",
+    "justification": "Supervision : lecture et écriture Modbus des automates de la ligne 2",
+    "source": "werbmap",
+    "majLe": "2026-10-30"
+   },
+   {
+    "id": "FX-002",
+    "src": "PC_ING01",
+    "dst": "API_L2_01",
+    "zoneSrc": "Z-SUP",
+    "zoneDst": "Z-PROC",
+    "proto": "tcp",
+    "port": "102",
+    "action": "autorise",
+    "fw": "FW_OT01",
+    "justification": "Poste d'ingénierie : programmation des automates (S7)",
+    "source": "werbmap",
+    "majLe": "2026-10-30"
+   },
+   {
+    "id": "FX-003",
+    "src": "VM_HIST01",
+    "dst": "SRV_SCADA01",
+    "zoneSrc": "Z-SUP",
+    "zoneDst": "Z-SUP",
+    "proto": "tcp",
+    "port": "4840",
+    "action": "autorise",
+    "justification": "Historisation des mesures (OPC UA)",
+    "source": "werbmap",
+    "majLe": "2026-10-30"
+   },
+   {
+    "id": "FX-004",
+    "src": "NAS_BCK01",
+    "dst": "API_L2_01",
+    "zoneSrc": "Z-SUP",
+    "zoneDst": "Z-PROC",
+    "proto": "tcp",
+    "port": "any",
+    "action": "autorise",
+    "source": "werbmap",
+    "majLe": "2026-10-30"
+   },
+   {
+    "id": "FX-005",
+    "src": "any",
+    "dst": "API_L2_01",
+    "zoneDst": "Z-PROC",
+    "proto": "any",
+    "port": "any",
+    "action": "refus",
+    "fw": "FW_OT01",
+    "justification": "Règle de fin : tout le reste vers les automates est refusé",
+    "source": "werbmap",
+    "majLe": "2026-10-30"
+   }
   ]
  }
 }

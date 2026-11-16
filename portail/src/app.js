@@ -278,10 +278,12 @@
 
     // Schémas d'architecture par site (site:cartographies, WerbCartoSI)
     const cartos = sitesAccessibles().map(s => ({ s, c: objetsSite(s.code, "cartographies") })).filter(x => x.c.length);
-    h += `<div class="card" data-cartographies>${titre("🗺️", "Schémas d'architecture par site", "cyan")}${cartos.length ? `<div class="tablewrap"><table class="t"><thead><tr><th>Site</th><th>Exigences couvertes</th><th>À revoir</th><th>En cours</th><th>Non couvertes</th><th>Schémas en vigueur</th><th>Publié</th></tr></thead><tbody>
-      ${cartos.map(({ s, c }) => { const n = e => c.filter(x => x.etat === e).length, pub = publication(s.code, "werbcartosi"), nb = new Set(c.flatMap(x => (x.schemas || []).map(y => y.id))).size;
-        return `<tr><td>${esc(s.code)}</td><td>${barre(Math.round(100 * n("couverte") / c.length))}<span class="small">${n("couverte")} / ${c.length}</span></td><td>${n("arevoir") ? badge(n("arevoir"), "b-warn") : "0"}</td><td>${n("encours")}</td>
-        <td>${n("non") ? badge(n("non"), "b-ko") : "0"}</td><td>${nb}</td><td class="small">${pub ? `${esc(frDate(pub.publieLe))}<br>${esc(pub.publiePar || "")}` : ""}</td></tr>`; }).join("")}</tbody></table></div>`
+    h += `<div class="card" data-cartographies>${titre("🗺️", "Schémas d'architecture par site", "cyan")}${cartos.length ? `<div class="tablewrap"><table class="t"><thead><tr><th>Site</th><th>Exigences couvertes</th><th>À revoir</th><th>En cours</th><th>Non couvertes</th><th>Non applicables</th><th>Schémas en vigueur</th><th title="Revues de schémas prévues dans les 60 prochains jours">Revues à venir (60 j)</th><th>Publié</th></tr></thead><tbody>
+      ${cartos.map(({ s, c }) => { const n = e => c.filter(x => x.etat === e).length, pub = publication(s.code, "werbcartosi"), nb = new Set(c.flatMap(x => (x.schemas || []).map(y => y.id))).size, app = c.length - n("na");   // non applicables hors décompte
+        const auj = new Date().toISOString().slice(0, 10), lim = new Date(Date.now() + 60 * 86400000).toISOString().slice(0, 10);
+        const rv = new Set(c.flatMap(x => (x.schemas || []).filter(y => y.prochaineRevue && y.prochaineRevue >= auj && y.prochaineRevue <= lim).map(y => y.id))).size;   // WerbCartoSI 1.8.0
+        return `<tr><td>${esc(s.code)}</td><td>${barre(app ? Math.round(100 * n("couverte") / app) : 100)}<span class="small">${n("couverte")} / ${app}</span></td><td>${n("arevoir") ? badge(n("arevoir"), "b-warn") : "0"}</td><td>${n("encours")}</td>
+        <td>${n("non") ? badge(n("non"), "b-ko") : "0"}</td><td>${n("na")}</td><td>${nb}</td><td>${rv ? badge(rv, "b-warn") : "0"}</td><td class="small">${pub ? `${esc(frDate(pub.publieLe))}<br>${esc(pub.publiePar || "")}` : ""}</td></tr>`; }).join("")}</tbody></table></div>`
       : `<p class="small muted">Aucune couverture publiée : chaque site publie la sienne depuis WerbCartoSI.</p>`}</div>`;
 
     const risques = sitesAccessibles().flatMap(s => objetsSite(s.code, "syntheseRisques").map(r => ({ site: s.code, r })));
@@ -360,10 +362,10 @@
       ${lignesFormation([Object.assign({ libelle: s.code }, fs), ...(fo.indicateurs || []).filter(x => x.site === s.code).map(x => Object.assign({}, x, { libelle: `· ${({ collaborateurs: "Collaborateurs", administrateurs: "Administrateurs", dirigeants: "Dirigeants", prestataires: "Prestataires", operateurs: "Opérateurs OT" })[x.population] || x.population}` }))])}</tbody></table></div>
       <p class="small muted">Indicateurs de l'académie du groupe (${esc(libelleModule(fo.source))}, publiés le ${esc(frDate(fo.majLe))}), sans aucun nom.</p></div>`;
     if (ca.length) {
-      const ETATS = { couverte: ["Couverte", "b-ok"], arevoir: ["À revoir", "b-warn"], encours: ["En cours", "b-info"], non: ["Non couverte", "b-ko"] };
+      const ETATS = { couverte: ["Couverte", "b-ok"], arevoir: ["À revoir", "b-warn"], encours: ["En cours", "b-info"], non: ["Non couverte", "b-ko"], na: ["Non applicable", "b-muted"] };
       h += `<div class="card" data-carto-site>${titre("🗺️", "Schémas d'architecture", "cyan")}<table class="t"><thead><tr><th>Exigence</th><th>Couverture</th><th>Schémas en vigueur</th></tr></thead><tbody>
         ${ca.map(x => `<tr><td><b>${esc(x.id)}</b> — ${esc(x.libelle)}</td><td>${badge((ETATS[x.etat] || [x.etat])[0], (ETATS[x.etat] || [])[1] || "")}</td>
-          <td class="small">${(x.schemas || []).map(y => `${esc(y.id)} ${esc(y.titre)} (v${esc(y.version)}${y.prochaineRevue ? `, revue ${esc(frDate(y.prochaineRevue))}` : ""})`).join("<br>") || `<span class="muted">aucun</span>`}</td></tr>`).join("")}</tbody></table>
+          <td class="small">${x.etat === "na" && x.nonApplicable ? `${esc(x.nonApplicable.justification || "")} <span class="muted">(décidée par ${esc(x.nonApplicable.decidePar || "?")}${x.nonApplicable.decideLe ? ` le ${esc(frDate(x.nonApplicable.decideLe))}` : ""})</span>` : (x.schemas || []).map(y => `${esc(y.id)} ${esc(y.titre)} (v${esc(y.version)}${y.prochaineRevue ? `, revue ${esc(frDate(y.prochaineRevue))}` : ""})`).join("<br>") || `<span class="muted">aucun</span>`}</td></tr>`).join("")}</tbody></table>
         <p class="small muted">Publié par ${esc(libelleModule("werbcartosi"))} : métadonnées seulement, les schémas restent dans le dossier du site.</p></div>`;
     }
     h += `<div class="card">${titre("📤", "Publications du site", "ambre")}${publicationsHtml(d.pub)}</div>`;
