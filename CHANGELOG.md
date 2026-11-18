@@ -4,6 +4,13 @@ Toutes les évolutions notables de l'environnement WerbSMSI (charte, portail, ou
 Les modules ont chacun leur propre CHANGELOG.
 Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/), numérotation [SemVer](https://semver.org/lang/fr/).
 
+## [0.30.0] — 2026-11
+
+### Ajouts
+- **Recueil des guides** : `docs/guides/Recueil_guides_WerbSMSI.html`, une page autonome (hors ligne) qui réunit les guides du portail, le guide technique et les guides de tous les modules publiés (87 guides, référentiels compris), classés par étape du parcours. Lecteur commun `guides.js` (même rendu que dans les modules, liens entre guides, images intégrées), navigation latérale, **recherche plein texte** (touche `/`, sans accents ni casse, extraits, occurrences surlignées et parcourues ▲▼), **thème Auto / Clair / Sombre** (palette du socle, impression en clair).
+- **`werb_charte.py recueil`** (`charte/outils/recueil_guides.py`, `gabarit_recueil.html`) ; **`publier` et `portail` régénèrent le recueil** : un guide ajouté, modifié ou retiré y entre sans autre geste. Charte §7.4 (le recueil), §10 et §11 complétées.
+- **Portail 1.15.0** : entrée **❓ Aide › 📚 Recueil de tous les guides** et bouton sur la carte du parcours de l'accueil ; ouverture dans un nouvel onglet, avec le thème du portail (`#werbsmsi=`, §7.5).
+
 ## [0.29.0] — 2026-11
 
 ### Changements

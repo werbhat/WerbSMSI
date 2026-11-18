@@ -229,8 +229,14 @@
         return `<li><button type="button" class="pc-etape" data-act="allerEtape" data-e="${esc(e.id)}" style="--tf:${f};--tt:${c}" title="Voir les modules de l'étape ${e.ordre}">
           <span class="pc-num">${e.ordre}</span><span class="pc-txt"><b>${e.emoji} ${esc(e.libelle)}</b><span>${esc(e.sousTitre)}</span><span class="pc-mods">${esc(mods.map(nomModule).join(" · ") || "—")}</span></span></button></li>`; }).join("")}</ol>
       <p class="pc-chaine small muted">Sans inventaire fiable, pas de cartographie pertinente. Sans cartographie, pas d'analyse de risque crédible. Sans analyse de risque, pas de décisions efficaces. Sans gouvernance, pas d'amélioration continue.</p>
-      <div class="row">${(window.WERB_MEDIAS || {}).infographie_demarrer ? `<button data-nav="infographie">🖼️ Voir l'infographie</button>` : ""}${guideDemarrer() ? `<button data-nav="${esc(guideDemarrer().id)}">📖 ${esc(guideDemarrer().titre)}</button>` : ""}</div></div>`;
+      <div class="row">${(window.WERB_MEDIAS || {}).infographie_demarrer ? `<button data-nav="infographie">🖼️ Voir l'infographie</button>` : ""}${guideDemarrer() ? `<button data-nav="${esc(guideDemarrer().id)}">📖 ${esc(guideDemarrer().titre)}</button>` : ""}<button data-nav="recueil" title="Tous les guides du portail et des modules, dans un nouvel onglet">📚 Recueil de tous les guides ↗</button></div></div>`;
   }
+
+  // Recueil de tous les guides (portail, guide technique, modules publiés ; charte §7.4) : page autonome produite par
+  // werb_charte.py recueil, ouverte dans un nouvel onglet avec le thème du portail (§7.5) pour être lue à côté de WerbSMSI
+  const RECUEIL = "../docs/guides/Recueil_guides_WerbSMSI.html";
+  const lienRecueil = () => WerbSocle.lien.avecTheme(RECUEIL, WerbSocle.theme.mode);
+  const ouvrirRecueil = () => window.open(lienRecueil(), "_blank", "noopener");
 
   // Guides du portail (portail/guides/) : lecture dans ❓ Aide ; « Démarrer avec WerbSMSI » est proposé à l'accueil
   WerbGuides.guides().forEach(g => { VUES[g.id] = () => WerbGuides.vue(g.id, { lien: id => `data-nav="${id}"` }); });
@@ -688,6 +694,7 @@ ${sites.map(s => `    ├── ${s.code || "?"}/  (werbsmsi.site.json, ${DOSSIE
   // Menu latéral commun (socle) : catégories à emoji sur fond de couleur ; le contenu suit l'espace ouvert
   const MENU = [];
   const menu = WerbSocle.menu($("#sidebar"), MENU, { surNav: id => {
+    if (id === "recueil") { ouvrirRecueil(); return; }        // nouvel onglet : la page du portail ne change pas
     if (id.startsWith("site:")) { P.vue = "site"; P.site = id.slice(5); } else P.vue = id;
     render(); $("#main").scrollTop = 0;
   } });
@@ -698,7 +705,7 @@ ${sites.map(s => `    ├── ${s.code || "?"}/  (werbsmsi.site.json, ${DOSSIE
         { g: "sites", i: "📍", l: "Sites", c: "vert", t: sites.map(s => ["site:" + s.code, s.code]) }] : []),
       { g: "outils", i: "🛠️", l: "Outils", c: "orange", t: [["assistant", "Mise en place"], ["verif", "Vérifier les modules"], ["modeles", "Modèles de documents"]] },
       { g: "admin", i: "⚙️", l: "Administration", c: "ardoise", t: [["sauvegarde", "Sauvegarde et restauration"], ["listes", "Listes de choix du groupe"], ["parametres", "Paramètres"]] },
-      { g: "aide", i: "❓", l: "Aide", c: "olive", t: [...WerbGuides.entrees(), ...((window.WERB_MEDIAS || {}).infographie_demarrer ? [["infographie", "Infographie : démarrer"]] : []), ["aide", "Créer la base d'un site"], ["apropos", "À propos"]] });
+      { g: "aide", i: "❓", l: "Aide", c: "olive", t: [["recueil", "📚 Recueil de tous les guides ↗"], ...WerbGuides.entrees(), ...((window.WERB_MEDIAS || {}).infographie_demarrer ? [["infographie", "Infographie : démarrer"]] : []), ["aide", "Créer la base d'un site"], ["apropos", "À propos"]] });
     const cnt = Object.fromEntries(sites.filter(s => !(P.sites[s.code] || {}).accessible).map(s => ["site:" + s.code, "🔒"]));
     menu.rendre({ actif: P.vue === "site" ? "site:" + P.site : P.vue, compteurs: cnt,
       pied: `<footer class="sig"><strong>${esc(WERB.produit)}</strong><br>${esc(WERB.signature)}<br>v${esc(WERB.version)} · ${esc(window.BUILD_DATE)}</footer>` });
@@ -1486,6 +1493,7 @@ ${sites.map(s => `    ├── ${s.code || "?"}/  (werbsmsi.site.json, ${DOSSIE
     const site = e.target.closest("[data-site]");
     if (site) { e.preventDefault(); P.vue = "site"; P.site = site.dataset.site; render(); $("#main").scrollTop = 0; return; }
     const nav = e.target.closest("[data-nav]");
+    if (nav && nav.dataset.nav === "recueil") { e.preventDefault(); ouvrirRecueil(); return; }   // thème du moment transmis
     if (nav) { P.vue = nav.dataset.nav; render(); $("#main").scrollTop = 0; return; }
     const act = e.target.closest("[data-act]");
     if (act && ACTIONS[act.dataset.act]) ACTIONS[act.dataset.act](act, e);
