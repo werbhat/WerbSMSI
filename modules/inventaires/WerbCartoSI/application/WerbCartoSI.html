@@ -1,5 +1,5 @@
 <!doctype html>
-<!-- WerbCartoSI v1.10.0 – Développé par @WerbHat – build novembre 2026 -->
+<!-- WerbCartoSI v1.10.1 – Développé par @WerbHat – build novembre 2026 -->
 <html lang="fr">
 <head>
 <meta charset="utf-8">
@@ -9,7 +9,7 @@
 <title>WerbCartoSI</title>
 <meta name="application-name" content="WerbCartoSI">
 <meta name="author" content="@WerbHat">
-<meta name="generator" content="WerbCartoSI v1.10.0 – Développé par @WerbHat">
+<meta name="generator" content="WerbCartoSI v1.10.1 – Développé par @WerbHat">
 <meta name="description" content="Registre des schémas d'architecture d'un site : exigences couvertes, versions, revues, approbation, liens vers les fichiers">
 <style>/*! WerbCartoSI – Développé par @WerbHat */
 :root {
@@ -179,7 +179,7 @@ const WERB = Object.freeze((() => {
   const bytes = [68, 195, 169, 118, 101, 108, 111, 112, 112, 195, 169, 32, 112, 97, 114, 32, 64, 87, 101, 114, 98, 72, 97, 116];
   const signature = new TextDecoder("utf-8").decode(new Uint8Array(bytes));
   const produit = "WerbCartoSI";
-  const version = "1.10.0";
+  const version = "1.10.1";
   return {
     id: "werbcartosi",
     produit, version, auteur: "@WerbHat", signature,
@@ -2794,7 +2794,7 @@ const WerbEbauche = (() => {
   // Formulaire de non-applicabilité (exigence pour le site, ou pour un SI)
   function formNA() {
     const n = ui.na, x = n.si ? items("si").find(y => y.id === n.si) : null;
-    return `<div class="card" data-na-form><h2>Déclarer non applicable : ${esc(exigNom(n.exigence))} <span class="muted">(${x ? `SI ${esc(x.id)} ${esc(x.nom)}` : "tout le site"})</span></h2>
+    return `<div class="card" data-na-form><h2>Déclarer non applicable : ${esc(exigNom(n.exigence))} <span class="muted">(${x ? `SI ${esc(x.nom || x.id)}` : "tout le site"})</span></h2>
       <p class="small muted">Un auditeur accepte une exigence non applicable si la raison est <b>écrite</b>, <b>décidée</b> par une fonction qui en répond et <b>datée</b>. La décision se revoit tous les ${S.parametres.revueMois} mois, comme un schéma : un changement d'architecture peut la rendre fausse.</p>
       <div class="fiche"><div class="lg"><label class="f" for="naJustif">Justification</label><textarea id="naJustif" rows="3" placeholder="${esc(x ? "Ex. SI isolé, sans accès d'administration distinct : administré uniquement en local depuis la console de la machine" : "Ex. aucun accès distant ni interconnexion : télémaintenance interdite par la politique du groupe, aucun lien avec un autre site")}">${esc(n.justification || "")}</textarea></div>
         <div><label class="f" for="naPar">Décidée par (fonction)</label><input id="naPar" value="${esc(n.decidePar || "")}" placeholder="Ex. RSSI du site"></div>
@@ -2811,7 +2811,7 @@ const WerbEbauche = (() => {
     return `<div class="card" data-couv-si><h2>Couverture par SI (WerbMap) — ${bs.couvertes}/${bs.attendues} schéma(s) attendu(s) couvert(s)</h2>
       <p class="small muted">Pour chaque SI publié par WerbMap (reçus le ${esc(frDate(recu("si").majLe))}), les exigences <b>attendues</b> selon leur portée : <i>chaque SI</i>, ou <i>les SI sensibles</i> (D, I ou C ≥ ${S.parametres.seuilDIC}, zone process ou métier critique, SL-T 2 et plus, actif critique, ou D, I, C non cotés). Une case est couverte par un schéma approuvé et à jour qui vise l'exigence et qui est lié au SI ou à une zone où le SI a des actifs. Cliquez une case pour le détail ou pour déclarer l'exigence non applicable à ce SI.</p>
       <div class="tablewrap"><table class="t"><thead><tr><th>SI</th><th>Couverture</th><th>Sensibilité</th>${ex.map(([c, l]) => `<th class="c" title="${esc(l)} — attendue pour : ${esc(porteeLib(c))}">${esc(c.replace(/^EX-/, ""))}</th>`).join("")}<th>Schémas liés</th></tr></thead><tbody>
-      ${items("si").map(x => { const cv = couvertureSI(x.id), se = sensibilite(x); return `<tr data-si="${esc(x.id)}"><td><b>${esc(x.id)}</b> — ${esc(x.nom)}<div class="small muted">${esc(x.fonction)}</div></td><td>${couvBadge(cv.etat)}</td>
+      ${items("si").map(x => { const cv = couvertureSI(x.id), se = sensibilite(x); return `<tr data-si="${esc(x.id)}"><td><b>${esc(x.nom || x.id)}</b><div class="small muted">${esc(x.fonction)}</div></td><td>${couvBadge(cv.etat)}</td>
         <td class="small" data-sensibilite>${se.sensible ? badge("Sensible", "b-warn") : badge("Standard", "b-muted")}<div class="muted">${esc(se.raisons.join(" ; ") || ["d", "i", "c"].map(k => `${k.toUpperCase()} = ${x[k]}`).join(", "))}</div></td>
         ${ex.map(([c]) => { const v = couvertureCase(c, x), sel = cel && cel.si === x.id && cel.ex === c;
           return `<td class="c" data-case="${esc(c)}"${sel ? ' style="background:var(--info-bg)"' : ""}><a href="#" data-act="cellule" data-si="${esc(x.id)}" data-ex="${esc(c)}" title="${esc(`${c} : ${lib(COUV, v.etat).toLowerCase()}${v.schemas.length ? " — " + v.schemas.map(s => s.id).join(", ") : ""}`)}">${caseBadge(v)}</a></td>`; }).join("")}
@@ -2821,7 +2821,7 @@ const WerbEbauche = (() => {
   }
   function detailCase({ si, ex }) {
     const x = items("si").find(y => y.id === si), v = couvertureCase(ex, x), se = sensibilite(x), p = portee(ex), zs = zonesSI(x), naSI = naDe(ex, si), naSite = naDe(ex);
-    return `<div class="infobox" data-cellule="${esc(ex + "@" + si)}"><div class="row"><b>${esc(si)} ${esc(x.nom)} × ${esc(exigNom(ex))}</b> ${couvBadge(v.etat)}<span class="spacer"></span><button class="small noprint" data-act="fermerCellule">Fermer</button></div>
+    return `<div class="infobox" data-cellule="${esc(ex + "@" + si)}"><div class="row"><b>${esc(x.nom || si)} × ${esc(exigNom(ex))}</b> ${couvBadge(v.etat)}<span class="spacer"></span><button class="small noprint" data-act="fermerCellule">Fermer</button></div>
       <p class="small">${v.attendue ? `<b>Attendue</b> : portée « ${esc(porteeLib(ex))} »${p === "sensibles" ? ` et SI sensible (${esc(se.raisons.join(" ; "))})` : ""}.`
         : `<b>Non attendue</b> : portée « ${esc(porteeLib(ex))} » et SI non sensible.`} ${esc((REPERES[ex] || [""])[0])}</p>
       <p class="small">Schémas en vigueur : ${v.schemas.length ? v.schemas.map(s => `<a href="#" data-nav="fiche:${esc(s.id)}">${esc(s.id)}</a> ${esc(s.titre)} ${statutBadge(s)} <span class="muted">(${s.sis.includes(si) ? "lié au SI" : "lié à la zone " + esc(s.zones.filter(z => zs.includes(z)).join(", "))})</span>`).join(" · ") : `<span class="muted">aucun — liez un schéma à ce SI ou à ses zones (${esc(zs.join(", ") || "aucune zone connue")}) dans sa fiche (Périmètre WerbMap)</span>`}</p>

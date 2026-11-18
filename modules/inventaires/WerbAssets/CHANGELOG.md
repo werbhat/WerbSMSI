@@ -6,6 +6,16 @@ Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/), num
 
 
 
+## [1.10.0] — 2026-11
+
+### Ajouts
+- **Brassage relié à la liste des coffrets de WerbMap** : les coffrets et baies publiés par WerbMap 1.31.0 (`site:coffrets` : TAG, libellé, niveau, criticité) deviennent des baies du brassage, **même si aucun actif n'y est rangé** ; jusqu'ici, seuls les coffrets cités par un actif réseau ou une machine apparaissaient. La carte de la baie rappelle le libellé, le niveau et la criticité WerbMap (repris en exemple dans les champs Libellé et Emplacement) ; un coffret WerbMap ne se supprime que dans WerbMap. Page *Intégration WerbSMSI* : objet `site:coffrets` lu ; page *Actifs du site* : nombre de coffrets chargés. Une publication antérieure (sans coffrets) garde le comportement précédent.
+- **Colonne « Coffret »** à droite de « Emplacement » dans les listes *Pare-feu*, *Switch*, *Autres assets* et *Actifs du site* (libellé et niveau WerbMap du coffret en infobulle) ; la colonne Emplacement n'affiche plus « Baie <coffret> » à défaut d'emplacement.
+- **Procédure de configuration et de sécurisation : « Non applicable » en un clic** — bouton **⊘ Tout « Non applicable »** (toutes les lignes) et **⊘ Section non applicable** sur chaque section ; confirmation avec le nombre de lignes et celles déjà « Fait » qui seront remplacées ; valeurs et commentaires conservés ; une ligne de journal par point.
+
+### Format de données
+- `inventaire.coffrets` : copie des coffrets publiés par WerbMap (`id`, `libelle`, `niveau`, `criticite`). `module.json › echanges.consomme` : `site:coffrets`. Schéma inchangé.
+
 ## [1.9.0] — 2026-11
 
 ### Ajouts

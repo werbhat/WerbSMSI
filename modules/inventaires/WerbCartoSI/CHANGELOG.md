@@ -3,6 +3,11 @@
 Toutes les évolutions notables de WerbCartoSI sont consignées ici.
 Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/), numérotation [SemVer](https://semver.org/lang/fr/).
 
+## [1.10.1] — 2026-11
+
+### Changements
+- *Couverture des exigences › Couverture par SI (WerbMap)* : chaque SI est affiché par son **nom** seul, sans son identifiant technique (repli sur l'identifiant si le SI n'a pas de nom) ; de même dans le détail d'une case et le formulaire « Déclarer non applicable » d'un SI. L'identifiant reste la clé des liens et des données.
+
 ## [1.10.0] — 2026-11
 
 ### Ajouts

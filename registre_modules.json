@@ -161,7 +161,7 @@
       "chemin": "modules/inventaires/WerbMap",
       "depot": "../WerbMap",
       "etat": "publie",
-      "version": "1.30.0",
+      "version": "1.31.0",
       "etape": "connaitre"
     },
     {
@@ -169,7 +169,7 @@
       "chemin": "modules/inventaires/WerbAssets",
       "depot": "../WerbAssets",
       "etat": "publie",
-      "version": "1.9.0",
+      "version": "1.10.0",
       "etape": "connaitre"
     },
     {
@@ -177,7 +177,7 @@
       "chemin": "modules/inventaires/WerbCartoSI",
       "depot": "../WerbCartoSI",
       "etat": "publie",
-      "version": "1.10.0",
+      "version": "1.10.1",
       "etape": "connaitre"
     },
     {
@@ -225,7 +225,7 @@
       "chemin": "modules/exploitation/WerbExploitation",
       "depot": "../WerbExploitation",
       "etat": "publie",
-      "version": "1.30.0",
+      "version": "1.33.0",
       "etape": "controler"
     },
     {

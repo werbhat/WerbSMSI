@@ -4,6 +4,17 @@ Toutes les évolutions notables de l'environnement WerbSMSI (charte, portail, ou
 Les modules ont chacun leur propre CHANGELOG.
 Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/), numérotation [SemVer](https://semver.org/lang/fr/).
 
+## [0.31.0] — 2026-11
+
+### Changements
+- **Charte : objet `site:coffrets`** (§5.4, schéma `publication_site`, `werb_charte.py`) — coffrets et baies de l'inventaire : TAG, libellé, niveau, criticité ; publié par WerbMap, lu par WerbAssets.
+- **WerbMap 1.31.0 publié** : publication de la liste des **coffrets** (`site:coffrets`), sans commentaire.
+- **WerbAssets 1.10.0 publié** : le **brassage** reprend la liste des coffrets de WerbMap, même ceux où aucun actif n'est rangé (jusqu'ici, seuls les coffrets cités par un actif apparaissaient) ; colonne **Coffret** à droite d'Emplacement dans Pare-feu, Switch, Autres assets et Actifs du site ; procédure de sécurisation : **« Non applicable » en un clic** pour toutes les lignes ou une section.
+- **WerbCartoSI 1.10.1 publié** : *Couverture par SI (WerbMap)* affiche chaque SI par son nom seul, sans son identifiant technique (détail d'une case et formulaire « non applicable » compris).
+- **WerbExploitation 1.33.0 publié** : **paramètres de calcul du dimensionnement des certificats** réglables dans *Référentiels* (poids des questions, seuils, durées, plafonds, raccourcissement, niveaux de chiffrement, tolérance), chaque preuve gardant les paramètres de son calcul ; **classeur de simulation Excel** (paramètres, scénarios calculés en formules, contrôle par l'outil) dont les paramètres se reprennent dans l'outil après revue des changements.
+- **WerbExploitation 1.32.0 publié** : **preuves de dimensionnement des certificats** — chaque calcul enregistré devient une preuve figée `DIM-AAAA-nnn` (réponses, résultat, date, auteur, périmètre), listée dans la page *Certificats* ; elle s'associe à un certificat existant (durée de vie et algorithme reportés au choix) ou crée un nouveau certificat déjà dimensionné ; calcul lancé depuis la fiche d'un certificat ; colonne **Dimensionnement** (preuve citée ou recommandation du site, conformité de la durée de vie) ; preuve PDF avec les certificats associés. L'évaluation de la 1.31.0 est reprise comme première preuve.
+- **WerbExploitation 1.31.0 publié** : **🧭 Dimensionner les certificats** dans la page *Certificats* — questionnaire de 10 questions (capacité à renouveler, capacité cryptographique, exposition et criticité) qui recommande une durée de validité des certificats finaux (24 mois à 90 jours, plafonnée par les arrêts techniques) et un niveau de chiffrement (Standard, Renforcé, Élevé, plafonné par les algorithmes supportés) ; alertes, actions recommandées, preuve de calcul en PDF au modèle de l'entreprise ; évaluation retenue pour le site gardée dans la base (`parametres.dimCert`) et rappelée en tête de la page.
+
 ## [0.30.0] — 2026-11
 
 ### Ajouts

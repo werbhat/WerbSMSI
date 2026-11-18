@@ -3,6 +3,14 @@
 Toutes les évolutions notables de WerbMap sont consignées ici.
 Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/), numérotation [SemVer](https://semver.org/lang/fr/).
 
+## [1.31.0] — 2026-11
+
+### Ajouts
+- **Liste des coffrets publiée** (`site:coffrets`, pour WerbAssets 1.10.0) : chaque coffret ou baie de l'inventaire *Coffrets* — TAG (identifiant), libellé, niveau, criticité ; jamais le commentaire. WerbAssets en fait les baies du brassage, même quand aucun actif n'y est rangé (jusqu'ici, seuls les coffrets cités par un actif lui parvenaient, à travers `site:actifs`). Publication dans l'espace et fichier de publication ; nombre de coffrets dans le panneau *Publier vers le site* et au journal.
+
+### Format de données
+- Publication `werbmap.json › data.coffrets` ; `module.json › echanges.publie` : `site:coffrets` (charte §5.4, schéma `publication_site`). Base inchangée.
+
 ## [1.30.0] — 2026-11
 
 ### Ajouts

@@ -1,5 +1,5 @@
 <!doctype html>
-<!-- WerbAssets v1.9.0 – Développé par @WerbHat – build novembre 2026 -->
+<!-- WerbAssets v1.10.0 – Développé par @WerbHat – build novembre 2026 -->
 <html lang="fr">
 <head>
 <meta charset="utf-8">
@@ -9,7 +9,7 @@
 <title>WerbAssets</title>
 <meta name="application-name" content="WerbAssets">
 <meta name="author" content="@WerbHat">
-<meta name="generator" content="WerbAssets v1.9.0 – Développé par @WerbHat">
+<meta name="generator" content="WerbAssets v1.10.0 – Développé par @WerbHat">
 <meta name="description" content="Fiches de configuration des assets réseau d'un site : pare-feu, switch, brassage des baies et autres équipements">
 <style>/*! WerbAssets – Développé par @WerbHat */
 :root {
@@ -225,7 +225,7 @@ const WERB = Object.freeze((() => {
   const bytes = [68, 195, 169, 118, 101, 108, 111, 112, 112, 195, 169, 32, 112, 97, 114, 32, 64, 87, 101, 114, 98, 72, 97, 116];
   const signature = new TextDecoder("utf-8").decode(new Uint8Array(bytes));
   const produit = "WerbAssets";
-  const version = "1.9.0";
+  const version = "1.10.0";
   return {
     id: "werbassets",
     produit, version, auteur: "@WerbHat", signature,
@@ -1994,7 +1994,7 @@ const WerbXlsx = (() => {
 
   /* ===================================================== modèle */
   function vide() {
-    return { site: { nom: "" }, versions: [], inventaire: { site: "", source: "", publieLe: "", chargeLe: "", actifs: [], zones: [], vlans: [] }, fiches: [], baies: [], bandeaux: [], archives: { bandeaux: [] }, largeurs: {},
+    return { site: { nom: "" }, versions: [], inventaire: { site: "", source: "", publieLe: "", chargeLe: "", actifs: [], zones: [], vlans: [], coffrets: [] }, fiches: [], baies: [], bandeaux: [], archives: { bandeaux: [] }, largeurs: {},
       refs: Object.fromEntries(REFS.map(([k, , d]) => [k, d.slice()])), listesGroupe: {} };   // listesGroupe : copie des valeurs du groupe { valeurs, majLe }
   }
   function nouvelleFiche(tag, cat = "") {
@@ -2038,7 +2038,8 @@ const WerbXlsx = (() => {
     const inv = d.inventaire || {};
     b.inventaire = { site: str(inv.site), source: str(inv.source), publieLe: str(inv.publieLe), chargeLe: str(inv.chargeLe),
       actifs: (Array.isArray(inv.actifs) ? inv.actifs : []).map(normActif).filter(a => a.id),
-      zones: (Array.isArray(inv.zones) ? inv.zones : []).map(z => ({ id: str(z && z.id).trim(), nom: str(z && z.nom), slt: str(z && z.slt) })).filter(z => z.id), vlans: normVlans(inv.vlans) };
+      zones: (Array.isArray(inv.zones) ? inv.zones : []).map(z => ({ id: str(z && z.id).trim(), nom: str(z && z.nom), slt: str(z && z.slt) })).filter(z => z.id), vlans: normVlans(inv.vlans),
+      coffrets: normCoffrets(inv.coffrets) };
     const vus = new Set();
     b.fiches = (Array.isArray(d.fiches) ? d.fiches : []).filter(x => x && typeof x === "object").map(normFiche)
       .filter(f => f.tag && !vus.has(f.tag.toUpperCase()) && vus.add(f.tag.toUpperCase()));
@@ -2124,10 +2125,18 @@ const WerbXlsx = (() => {
   const badgeCtrl = f => { const s = statCtrl(f); return `<span class="jauge" title="${s.pct} %"><i style="width:${s.pct}%"></i></span><span class="small">${s.fait} / ${s.utiles}</span>${s.afaire ? " " + badge(`${s.afaire} à faire`, "b-warn") : ""}`; };
   const libEtat = o => (ETATS_CTRL.find(e => o && e[0] === o.etat) || ["", ""])[1];
 
-  // Baies : coffrets des actifs WerbMap, baies saisies ici et baies citées par les bandeaux
+  // Colonne « Coffret » des listes : TAG du coffret, libellé WerbMap en infobulle
+  const coffretCase = t => { if (!t) return ""; const c = coffretDe(t); return `<span${c && c.libelle ? ` title="${esc(c.libelle + (c.niveau ? " · niveau " + c.niveau : ""))}"` : ""}>${esc(t)}</span>`; };
+  // Coffrets et baies publiés par WerbMap (site:coffrets, WerbMap 1.31.0) : TAG, libellé, niveau, criticité ; publication antérieure : liste vide
+  const normCoffrets = l => { const vus = new Set();
+    return (Array.isArray(l) ? l : []).filter(x => x && typeof x === "object").map(x => ({ id: str(x.id).trim(), libelle: str(x.libelle), niveau: str(x.niveau), criticite: str(x.criticite) }))
+      .filter(x => x.id && !vus.has(x.id.toUpperCase()) && vus.add(x.id.toUpperCase())); };
+  const coffretDe = tag => { const k = String(tag || "").trim().toUpperCase(); return k ? (S.inventaire.coffrets || []).find(c => c.id.toUpperCase() === k) || null : null; };
+  // Baies : coffrets publiés par WerbMap (liste des coffrets, même vides), coffrets cités par les actifs, baies saisies ici et baies citées par les bandeaux
   function baiesListe(D = S) {
     const m = new Map();
     const aj = t => { t = String(t || "").trim(); if (!t) return null; const k = t.toUpperCase(); if (!m.has(k)) m.set(k, { tag: t, inv: false, loc: null, n: 0 }); return m.get(k); };
+    (D.inventaire.coffrets || []).forEach(c => { const o = aj(c.id); if (o) { o.inv = true; o.cof = c; } });
     D.inventaire.actifs.forEach(a => { const o = aj(a.coffret); if (o) o.inv = true; });
     D.baies.forEach(b => { const o = aj(b.tag); if (o) o.loc = b; });
     D.bandeaux.forEach(b => { const o = aj(b.baie); if (o) o.n++; });
@@ -2143,7 +2152,8 @@ const WerbXlsx = (() => {
     const zones = (Array.isArray(pub.zones) ? pub.zones : []).map(z => ({ id: str(z.id).trim(), nom: str(z.nom), slt: str(z.slt) })).filter(z => z.id);
     const avant = S.inventaire.actifs.length, orphAvant = orphelines().length;
     const vlans = normVlans(pub.vlans);   // absent d'une publication antérieure à WerbMap 1.23.0 : liste vide
-    S.inventaire = Object.assign({}, S.inventaire, source, { actifs, zones, vlans, chargeLe: new Date().toISOString() });
+    const coffrets = normCoffrets(pub.coffrets);   // absent d'une publication antérieure à WerbMap 1.31.0 : liste vide
+    S.inventaire = Object.assign({}, S.inventaire, source, { actifs, zones, vlans, coffrets, chargeLe: new Date().toISOString() });
     indexer();
     S.fiches.forEach(f => { const a = actifDe(f.tag); if (a) { f.tag = a.id; f.ref = refDe(a); } });   // copie de l'identité pour le jour où l'actif disparaît
     indexer();
@@ -2417,9 +2427,11 @@ const WerbXlsx = (() => {
     if (n) toast(`${n} ligne(s) ${{ archiver: "archivée(s) : hors brassage, impression et classeurs", desarchiver: "désarchivée(s)", supprimer: "supprimée(s)" }[action]}.`, "ok");
   }
   function controlesHtml(f) {
-    return `<div class="card"><div class="row"><h2 style="margin:0">Procédure de configuration et de sécurisation</h2><span class="spacer"></span>${badgeCtrl(f)}</div>
+    const ro = WerbSocle.verrou.lectureSeule ? " disabled" : "";
+    return `<div class="card" data-controles><div class="row"><h2 style="margin:0">Procédure de configuration et de sécurisation</h2><span class="spacer"></span>${badgeCtrl(f)}
+      <button class="small noprint" data-act="ctrlNA"${ro} title="Mettre « Non applicable » sur toutes les lignes de la procédure (valeurs et commentaires conservés)">⊘ Tout « Non applicable »</button></div>
       <p class="small muted">Indiquez seulement que le point est traité et comment : ne saisissez jamais de mot de passe.</p>
-      <table class="t ctrl"><tbody>${CONTROLES.map(([s, l]) => `<tr class="dom"><td colspan="3">${esc(s)}</td></tr>` + l.map(([code, lib]) => {
+      <table class="t ctrl"><tbody>${CONTROLES.map(([s, l], si) => `<tr class="dom"><td colspan="3"><div class="row"><span>${esc(s)}</span><span class="spacer"></span><button class="small noprint" data-act="ctrlNA" data-s="${si}"${ro} title="Mettre « Non applicable » sur les lignes de cette section">⊘ Section non applicable</button></div></td></tr>` + l.map(([code, lib]) => {
         const o = f.controles[code] || {};
         return `<tr><td style="width:46%"><span class="mono muted">${code}</span> ${esc(lib)}</td><td style="width:160px"><select class="ctl ${o.etat || ""}" data-k="controles.${code}.etat">${optPaires(ETATS_CTRL, o.etat, "—")}</select></td>
           <td><input data-k="controles.${code}.valeur" value="${esc(o.valeur || "")}" placeholder="Valeur / commentaire"></td></tr>`;
@@ -2440,10 +2452,10 @@ const WerbXlsx = (() => {
       <div class="tabs">${tabs.map(t => `<button class="tab${t.z === z ? " act" : ""}" data-act="zone" data-c="${cat}" data-z="${esc(t.z)}">${esc(t.l)} <span class="n">${t.n}</span></button>`).join("") || `<span class="small muted">Aucun asset de cette catégorie.</span>`}</div>
       <div class="row barre noprint"><button data-act="horsInv" data-c="${cat}">+ Asset hors inventaire</button><input placeholder="🔍 Filtrer" data-q="${cat}" value="${esc(ui.q[cat] || "")}" style="max-width:240px">
       <span class="spacer"></span><button data-act="excelCat" data-c="${cat}">📥 Saisie Excel</button><button data-act="imprimerZone" data-c="${cat}"${l.length ? "" : " disabled"}>🖨 Imprimer les fiches de l'onglet</button><span class="small muted">${l.length} asset(s)</span></div>
-      <div class="tablewrap"><table class="t liste" data-table="${cat}"><thead><tr><th data-col="tag">TAG</th><th data-col="libelle">Libellé</th><th data-col="emplacement">Emplacement</th>${cat === "autre" ? `<th data-col="type">Type</th>` : ""}<th data-col="marque">Marque</th><th data-col="modele">Modèle</th><th data-col="fiche">Fiche</th>${ctrl ? `<th data-col="ctrl">Sécurisation</th>` : ""}<th data-col="positionU" title="Position de l'asset dans la baie, saisie ici ou dans la fiche">Position (U)</th></tr></thead><tbody>
-      ${l.map(x => `<tr class="clic" data-act="ouvrirFiche" data-tag="${esc(x.tag)}"><td><b>${esc(x.tag)}</b>${x.orph && invCharge() ? " " + badge("orpheline", "b-warn") : ""}</td><td>${esc(x.i.libelle)}</td><td>${esc(emplacementDe(x.i))}</td>
+      <div class="tablewrap"><table class="t liste" data-table="${cat}"><thead><tr><th data-col="tag">TAG</th><th data-col="libelle">Libellé</th><th data-col="emplacement">Emplacement</th><th data-col="coffret">Coffret</th>${cat === "autre" ? `<th data-col="type">Type</th>` : ""}<th data-col="marque">Marque</th><th data-col="modele">Modèle</th><th data-col="fiche">Fiche</th>${ctrl ? `<th data-col="ctrl">Sécurisation</th>` : ""}<th data-col="positionU" title="Position de l'asset dans la baie, saisie ici ou dans la fiche">Position (U)</th></tr></thead><tbody>
+      ${l.map(x => `<tr class="clic" data-act="ouvrirFiche" data-tag="${esc(x.tag)}"><td><b>${esc(x.tag)}</b>${x.orph && invCharge() ? " " + badge("orpheline", "b-warn") : ""}</td><td>${esc(x.i.libelle)}</td><td>${esc(x.i.emplacement || "")}</td><td>${coffretCase(x.i.coffret)}</td>
         ${cat === "autre" ? `<td>${esc(x.i.type)}</td>` : ""}<td>${esc(x.i.marque)}</td><td>${esc((x.f && x.f.modele) || x.i.modele || "")}</td><td>${badgeAvancement(x.f, cat)}</td>${ctrl ? `<td>${badgeCtrl(x.f)}</td>` : ""}<td class="pos"><input class="pos-u" data-pos="${esc(x.tag)}" value="${esc((x.f && x.f.positionU) || "")}" placeholder="U" aria-label="Position dans la baie (U)"${WerbSocle.verrou.lectureSeule ? " disabled" : ""}></td></tr>`).join("")
-      || `<tr><td colspan="10" class="empty">Aucun asset dans cet onglet.</td></tr>`}</tbody></table></div>`;
+      || `<tr><td colspan="11" class="empty">Aucun asset dans cet onglet.</td></tr>`}</tbody></table></div>`;
   }
   CATS.forEach(x => { VUES[x.k] = () => vueCat(x.k); });
 
@@ -2487,7 +2499,7 @@ const WerbXlsx = (() => {
     const bs = baiesListe();
     let cur = bs.find(b => b.tag.toUpperCase() === String(ui.baie || "").toUpperCase());
     if (!cur && bs.length) { cur = bs[0]; ui.baie = cur.tag; }
-    const tete = `<h1>🔌 Brassage</h1><p class="sub">Raccordement des bandeaux RJ45 et fibre optique dans les baies : un onglet par baie (coffrets de l'inventaire WerbMap et baies saisies ici).</p>`;
+    const tete = `<h1>🔌 Brassage</h1><p class="sub">Raccordement des bandeaux RJ45 et fibre optique dans les baies : un onglet par baie (coffrets de l'inventaire WerbMap — liste des coffrets et coffrets des actifs — et baies saisies ici).</p>`;
     if (!cur) return tete + `<div class="card"><p class="muted">Aucune baie : chargez l'inventaire WerbMap (coffrets des actifs) ou créez une baie.</p><button class="primary" data-act="baieAjout">+ Baie</button></div>`;
     const loc = cur.loc || {}, l = lignesT("bandeaux"), nAct = l.filter(b => !b.archive).length;
     const actifs = S.inventaire.actifs.filter(a => (a.coffret || "").toUpperCase() === cur.tag.toUpperCase());
@@ -2496,9 +2508,10 @@ const WerbXlsx = (() => {
         title="${cur.inv ? "Coffret de l'inventaire WerbMap : à retirer dans WerbMap" : "Supprimer la baie, ses bandeaux et leurs raccordements"}">🗑 Supprimer baie</button><button class="primary" data-act="bandeauAjout">+ Bandeau</button><span class="spacer"></span>
       <button data-act="excelCat" data-c="brassage">📥 Saisie Excel</button><button data-act="imprimerBaie"${nAct ? "" : " disabled"}>🖨 Imprimer la baie</button>
       </div>
-      <div class="card"><h2>Baie ${esc(cur.tag)} <span class="small muted">${cur.inv ? "(coffret de l'inventaire WerbMap)" : "(saisie dans WerbAssets)"}</span></h2><div class="fiche">
-      <div><label class="f">Libellé</label><input data-baie="${esc(cur.tag)}" data-bk="libelle" value="${esc(loc.libelle || "")}"></div>
-      <div><label class="f">Emplacement</label><input data-baie="${esc(cur.tag)}" data-bk="emplacement" value="${esc(loc.emplacement || "")}"></div></div>
+      <div class="card"><h2>Baie ${esc(cur.tag)} <span class="small muted">${cur.inv ? "(coffret de l'inventaire WerbMap)" : "(saisie dans WerbAssets)"}</span></h2>
+      ${cur.cof ? `<p class="small" data-coffret-werbmap>Coffret WerbMap : <b>${esc(cur.cof.libelle || cur.tag)}</b>${cur.cof.niveau ? ` · niveau ${esc(cur.cof.niveau)}` : ""}${cur.cof.criticite ? " · " + badge("critique", "b-warn") : ""}</p>` : ""}<div class="fiche">
+      <div><label class="f">Libellé</label><input data-baie="${esc(cur.tag)}" data-bk="libelle" value="${esc(loc.libelle || "")}" placeholder="${esc((cur.cof && cur.cof.libelle) || "")}"></div>
+      <div><label class="f">Emplacement</label><input data-baie="${esc(cur.tag)}" data-bk="emplacement" value="${esc(loc.emplacement || "")}" placeholder="${esc(cur.cof && cur.cof.niveau ? "Niveau " + cur.cof.niveau : "")}"></div></div>
       ${actifs.length ? `<p class="small muted">Actifs WerbMap dans cette baie : ${actifs.map(a => esc(a.id)).join(", ")}</p>` : ""}</div>
       ${outilsTable("bandeaux")}<div class="tablewrap"><table class="t liste" data-table="bandeaux"><thead><tr>${caseTout("bandeaux", l)}<th data-col="position">Position (U)</th><th data-col="tag">TAG du bandeau</th><th data-col="libelle">Libellé</th><th data-col="nbPorts">Ports</th><th data-col="typePort">Type de port</th><th data-col="raccordes">Ports raccordés</th></tr></thead><tbody>
       ${l.map((b, n) => `<tr class="${b.archive ? "archivee" : "clic"}"${b.archive ? ` title="Archivé le ${esc(frDate(b.archive.le))} par ${esc(b.archive.par)}"` : ` data-act="ouvrirBandeau" data-id="${esc(b.id)}"`}>${caseT("bandeaux", n, b)}<td>${esc(b.position)}</td><td><b>${esc(b.tag)}</b></td><td>${esc(b.libelle)}</td><td>${esc(b.nbPorts)}</td><td>${esc(b.typePort)}</td><td>${raccordes(b)} / ${b.raccords.length}</td></tr>`).join("")
@@ -2517,15 +2530,15 @@ const WerbXlsx = (() => {
     const inv = S.inventaire, q = ui.iq.toLowerCase();
     const l = inv.actifs.filter(a => !q || CHAMPS_ACTIF.some(f => String(a[f] || "").toLowerCase().includes(q)));
     const famille = { reseau: "Réseau", physique: "Machine physique", virtuelle: "Machine virtuelle" };
-    return `<h1>Inventaire WerbMap du site</h1><p class="sub">Actifs publiés par WerbMap : ils forment les listes des pages Pare-feu, Switch et Autres assets, rangées par zone. Les coffrets deviennent les baies du brassage.</p>
-      <div class="card"><div class="row"><div>${inv.actifs.length ? `<b>${inv.actifs.length}</b> actif(s) · ${inv.zones.length} zone(s) · site ${esc(inv.site || "—")} · publiés le ${esc(frDate(inv.publieLe) || "—")} · chargés le ${esc(frDate(inv.chargeLe))}<br><span class="small muted">Source : ${esc(inv.source)}</span>` : `<b>Aucun inventaire chargé.</b>`}</div><span class="spacer"></span>
+    return `<h1>Inventaire WerbMap du site</h1><p class="sub">Actifs publiés par WerbMap : ils forment les listes des pages Pare-feu, Switch et Autres assets, rangées par zone. Les coffrets de WerbMap (liste des coffrets et coffrets des actifs) deviennent les baies du brassage.</p>
+      <div class="card"><div class="row"><div>${inv.actifs.length ? `<b>${inv.actifs.length}</b> actif(s) · ${inv.zones.length} zone(s) · ${(inv.coffrets || []).length} coffret(s) · site ${esc(inv.site || "—")} · publiés le ${esc(frDate(inv.publieLe) || "—")} · chargés le ${esc(frDate(inv.chargeLe))}<br><span class="small muted">Source : ${esc(inv.source)}</span>` : `<b>Aucun inventaire chargé.</b>`}</div><span class="spacer"></span>
       <button class="primary" data-act="invEspace"${E.ouvert && LIAISON.site ? "" : " disabled"} title="${E.ouvert && LIAISON.site ? "" : "Ouvrez l'espace et rattachez la base (Intégration WerbSMSI)"}">⟳ Actualiser depuis l'espace</button>
       <button data-act="invFichier">Importer une publication WerbMap…</button></div>
       <p class="small muted">L'inventaire est copié dans la base : les listes restent disponibles sans l'espace. WerbMap ne publie ni adresse IP, ni VLAN, ni numéro de série : ils se saisissent dans les fiches. Une fiche dont l'actif disparaît de WerbMap est conservée et marquée orpheline.</p></div>
       <div class="card"><div class="row" style="margin-bottom:8px"><input placeholder="🔍 Filtrer" id="filtreInv" value="${esc(ui.iq)}" style="max-width:260px"><span class="spacer"></span><span class="small muted">${l.length} actif(s)</span></div>
-      <div class="tablewrap"><table class="t liste" data-table="inventaire"><thead><tr>${[["id", "TAG"], ["libelle", "Libellé"], ["type", "Type"], ["famille", "Famille"], ["zone", "Zone"], ["emplacement", "Emplacement"], ["fiche", "Fiche WerbAssets"]].map(([k, x]) => `<th data-col="${k}">${x}</th>`).join("")}</tr></thead><tbody>
-      ${l.map(a => { const k = catDe(a.id); return `<tr class="clic" data-act="ouvrirFiche" data-tag="${esc(a.id)}"><td><b>${esc(a.id)}</b></td><td>${esc(a.libelle)}</td><td>${esc(a.type)}</td><td>${esc(famille[a.famille] || a.famille || "")}</td><td>${esc(a.zone ? nomZone(a.zone) : "")}</td><td>${esc(emplacementDe(a))}</td>
-        <td>${k ? `${esc(CAT[k].l)} · ${badgeAvancement(ficheDe(a.id), k)}` : `<span class="muted">hors assets réseau</span>`}</td></tr>`; }).join("") || `<tr><td colspan="7" class="empty">Aucun actif.</td></tr>`}</tbody></table></div></div>`;
+      <div class="tablewrap"><table class="t liste" data-table="inventaire"><thead><tr>${[["id", "TAG"], ["libelle", "Libellé"], ["type", "Type"], ["famille", "Famille"], ["zone", "Zone"], ["emplacement", "Emplacement"], ["coffret", "Coffret"], ["fiche", "Fiche WerbAssets"]].map(([k, x]) => `<th data-col="${k}">${x}</th>`).join("")}</tr></thead><tbody>
+      ${l.map(a => { const k = catDe(a.id); return `<tr class="clic" data-act="ouvrirFiche" data-tag="${esc(a.id)}"><td><b>${esc(a.id)}</b></td><td>${esc(a.libelle)}</td><td>${esc(a.type)}</td><td>${esc(famille[a.famille] || a.famille || "")}</td><td>${esc(a.zone ? nomZone(a.zone) : "")}</td><td>${esc(a.emplacement || "")}</td><td>${coffretCase(a.coffret)}</td>
+        <td>${k ? `${esc(CAT[k].l)} · ${badgeAvancement(ficheDe(a.id), k)}` : `<span class="muted">hors assets réseau</span>`}</td></tr>`; }).join("") || `<tr><td colspan="8" class="empty">Aucun actif.</td></tr>`}</tbody></table></div></div>`;
   };
 
   VUES.refs = () => `<h1>Référentiels</h1><p class="sub">Listes de choix des fiches et du brassage. 🏢 Valeurs du groupe, publiées par le portail WerbSMSI : non modifiables ici ; la zone de saisie contient les valeurs 📍 propres au site, une par ligne.</p>
@@ -2558,6 +2571,7 @@ const WerbXlsx = (() => {
       <div class="card"><h2>Objets lus</h2><table class="t"><tbody>
       <tr><td style="width:200px"><code>site:actifs</code></td><td>Inventaire publié par WerbMap : ${S.inventaire.actifs.length} actif(s) chargé(s)${S.inventaire.chargeLe ? ` le ${esc(frDate(S.inventaire.chargeLe))}` : ""}</td></tr>
       <tr><td><code>site:zones</code></td><td>Zones de sécurité publiées par WerbMap (onglets des pages d'assets) : ${S.inventaire.zones.length ? esc(S.inventaire.zones.map(z => z.id).join(", ")) : "aucune"}</td></tr>
+      <tr><td><code>site:coffrets</code></td><td>Coffrets et baies publiés par WerbMap (1.31.0 ou plus récent), baies du brassage même sans actif rangé dedans : ${(S.inventaire.coffrets || []).length ? `${S.inventaire.coffrets.length} coffret(s)` : "aucun (republiez l'inventaire depuis WerbMap)"}</td></tr>
       <tr><td><code>site:vlans</code></td><td>VLAN du plan publiés par WerbMap (1.23.0 ou plus récent), proposés dans les fiches pare-feu et switch : ${S.inventaire.vlans.length ? `${S.inventaire.vlans.length} VLAN` : "aucun (republiez l'inventaire depuis WerbMap)"}</td></tr>
       <tr><td><code>groupe:sites</code></td><td>Liste des sites de l'espace, pour le rattachement</td></tr></tbody></table></div>`;
   };
@@ -3151,6 +3165,22 @@ const WerbXlsx = (() => {
     baie(el) { ui.baie = el.dataset.tag; ui.coche.bandeaux = new Set(); render(); },
     ouvrirFiche(el) { ouvrirFiche(el.dataset.tag, vue === "fiche" ? ui.retour : vue); },
     ouvrirBandeau(el) { ui.sel = { t: "bandeau", id: el.dataset.id }; vue = "bandeau"; render(); $("#main").scrollTop = 0; },
+    // Procédure de sécurisation : « Non applicable » sur toutes les lignes, ou sur celles d'une section (data-s)
+    async ctrlNA(el) {
+      const x = cible(); if (!x || !x.controles || WerbSocle.verrou.lectureSeule) return;
+      const section = el.dataset.s !== undefined ? CONTROLES[+el.dataset.s] : null;
+      const codes = (section ? section[1].map(([c]) => c) : POINTS.map(p => p.code)).filter(c => (x.controles[c] || {}).etat !== "na");
+      if (!codes.length) { toast(section ? "Toutes les lignes de la section sont déjà « Non applicable »." : "Toutes les lignes sont déjà « Non applicable ».", ""); return; }
+      const faits = codes.filter(c => (x.controles[c] || {}).etat === "fait").length;
+      if (!(await confirmer(`Mettre « Non applicable » sur ${codes.length} ligne(s)${section ? ` de la section <b>${esc(section[0])}</b>` : " de la procédure"}${faits ? `, dont <b>${faits} marquée(s) « Fait »</b>` : ""} ? Les valeurs et commentaires saisis sont conservés.`, "Non applicable"))) return;
+      codes.forEach(c => {
+        const o = x.controles[c] = x.controles[c] || { etat: "", valeur: "" }, avant = o.etat;
+        o.etat = "na";
+        journaliser("Modification", objetCible(x), x.tag, libelleChemin(x, `controles.${c}.etat`), avant, "na");
+      });
+      marquer(); rerender();
+      toast(`${codes.length} ligne(s) mise(s) à « Non applicable ».`, "ok");
+    },
     retour() { vue = ui.sel && ui.sel.t === "bandeau" ? "brassage" : CAT[ui.retour] || ["inventaire", "tdb"].includes(ui.retour) ? ui.retour : "tdb"; ui.sel = null; render(); },
     excelCat(el) { ui.xcat = el.dataset.c; vue = "excel"; render(); },
     xcat(el) { ui.xcat = el.dataset.c; render(); },

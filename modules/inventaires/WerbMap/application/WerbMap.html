@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- WerbMap v1.30.0 – Développé par @WerbHat – build novembre 2026 -->
+<!-- WerbMap v1.31.0 – Développé par @WerbHat – build novembre 2026 -->
 <!--
   WerbMap – Cartographie VLAN / Adressage IP / Actifs / Flux
   Module « Inventaires ICS » de WerbSMSI (niveau site). Version : sources/src/signature.js.
@@ -21,7 +21,7 @@
 <title>WerbMap</title>
 <meta name="application-name" content="WerbMap">
 <meta name="author" content="@WerbHat">
-<meta name="generator" content="WerbMap v1.30.0 – Développé par @WerbHat">
+<meta name="generator" content="WerbMap v1.31.0 – Développé par @WerbHat">
 <meta name="description" content="Cartographie VLAN, adressage IP, actifs et flux d'un site">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22%3E%3Crect width=%2232%22 height=%2232%22 rx=%226%22 fill=%22%230d2238%22/%3E%3Cpath d=%22M6 9h20M6 16h20M6 23h20M11 6v20M21 6v20%22 stroke=%22%23ffd27a%22 stroke-width=%222%22/%3E%3Ccircle cx=%2221%22 cy=%2216%22 r=%223.5%22 fill=%22%238fd16a%22/%3E%3C/svg%3E">
 <style>
@@ -36666,7 +36666,7 @@ const WERB = Object.freeze((() => {
   const bytes = [68, 195, 169, 118, 101, 108, 111, 112, 112, 195, 169, 32, 112, 97, 114, 32, 64, 87, 101, 114, 98, 72, 97, 116];
   const signature = new TextDecoder("utf-8").decode(new Uint8Array(bytes));
   const produit = "WerbMap";
-  const version = "1.30.0";
+  const version = "1.31.0";
   return {
     id: "werbmap",
     produit, version, auteur: "@WerbHat", signature,
@@ -38878,6 +38878,9 @@ function smsiActifs(){const zd=smsiZoneDe(),vus=new Set(),out=[];
     out.push(a);}));return out;}
 // VLAN du plan (matrice et réseaux isolés) pour WerbAssets (fiches pare-feu et switch) : ID, nom, réseau, zone, statut, couche ;
 // jamais d'adressage (bloc IP, masque, passerelle) ni de commentaire : les publications restent des synthèses
+// Coffrets et baies (1.31.0) pour WerbAssets (baies du brassage, même sans actif rangé dedans) : TAG, libellé, niveau, criticité — ni commentaire
+function smsiCoffrets(){const vus=new Set(),out=[];S.coffrets.forEach(r=>{const g=(r.tag||'').trim();if(!g||vus.has(upT(g)))return;vus.add(upT(g));
+  const o={id:g};if(String(r.libelle||'').trim())o.libelle=String(r.libelle).trim();if(String(r.niveau||'').trim())o.niveau=String(r.niveau).trim();if(r.crit)o.criticite='critique';out.push(o);});return out;}
 function smsiVlans(){return vlanList().map(v=>{const o={id:v.key,vlan:String(v.id),nom:v.vname||'',reseau:v.nom,statut:v.st||''};if(v.zone)o.zone=v.zone;if(v.sw)o.couche=v.sw;if(v.iso)o.isole=true;return o;});}
 function smsiConduits(){const zd=smsiZoneDe(),m=new Map();
   S.flux.forEach(f=>{if(/^(block|reset)$/i.test(f.action||'')||/^off$/i.test(f.state||''))return;const a=zd.get(upT(f.src)),b=zd.get(upT(f.dst));if(!a||!b||a===b)return;
@@ -38894,7 +38897,7 @@ function smsiFlux(){const zd=smsiZoneDe(),ext=v=>RE_IP_PUB.test(String(v||''))?'
     if(f.proto)o.proto=String(f.proto);if(f.port)o.port=String(f.port);if(f.fw)o.fw=String(f.fw);
     const j=sansIP(f.comment).trim().slice(0,300);if(j)o.justification=j;if(f.interco)o.interco=true;return o;});}
 function renderSmsi(){const E=WerbSocle.espace,L=liaison(),g=E.groupe,ed=can('edit')?'':' disabled';
-  const zs=smsiZones(),cs=smsiConduits(),as=smsiActifs(),sis=smsiSI(),vls=smsiVlans(),fls=smsiFlux(),lie=!!L.site,ok=E.ouvert&&lie&&L.groupeId===g.groupeId;
+  const zs=smsiZones(),cs=smsiConduits(),as=smsiActifs(),sis=smsiSI(),vls=smsiVlans(),fls=smsiFlux(),cfs=smsiCoffrets(),lie=!!L.site,ok=E.ouvert&&lie&&L.groupeId===g.groupeId;
   let h=`<div class="bar"><h2>Intégration WerbSMSI</h2><span class="hint">Module « Inventaires ICS », niveau site. Publie les zones, conduits et actifs du site pour les autres modules (IEC 62443, EBIOS RM, Exploitation).</span></div>
   <div class="panel"><h3>Espace et rattachement</h3>
   ${E.disponible?'':'<p class="warn">Ce navigateur ne permet pas d\'ouvrir un dossier : utilise Microsoft Edge.</p>'}
@@ -38937,7 +38940,7 @@ function renderSmsi(){const E=WerbSocle.espace,L=liaison(),g=E.groupe,ed=can('ed
   <h3 style="margin-top:12px">Écarts proposés</h3>
   <table class="grid" data-releve-ecarts><thead><tr><th>Machine</th><th>Champ</th><th>Valeur actuelle</th><th>Valeur relevée</th><th></th></tr></thead><tbody>${ec.map((e,i)=>`<tr><td class="b">${esc(e.tag)}</td><td>${esc(e.l)}</td><td>${esc(e.avant)||'<span class="hint">vide</span>'}</td><td>${esc(e.apres)}</td><td><button data-relapp="${i}"${ed}>Appliquer</button></td></tr>`).join('')||`<tr><td colspan="5" class="hint">${can('edit')?'Aucun écart : fiches, plan d\'adressage et routes à jour.':'Lecture seule.'}</td></tr>`}</tbody></table>
   ${ec.length>1?`<p><button id="relAppAll"${ed}>Appliquer les ${ec.length} écarts</button></p>`:''}`:'<p class="hint">Aucun relevé importé.</p>'}</div>`;})()}
-  <div class="panel"><h3>Publier vers le site</h3><p>${zs.length} zone(s), ${cs.length} conduit(s), ${as.length} actif(s) (TAG, type, famille, zone, libellé, criticité, emplacement, coffret, OS, hyperviseur, fonction, marque, modèle, version firmware, commentaire) et ${sis.length} système(s) d'information (nom, fonction, D / I / C, ID des VLAN, TAG des actifs : WerbEBIOS les reprend comme biens supports), ainsi que ${vls.length} VLAN (ID, nom, réseau, zone, statut, couche : WerbAssets les propose dans les fiches pare-feu et switch) et les ${fls.length} règle(s) active(s) de la matrice de flux (source et destination par TAG ou nom de réseau, zones, protocole, port, action, pare-feu, justification : WerbCartoSI en tire l'annexe des schémas de flux). Les adresses IP (y compris l'adressage des VLAN et une adresse saisie dans une règle), numéros de série, règles désactivées et le contenu des fiches SI (RACI, saisies) ne sont pas publiés.</p>
+  <div class="panel"><h3>Publier vers le site</h3><p>${zs.length} zone(s), ${cs.length} conduit(s), ${as.length} actif(s) (TAG, type, famille, zone, libellé, criticité, emplacement, coffret, OS, hyperviseur, fonction, marque, modèle, version firmware, commentaire) et ${sis.length} système(s) d'information (nom, fonction, D / I / C, ID des VLAN, TAG des actifs : WerbEBIOS les reprend comme biens supports), ainsi que ${vls.length} VLAN (ID, nom, réseau, zone, statut, couche : WerbAssets les propose dans les fiches pare-feu et switch), ${cfs.length} coffret(s) (TAG, libellé, niveau, criticité : les baies du brassage de WerbAssets) et les ${fls.length} règle(s) active(s) de la matrice de flux (source et destination par TAG ou nom de réseau, zones, protocole, port, action, pare-feu, justification : WerbCartoSI en tire l'annexe des schémas de flux). Les adresses IP (y compris l'adressage des VLAN et une adresse saisie dans une règle), numéros de série, règles désactivées et le contenu des fiches SI (RACI, saisies) ne sont pas publiés.</p>
   ${pending.length?'<p class="warn">Des modifications ne sont pas enregistrées : enregistre une version avant de publier.</p>':''}
   <button class="pri" id="smPub"${ok&&can('edit')&&!pending.length?'':' disabled'}>Publier dans sites/${esc(L.site||'…')}/publications/werbmap.json</button>
   <h3 style="margin-top:14px">Sans espace WerbSMSI : fichier de publication</h3>
@@ -38957,7 +38960,7 @@ function renderSmsi(){const E=WerbSocle.espace,L=liaison(),g=E.groupe,ed=can('ed
     const meta={produit:WERB.produit,appVersion:WERB.version,auteur:WERB.auteur,generateur:WERB.ligne,creeLe:now.slice(0,10),modifieLe:now,modifiePar:USER.login,
       module:WERB.id,portee:'site',publiePar:USER.login,publieLe:now};
     if(L.groupeId)meta.groupeId=L.groupeId;if(L.site)meta.site=L.site;
-    const pub={format:'WERBSMSI-PUBLICATION',schema:1,famille:'WERBSMSI',meta,data:{zones:zs.map(({_vlans,...z})=>sig(z)),conduits:cs.map(sig),actifs:as.map(sig),si:sis.map(sig),vlans:vls.map(sig),flux:fls.map(sig)}};
+    const pub={format:'WERBSMSI-PUBLICATION',schema:1,famille:'WERBSMSI',meta,data:{zones:zs.map(({_vlans,...z})=>sig(z)),conduits:cs.map(sig),actifs:as.map(sig),si:sis.map(sig),vlans:vls.map(sig),flux:fls.map(sig),coffrets:cfs.map(sig)}};
     const nom=`werbmap_publication_${L.site||'SITE'}_${stamp()}.json`;dl(nom,JSON.stringify(pub,null,1),'application/json');
     log('WerbSMSI','publication','Export de publication',nom,'',`${zs.length} zone(s), ${cs.length} conduit(s), ${as.length} actif(s)`);render();
     setStatus('Fichier de publication exporté : à importer dans WerbExploitation (Parc & cycle de vie › Actifs du site (WerbMap) › Importer une publication WerbMap…).');};
@@ -38969,10 +38972,10 @@ function renderSmsi(){const E=WerbSocle.espace,L=liaison(),g=E.groupe,ed=can('ed
     const avant=L.site;delete S.meta.werbsmsi;log('Base','werbsmsi','Intégration WerbSMSI','Site rattaché',avant,'');render();};
   document.querySelectorAll('#s-smsi [data-zs]').forEach(el=>el.onchange=()=>{const code=el.dataset.zs,f=el.dataset.zf,sec=S.meta.zonesSec=S.meta.zonesSec||{},z=sec[code]=sec[code]||{};
     const avant=z[f]||'';z[f]=el.value.trim();if(!z.nom&&!z.slt)delete sec[code];log('Zone de sécurité',code,code,f==='slt'?'SL-T':'Nom publié',avant,el.value.trim());render();});
-  $('#smPub').onclick=async()=>{if(!confirm(`Publier ${zs.length} zone(s), ${cs.length} conduit(s), ${as.length} actif(s) et ${sis.length} SI vers le site ${L.site} ?\nLes modules du site et le groupe pourront les lire.`))return;
-    try{const objets={zones:zs.map(({_vlans,...z})=>z),conduits:cs,actifs:as,si:sis,vlans:vls,flux:fls};
+  $('#smPub').onclick=async()=>{if(!confirm(`Publier ${zs.length} zone(s), ${cs.length} conduit(s), ${as.length} actif(s), ${cfs.length} coffret(s) et ${sis.length} SI vers le site ${L.site} ?\nLes modules du site et le groupe pourront les lire.`))return;
+    try{const objets={zones:zs.map(({_vlans,...z})=>z),conduits:cs,actifs:as,si:sis,vlans:vls,flux:fls,coffrets:cfs};
       const chemin=await E.publier({niveau:'site',site:L.site,objets,utilisateur:USER.login});
-      log('WerbSMSI','publication','Publication',chemin,'',`${zs.length} zone(s), ${cs.length} conduit(s), ${as.length} actif(s), ${sis.length} SI, ${vls.length} VLAN`);render();
+      log('WerbSMSI','publication','Publication',chemin,'',`${zs.length} zone(s), ${cs.length} conduit(s), ${as.length} actif(s), ${sis.length} SI, ${vls.length} VLAN, ${cfs.length} coffret(s)`);render();
       setStatus('Publication effectuée — elle est tracée au journal de la prochaine version.');}catch(e){SMSI_ERR='Publication impossible : '+e.message;render();}};}
 /* Guide du module */
 function renderAide(){const P=(e,t,c)=>`<div class="panel"><h3>${e} ${t}</h3>${c}</div>`;

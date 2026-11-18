@@ -2,7 +2,7 @@
   "charte": "1.0",
   "id": "werbcartosi",
   "produit": "WerbCartoSI",
-  "version": "1.10.0",
+  "version": "1.10.1",
   "dateVersion": "2026-11",
   "auteur": "@WerbHat",
   "signature": "Développé par @WerbHat",
@@ -14,7 +14,7 @@
   "entree": "application/WerbCartoSI.html",
   "empreinte": {
     "algo": "SHA-256",
-    "valeur": "a6d7bca61da50d90fef07727c357583af948aaae923c5dc99dfd5124d3ae752b"
+    "valeur": "2bc61142044275e824bdc4a776b004030a3c8fe8817840e08378f137c2f39622"
   },
   "donnees": {
     "format": "WERBCARTOSI",

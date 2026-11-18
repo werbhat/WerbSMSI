@@ -1,7 +1,7 @@
 # WerbAssets
 
 > Fiches de configuration des assets réseau d'un site : pare-feu, switch, brassage des baies et autres équipements
-> Version **1.9.0** — Développé par **@WerbHat**
+> Version **1.10.0** — Développé par **@WerbHat**
 
 ---
 
@@ -192,7 +192,7 @@ Les guides sont des fichiers Markdown du dossier `guides/`, lisibles aussi hors 
 ## Intégration WerbSMSI
 
 - Rubrique : **Inventaires ICS** ; niveau d'utilisation : **site**.
-- Objets **lus** : `site:actifs`, `site:zones` et `site:vlans` (publication WerbMap du site ; VLAN depuis WerbMap 1.23.0), `groupe:sites` (rattachement), `groupe:listes` (listes de choix du groupe, portail WerbSMSI 1.4 ou plus récent).
+- Objets **lus** : `site:actifs`, `site:zones`, `site:vlans` et `site:coffrets` (publication WerbMap du site ; VLAN depuis WerbMap 1.23.0, coffrets depuis WerbMap 1.31.0 : baies du brassage, même sans actif rangé dedans), `groupe:sites` (rattachement), `groupe:listes` (listes de choix du groupe, portail WerbSMSI 1.4 ou plus récent).
 - **Listes de choix du groupe** (charte §5.9) : dans *⚙️ Base › Référentiels*, les types de port, de bandeau et de lien WAN reçoivent les valeurs publiées par le groupe, affichées 🏢 et non modifiables ; la zone de saisie contient les valeurs 📍 du site. Une valeur retirée par le groupe mais encore employée reste disponible, signalée ⚠ ; un renommage est proposé (*Remplacer*).
 - Objets **publiés** : *aucun*. La configuration des équipements reste dans la base du site.
 - Emplacement des bases : `SMSI_<GROUPE>\sites\<CODE>\inventaires\`.
@@ -232,6 +232,7 @@ python tests\test_listes.py
 python tests\test_theme.py
 python tests\test_correspondance.py
 python tests\test_lot_a.py
+python tests\test_coffrets_na.py
 python tests\test_tables.py
 python tests\test_vlans_position.py
 python tests\test_versions.py
@@ -255,7 +256,7 @@ python <WerbSMSI>\charte\outils\werb_charte.py publier .
 
 ## Historique des versions
 
-Version courante : **1.9.0** de novembre 2026 — versions de la base : commentaire obligatoire à chaque enregistrement, page Versions, journal par version. Versions précédentes : **1.8.0** de novembre 2026 — colonne « Position (U) » dans les listes d'assets ; VLAN de WerbMap importables dans les fiches pare-feu et switch. Versions précédentes : **1.7.0** de novembre 2026 — guide « Maîtriser et durcir les assets du site » et lecteur de guides (❓ Aide, accueil). Versions précédentes : **1.6.0** d'octobre 2026 — sélection multiple et archivage, chercher / remplacer, largeur des colonnes (socle 1.9.0). Versions précédentes : **1.5.1** d'octobre 2026 — correctif : 🖨 PDF du bandeau ; **1.5.0** d'octobre 2026 — bandeau commun (socle 1.8.0, TRV-7) ; **1.4.0** d'octobre 2026 — suppression d'une baie, colonnes N° étroites, couleur des ports selon l'état, repère fil/brin ; **1.3.0** d'octobre 2026 — modèle, version firmware et commentaire repris de WerbMap ; **1.2.0** d'octobre 2026 — thème clair / sombre (socle 1.7.1) ; **1.1.0** d'octobre 2026 — page Référentiels (types de port, de bandeau, de lien WAN) et listes de choix reçues du groupe (charte §5.9) ; **1.0.0** d'octobre 2026 — première version : fiches pare-feu, switch et autres assets par type et par zone d'après l'inventaire WerbMap, procédure de sécurisation, brassage des baies, saisie Excel avec rapport d'import, impression. Détail dans [CHANGELOG.md](CHANGELOG.md).
+Version courante : **1.10.0** de novembre 2026 — coffrets de WerbMap dans le brassage (`site:coffrets`), colonne Coffret dans les listes, « Non applicable » en un clic dans la procédure de sécurisation. Versions précédentes : **1.9.0** de novembre 2026 — versions de la base : commentaire obligatoire à chaque enregistrement, page Versions, journal par version. Versions précédentes : **1.8.0** de novembre 2026 — colonne « Position (U) » dans les listes d'assets ; VLAN de WerbMap importables dans les fiches pare-feu et switch. Versions précédentes : **1.7.0** de novembre 2026 — guide « Maîtriser et durcir les assets du site » et lecteur de guides (❓ Aide, accueil). Versions précédentes : **1.6.0** d'octobre 2026 — sélection multiple et archivage, chercher / remplacer, largeur des colonnes (socle 1.9.0). Versions précédentes : **1.5.1** d'octobre 2026 — correctif : 🖨 PDF du bandeau ; **1.5.0** d'octobre 2026 — bandeau commun (socle 1.8.0, TRV-7) ; **1.4.0** d'octobre 2026 — suppression d'une baie, colonnes N° étroites, couleur des ports selon l'état, repère fil/brin ; **1.3.0** d'octobre 2026 — modèle, version firmware et commentaire repris de WerbMap ; **1.2.0** d'octobre 2026 — thème clair / sombre (socle 1.7.1) ; **1.1.0** d'octobre 2026 — page Référentiels (types de port, de bandeau, de lien WAN) et listes de choix reçues du groupe (charte §5.9) ; **1.0.0** d'octobre 2026 — première version : fiches pare-feu, switch et autres assets par type et par zone d'après l'inventaire WerbMap, procédure de sécurisation, brassage des baies, saisie Excel avec rapport d'import, impression. Détail dans [CHANGELOG.md](CHANGELOG.md).
 
 ---
 
