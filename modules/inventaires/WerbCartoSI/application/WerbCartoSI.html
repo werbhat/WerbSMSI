@@ -1,5 +1,5 @@
 <!doctype html>
-<!-- WerbCartoSI v1.10.1 – Développé par @WerbHat – build novembre 2026 -->
+<!-- WerbCartoSI v1.10.3 – Développé par @WerbHat – build novembre 2026 -->
 <html lang="fr">
 <head>
 <meta charset="utf-8">
@@ -9,7 +9,7 @@
 <title>WerbCartoSI</title>
 <meta name="application-name" content="WerbCartoSI">
 <meta name="author" content="@WerbHat">
-<meta name="generator" content="WerbCartoSI v1.10.1 – Développé par @WerbHat">
+<meta name="generator" content="WerbCartoSI v1.10.3 – Développé par @WerbHat">
 <meta name="description" content="Registre des schémas d'architecture d'un site : exigences couvertes, versions, revues, approbation, liens vers les fichiers">
 <style>/*! WerbCartoSI – Développé par @WerbHat */
 :root {
@@ -179,7 +179,7 @@ const WERB = Object.freeze((() => {
   const bytes = [68, 195, 169, 118, 101, 108, 111, 112, 112, 195, 169, 32, 112, 97, 114, 32, 64, 87, 101, 114, 98, 72, 97, 116];
   const signature = new TextDecoder("utf-8").decode(new Uint8Array(bytes));
   const produit = "WerbCartoSI";
-  const version = "1.10.1";
+  const version = "1.10.3";
   return {
     id: "werbcartosi",
     produit, version, auteur: "@WerbHat", signature,
@@ -2761,9 +2761,9 @@ const WerbEbauche = (() => {
     S.refs.exigences.filter(([c]) => couverture(c).etat === "non").forEach(([c]) => a.push([`Exigence non couverte : ${exigNom(c)}`, "exigences"]));
     S.nonApplicables.filter(naARevoir).forEach(n => a.push([`Non-applicabilité à revoir : ${n.exigence}${n.si ? ` pour ${n.si}` : ""} (décidée le ${frDate(n.decideLe)}${n.revueLe ? `, revue le ${frDate(n.revueLe)}` : ""})`, "exigences"]));
     items("si").forEach(x => {
-      if (couvertureSI(x.id).etat === "non") { a.push([`SI sans schéma : ${x.id} ${x.nom}`, "exigences"]); return; }
+      if (couvertureSI(x.id).etat === "non") { a.push([`SI sans schéma : ${x.nom || x.id}`, "exigences"]); return; }
       const m = exigencesSI().filter(([c]) => { const v = couvertureCase(c, x); return v.attendue && v.etat === "non"; }).map(([c]) => c);
-      if (m.length) a.push([`SI ${x.id} ${x.nom} : schéma attendu absent pour ${m.join(", ")}`, "exigences"]);
+      if (m.length) a.push([`SI ${x.nom || x.id} : schéma attendu absent pour ${m.join(", ")}`, "exigences"]);
     });
     S.schemas.forEach(s => pointsSchema(s).forEach(m => a.push([`${s.id} ${s.titre} : ${m}`, "fiche:" + s.id])));
     return a;
@@ -2871,7 +2871,7 @@ const WerbEbauche = (() => {
       <p class="small"><b>Attendue pour</b> ${esc(porteeLib(c))}.</p>
       ${cv.na ? `<div class="infobox small"><b>Non applicable</b> : ${esc(naTexte(cv.na))}.</div>` : ""}
       <h3>Schémas en vigueur</h3>${lignes ? `<div class="tablewrap"><table class="t"><thead><tr><th>ID</th><th>Schéma</th><th>Version</th><th>Statut</th><th>Propriétaire</th><th>Approbation</th><th>Revue</th><th>Empreinte SHA-256</th></tr></thead><tbody>${lignes}</tbody></table></div>` : `<p class="muted">Aucun schéma.</p>`}
-      ${sis.length ? `<h3>Par système d'information</h3><div class="tablewrap"><table class="t"><thead><tr><th>SI</th><th>Couverture</th><th>Schémas ou décision</th></tr></thead><tbody>${sis.map(([x, v]) => `<tr><td><b>${esc(x.id)}</b> ${esc(x.nom)}</td><td>${couvBadge(v.etat)}</td>
+      ${sis.length ? `<h3>Par système d'information</h3><div class="tablewrap"><table class="t"><thead><tr><th>SI</th><th>Couverture</th><th>Schémas ou décision</th></tr></thead><tbody>${sis.map(([x, v]) => `<tr><td><b>${esc(x.nom || x.id)}</b></td><td>${couvBadge(v.etat)}</td>
         <td class="small">${v.na ? esc(naTexte(v.na)) : v.schemas.map(s => `${esc(s.id)} v${esc(s.version)}`).join(", ") || `<span class="muted">aucun</span>`}</td></tr>`).join("")}</tbody></table></div>` : ""}
       ${flux ? `<h3>Matrice des flux (WerbMap, reçue le ${esc(frDate(recu("flux").majLe))})</h3>${tableFlux(flux)}` : ""}</section>`;
   }
@@ -2918,7 +2918,7 @@ const WerbEbauche = (() => {
       <input id="filtreSch" type="search" placeholder="Rechercher" value="${esc(ui.q)}" style="max-width:200px">
       <select id="filtreExig">${opt(S.refs.exigences.map(([c, l]) => [c, `${c} — ${l}`]), ui.fe, "Toutes les exigences")}</select>
       <select id="filtreType">${opt(S.refs.types, ui.ft, "Tous les types")}</select>
-      ${recu("si") ? `<select id="filtreSI">${opt(items("si").map(x => [x.id, `${x.id} — ${x.nom}`]), ui.fsi, "Tous les SI")}</select>` : ""}
+      ${recu("si") ? `<select id="filtreSI">${opt(items("si").map(x => [x.id, x.nom || x.id]), ui.fsi, "Tous les SI")}</select>` : ""}
       <select id="filtreStatut">${opt([...STATUTS.map(t => [t[0], t[1]]), ["arevoir", "Revue dépassée"]], ui.fs, "Tous les statuts")}</select>
       <label class="chk-in"><input type="checkbox" id="vuePlat"${ui.plat ? " checked" : ""}> Liste à plat</label></div>`;
     let corps;
@@ -3017,14 +3017,14 @@ const WerbEbauche = (() => {
   // Périmètre WerbMap : SI, zones et actifs publiés par le site (CSI-7)
   function perimetreMap(s, dis) {
     const absents = absentsMap(s);
-    const cases = (k, l, lib) => l.map(x => `<label class="chk-in"><input type="checkbox" data-sref="${k}" value="${esc(x.id)}"${s[k].includes(x.id) ? " checked" : ""}${dis}> <span class="mono">${esc(x.id)}</span> <span class="small">${esc(lib(x))}</span></label>`).join("");
+    const cases = (k, l, lib, sansId) => l.map(x => `<label class="chk-in"><input type="checkbox" data-sref="${k}" value="${esc(x.id)}"${s[k].includes(x.id) ? " checked" : ""}${dis}> ${sansId ? `<span>${esc(lib(x))}</span>` : `<span class="mono">${esc(x.id)}</span> <span class="small">${esc(lib(x))}</span>`}</label>`).join("");
     if (!recu("si") && !recu("zones") && !recu("actifs")) return `<div class="card" data-perimetre-map><h2>Périmètre WerbMap</h2><p class="small muted">Ouvrez l'espace et rattachez la base au site : les SI, zones et actifs publiés par WerbMap pourront être liés au schéma.</p>
       ${[...s.sis, ...s.zones, ...s.actifs].length ? `<p class="small">Liens enregistrés : <span class="mono">${esc([...s.sis, ...s.zones, ...s.actifs].join(", "))}</span></p>` : ""}</div>`;
     const q = norm(ui.fa), parSI = new Set(items("si").filter(x => s.sis.includes(x.id)).flatMap(x => x.actifs));
     const acts = items("actifs").filter(x => s.actifs.includes(x.id) || !q || norm([x.id, x.libelle, x.type, x.zone].join(" ")).includes(q)).slice(0, 300);
     return `<div class="card" data-perimetre-map><h2>Périmètre WerbMap</h2><p class="small muted">Ce que le schéma représente, d'après l'inventaire publié par WerbMap (reçu le ${esc(frDate((recu("si") || recu("actifs") || {}).majLe))}). Sert à la couverture des SI et sera publié avec la couverture.</p>
       ${absents.length ? `<div class="warnbox small">Absent de la dernière publication de WerbMap : <span class="mono">${esc(absents.join(", "))}</span> (renommé ou retiré dans WerbMap).</div>` : ""}
-      <label class="f">Systèmes d'information</label><div class="chk-grille">${cases("sis", items("si"), x => x.nom) || `<span class="muted small">Aucun SI publié.</span>`}</div>
+      <label class="f">Systèmes d'information</label><div class="chk-grille">${cases("sis", items("si"), x => x.nom || x.id, true) || `<span class="muted small">Aucun SI publié.</span>`}</div>
       <label class="f">Zones</label><div class="chk-grille">${cases("zones", items("zones"), x => x.nom) || `<span class="muted small">Aucune zone publiée.</span>`}</div>
       <label class="f">Actifs</label>${parSI.size ? `<p class="small muted">Actifs des SI cochés : <span class="mono">${esc([...parSI].join(", "))}</span></p>` : ""}
       <input id="filtreActifs" type="search" placeholder="Filtrer les actifs (TAG, libellé, type, zone)" value="${esc(ui.fa)}" style="max-width:340px;margin-bottom:6px">
@@ -3093,14 +3093,14 @@ const WerbEbauche = (() => {
     const e = ui.eb || {}, dd = ebaucheDonnees();
     return WerbEbauche.construire(Object.assign(dd, { titre: e.titre || "Zones et conduits", id, site: LIAISON.site || "SITE", siteNom: S.site.nom, organisation: E.ouvert && E.groupe ? E.groupe.organisation || "" : "",
       version: "0.1", date: frDate(auj()), auteur: user, proprietaire: e.proprietaire || "", classification: "Diffusion restreinte", exigences: "EX-ZONES, EX-CARTO",
-      perimetre: dd.si ? `SI ${dd.si.id} ${dd.si.nom}` : "tout le site", genereLe: frDate(auj()), examiner: pointsFlux }));
+      perimetre: dd.si ? `SI ${dd.si.nom || dd.si.id}` : "tout le site", genereLe: frDate(auj()), examiner: pointsFlux }));
   }
   function ebaucheHtml() {
     if (!recu("zones") || !recu("actifs")) return `<div class="card" data-ebauche><h2>Ébauche depuis WerbMap</h2><p class="muted small">Ouvrez l'espace et rattachez la base au site : les zones, actifs, conduits et flux publiés par WerbMap permettent de générer une ébauche du schéma « Zones et conduits ».</p></div>`;
     const e = ui.eb = ui.eb || { perim: "", titre: "Zones et conduits", proprietaire: "" }, r = ebauche(prochainId());
     return `<div class="card" data-ebauche><h2>Ébauche « Zones et conduits » depuis WerbMap</h2>
       <p class="small muted">Le module dessine une première version du schéma à partir de l'inventaire publié par WerbMap : zones (couleur de criticité, SL-T), actifs de chaque zone (TAG), conduits entre zones avec le pare-feu de la matrice de flux, tableau des conduits, légende et cartouche rempli. Le fichier Visio est enregistré dans le dossier des schémas et sa fiche est créée en brouillon (EX-ZONES, EX-CARTO), liée aux SI et aux zones. <b>Une ébauche se reprend à la main</b> : disposition, regroupements, libellés ; comparez-la au terrain avant de l'approuver.</p>
-      <div class="fiche"><div><label class="f" for="ebPerim">Périmètre</label><select id="ebPerim">${opt(items("si").map(x => [x.id, `SI ${x.id} — ${x.nom}`]), e.perim, "Tout le site")}</select></div>
+      <div class="fiche"><div><label class="f" for="ebPerim">Périmètre</label><select id="ebPerim">${opt(items("si").map(x => [x.id, `SI ${x.nom || x.id}`]), e.perim, "Tout le site")}</select></div>
         <div class="lg"><label class="f" for="ebTitre">Titre</label><input id="ebTitre" value="${esc(e.titre)}"></div>
         <div><label class="f" for="ebProp">Propriétaire (fonction)</label><input id="ebProp" value="${esc(e.proprietaire)}" placeholder="Ex. Responsable automatisme"></div></div>
       <p class="small" style="margin-top:8px" data-ebauche-bilan>${r.stats.zones} zone(s), ${r.stats.conduits} conduit(s)${r.stats.sansParefeu ? ` · ${badge(`${r.stats.sansParefeu} conduit(s) sans pare-feu dans la matrice`, "b-warn")}` : ""}</p>
@@ -3413,7 +3413,7 @@ const WerbEbauche = (() => {
     } else WerbSocle.telecharger(blob, nom, WerbVisio.TYPE);
     const chemin = LIAISON.site ? `${siteDossier()}/${enreg}` : "";
     if (chemin && espaceOk()) { try { const g = await E.fichier(chemin); present = !!g && g.size === blob.size; } catch (err) { present = false; } }
-    const perim = dd.si ? `SI ${dd.si.id} ${dd.si.nom}` : "tout le site";
+    const perim = dd.si ? `SI ${dd.si.nom || dd.si.id}` : "tout le site";
     const s = normSchema({ id, titre, type: S.refs.types.includes("Zones et conduits") ? "Zones et conduits" : "", exigences: ["EX-ZONES", "EX-CARTO"].filter(c => S.refs.exigences.some(x => x[0] === c)),
       classification: "Diffusion restreinte", version: "0.1", proprietaire: e.proprietaire || "", responsable: user, format: "Visio", statut: "brouillon", creeLe: auj(), modele: "Ébauche WerbMap",
       perimetre: `Ébauche générée depuis WerbMap (${perim}) : à reprendre et à comparer au terrain`, sis: dd.si ? [dd.si.id] : items("si").map(x => x.id), zones: r.formes.length ? dd.zones.map(z => z.id) : [],

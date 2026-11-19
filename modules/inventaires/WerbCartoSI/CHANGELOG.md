@@ -3,6 +3,16 @@
 Toutes les évolutions notables de WerbCartoSI sont consignées ici.
 Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/), numérotation [SemVer](https://semver.org/lang/fr/).
 
+## [1.10.3] — 2026-11
+
+### Changements
+- Fiche d'un schéma › *Périmètre WerbMap* : les cases des **systèmes d'information** liés affichent le nom du SI seul, sans son identifiant (repli sur l'identifiant si le SI n'a pas de nom). Zones et actifs gardent leur identifiant (TAG).
+
+## [1.10.2] — 2026-11
+
+### Changements
+- Les SI sont désormais affichés par leur **nom** seul partout où l'identifiant technique apparaissait encore (repli sur l'identifiant si le SI n'a pas de nom) : tableau « Par système d'information » du détail d'une exigence et du dossier de preuve, liste de filtre par SI, choix du périmètre de l'ébauche « Zones et conduits » (et mention du périmètre dans l'ébauche et la fiche créée), points d'attention du tableau de bord. L'identifiant reste la clé des liens, des données et du journal.
+
 ## [1.10.1] — 2026-11
 
 ### Changements

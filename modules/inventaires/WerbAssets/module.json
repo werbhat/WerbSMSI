@@ -2,7 +2,7 @@
   "charte": "1.0",
   "id": "werbassets",
   "produit": "WerbAssets",
-  "version": "1.10.0",
+  "version": "1.14.0",
   "dateVersion": "2026-11",
   "auteur": "@WerbHat",
   "signature": "Développé par @WerbHat",
@@ -14,7 +14,7 @@
   "entree": "application/WerbAssets.html",
   "empreinte": {
     "algo": "SHA-256",
-    "valeur": "9a8702d73dd2494f86639c472876b17f146dd17ffdc18814b01de29e7e30acbd"
+    "valeur": "4bb135c676f6db4931da2ea796ad76411c6cdb8cffbdf85fd995e18376fc7634"
   },
   "donnees": {
     "format": "WERBASSETS",
@@ -77,6 +77,68 @@
         "MPLS",
         "Liaison louée",
         "Satellite"
+      ]
+    },
+    {
+      "id": "couleursBrin",
+      "libelle": "Couleurs de brin (RJ45, fibre optique)",
+      "forme": "simple",
+      "defaut": [
+        "Blanc/Orange",
+        "Orange",
+        "Blanc/Vert",
+        "Vert",
+        "Blanc/Bleu",
+        "Bleu",
+        "Blanc/Marron",
+        "Marron",
+        "Gris",
+        "Blanc",
+        "Rouge",
+        "Noir",
+        "Jaune",
+        "Violet",
+        "Rose",
+        "Turquoise",
+        "Bleu (traceur noir)",
+        "Orange (traceur noir)",
+        "Vert (traceur noir)",
+        "Marron (traceur noir)",
+        "Gris (traceur noir)",
+        "Blanc (traceur noir)",
+        "Rouge (traceur noir)",
+        "Noir (traceur jaune)",
+        "Jaune (traceur noir)",
+        "Violet (traceur noir)",
+        "Rose (traceur noir)",
+        "Turquoise (traceur noir)"
+      ]
+    },
+    {
+      "id": "typesCable",
+      "libelle": "Types de câble de liaison",
+      "forme": "simple",
+      "defaut": [
+        "Fibre multimode OM3",
+        "Fibre multimode OM4",
+        "Fibre monomode OS2",
+        "Cuivre Cat 6 U/UTP",
+        "Cuivre Cat 6A F/FTP",
+        "Cuivre Cat 7 S/FTP",
+        "Multipaire téléphonique",
+        "Autre"
+      ]
+    },
+    {
+      "id": "typesCordon",
+      "libelle": "Types de cordon de brassage",
+      "forme": "simple",
+      "defaut": [
+        "Cordon RJ45",
+        "Jarretière optique LC-LC",
+        "Jarretière optique SC-SC",
+        "Jarretière optique LC-SC",
+        "Autre"
       ]
     }
   ],

@@ -3,8 +3,62 @@
 Toutes les évolutions notables de WerbAssets sont consignées ici.
 Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/), numérotation [SemVer](https://semver.org/lang/fr/).
 
+## [1.14.0] — 2026-11
 
+### Ajouts
+- **Inventaire des câbles de liaison** (menu *Assets › 🧵 Câbles de liaison*) : un câble multibrin par ligne — repère, type, nombre de brins ou de fils, tenant, aboutissant, longueur, commentaire — avec les **brins raccordés** (ports des bandeaux qui citent le câble / nombre de brins, brins libres) et les **bandeaux et ports** qui le raccordent (lien vers le bandeau). Filtre, **+ Câble** ; un câble raccordé ne se supprime pas. Renommer un câble ou changer son type dans l'inventaire met à jour tous ses ports. Tenant et aboutissant vides : ceux des ports proposés en grisé.
+- **Type de câble** dans le groupe du câble (fiche du bandeau) : nouvelle colonne entre *Repère câble liaison* et *Brin*, dans le même encadré que *Tenant* et le repère, saisie une fois pour tout le câble ; tenue dans l'inventaire (l'inventaire fait foi, les ports suivent). Liste *Types de câble de liaison* (fibre multimode OM3, OM4, monomode OS2, cuivre Cat 6 U/UTP, Cat 6A F/FTP, Cat 7 S/FTP, multipaire téléphonique, autre), modifiable dans *Référentiels*.
+- **Repère câble liaison** proposé depuis l'inventaire ; un nouveau repère saisi dans un bandeau est **ajouté à l'inventaire** (type et tenant du port, aboutissant = baie et bandeau) ; renommé sur ses ports, le câble est renommé dans l'inventaire s'il n'est plus cité ailleurs. Une valeur de remplissage (nc, n/a, -, ?, néant) n'est jamais ajoutée.
+- **Tenant** proposé depuis la liste commune des **coffrets et baies** (coffrets WerbMap, baies saisies) et des bandeaux (« BAIE / bandeau »).
+- Contrôle : câble dont plus de ports sont raccordés que de brins — signalé dans l'inventaire et au tableau de bord.
+- Excel : feuille **Câbles de liaison** dans le classeur du brassage (modèle, export, import) ; à l'import, les câbles cités par les raccordements sont ajoutés à l'inventaire (avertissement du rapport). Un classeur antérieur sans cette feuille s'importe (avertissement « feuille absente »).
 
+### Changements
+- *Câble de liaison* redevient **Repère câble liaison** (l'ancien libellé reste accepté à l'import Excel).
+
+### Format de données
+- `cables` : liste `{ id, repere, type, nbBrins, tenant, aboutissant, longueur, commentaire }` ; `bandeaux[].raccords[].typeCable` (copie du type du câble) ; `refs.typesCable`. Une base antérieure reçoit à l'ouverture les câbles cités par ses raccordements. Schéma inchangé.
+
+## [1.13.0] — 2026-11
+
+### Changements
+- **Câble de liaison fusionné** : un seul encadré par câble, qui englobe **Tenant** et **Câble de liaison** ; le nom du câble et le tenant ne sont écrits que sur la première ligne du groupe (sur les lignes suivantes, la valeur réapparaît quand on clique dans la case). Saisir le tenant ou renommer le câble sur la **première ligne** s'applique à **tout le groupe** (tenant : lignes vides ou égales à l'ancienne valeur ; chaque port inscrit au journal). Un tenant différent sur une ligne du groupe reste affiché, en couleur d'alerte.
+
+### Ajouts
+- **Couleurs de brin** : liste *Couleurs de brin (RJ45, fibre optique)* proposée dans la colonne **Brin** et modifiable dans *Référentiels* (gérée au groupe) : paires RJ45 T568A/B (Blanc/Orange, Orange, Blanc/Vert, Vert, Blanc/Bleu, Bleu, Blanc/Marron, Marron), fibres 1 à 12 selon le code TIA-598 (Bleu, Orange, Vert, Marron, Gris, Blanc, Rouge, Noir, Jaune, Violet, Rose, Turquoise) et 13 à 24 (même couleur avec traceur noir, Noir avec traceur jaune). **Pastille de couleur** dans la case (bicolore pour une paire, à traceur pour une fibre 13 à 24). Un repère libre (F12-B3) reste accepté.
+
+### Format de données
+- `refs.couleursBrin` (`module.json › listes`). Champs des raccordements inchangés. Schéma inchangé.
+
+## [1.12.0] — 2026-11
+
+### Changements
+- **Raccordements rangés comme le bandeau** : à gauche du N°, l'**arrière** (tenant : câble multibrin vers une autre baie), à droite l'**avant** (aboutissant : brassage, câble et actif). Une ligne au-dessus des en-têtes nomme les trois côtés (« ◀ Arrière · tenant », « Port », « Avant · aboutissant ▶ »), en-têtes teintés par côté, N° et dessin ⇅ encadrés ; même ligne à l'impression.
+- **Libellés harmonisés**, explication de chaque colonne en infobulle :
+
+  | Côté | Avant 1.12.0 | Depuis 1.12.0 |
+  |---|---|---|
+  | Arrière | Libellé tenant · Repère câble liaison · Repère fil/brin · Détail raccordement | Tenant · Câble de liaison · Brin · Détail |
+  | Port | N° | N° |
+  | Avant | Réseau / usage · Brassé vers · Cordon · Repère cordon · Rep. câble · Rep. aboutissant · Raccordement actif · Commentaires | Réseau / usage · Brassé vers · Cordon · Repère cordon · Repère câble · Aboutissant · Actif · Commentaire |
+
+- **Import Excel** : les classeurs aux anciens en-têtes s'importent toujours (anciens libellés reconnus). L'export et le modèle de saisie suivent le nouvel ordre. Données inchangées (mêmes champs).
+
+## [1.11.0] — 2026-11
+
+### Ajouts
+- **Brassage entre ports** (fiche d'un bandeau, tableau *Raccordements*) : colonnes **Brassé vers** (numéro d'un port du bandeau, « 5 » ou « port 5 », ou port d'un autre bandeau « BD-A2/12 », proposés dans une liste), **Cordon** (liste *Types de cordon de brassage* : cordon RJ45, jarretières optiques LC-LC, SC-SC, LC-SC, autre) et **Repère cordon**. Le lien est tenu **dans les deux sens** : le port d'en face reçoit le lien retour, le cordon et le repère ; changer le cordon ou le repère d'un côté change l'autre ; effacer le lien le retire des deux côtés ; brasser un port déjà brassé défait l'ancien lien (message). Saisie refusée : port inexistant, port brassé vers lui-même, bandeau inconnu. Un cordon à deux brins (duplex) = deux liens portant le même repère.
+- **Dessin du brassage** (colonne ⇅ après N°) : un trait entre les deux ports de chaque lien du bandeau, une couleur par repère de cordon (cordon, repère et ports en infobulle) ; ↗ pour un lien vers un autre bandeau.
+- **Câble de liaison** : les lignes consécutives du même *Repère câble liaison* sont regroupées (fond et cadre de couleur, nom en clair sur la première ligne).
+- **Reprise des repères** : quand deux ports sont brassés et que leur *Rep. câble* porte le même repère (ex. C-101 saisi avant cette version), il est déplacé vers *Repère cordon* sur les deux ports.
+- **Contrôles** : lien sans retour, port ou bandeau d'en face inexistant, repère de cordon sur plus de deux liens de la baie — signalés sur la fiche du bandeau et au tableau de bord (*Brassage entre ports*).
+- Un port brassé compte comme raccordé ; suppression d'un port ou d'un bandeau : le lien retour est retiré ; renommage d'un bandeau : les liens des autres bandeaux suivent ; import Excel : le lien retour est complété sur le port d'en face resté vide (avertissement du rapport). *Chercher / remplacer* ne porte pas sur « Brassé vers ».
+
+### Format de données
+- `bandeaux[].raccords[]` : `brasseVers` (« 5 » ou « TAG/5 »), `cordon`, `repCordon` ; `refs.typesCordon` (liste de choix, gérée au groupe : `module.json › listes`). Schéma inchangé.
+
+### Tests
+- `tests/test_brassage_ports.py`.
 
 ## [1.10.0] — 2026-11
 

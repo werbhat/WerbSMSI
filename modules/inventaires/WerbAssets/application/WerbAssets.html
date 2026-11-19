@@ -1,5 +1,5 @@
 <!doctype html>
-<!-- WerbAssets v1.10.0 – Développé par @WerbHat – build novembre 2026 -->
+<!-- WerbAssets v1.14.0 – Développé par @WerbHat – build novembre 2026 -->
 <html lang="fr">
 <head>
 <meta charset="utf-8">
@@ -9,7 +9,7 @@
 <title>WerbAssets</title>
 <meta name="application-name" content="WerbAssets">
 <meta name="author" content="@WerbHat">
-<meta name="generator" content="WerbAssets v1.10.0 – Développé par @WerbHat">
+<meta name="generator" content="WerbAssets v1.14.0 – Développé par @WerbHat">
 <meta name="description" content="Fiches de configuration des assets réseau d'un site : pare-feu, switch, brassage des baies et autres équipements">
 <style>/*! WerbAssets – Développé par @WerbHat */
 :root {
@@ -22,7 +22,10 @@
 :root { --navy-fond: #1f3864; --info-bg: #e8eef9; --th: #fafbfc; --champ: #fff; --bandeau-pill: rgba(255,255,255,.15); --bandeau-bord: rgba(255,255,255,.4); --modif: #c27a00; --info: #1b4b8a; --warn-t: #5b4300; --rubrique-bg: #eef2f7; --voile: rgba(20,30,50,.45); --ombre: rgba(0,0,0,.18); --toast: #1d2330; --toast-ok: #2e7d32; --toast-ko: #b3261e;
   --onglet: #eef2f7; --onglet-n: #dbe5f5; --survol: #f3f7fd; --bloque-bg: #f6f7f9;
   /* Couleurs métier (classeur) : états des interfaces et des ports, inchangées */
-  --etat-service: #70ad47; --etat-reserve: #e53935; --etat-cours: #ffc000; }
+  --etat-service: #70ad47; --etat-reserve: #e53935; --etat-cours: #ffc000;
+  --fil-bleu: #1f6feb; --fil-orange: #f28c28; --fil-vert: #2e9d4c; --fil-marron: #8b5a2b; --fil-gris: #8c959f; --fil-blanc: #ffffff; --fil-rouge: #d73a31;
+  --fil-noir: #1b1f24; --fil-jaune: #f4d03f; --fil-violet: #8e44ad; --fil-rose: #f49ac1; --fil-turquoise: #1abc9c;
+  --brs-0: #e5484d; --brs-1: #30a46c; --brs-2: #3e63dd; --brs-3: #f76b15; --brs-4: #8e4ec6; --brs-5: #12a594; --brs-6: #d6409f; --brs-7: #a18072; }
 @media screen {
   :root[data-theme=sombre] { --info: #9cc1f5; --warn-t: #e8c06a; --rubrique-bg: #1f2a38; --voile: rgba(0,0,0,.6); --ombre: rgba(0,0,0,.5); --toast: #2e3947; --onglet: #1c2632; --onglet-n: #26406a; --survol: #1c2a3b; --bloque-bg: #1a2029; }
 }
@@ -197,6 +200,45 @@ tr.archivee td.sel { opacity: 1; }
 .outils-t { margin: 4px 0 8px; gap: 8px; flex-wrap: wrap; }
 label.chk-in { display: inline-flex; gap: 6px; align-items: center; font-size: 13px; }
 label.chk-in input { width: auto; }
+
+/* Brassage entre ports (1.11.0) : colonne ⇅ — un trait par lien entre deux ports du bandeau, une couleur par repère de cordon */
+table.t.edit th.brs, table.t.edit td.brs { min-width: 14px; padding: 0; position: relative; }
+table.t.edit th.brs { text-align: center; }
+td.brs i { position: absolute; display: block; pointer-events: auto; }
+td.brs i.v { width: 0; border-left: 2px solid currentColor; }
+td.brs i.v.deb { top: 50%; bottom: -1px; }
+td.brs i.v.mil { top: 0; bottom: -1px; }
+td.brs i.v.fin { top: 0; bottom: 50%; }
+td.brs i.h { left: 0; top: calc(50% - 1px); height: 0; border-top: 2px solid currentColor; }
+td.brs i.h::before { content: ""; position: absolute; left: -1px; top: -4px; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+td.brs .ext { position: absolute; left: 3px; top: 50%; transform: translateY(-50%); font-size: 12px; color: var(--muted); cursor: help; }
+td.brs .c0 { color: var(--brs-0); } td.brs .c1 { color: var(--brs-1); } td.brs .c2 { color: var(--brs-2); } td.brs .c3 { color: var(--brs-3); }
+td.brs .c4 { color: var(--brs-4); } td.brs .c5 { color: var(--brs-5); } td.brs .c6 { color: var(--brs-6); } td.brs .c7 { color: var(--brs-7); }
+/* Repère câble liaison : lignes consécutives du même câble regroupées (fond teinté, cadre du groupe) */
+/* Fusion (1.13.0) : Tenant + Câble de liaison dans un seul encadré ; valeur répétée masquée (visible à la saisie) */
+table.t.edit td.liai { background: color-mix(in srgb, var(--liai) 14%, transparent); }
+table.t.edit td.liai.gt { border-left: 3px solid var(--liai); }
+table.t.edit td.liai.gy { border-right: 3px solid var(--liai); }
+table.t.edit td.liai.deb { border-top: 3px solid var(--liai); }
+table.t.edit td.liai:not(.fin) { border-bottom-color: transparent; }
+table.t.edit td.liai.fin { border-bottom: 3px solid var(--liai); }
+table.t.edit td.liai.deb input { font-weight: 600; }
+table.t.edit td.liai.suite input:not(:focus) { color: transparent; background: transparent; border-color: transparent; }
+table.t.edit td.liai.ecart input { color: var(--warn); }
+td.liai.g0 { --liai: var(--brs-1); } td.liai.g1 { --liai: var(--brs-2); } td.liai.g2 { --liai: var(--brs-3); } td.liai.g3 { --liai: var(--brs-4); }
+
+/* Raccordements (1.12.0) : côtés du bandeau — arrière (tenant) à gauche, port au centre, avant (aboutissant) à droite */
+table.t tr.cotes th { position: static; text-align: center; font-size: 11px; text-transform: uppercase; letter-spacing: .03em; border-bottom: 2px solid var(--line); }
+table.t th.cote-t { background: color-mix(in srgb, var(--brs-2) 12%, var(--th)); }
+table.t th.cote-a { background: color-mix(in srgb, var(--brs-1) 12%, var(--th)); }
+table.t.brassage th[data-col="n"], table.t.brassage td.port-n { border-left: 2px solid var(--muted); }
+table.t.brassage th.brs, table.t.brassage td.brs { border-right: 2px solid var(--muted); }
+@media print { .pfiche tr.cotes th { text-align: center; font-size: 8pt; } }
+
+/* Brin : pastille de couleur (paire RJ45 bicolore, fibre, fibre à traceur) */
+table.t.edit td.brin { position: relative; }
+table.t.edit td.brin input { padding-left: 24px; }
+td.brin .fil { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); width: 12px; height: 12px; border-radius: 50%; border: 1px solid var(--muted); pointer-events: none; }
 </style>
 </head>
 <body>
@@ -216,7 +258,7 @@ label.chk-in input { width: auto; }
 <div id="datalists" hidden></div>
 <input type="file" id="file-input" hidden>
 <script>window.BUILD_DATE="novembre 2026";</script>
-<script>window.WERB_GUIDES = [{ fichier: "1-Maitriser_et_durcir_les_assets.md", texte: "<!-- WerbAssets – Développé par @WerbHat -->\n# Maîtriser et durcir les assets du site\n\nCe guide s'adresse à ceux qui installent, exploitent ou financent les équipements réseau d'un site industriel : pare-feu, switch, baies de brassage, automates, IHM, passerelles, onduleurs communicants. Il défend deux idées :\n\n1. **Un asset mal connu se répare lentement.** Une configuration non documentée ou un raccordement mal repéré dans une baie allongent **toujours** la durée d'interruption après une panne ou une attaque : ils font monter le RTO réel.\n2. **Un asset se durcit à sa première configuration.** Le durcir plus tard, une fois en production, est plus long, plus cher et plus risqué.\n\nLa dernière partie explique comment tenir WerbAssets pour que ces deux idées deviennent une habitude du site.\n\n---\n\n## 1. Ce que l'on ne connaît pas allonge la reprise\n\n### Le RTO se joue avant l'incident\n\nLe **RTO** (*Recovery Time Objective*, durée maximale d'interruption admissible) se fixe avec le métier dans le plan de reprise informatique (WerbPCR, *Plan PRI*). Ce n'est pas un souhait : le temps réel de reprise est la **somme de durées bien concrètes**, et chacune s'allonge dès qu'il manque une information.\n\n| Étape de la reprise | Ce qui la rallonge quand l'asset est mal connu |\n|---|---|\n| Comprendre ce qui est tombé | Aucun plan des flux ni des raccordements : on cherche quel équipement porte quel réseau, en interrogeant les uns et les autres |\n| Trouver l'équipement et ses câbles | Baie mal identifiée, bandeau sans plan, câbles sans repère : on suit les câbles à la main |\n| Remplacer ou réinitialiser | Modèle, version de firmware ou options inconnus : la pièce de rechange n'est pas la bonne, ou ne se comporte pas pareil |\n| Reconfigurer | VLAN, ports, règles de filtrage reconstitués de mémoire ou par essais successifs |\n| Vérifier | Aucune référence de ce qui est « normal » : on découvre les oublis quand la production les réclame, un par un |\n\nChaque inconnue transforme quelques minutes en heures. Cumulées, elles transforment une panne de matériel banale en arrêt de production.\n\n### Des situations très courantes\n\n- **Un switch de cellule est remplacé.** Avec la fiche (ports, VLAN par port, ports en tronc, ports bloqués) et la configuration sauvegardée, on restaure et on vérifie. Sans elles, on rebranche port par port en essayant de deviner ce que faisait chaque câble ; un VLAN mal affecté place une machine dans la mauvaise zone, et le défaut n'apparaît que plus tard.\n- **Le pare-feu tombe.** Sans sauvegarde de configuration ni fiche des interfaces, les règles se reconstruisent à partir des souvenirs de chacun. Les flux oubliés (télémaintenance, synchronisation d'horloge, remontée vers l'historique) réapparaissent sous forme d'incidents dans les jours qui suivent.\n- **Un câble est débranché pendant une intervention.** Sans repère aux deux extrémités ni plan de raccordement, impossible de savoir où il allait. Un petit switch ajouté « provisoirement » dans un coffret et jamais documenté devient une panne fantôme.\n- **Le mot de passe d'administration est introuvable.** Il ne reste que le retour aux paramètres d'usine, donc une reconfiguration complète, souvent sans plan.\n- **La version de firmware est inconnue.** On installe la plus récente : le comportement change, un automate ne dialogue plus avec sa supervision.\n- **Seul le prestataire sait.** Son délai d'intervention (la nuit, le week-end) s'ajoute au RTO.\n\n### Un ordre de grandeur\n\nLes durées ci-dessous sont **illustratives** : elles donnent l'écart typique entre un asset maîtrisé et un asset inconnu, pour le remplacement d'un switch de cellule de 24 ports.\n\n| Ce qui est disponible | Durée typique de remise en service |\n|---|---|\n| Fiche à jour, configuration sauvegardée et testée, câbles repérés | Environ une heure |\n| Fiche à jour, sans sauvegarde de configuration | Deux à trois heures (reconfiguration à la main, d'après la fiche) |\n| Ni fiche, ni sauvegarde, ni repère | Une demi-journée à plusieurs jours, puis des défauts découverts après le redémarrage |\n\nL'écart ne vient pas de la compétence des équipes : il vient de **ce qu'elles trouvent en arrivant**.\n\n### Après une cyberattaque, c'est pire\n\nAprès une attaque, on ne peut plus faire confiance à la configuration en place : un attaquant a pu ajouter une règle, un compte, une redirection de port. Pour reprendre, il faut savoir **ce qui est légitime**. Sans configuration de référence documentée, on ne distingue pas une règle ajoutée par l'attaquant d'une règle oubliée : il faut tout reconstruire, sans plan, alors même que la pression est la plus forte.\n\n> **Repère** : un RTO de 4 h annoncé dans le PRI n'est tenable que si les fiches des assets du système sont à jour. Sinon, le RTO réel est inconnu, et presque toujours plus long.\n\n### Ce que « connaître un asset en profondeur » veut dire\n\nPour chaque équipement, on doit pouvoir répondre sans aller le voir :\n\n- **qui il est** : TAG, type, marque, modèle, numéro de série, version de firmware ;\n- **où il est** : site, zone, baie, position, bandeau ;\n- **comment il est raccordé** : chaque port utilisé, son câble, son repère, ce qu'il y a au bout ;\n- **comment il est configuré** : interfaces, VLAN, adresses, règles, adresse d'administration ;\n- **qui l'administre et comment on y accède** (le mot de passe, lui, reste dans le coffre-fort, jamais dans la fiche) ;\n- **où est la sauvegarde de sa configuration**, et quand sa restauration a été testée ;\n- **comment il a été durci**, et ce qui reste à faire.\n\nC'est exactement ce que tient une fiche WerbAssets.\n\n---\n\n## 2. Durcir un asset : de quoi parle-t-on ?\n\nUn équipement sort de l'usine configuré pour **fonctionner partout, facilement** : comptes par défaut, mots de passe connus de tous, services ouverts, tous les ports actifs. C'est pratique pour l'installer, et tout aussi pratique pour un attaquant.\n\n**Durcir** (*hardening*), c'est réduire sa **surface d'attaque** : tout ce qui n'est pas nécessaire à son rôle est retiré, désactivé ou fermé ; ce qui reste est protégé, tracé et tenu à jour. On passe de « fonctionne partout » à **« ne fait que ce qu'on attend de lui, et seulement pour ceux qui doivent »**.\n\n### Les domaines du durcissement\n\n| Domaine | Mesures typiques |\n|---|---|\n| Mises à jour | Firmware à jour, validé par le constructeur pour l'usage industriel ; version notée dans la fiche |\n| Comptes | Compte d'usine supprimé ou désactivé, mots de passe par défaut remplacés, comptes nominatifs, droits au strict nécessaire |\n| Authentification | Mots de passe longs conservés dans le coffre-fort, verrouillage après plusieurs erreurs, double authentification quand l'équipement le permet |\n| Administration | Protocoles chiffrés (SSH, HTTPS) à la place de Telnet et HTTP ; administration seulement depuis le réseau d'administration ; fermeture de session après inactivité |\n| Services | Désactivation de ce qui ne sert pas : serveur web inutile, SNMP v1 et v2c (communauté « public »), UPnP, protocoles de découverte hors besoin, fonctions d'écriture OT non utilisées |\n| Ports | Ports inutilisés désactivés ou placés dans un VLAN sans issue ; contrôle des équipements raccordés ; VLAN 1 non utilisé pour les flux |\n| Filtrage | Tout est interdit sauf ce qui est explicitement autorisé ; règles au plus juste, sans « tout vers tout » ; protection contre l'usurpation d'adresse (antispoofing) |\n| Traçabilité | Horloge synchronisée (NTP), journaux envoyés vers un serveur central (syslog), bannière d'avertissement |\n| Sauvegarde | Configuration sauvegardée **après** durcissement, restauration testée |\n| Physique | Baie fermée à clé, ports en façade obturés, sélecteur RUN / PROG des automates en position protégée |\n\n### Les particularités d'un site industriel\n\n- On ne met pas à jour un automate comme un poste de bureau : une mise à jour se **valide** avec le constructeur ou l'intégrateur, et se planifie sur un arrêt.\n- Quand une mesure est impossible (équipement ancien, logiciel figé), on la **compense** : cloisonnement par le pare-feu, accès limité, surveillance renforcée. La compensation se note dans la fiche.\n- Certains équipements supportent mal les analyses réseau : les scans se font **hors production**.\n- Références utiles : l'IEC 62443-4-2 (exigences de sécurité des composants), l'IEC 62443-3-3 (exigences du système), les guides de l'ANSSI sur l'hygiène informatique et sur la cybersécurité des systèmes industriels.\n\nDurcir ne doit rien casser : c'est pour cela qu'on teste, et que le bon moment pour le faire est le suivant.\n\n---\n\n## 3. Durcir dès la première configuration\n\n### Pourquoi à la mise en service\n\n|  | À la mise en service | En production |\n|---|---|---|\n| Arrêt | L'équipement n'est pas encore critique : on redémarre librement | Chaque redémarrage (mise à jour, changement de mode) demande une fenêtre d'arrêt négociée avec la production |\n| Flux | Aucun flux métier à casser | Fermer un port ou couper un service peut arrêter un flux que personne n'avait documenté |\n| Tests | Scans et captures sans risque | Un scan peut perturber un automate ou une IHM fragile |\n| Retour arrière | On recommence | Il faut une procédure de retour arrière, préparée et testée |\n| Coût | Quelques heures, prévues dans le projet | Un projet à part, souvent repoussé : la « dette de sécurité » s'accumule |\n| Référence | La configuration durcie devient la référence documentée | La référence n'existe pas : on la découvre en même temps qu'on la modifie |\n\nDurcir à la mise en service coûte peu ; durcir en production coûte cher et expose à l'arrêt. Chaque équipement installé sans durcissement est une **dette** que le site paiera plus tard, au pire moment.\n\n### Une procédure, dès la première configuration\n\nLa procédure est **écrite**, la même pour tous les équipements d'un même type, et appliquée **avant** le raccordement au réseau de production :\n\n1. **Mettre à jour le firmware** vers la version validée.\n2. **Sécuriser l'accès** : type d'interface, authentification, compte d'usine supprimé, mot de passe par défaut remplacé, complexité, politique d'erreur.\n3. **Configurer le réseau** : interfaces, VLAN, adresse d'administration, antispoofing.\n4. **Désactiver les services** inutiles.\n5. **Poser les règles** au plus juste.\n6. **Sauvegarder la configuration** et inscrire la sauvegarde au registre.\n7. **Analyser hors production** : découverte des ports ouverts, capture des échanges, vulnérabilités connues de la version installée.\n8. **Contrôler en production**, une fois raccordé.\n\nCe sont les **8 étapes et 23 points** de la *Procédure de configuration et de sécurisation* de chaque fiche pare-feu et switch de WerbAssets : chaque point est **Fait**, **À faire** ou **Non applicable**, avec une valeur ou un commentaire, jamais un mot de passe.\n\nQuand l'équipement est livré par un intégrateur, exigez qu'il le livre **durci et documenté** : fiche remplie, procédure suivie, configuration sauvegardée. C'est une clause du cahier d'exigences cyber du prestataire (WerbPresta).\n\n### Durcir un équipement déjà en production\n\nQuand il faut le faire quand même :\n\n1. **Connaître d'abord** : compléter la fiche, observer les flux réels (capture sur un port miroir pendant un cycle de production complet).\n2. **Sauvegarder** la configuration actuelle : c'est le retour arrière.\n3. **Prioriser** : pare-feu en frontière de zone, équipements joignables à distance, ports accessibles en façade.\n4. **Changer par petits lots**, sur une fenêtre de maintenance, avec l'exploitation présente, un équipement à la fois.\n5. **Vérifier** les flux après chaque lot ; revenir en arrière au moindre doute.\n6. **Mettre à jour la fiche** et sauvegarder la nouvelle configuration.\n\n---\n\n## 4. Bien tenir WerbAssets\n\n### Les principes\n\n- **WerbMap fait foi pour l'inventaire** : un équipement se déclare d'abord dans WerbMap (TAG, type, zone, coffret), qui le publie ; WerbAssets le reprend au rechargement de l'inventaire. *+ Asset hors inventaire* reste provisoire, le temps de le déclarer dans WerbMap.\n- **Une base par site**, rangée dans `sites/<CODE>/inventaires/`, avec des droits réservés à l'équipe du site : elle décrit la configuration du réseau.\n- **Aucun secret** : ni mot de passe, ni clé, ni fichier de configuration dans WerbAssets. Les mots de passe vont dans le coffre-fort (guide « Les mots de passe » de WerbMap), les configurations dans l'espace de sauvegarde inscrit au registre des sauvegardes (WerbExploitation).\n- **Règle d'or : une intervention, une fiche à jour.** Le jour même, par celui qui est intervenu. Le journal garde qui a changé quoi.\n\n### À la mise en service d'un équipement\n\n- [ ] Actif créé dans WerbMap (TAG, type, zone, coffret) et inventaire publié\n- [ ] Inventaire rechargé dans WerbAssets, fiche créée (modèle, numéro de série, firmware, administrateur, adresse d'administration)\n- [ ] Interfaces, VLAN et ports saisis ; ports inutilisés bloqués\n- [ ] Raccordements saisis dans le brassage, câbles repérés aux deux extrémités (repère câble, repère fil / brin, aboutissant)\n- [ ] Procédure de configuration et de sécurisation : chaque point **Fait** ou **Non applicable** (avec la raison)\n- [ ] Configuration sauvegardée après durcissement, sauvegarde inscrite au registre, restauration testée\n- [ ] Mot de passe d'administration rangé dans le coffre-fort\n- [ ] Fiche et baie imprimées\n\n### Garder une copie hors de l'outil\n\nPendant une panne réseau, l'ordinateur qui ouvre WerbAssets peut lui-même être inaccessible. **Imprimez la baie** (*Imprimer la baie* : tous ses bandeaux) et les fiches de ses équipements, et rangez-les dans la baie ou dans le classeur d'exploitation. Remplacez-les à chaque modification importante.\n\n### Saisir sur le terrain\n\nPour un relevé en baie ou une mise en service de plusieurs équipements, utilisez **Saisie Excel** : *Modèle de saisie* (une ligne par asset de l'inventaire), remplissage sur place, puis *Importer un classeur*. Le rapport montre chaque création, mise à jour ou ligne rejetée **avant** d'appliquer.\n\n### La revue périodique\n\nChaque mois, ou chaque trimestre sur un petit site, ouvrez le **tableau de bord** et traitez ses points d'attention :\n\n| Point d'attention | Action |\n|---|---|\n| Inventaire WerbMap absent ou de plus de 90 jours | Faire publier l'inventaire dans WerbMap, puis le recharger |\n| Fiches à renseigner | Compléter en priorité les pare-feu et les switch de cœur |\n| Points de sécurisation à faire | Planifier, ou noter une mesure compensatoire et passer le point en Non applicable avec sa raison |\n| Fiche orpheline | L'équipement a disparu de WerbMap : retiré du site (effacer la fiche) ou oublié dans l'inventaire (le redéclarer) |\n| Écart de modèle ou de firmware avec WerbMap | Vérifier sur l'équipement, puis corriger la source fautive |\n\n### Avec les autres modules\n\n- **WerbMap** : l'inventaire, les zones et les systèmes d'information dont les assets font partie.\n- **WerbPCR** : le RTO de chaque système et ses procédures de reprise s'appuient sur les fiches WerbAssets. Une procédure qui dit « reconfigurer le switch » doit pouvoir renvoyer à une fiche à jour et à une configuration sauvegardée.\n- **WerbExploitation** : le registre des sauvegardes des configurations, les mises à jour de firmware et les interventions.\n- **WerbRecette** : la recette réseau après une mise en service ou une modification, et les contrôles de non-régression.\n- **WerbPresta** : les exigences envers les intégrateurs et les mainteneurs (livrer durci et documenté).\n\n> **En résumé** : chaque heure passée à documenter et à durcir un équipement à sa mise en service est une heure, souvent bien plus, gagnée le jour où il tombe.\n" }];
+<script>window.WERB_GUIDES = [{ fichier: "1-Maitriser_et_durcir_les_assets.md", texte: "<!-- WerbAssets – Développé par @WerbHat -->\n# Maîtriser et durcir les assets du site\n\nCe guide s'adresse à ceux qui installent, exploitent ou financent les équipements réseau d'un site industriel : pare-feu, switch, baies de brassage, automates, IHM, passerelles, onduleurs communicants. Il défend deux idées :\n\n1. **Un asset mal connu se répare lentement.** Une configuration non documentée ou un raccordement mal repéré dans une baie allongent **toujours** la durée d'interruption après une panne ou une attaque : ils font monter le RTO réel.\n2. **Un asset se durcit à sa première configuration.** Le durcir plus tard, une fois en production, est plus long, plus cher et plus risqué.\n\nLa dernière partie explique comment tenir WerbAssets pour que ces deux idées deviennent une habitude du site.\n\n---\n\n## 1. Ce que l'on ne connaît pas allonge la reprise\n\n### Le RTO se joue avant l'incident\n\nLe **RTO** (*Recovery Time Objective*, durée maximale d'interruption admissible) se fixe avec le métier dans le plan de reprise informatique (WerbPCR, *Plan PRI*). Ce n'est pas un souhait : le temps réel de reprise est la **somme de durées bien concrètes**, et chacune s'allonge dès qu'il manque une information.\n\n| Étape de la reprise | Ce qui la rallonge quand l'asset est mal connu |\n|---|---|\n| Comprendre ce qui est tombé | Aucun plan des flux ni des raccordements : on cherche quel équipement porte quel réseau, en interrogeant les uns et les autres |\n| Trouver l'équipement et ses câbles | Baie mal identifiée, bandeau sans plan, câbles sans repère : on suit les câbles à la main |\n| Remplacer ou réinitialiser | Modèle, version de firmware ou options inconnus : la pièce de rechange n'est pas la bonne, ou ne se comporte pas pareil |\n| Reconfigurer | VLAN, ports, règles de filtrage reconstitués de mémoire ou par essais successifs |\n| Vérifier | Aucune référence de ce qui est « normal » : on découvre les oublis quand la production les réclame, un par un |\n\nChaque inconnue transforme quelques minutes en heures. Cumulées, elles transforment une panne de matériel banale en arrêt de production.\n\n### Des situations très courantes\n\n- **Un switch de cellule est remplacé.** Avec la fiche (ports, VLAN par port, ports en tronc, ports bloqués) et la configuration sauvegardée, on restaure et on vérifie. Sans elles, on rebranche port par port en essayant de deviner ce que faisait chaque câble ; un VLAN mal affecté place une machine dans la mauvaise zone, et le défaut n'apparaît que plus tard.\n- **Le pare-feu tombe.** Sans sauvegarde de configuration ni fiche des interfaces, les règles se reconstruisent à partir des souvenirs de chacun. Les flux oubliés (télémaintenance, synchronisation d'horloge, remontée vers l'historique) réapparaissent sous forme d'incidents dans les jours qui suivent.\n- **Un câble est débranché pendant une intervention.** Sans repère aux deux extrémités ni plan de raccordement, impossible de savoir où il allait. Un petit switch ajouté « provisoirement » dans un coffret et jamais documenté devient une panne fantôme.\n- **Le mot de passe d'administration est introuvable.** Il ne reste que le retour aux paramètres d'usine, donc une reconfiguration complète, souvent sans plan.\n- **La version de firmware est inconnue.** On installe la plus récente : le comportement change, un automate ne dialogue plus avec sa supervision.\n- **Seul le prestataire sait.** Son délai d'intervention (la nuit, le week-end) s'ajoute au RTO.\n\n### Un ordre de grandeur\n\nLes durées ci-dessous sont **illustratives** : elles donnent l'écart typique entre un asset maîtrisé et un asset inconnu, pour le remplacement d'un switch de cellule de 24 ports.\n\n| Ce qui est disponible | Durée typique de remise en service |\n|---|---|\n| Fiche à jour, configuration sauvegardée et testée, câbles repérés | Environ une heure |\n| Fiche à jour, sans sauvegarde de configuration | Deux à trois heures (reconfiguration à la main, d'après la fiche) |\n| Ni fiche, ni sauvegarde, ni repère | Une demi-journée à plusieurs jours, puis des défauts découverts après le redémarrage |\n\nL'écart ne vient pas de la compétence des équipes : il vient de **ce qu'elles trouvent en arrivant**.\n\n### Après une cyberattaque, c'est pire\n\nAprès une attaque, on ne peut plus faire confiance à la configuration en place : un attaquant a pu ajouter une règle, un compte, une redirection de port. Pour reprendre, il faut savoir **ce qui est légitime**. Sans configuration de référence documentée, on ne distingue pas une règle ajoutée par l'attaquant d'une règle oubliée : il faut tout reconstruire, sans plan, alors même que la pression est la plus forte.\n\n> **Repère** : un RTO de 4 h annoncé dans le PRI n'est tenable que si les fiches des assets du système sont à jour. Sinon, le RTO réel est inconnu, et presque toujours plus long.\n\n### Ce que « connaître un asset en profondeur » veut dire\n\nPour chaque équipement, on doit pouvoir répondre sans aller le voir :\n\n- **qui il est** : TAG, type, marque, modèle, numéro de série, version de firmware ;\n- **où il est** : site, zone, baie, position, bandeau ;\n- **comment il est raccordé** : chaque port utilisé, son câble, son repère, ce qu'il y a au bout ;\n- **comment il est configuré** : interfaces, VLAN, adresses, règles, adresse d'administration ;\n- **qui l'administre et comment on y accède** (le mot de passe, lui, reste dans le coffre-fort, jamais dans la fiche) ;\n- **où est la sauvegarde de sa configuration**, et quand sa restauration a été testée ;\n- **comment il a été durci**, et ce qui reste à faire.\n\nC'est exactement ce que tient une fiche WerbAssets.\n\n---\n\n## 2. Durcir un asset : de quoi parle-t-on ?\n\nUn équipement sort de l'usine configuré pour **fonctionner partout, facilement** : comptes par défaut, mots de passe connus de tous, services ouverts, tous les ports actifs. C'est pratique pour l'installer, et tout aussi pratique pour un attaquant.\n\n**Durcir** (*hardening*), c'est réduire sa **surface d'attaque** : tout ce qui n'est pas nécessaire à son rôle est retiré, désactivé ou fermé ; ce qui reste est protégé, tracé et tenu à jour. On passe de « fonctionne partout » à **« ne fait que ce qu'on attend de lui, et seulement pour ceux qui doivent »**.\n\n### Les domaines du durcissement\n\n| Domaine | Mesures typiques |\n|---|---|\n| Mises à jour | Firmware à jour, validé par le constructeur pour l'usage industriel ; version notée dans la fiche |\n| Comptes | Compte d'usine supprimé ou désactivé, mots de passe par défaut remplacés, comptes nominatifs, droits au strict nécessaire |\n| Authentification | Mots de passe longs conservés dans le coffre-fort, verrouillage après plusieurs erreurs, double authentification quand l'équipement le permet |\n| Administration | Protocoles chiffrés (SSH, HTTPS) à la place de Telnet et HTTP ; administration seulement depuis le réseau d'administration ; fermeture de session après inactivité |\n| Services | Désactivation de ce qui ne sert pas : serveur web inutile, SNMP v1 et v2c (communauté « public »), UPnP, protocoles de découverte hors besoin, fonctions d'écriture OT non utilisées |\n| Ports | Ports inutilisés désactivés ou placés dans un VLAN sans issue ; contrôle des équipements raccordés ; VLAN 1 non utilisé pour les flux |\n| Filtrage | Tout est interdit sauf ce qui est explicitement autorisé ; règles au plus juste, sans « tout vers tout » ; protection contre l'usurpation d'adresse (antispoofing) |\n| Traçabilité | Horloge synchronisée (NTP), journaux envoyés vers un serveur central (syslog), bannière d'avertissement |\n| Sauvegarde | Configuration sauvegardée **après** durcissement, restauration testée |\n| Physique | Baie fermée à clé, ports en façade obturés, sélecteur RUN / PROG des automates en position protégée |\n\n### Les particularités d'un site industriel\n\n- On ne met pas à jour un automate comme un poste de bureau : une mise à jour se **valide** avec le constructeur ou l'intégrateur, et se planifie sur un arrêt.\n- Quand une mesure est impossible (équipement ancien, logiciel figé), on la **compense** : cloisonnement par le pare-feu, accès limité, surveillance renforcée. La compensation se note dans la fiche.\n- Certains équipements supportent mal les analyses réseau : les scans se font **hors production**.\n- Références utiles : l'IEC 62443-4-2 (exigences de sécurité des composants), l'IEC 62443-3-3 (exigences du système), les guides de l'ANSSI sur l'hygiène informatique et sur la cybersécurité des systèmes industriels.\n\nDurcir ne doit rien casser : c'est pour cela qu'on teste, et que le bon moment pour le faire est le suivant.\n\n---\n\n## 3. Durcir dès la première configuration\n\n### Pourquoi à la mise en service\n\n|  | À la mise en service | En production |\n|---|---|---|\n| Arrêt | L'équipement n'est pas encore critique : on redémarre librement | Chaque redémarrage (mise à jour, changement de mode) demande une fenêtre d'arrêt négociée avec la production |\n| Flux | Aucun flux métier à casser | Fermer un port ou couper un service peut arrêter un flux que personne n'avait documenté |\n| Tests | Scans et captures sans risque | Un scan peut perturber un automate ou une IHM fragile |\n| Retour arrière | On recommence | Il faut une procédure de retour arrière, préparée et testée |\n| Coût | Quelques heures, prévues dans le projet | Un projet à part, souvent repoussé : la « dette de sécurité » s'accumule |\n| Référence | La configuration durcie devient la référence documentée | La référence n'existe pas : on la découvre en même temps qu'on la modifie |\n\nDurcir à la mise en service coûte peu ; durcir en production coûte cher et expose à l'arrêt. Chaque équipement installé sans durcissement est une **dette** que le site paiera plus tard, au pire moment.\n\n### Une procédure, dès la première configuration\n\nLa procédure est **écrite**, la même pour tous les équipements d'un même type, et appliquée **avant** le raccordement au réseau de production :\n\n1. **Mettre à jour le firmware** vers la version validée.\n2. **Sécuriser l'accès** : type d'interface, authentification, compte d'usine supprimé, mot de passe par défaut remplacé, complexité, politique d'erreur.\n3. **Configurer le réseau** : interfaces, VLAN, adresse d'administration, antispoofing.\n4. **Désactiver les services** inutiles.\n5. **Poser les règles** au plus juste.\n6. **Sauvegarder la configuration** et inscrire la sauvegarde au registre.\n7. **Analyser hors production** : découverte des ports ouverts, capture des échanges, vulnérabilités connues de la version installée.\n8. **Contrôler en production**, une fois raccordé.\n\nCe sont les **8 étapes et 23 points** de la *Procédure de configuration et de sécurisation* de chaque fiche pare-feu et switch de WerbAssets : chaque point est **Fait**, **À faire** ou **Non applicable**, avec une valeur ou un commentaire, jamais un mot de passe.\n\nQuand l'équipement est livré par un intégrateur, exigez qu'il le livre **durci et documenté** : fiche remplie, procédure suivie, configuration sauvegardée. C'est une clause du cahier d'exigences cyber du prestataire (WerbPresta).\n\n### Durcir un équipement déjà en production\n\nQuand il faut le faire quand même :\n\n1. **Connaître d'abord** : compléter la fiche, observer les flux réels (capture sur un port miroir pendant un cycle de production complet).\n2. **Sauvegarder** la configuration actuelle : c'est le retour arrière.\n3. **Prioriser** : pare-feu en frontière de zone, équipements joignables à distance, ports accessibles en façade.\n4. **Changer par petits lots**, sur une fenêtre de maintenance, avec l'exploitation présente, un équipement à la fois.\n5. **Vérifier** les flux après chaque lot ; revenir en arrière au moindre doute.\n6. **Mettre à jour la fiche** et sauvegarder la nouvelle configuration.\n\n---\n\n## 4. Bien tenir WerbAssets\n\n### Les principes\n\n- **WerbMap fait foi pour l'inventaire** : un équipement se déclare d'abord dans WerbMap (TAG, type, zone, coffret), qui le publie ; WerbAssets le reprend au rechargement de l'inventaire. *+ Asset hors inventaire* reste provisoire, le temps de le déclarer dans WerbMap.\n- **Une base par site**, rangée dans `sites/<CODE>/inventaires/`, avec des droits réservés à l'équipe du site : elle décrit la configuration du réseau.\n- **Aucun secret** : ni mot de passe, ni clé, ni fichier de configuration dans WerbAssets. Les mots de passe vont dans le coffre-fort (guide « Les mots de passe » de WerbMap), les configurations dans l'espace de sauvegarde inscrit au registre des sauvegardes (WerbExploitation).\n- **Règle d'or : une intervention, une fiche à jour.** Le jour même, par celui qui est intervenu. Le journal garde qui a changé quoi.\n\n### À la mise en service d'un équipement\n\n- [ ] Actif créé dans WerbMap (TAG, type, zone, coffret) et inventaire publié\n- [ ] Inventaire rechargé dans WerbAssets, fiche créée (modèle, numéro de série, firmware, administrateur, adresse d'administration)\n- [ ] Interfaces, VLAN et ports saisis ; ports inutilisés bloqués\n- [ ] Raccordements saisis dans le brassage, câbles repérés aux deux extrémités (repère câble, repère fil / brin, aboutissant) ; cordons et jarretières entre ports saisis dans « Brassé vers », avec leur repère\n- [ ] Procédure de configuration et de sécurisation : chaque point **Fait** ou **Non applicable** (avec la raison)\n- [ ] Configuration sauvegardée après durcissement, sauvegarde inscrite au registre, restauration testée\n- [ ] Mot de passe d'administration rangé dans le coffre-fort\n- [ ] Fiche et baie imprimées\n\n### Garder une copie hors de l'outil\n\nPendant une panne réseau, l'ordinateur qui ouvre WerbAssets peut lui-même être inaccessible. **Imprimez la baie** (*Imprimer la baie* : tous ses bandeaux) et les fiches de ses équipements, et rangez-les dans la baie ou dans le classeur d'exploitation. Remplacez-les à chaque modification importante.\n\n### Saisir sur le terrain\n\nPour un relevé en baie ou une mise en service de plusieurs équipements, utilisez **Saisie Excel** : *Modèle de saisie* (une ligne par asset de l'inventaire), remplissage sur place, puis *Importer un classeur*. Le rapport montre chaque création, mise à jour ou ligne rejetée **avant** d'appliquer.\n\n### La revue périodique\n\nChaque mois, ou chaque trimestre sur un petit site, ouvrez le **tableau de bord** et traitez ses points d'attention :\n\n| Point d'attention | Action |\n|---|---|\n| Inventaire WerbMap absent ou de plus de 90 jours | Faire publier l'inventaire dans WerbMap, puis le recharger |\n| Fiches à renseigner | Compléter en priorité les pare-feu et les switch de cœur |\n| Points de sécurisation à faire | Planifier, ou noter une mesure compensatoire et passer le point en Non applicable avec sa raison |\n| Fiche orpheline | L'équipement a disparu de WerbMap : retiré du site (effacer la fiche) ou oublié dans l'inventaire (le redéclarer) |\n| Écart de modèle ou de firmware avec WerbMap | Vérifier sur l'équipement, puis corriger la source fautive |\n\n### Avec les autres modules\n\n- **WerbMap** : l'inventaire, les zones et les systèmes d'information dont les assets font partie.\n- **WerbPCR** : le RTO de chaque système et ses procédures de reprise s'appuient sur les fiches WerbAssets. Une procédure qui dit « reconfigurer le switch » doit pouvoir renvoyer à une fiche à jour et à une configuration sauvegardée.\n- **WerbExploitation** : le registre des sauvegardes des configurations, les mises à jour de firmware et les interventions.\n- **WerbRecette** : la recette réseau après une mise en service ou une modification, et les contrôles de non-régression.\n- **WerbPresta** : les exigences envers les intégrateurs et les mainteneurs (livrer durci et documenté).\n\n> **En résumé** : chaque heure passée à documenter et à durcir un équipement à sa mise en service est une heure, souvent bien plus, gagnée le jour où il tombe.\n" }];
 window.WERB_EXEMPLE = { nom: "Exemple_LYON.werbassets.json", texte: "{\n \"format\": \"WERBASSETS\",\n \"schema\": 1,\n \"famille\": \"WERBSMSI\",\n \"meta\": {\n  \"produit\": \"WerbAssets\",\n  \"appVersion\": \"1.0.0\",\n  \"auteur\": \"@WerbHat\",\n  \"generateur\": \"WerbAssets v1.0.0 – Développé par @WerbHat\",\n  \"creeLe\": \"2026-10-26\",\n  \"modifieLe\": \"2026-10-26T08:00:00Z\",\n  \"modifiePar\": \"Exemple\",\n  \"groupeId\": \"e6a47cd7-77fe-463f-b6ea-b50ff390bfc7\",\n  \"portee\": \"site\",\n  \"site\": \"LYON\"\n },\n \"verrou\": null,\n \"journal\": [\n  {\n   \"date\": \"2026-10-26T08:00:00Z\",\n   \"par\": \"Exemple\",\n   \"action\": \"Création\",\n   \"objet\": \"Base\",\n   \"element\": \"\",\n   \"champ\": \"\",\n   \"avant\": \"\",\n   \"apres\": \"Base d'exemple fictive\"\n  }\n ],\n \"data\": {\n  \"site\": {\n   \"nom\": \"Usine de Lyon (fictive)\"\n  },\n  \"inventaire\": {\n   \"site\": \"LYON\",\n   \"source\": \"sites/LYON/publications\",\n   \"publieLe\": \"2026-10-24T00:00:00Z\",\n   \"chargeLe\": \"2026-10-26T08:00:00Z\",\n   \"actifs\": [\n    {\n     \"id\": \"API_L2_01\",\n     \"type\": \"Automate\",\n     \"famille\": \"reseau\",\n     \"zone\": \"Z-PROC\",\n     \"criticite\": \"process\",\n     \"libelle\": \"Automate ligne 2\",\n     \"emplacement\": \"Atelier ligne 2\",\n     \"coffret\": \"CF-L2-01\",\n     \"marque\": \"Constructeur A\"\n    },\n    {\n     \"id\": \"SW_CORE01\",\n     \"type\": \"Switch\",\n     \"famille\": \"reseau\",\n     \"zone\": \"Z-SUP\",\n     \"libelle\": \"Commutateur de cœur OT\",\n     \"emplacement\": \"Salle serveurs B\",\n     \"coffret\": \"BAIE-01\"\n    },\n    {\n     \"id\": \"FW_OT01\",\n     \"type\": \"Pare-feu\",\n     \"famille\": \"reseau\",\n     \"zone\": \"Z-SUP\",\n     \"criticite\": \"critique\",\n     \"libelle\": \"Pare-feu IT / OT\",\n     \"emplacement\": \"Salle serveurs B\",\n     \"coffret\": \"BAIE-01\"\n    },\n    {\n     \"id\": \"SRV_SCADA01\",\n     \"type\": \"Serveur\",\n     \"famille\": \"physique\",\n     \"zone\": \"Z-SUP\",\n     \"criticite\": \"metier-critique\",\n     \"libelle\": \"Serveur de supervision\",\n     \"emplacement\": \"Salle serveurs B\",\n     \"coffret\": \"BAIE-01\",\n     \"os\": \"Windows Server 2022\",\n     \"fonction\": \"Supervision\",\n     \"marque\": \"Constructeur B\"\n    },\n    {\n     \"id\": \"HYP_OT01\",\n     \"type\": \"Hyperviseur\",\n     \"famille\": \"physique\",\n     \"zone\": \"Z-SUP\",\n     \"libelle\": \"Hyperviseur OT\",\n     \"emplacement\": \"Salle serveurs B\",\n     \"coffret\": \"BAIE-01\",\n     \"os\": \"Hyperviseur 8.0\",\n     \"fonction\": \"Virtualisation\"\n    },\n    {\n     \"id\": \"NAS_BCK01\",\n     \"type\": \"Serveur\",\n     \"famille\": \"physique\",\n     \"zone\": \"Z-SUP\",\n     \"libelle\": \"NAS de sauvegarde\",\n     \"emplacement\": \"Local technique\",\n     \"os\": \"DSM 7.2\",\n     \"fonction\": \"Sauvegardes\"\n    },\n    {\n     \"id\": \"PC_ING01\",\n     \"type\": \"Station de travail\",\n     \"famille\": \"physique\",\n     \"zone\": \"Z-SUP\",\n     \"libelle\": \"Poste d'ingénierie automatisme\",\n     \"emplacement\": \"Bureau méthodes\",\n     \"os\": \"Windows 11 23H2\",\n     \"fonction\": \"Ingénierie\"\n    },\n    {\n     \"id\": \"VM_HIST01\",\n     \"type\": \"Machine virtuelle\",\n     \"famille\": \"virtuelle\",\n     \"zone\": \"Z-SUP\",\n     \"libelle\": \"Historian\",\n     \"hote\": \"HYP_OT01\",\n     \"os\": \"Windows Server 2019\",\n     \"fonction\": \"Historisation\"\n    },\n    {\n     \"id\": \"VM_AD01\",\n     \"type\": \"Machine virtuelle\",\n     \"famille\": \"virtuelle\",\n     \"zone\": \"Z-SUP\",\n     \"libelle\": \"Contrôleur de domaine OT\",\n     \"hote\": \"HYP_OT01\",\n     \"os\": \"Windows Server 2022\",\n     \"fonction\": \"Annuaire\"\n    }\n   ],\n   \"zones\": [\n    {\n     \"id\": \"Z-PROC\",\n     \"nom\": \"Réseaux process\",\n     \"slt\": \"3\"\n    },\n    {\n     \"id\": \"Z-SUP\",\n     \"nom\": \"Supervision\",\n     \"slt\": \"2\"\n    }\n   ]\n  },\n  \"fiches\": [\n   {\n    \"tag\": \"FW_OT01\",\n    \"cat\": \"\",\n    \"ref\": {\n     \"type\": \"Pare-feu\",\n     \"famille\": \"reseau\",\n     \"zone\": \"Z-SUP\",\n     \"libelle\": \"Pare-feu IT / OT\",\n     \"emplacement\": \"Salle serveurs B\",\n     \"coffret\": \"BAIE-01\"\n    },\n    \"modele\": \"NGFW-100\",\n    \"version\": \"7.2.8\",\n    \"serie\": \"FW100-DEMO-0001\",\n    \"administrateur\": \"Équipe OT du site\",\n    \"commentaire\": \"Pare-feu de séparation entre le réseau de gestion et les réseaux industriels.\",\n    \"reseauPublic\": \"203.0.113.0/29\",\n    \"ipPublique\": \"203.0.113.2\",\n    \"routeurWan\": \"Routeur opérateur\",\n    \"portWan\": \"WAN1\",\n    \"typeWan\": \"Fibre\",\n    \"passerelle\": \"203.0.113.1\",\n    \"autresInfos\": \"Haute disponibilité prévue en 2027 (lien HA sur Ethernet 4).\",\n    \"filtrageUrl\": \"Désactivé : aucun accès Internet depuis les réseaux industriels.\",\n    \"interfaces\": [\n     {\n      \"port\": \"Ethernet 1\",\n      \"type\": \"Physique\",\n      \"affectation\": \"Réseau WAN\",\n      \"dhcp\": \"NON\",\n      \"etat\": \"En service\",\n      \"reseau\": \"RSX_WAN\",\n      \"vlanNom\": \"\",\n      \"vlanId\": \"\",\n      \"cidr\": \"203.0.113.0/29\",\n      \"masque\": \"255.255.255.248\",\n      \"ipPasserelle\": \"203.0.113.2\",\n      \"ipActifs\": \"\",\n      \"commentaire\": \"\"\n     },\n     {\n      \"port\": \"Ethernet 2\",\n      \"type\": \"Physique\",\n      \"affectation\": \"Supervision\",\n      \"dhcp\": \"NON\",\n      \"etat\": \"En service\",\n      \"reseau\": \"RSX_SUP\",\n      \"vlanNom\": \"VL200_SUP\",\n      \"vlanId\": \"200\",\n      \"cidr\": \"10.20.0.0/24\",\n      \"masque\": \"255.255.255.0\",\n      \"ipPasserelle\": \"10.20.0.254\",\n      \"ipActifs\": \"10.20.0.10 SRV_SCADA01\\n10.20.0.11 HYP_OT01\\n10.20.0.20 PC_ING01\",\n      \"commentaire\": \"\"\n     },\n     {\n      \"port\": \"Ethernet 2.210\",\n      \"type\": \"VLAN\",\n      \"affectation\": \"Administration\",\n      \"dhcp\": \"NON\",\n      \"etat\": \"En cours\",\n      \"reseau\": \"RSX_ADMIN\",\n      \"vlanNom\": \"VL210_ADMIN\",\n      \"vlanId\": \"210\",\n      \"cidr\": \"10.21.0.0/26\",\n      \"masque\": \"255.255.255.192\",\n      \"ipPasserelle\": \"10.21.0.62\",\n      \"ipActifs\": \"\",\n      \"commentaire\": \"\"\n     },\n     {\n      \"port\": \"Ethernet 3\",\n      \"type\": \"Physique\",\n      \"affectation\": \"Process ligne 2\",\n      \"dhcp\": \"NON\",\n      \"etat\": \"En service\",\n      \"reseau\": \"RSX_PROC_L2\",\n      \"vlanNom\": \"VL110_PROC\",\n      \"vlanId\": \"110\",\n      \"cidr\": \"10.11.0.0/24\",\n      \"masque\": \"255.255.255.0\",\n      \"ipPasserelle\": \"10.11.0.254\",\n      \"ipActifs\": \"10.11.0.20 API_L2_01\",\n      \"commentaire\": \"\"\n     },\n     {\n      \"port\": \"Ethernet 4\",\n      \"type\": \"Physique\",\n      \"affectation\": \"Liaison HA\",\n      \"dhcp\": \"NON\",\n      \"etat\": \"Réservé\",\n      \"reseau\": \"\",\n      \"vlanNom\": \"\",\n      \"vlanId\": \"\",\n      \"cidr\": \"\",\n      \"masque\": \"\",\n      \"ipPasserelle\": \"\",\n      \"ipActifs\": \"\",\n      \"commentaire\": \"Réservé au second pare-feu\"\n     }\n    ],\n    \"controles\": {\n     \"MAJ-01\": {\n      \"etat\": \"fait\",\n      \"valeur\": \"Firmware 7.2.8 installé le 15/09/2026\"\n     },\n     \"CNX-01\": {\n      \"etat\": \"fait\",\n      \"valeur\": \"Serveur web embarqué (HTTPS)\"\n     },\n     \"CNX-02\": {\n      \"etat\": \"fait\",\n      \"valeur\": \"Mot de passe et second facteur\"\n     },\n     \"CNX-03\": {\n      \"etat\": \"fait\",\n      \"valeur\": \"\"\n     },\n     \"CNX-04\": {\n      \"etat\": \"fait\",\n      \"valeur\": \"\"\n     },\n     \"CNX-05\": {\n      \"etat\": \"afaire\",\n      \"valeur\": \"Longueur minimale à porter à 14 caractères\"\n     },\n     \"CNX-06\": {\n      \"etat\": \"fait\",\n      \"valeur\": \"Verrouillage après 5 échecs\"\n     },\n     \"RSX-01\": {\n      \"etat\": \"fait\",\n      \"valeur\": \"IP fixe\"\n     },\n     \"RSX-02\": {\n      \"etat\": \"fait\",\n      \"valeur\": \"\"\n     },\n     \"RSX-03\": {\n      \"etat\": \"fait\",\n      \"valeur\": \"\"\n     },\n     \"RSX-04\": {\n      \"etat\": \"fait\",\n      \"valeur\": \"\"\n     },\n     \"RSX-05\": {\n      \"etat\": \"fait\",\n      \"valeur\": \"Activé sur toutes les interfaces\"\n     },\n     \"SRV-01\": {\n      \"etat\": \"fait\",\n      \"valeur\": \"\"\n     },\n     \"SRV-02\": {\n      \"etat\": \"fait\",\n      \"valeur\": \"\"\n     },\n     \"SRV-03\": {\n      \"etat\": \"fait\",\n      \"valeur\": \"Telnet et HTTP désactivés\"\n     },\n     \"REG-01\": {\n      \"etat\": \"fait\",\n      \"valeur\": \"\"\n     },\n     \"REG-02\": {\n      \"etat\": \"fait\",\n      \"valeur\": \"Matrice de flux WerbMap\"\n     },\n     \"SAV-01\": {\n      \"etat\": \"fait\",\n      \"valeur\": \"Sauvegarde chiffrée sur NAS_BCK01\"\n     },\n     \"HPR-01\": {\n      \"etat\": \"fait\",\n      \"valeur\": \"\"\n     },\n     \"HPR-02\": {\n      \"etat\": \"na\",\n      \"valeur\": \"\"\n     },\n     \"HPR-03\": {\n      \"etat\": \"afaire\",\n      \"valeur\": \"\"\n     },\n     \"PRD-01\": {\n      \"etat\": \"na\",\n      \"valeur\": \"Interdit en production\"\n     },\n     \"PRD-02\": {\n      \"etat\": \"na\",\n      \"valeur\": \"\"\n     }\n    }\n   },\n   {\n    \"tag\": \"SW_CORE01\",\n    \"cat\": \"\",\n    \"ref\": {\n     \"type\": \"Switch\",\n     \"famille\": \"reseau\",\n     \"zone\": \"Z-SUP\",\n     \"libelle\": \"Commutateur de cœur OT\",\n     \"emplacement\": \"Salle serveurs B\",\n     \"coffret\": \"BAIE-01\"\n    },\n    \"modele\": \"SW-24G-2SFP\",\n    \"version\": \"10.12\",\n    \"serie\": \"SWC-DEMO-0001\",\n    \"administrateur\": \"Équipe OT du site\",\n    \"ipAdmin\": \"10.21.0.10\",\n    \"masqueAdmin\": \"255.255.255.192\",\n    \"passerelleAdmin\": \"10.21.0.62\",\n    \"nbRj45\": \"24\",\n    \"nbSfp\": \"2\",\n    \"guideDoc\": \"Procédure de configuration : DOC-SW-001 (fictive)\",\n    \"annexes\": \"\",\n    \"vlans\": [\n     {\n      \"id\": \"1\",\n      \"nom\": \"Défaut (inutilisé)\",\n      \"commentaire\": \"Aucun port\"\n     },\n     {\n      \"id\": \"110\",\n      \"nom\": \"VL110_PROC\",\n      \"commentaire\": \"Process ligne 2\"\n     },\n     {\n      \"id\": \"200\",\n      \"nom\": \"VL200_SUP\",\n      \"commentaire\": \"Supervision\"\n     },\n     {\n      \"id\": \"210\",\n      \"nom\": \"VL210_ADMIN\",\n      \"commentaire\": \"Administration des équipements\"\n     }\n    ],\n    \"ports\": [\n     {\n      \"n\": \"1\",\n      \"libelle\": \"SRV_SCADA01\",\n      \"type\": \"RJ45\",\n      \"etat\": \"ACTIF\",\n      \"vlan\": \"200\",\n      \"ut\": \"Untagged\",\n      \"repere\": \"C-001\",\n      \"about\": \"SRV_SCADA01\",\n      \"commentaire\": \"\",\n      \"statut\": \"En service\"\n     },\n     {\n      \"n\": \"2\",\n      \"libelle\": \"HYP_OT01\",\n      \"type\": \"RJ45\",\n      \"etat\": \"ACTIF\",\n      \"vlan\": \"200\",\n      \"ut\": \"Untagged\",\n      \"repere\": \"C-002\",\n      \"about\": \"HYP_OT01\",\n      \"commentaire\": \"\",\n      \"statut\": \"En service\"\n     },\n     {\n      \"n\": \"3\",\n      \"libelle\": \"PC_ING01\",\n      \"type\": \"RJ45\",\n      \"etat\": \"ACTIF\",\n      \"vlan\": \"200\",\n      \"ut\": \"Untagged\",\n      \"repere\": \"C-003\",\n      \"about\": \"BAIE-01-BS01 port 3\",\n      \"commentaire\": \"\",\n      \"statut\": \"En service\"\n     },\n     {\n      \"n\": \"4\",\n      \"libelle\": \"Réservé poste d'ingénierie 2\",\n      \"type\": \"RJ45\",\n      \"etat\": \"BLOQUÉ\",\n      \"vlan\": \"200\",\n      \"ut\": \"\",\n      \"repere\": \"\",\n      \"about\": \"\",\n      \"commentaire\": \"\",\n      \"statut\": \"Réservé\"\n     },\n     {\n      \"n\": \"5\",\n      \"libelle\": \"\",\n      \"type\": \"RJ45\",\n      \"etat\": \"BLOQUÉ\",\n      \"vlan\": \"\",\n      \"ut\": \"\",\n      \"repere\": \"\",\n      \"about\": \"\",\n      \"commentaire\": \"\",\n      \"statut\": \"\"\n     },\n     {\n      \"n\": \"6\",\n      \"libelle\": \"\",\n      \"type\": \"RJ45\",\n      \"etat\": \"BLOQUÉ\",\n      \"vlan\": \"\",\n      \"ut\": \"\",\n      \"repere\": \"\",\n      \"about\": \"\",\n      \"commentaire\": \"\",\n      \"statut\": \"\"\n     },\n     {\n      \"n\": \"7\",\n      \"libelle\": \"\",\n      \"type\": \"RJ45\",\n      \"etat\": \"BLOQUÉ\",\n      \"vlan\": \"\",\n      \"ut\": \"\",\n      \"repere\": \"\",\n      \"about\": \"\",\n      \"commentaire\": \"\",\n      \"statut\": \"\"\n     },\n     {\n      \"n\": \"8\",\n      \"libelle\": \"\",\n      \"type\": \"RJ45\",\n      \"etat\": \"BLOQUÉ\",\n      \"vlan\": \"\",\n      \"ut\": \"\",\n      \"repere\": \"\",\n      \"about\": \"\",\n      \"commentaire\": \"\",\n      \"statut\": \"\"\n     },\n     {\n      \"n\": \"9\",\n      \"libelle\": \"\",\n      \"type\": \"RJ45\",\n      \"etat\": \"BLOQUÉ\",\n      \"vlan\": \"\",\n      \"ut\": \"\",\n      \"repere\": \"\",\n      \"about\": \"\",\n      \"commentaire\": \"\",\n      \"statut\": \"\"\n     },\n     {\n      \"n\": \"10\",\n      \"libelle\": \"\",\n      \"type\": \"RJ45\",\n      \"etat\": \"BLOQUÉ\",\n      \"vlan\": \"\",\n      \"ut\": \"\",\n      \"repere\": \"\",\n      \"about\": \"\",\n      \"commentaire\": \"\",\n      \"statut\": \"\"\n     },\n     {\n      \"n\": \"11\",\n      \"libelle\": \"\",\n      \"type\": \"RJ45\",\n      \"etat\": \"BLOQUÉ\",\n      \"vlan\": \"\",\n      \"ut\": \"\",\n      \"repere\": \"\",\n      \"about\": \"\",\n      \"commentaire\": \"\",\n      \"statut\": \"\"\n     },\n     {\n      \"n\": \"12\",\n      \"libelle\": \"\",\n      \"type\": \"RJ45\",\n      \"etat\": \"BLOQUÉ\",\n      \"vlan\": \"\",\n      \"ut\": \"\",\n      \"repere\": \"\",\n      \"about\": \"\",\n      \"commentaire\": \"\",\n      \"statut\": \"\"\n     },\n     {\n      \"n\": \"13\",\n      \"libelle\": \"\",\n      \"type\": \"RJ45\",\n      \"etat\": \"BLOQUÉ\",\n      \"vlan\": \"\",\n      \"ut\": \"\",\n      \"repere\": \"\",\n      \"about\": \"\",\n      \"commentaire\": \"\",\n      \"statut\": \"\"\n     },\n     {\n      \"n\": \"14\",\n      \"libelle\": \"\",\n      \"type\": \"RJ45\",\n      \"etat\": \"BLOQUÉ\",\n      \"vlan\": \"\",\n      \"ut\": \"\",\n      \"repere\": \"\",\n      \"about\": \"\",\n      \"commentaire\": \"\",\n      \"statut\": \"\"\n     },\n     {\n      \"n\": \"15\",\n      \"libelle\": \"\",\n      \"type\": \"RJ45\",\n      \"etat\": \"BLOQUÉ\",\n      \"vlan\": \"\",\n      \"ut\": \"\",\n      \"repere\": \"\",\n      \"about\": \"\",\n      \"commentaire\": \"\",\n      \"statut\": \"\"\n     },\n     {\n      \"n\": \"16\",\n      \"libelle\": \"\",\n      \"type\": \"RJ45\",\n      \"etat\": \"BLOQUÉ\",\n      \"vlan\": \"\",\n      \"ut\": \"\",\n      \"repere\": \"\",\n      \"about\": \"\",\n      \"commentaire\": \"\",\n      \"statut\": \"\"\n     },\n     {\n      \"n\": \"17\",\n      \"libelle\": \"\",\n      \"type\": \"RJ45\",\n      \"etat\": \"BLOQUÉ\",\n      \"vlan\": \"\",\n      \"ut\": \"\",\n      \"repere\": \"\",\n      \"about\": \"\",\n      \"commentaire\": \"\",\n      \"statut\": \"\"\n     },\n     {\n      \"n\": \"18\",\n      \"libelle\": \"\",\n      \"type\": \"RJ45\",\n      \"etat\": \"BLOQUÉ\",\n      \"vlan\": \"\",\n      \"ut\": \"\",\n      \"repere\": \"\",\n      \"about\": \"\",\n      \"commentaire\": \"\",\n      \"statut\": \"\"\n     },\n     {\n      \"n\": \"19\",\n      \"libelle\": \"\",\n      \"type\": \"RJ45\",\n      \"etat\": \"BLOQUÉ\",\n      \"vlan\": \"\",\n      \"ut\": \"\",\n      \"repere\": \"\",\n      \"about\": \"\",\n      \"commentaire\": \"\",\n      \"statut\": \"\"\n     },\n     {\n      \"n\": \"20\",\n      \"libelle\": \"\",\n      \"type\": \"RJ45\",\n      \"etat\": \"BLOQUÉ\",\n      \"vlan\": \"\",\n      \"ut\": \"\",\n      \"repere\": \"\",\n      \"about\": \"\",\n      \"commentaire\": \"\",\n      \"statut\": \"\"\n     },\n     {\n      \"n\": \"21\",\n      \"libelle\": \"\",\n      \"type\": \"RJ45\",\n      \"etat\": \"BLOQUÉ\",\n      \"vlan\": \"\",\n      \"ut\": \"\",\n      \"repere\": \"\",\n      \"about\": \"\",\n      \"commentaire\": \"\",\n      \"statut\": \"\"\n     },\n     {\n      \"n\": \"22\",\n      \"libelle\": \"\",\n      \"type\": \"RJ45\",\n      \"etat\": \"BLOQUÉ\",\n      \"vlan\": \"\",\n      \"ut\": \"\",\n      \"repere\": \"\",\n      \"about\": \"\",\n      \"commentaire\": \"\",\n      \"statut\": \"\"\n     },\n     {\n      \"n\": \"23\",\n      \"libelle\": \"\",\n      \"type\": \"RJ45\",\n      \"etat\": \"BLOQUÉ\",\n      \"vlan\": \"\",\n      \"ut\": \"\",\n      \"repere\": \"\",\n      \"about\": \"\",\n      \"commentaire\": \"\",\n      \"statut\": \"\"\n     },\n     {\n      \"n\": \"24\",\n      \"libelle\": \"Uplink FW_OT01 Ethernet 2\",\n      \"type\": \"RJ45\",\n      \"etat\": \"ACTIF\",\n      \"vlan\": \"200;210\",\n      \"ut\": \"Tagged\",\n      \"repere\": \"C-024\",\n      \"about\": \"FW_OT01\",\n      \"commentaire\": \"\",\n      \"statut\": \"En service\"\n     },\n     {\n      \"n\": \"25\",\n      \"libelle\": \"Trunk vers coffret ligne 2\",\n      \"type\": \"SFP\",\n      \"etat\": \"ACTIF\",\n      \"vlan\": \"110\",\n      \"ut\": \"Tagged\",\n      \"repere\": \"F-001\",\n      \"about\": \"BAIE-01-RO01 port 1\",\n      \"commentaire\": \"\",\n      \"statut\": \"En service\"\n     },\n     {\n      \"n\": \"26\",\n      \"libelle\": \"\",\n      \"type\": \"SFP\",\n      \"etat\": \"BLOQUÉ\",\n      \"vlan\": \"\",\n      \"ut\": \"\",\n      \"repere\": \"\",\n      \"about\": \"\",\n      \"commentaire\": \"Future liaison vers la supervision secours\",\n      \"statut\": \"En cours\"\n     }\n    ],\n    \"controles\": {\n     \"MAJ-01\": {\n      \"etat\": \"fait\",\n      \"valeur\": \"10.12\"\n     },\n     \"CNX-01\": {\n      \"etat\": \"fait\",\n      \"valeur\": \"Serveur web embarqué\"\n     },\n     \"CNX-02\": {\n      \"etat\": \"fait\",\n      \"valeur\": \"Mot de passe uniquement\"\n     },\n     \"CNX-03\": {\n      \"etat\": \"fait\",\n      \"valeur\": \"\"\n     },\n     \"CNX-04\": {\n      \"etat\": \"fait\",\n      \"valeur\": \"\"\n     },\n     \"CNX-05\": {\n      \"etat\": \"afaire\",\n      \"valeur\": \"\"\n     },\n     \"RSX-01\": {\n      \"etat\": \"fait\",\n      \"valeur\": \"IP fixe\"\n     },\n     \"RSX-02\": {\n      \"etat\": \"fait\",\n      \"valeur\": \"\"\n     },\n     \"SRV-03\": {\n      \"etat\": \"afaire\",\n      \"valeur\": \"SNMP v1 encore actif\"\n     },\n     \"SAV-01\": {\n      \"etat\": \"fait\",\n      \"valeur\": \"Export de configuration du 02/10/2026\"\n     }\n    }\n   },\n   {\n    \"tag\": \"API_L2_01\",\n    \"cat\": \"\",\n    \"ref\": {\n     \"type\": \"Automate\",\n     \"famille\": \"reseau\",\n     \"zone\": \"Z-PROC\",\n     \"libelle\": \"Automate ligne 2\",\n     \"emplacement\": \"Atelier ligne 2\",\n     \"coffret\": \"CF-L2-01\"\n    },\n    \"modele\": \"CPU-1500 (fictif)\",\n    \"version\": \"2.9\",\n    \"administrateur\": \"Automaticien du site\",\n    \"ipAdmin\": \"10.11.0.20\",\n    \"acces\": \"Logiciel de programmation du constructeur\",\n    \"notes\": \"Protection en écriture activée ; mot de passe de niveau 3 détenu par le responsable automatisme.\"\n   },\n   {\n    \"tag\": \"SW_L2_02\",\n    \"cat\": \"switch\",\n    \"ref\": {\n     \"type\": \"Switch\",\n     \"famille\": \"reseau\",\n     \"zone\": \"Z-PROC\",\n     \"libelle\": \"Ancien switch ligne 2 (déposé)\",\n     \"emplacement\": \"Atelier ligne 2\",\n     \"coffret\": \"CF-L2-01\"\n    },\n    \"modele\": \"SW-8G\",\n    \"version\": \"3.1\",\n    \"serie\": \"SWL-DEMO-0002\",\n    \"commentaire\": \"Déposé en 2026 et retiré de WerbMap : fiche conservée pour l'historique.\",\n    \"nbRj45\": \"8\",\n    \"nbSfp\": \"0\"\n   }\n  ],\n  \"baies\": [\n   {\n    \"id\": \"xbaie01\",\n    \"tag\": \"BAIE-01\",\n    \"libelle\": \"Baie principale salle serveurs B\",\n    \"emplacement\": \"Salle serveurs B\"\n   },\n   {\n    \"id\": \"xcfl201\",\n    \"tag\": \"CF-L2-01\",\n    \"libelle\": \"Coffret réseau ligne 2\",\n    \"emplacement\": \"Atelier ligne 2\"\n   }\n  ],\n  \"bandeaux\": [\n   {\n    \"id\": \"xbs01\",\n    \"baie\": \"BAIE-01\",\n    \"tag\": \"BAIE-01-BS01\",\n    \"libelle\": \"Bandeau cuivre salle de contrôle\",\n    \"position\": \"31\",\n    \"nbPorts\": \"24\",\n    \"typePort\": \"RJ45\",\n    \"commentaire\": \"\",\n    \"raccords\": [\n     {\n      \"n\": \"1\",\n      \"reseau\": \"Supervision\",\n      \"repereLiaison\": \"C-101\",\n      \"tenant\": \"Salle de contrôle prise P01\",\n      \"detail\": \"RJ45\",\n      \"repCable\": \"C-101\",\n      \"repAbout\": \"PC_ING01\",\n      \"actifAbout\": \"PC_ING01\",\n      \"commentaire\": \"\"\n     },\n     {\n      \"n\": \"2\",\n      \"reseau\": \"\",\n      \"repereLiaison\": \"\",\n      \"tenant\": \"\",\n      \"detail\": \"\",\n      \"repCable\": \"\",\n      \"repAbout\": \"\",\n      \"actifAbout\": \"\",\n      \"commentaire\": \"\"\n     },\n     {\n      \"n\": \"3\",\n      \"reseau\": \"Supervision\",\n      \"repereLiaison\": \"C-003\",\n      \"tenant\": \"SW_CORE01\",\n      \"detail\": \"RJ45\",\n      \"repCable\": \"C-003\",\n      \"repAbout\": \"SW_CORE01 port 3\",\n      \"actifAbout\": \"SW_CORE01\",\n      \"commentaire\": \"\"\n     },\n     {\n      \"n\": \"4\",\n      \"reseau\": \"\",\n      \"repereLiaison\": \"\",\n      \"tenant\": \"\",\n      \"detail\": \"\",\n      \"repCable\": \"\",\n      \"repAbout\": \"\",\n      \"actifAbout\": \"\",\n      \"commentaire\": \"\"\n     },\n     {\n      \"n\": \"5\",\n      \"reseau\": \"\",\n      \"repereLiaison\": \"\",\n      \"tenant\": \"\",\n      \"detail\": \"\",\n      \"repCable\": \"\",\n      \"repAbout\": \"\",\n      \"actifAbout\": \"\",\n      \"commentaire\": \"\"\n     },\n     {\n      \"n\": \"6\",\n      \"reseau\": \"\",\n      \"repereLiaison\": \"\",\n      \"tenant\": \"\",\n      \"detail\": \"\",\n      \"repCable\": \"\",\n      \"repAbout\": \"\",\n      \"actifAbout\": \"\",\n      \"commentaire\": \"\"\n     },\n     {\n      \"n\": \"7\",\n      \"reseau\": \"\",\n      \"repereLiaison\": \"\",\n      \"tenant\": \"\",\n      \"detail\": \"\",\n      \"repCable\": \"\",\n      \"repAbout\": \"\",\n      \"actifAbout\": \"\",\n      \"commentaire\": \"\"\n     },\n     {\n      \"n\": \"8\",\n      \"reseau\": \"\",\n      \"repereLiaison\": \"\",\n      \"tenant\": \"\",\n      \"detail\": \"\",\n      \"repCable\": \"\",\n      \"repAbout\": \"\",\n      \"actifAbout\": \"\",\n      \"commentaire\": \"\"\n     },\n     {\n      \"n\": \"9\",\n      \"reseau\": \"\",\n      \"repereLiaison\": \"\",\n      \"tenant\": \"\",\n      \"detail\": \"\",\n      \"repCable\": \"\",\n      \"repAbout\": \"\",\n      \"actifAbout\": \"\",\n      \"commentaire\": \"\"\n     },\n     {\n      \"n\": \"10\",\n      \"reseau\": \"\",\n      \"repereLiaison\": \"\",\n      \"tenant\": \"\",\n      \"detail\": \"\",\n      \"repCable\": \"\",\n      \"repAbout\": \"\",\n      \"actifAbout\": \"\",\n      \"commentaire\": \"\"\n     },\n     {\n      \"n\": \"11\",\n      \"reseau\": \"\",\n      \"repereLiaison\": \"\",\n      \"tenant\": \"\",\n      \"detail\": \"\",\n      \"repCable\": \"\",\n      \"repAbout\": \"\",\n      \"actifAbout\": \"\",\n      \"commentaire\": \"\"\n     },\n     {\n      \"n\": \"12\",\n      \"reseau\": \"\",\n      \"repereLiaison\": \"\",\n      \"tenant\": \"\",\n      \"detail\": \"\",\n      \"repCable\": \"\",\n      \"repAbout\": \"\",\n      \"actifAbout\": \"\",\n      \"commentaire\": \"\"\n     },\n     {\n      \"n\": \"13\",\n      \"reseau\": \"\",\n      \"repereLiaison\": \"\",\n      \"tenant\": \"\",\n      \"detail\": \"\",\n      \"repCable\": \"\",\n      \"repAbout\": \"\",\n      \"actifAbout\": \"\",\n      \"commentaire\": \"\"\n     },\n     {\n      \"n\": \"14\",\n      \"reseau\": \"\",\n      \"repereLiaison\": \"\",\n      \"tenant\": \"\",\n      \"detail\": \"\",\n      \"repCable\": \"\",\n      \"repAbout\": \"\",\n      \"actifAbout\": \"\",\n      \"commentaire\": \"\"\n     },\n     {\n      \"n\": \"15\",\n      \"reseau\": \"\",\n      \"repereLiaison\": \"\",\n      \"tenant\": \"\",\n      \"detail\": \"\",\n      \"repCable\": \"\",\n      \"repAbout\": \"\",\n      \"actifAbout\": \"\",\n      \"commentaire\": \"\"\n     },\n     {\n      \"n\": \"16\",\n      \"reseau\": \"\",\n      \"repereLiaison\": \"\",\n      \"tenant\": \"\",\n      \"detail\": \"\",\n      \"repCable\": \"\",\n      \"repAbout\": \"\",\n      \"actifAbout\": \"\",\n      \"commentaire\": \"\"\n     },\n     {\n      \"n\": \"17\",\n      \"reseau\": \"\",\n      \"repereLiaison\": \"\",\n      \"tenant\": \"\",\n      \"detail\": \"\",\n      \"repCable\": \"\",\n      \"repAbout\": \"\",\n      \"actifAbout\": \"\",\n      \"commentaire\": \"\"\n     },\n     {\n      \"n\": \"18\",\n      \"reseau\": \"\",\n      \"repereLiaison\": \"\",\n      \"tenant\": \"\",\n      \"detail\": \"\",\n      \"repCable\": \"\",\n      \"repAbout\": \"\",\n      \"actifAbout\": \"\",\n      \"commentaire\": \"\"\n     },\n     {\n      \"n\": \"19\",\n      \"reseau\": \"\",\n      \"repereLiaison\": \"\",\n      \"tenant\": \"\",\n      \"detail\": \"\",\n      \"repCable\": \"\",\n      \"repAbout\": \"\",\n      \"actifAbout\": \"\",\n      \"commentaire\": \"\"\n     },\n     {\n      \"n\": \"20\",\n      \"reseau\": \"\",\n      \"repereLiaison\": \"\",\n      \"tenant\": \"\",\n      \"detail\": \"\",\n      \"repCable\": \"\",\n      \"repAbout\": \"\",\n      \"actifAbout\": \"\",\n      \"commentaire\": \"\"\n     },\n     {\n      \"n\": \"21\",\n      \"reseau\": \"\",\n      \"repereLiaison\": \"\",\n      \"tenant\": \"\",\n      \"detail\": \"\",\n      \"repCable\": \"\",\n      \"repAbout\": \"\",\n      \"actifAbout\": \"\",\n      \"commentaire\": \"\"\n     },\n     {\n      \"n\": \"22\",\n      \"reseau\": \"\",\n      \"repereLiaison\": \"\",\n      \"tenant\": \"\",\n      \"detail\": \"\",\n      \"repCable\": \"\",\n      \"repAbout\": \"\",\n      \"actifAbout\": \"\",\n      \"commentaire\": \"\"\n     },\n     {\n      \"n\": \"23\",\n      \"reseau\": \"\",\n      \"repereLiaison\": \"\",\n      \"tenant\": \"\",\n      \"detail\": \"\",\n      \"repCable\": \"\",\n      \"repAbout\": \"\",\n      \"actifAbout\": \"\",\n      \"commentaire\": \"\"\n     },\n     {\n      \"n\": \"24\",\n      \"reseau\": \"Trunk interco temporaire\",\n      \"repereLiaison\": \"nc\",\n      \"tenant\": \"CF-L2-01\",\n      \"detail\": \"\",\n      \"repCable\": \"\",\n      \"repAbout\": \"\",\n      \"actifAbout\": \"\",\n      \"commentaire\": \"À retirer après la mise en service de la fibre\"\n     }\n    ]\n   },\n   {\n    \"id\": \"xro01\",\n    \"baie\": \"BAIE-01\",\n    \"tag\": \"BAIE-01-RO01\",\n    \"libelle\": \"Tiroir optique vers la ligne 2\",\n    \"position\": \"38\",\n    \"nbPorts\": \"12\",\n    \"typePort\": \"Fibre LC duplex\",\n    \"commentaire\": \"Fibre multimode OM3\",\n    \"raccords\": [\n     {\n      \"n\": \"1\",\n      \"reseau\": \"Trunk ligne 2\",\n      \"repereLiaison\": \"WO-BAIE01-RO01/CF-L2-01-RO01-A\",\n      \"tenant\": \"CF-L2-01-RO01\",\n      \"detail\": \"Rd\",\n      \"repCable\": \"F-001\",\n      \"repAbout\": \"SW_CORE01 port 25\",\n      \"actifAbout\": \"TX - LC en 1000baseSX\",\n      \"commentaire\": \"\"\n     },\n     {\n      \"n\": \"2\",\n      \"reseau\": \"Trunk ligne 2\",\n      \"repereLiaison\": \"WO-BAIE01-RO01/CF-L2-01-RO01-A\",\n      \"tenant\": \"CF-L2-01-RO01\",\n      \"detail\": \"Bk\",\n      \"repCable\": \"F-001\",\n      \"repAbout\": \"SW_CORE01 port 25\",\n      \"actifAbout\": \"RX - LC en 1000baseSX\",\n      \"commentaire\": \"\"\n     },\n     {\n      \"n\": \"3\",\n      \"reseau\": \"libre\",\n      \"repereLiaison\": \"\",\n      \"tenant\": \"\",\n      \"detail\": \"\",\n      \"repCable\": \"\",\n      \"repAbout\": \"\",\n      \"actifAbout\": \"\",\n      \"commentaire\": \"\"\n     },\n     {\n      \"n\": \"4\",\n      \"reseau\": \"libre\",\n      \"repereLiaison\": \"\",\n      \"tenant\": \"\",\n      \"detail\": \"\",\n      \"repCable\": \"\",\n      \"repAbout\": \"\",\n      \"actifAbout\": \"\",\n      \"commentaire\": \"\"\n     },\n     {\n      \"n\": \"5\",\n      \"reseau\": \"libre\",\n      \"repereLiaison\": \"\",\n      \"tenant\": \"\",\n      \"detail\": \"\",\n      \"repCable\": \"\",\n      \"repAbout\": \"\",\n      \"actifAbout\": \"\",\n      \"commentaire\": \"\"\n     },\n     {\n      \"n\": \"6\",\n      \"reseau\": \"libre\",\n      \"repereLiaison\": \"\",\n      \"tenant\": \"\",\n      \"detail\": \"\",\n      \"repCable\": \"\",\n      \"repAbout\": \"\",\n      \"actifAbout\": \"\",\n      \"commentaire\": \"\"\n     },\n     {\n      \"n\": \"7\",\n      \"reseau\": \"libre\",\n      \"repereLiaison\": \"\",\n      \"tenant\": \"\",\n      \"detail\": \"\",\n      \"repCable\": \"\",\n      \"repAbout\": \"\",\n      \"actifAbout\": \"\",\n      \"commentaire\": \"\"\n     },\n     {\n      \"n\": \"8\",\n      \"reseau\": \"libre\",\n      \"repereLiaison\": \"\",\n      \"tenant\": \"\",\n      \"detail\": \"\",\n      \"repCable\": \"\",\n      \"repAbout\": \"\",\n      \"actifAbout\": \"\",\n      \"commentaire\": \"\"\n     },\n     {\n      \"n\": \"9\",\n      \"reseau\": \"libre\",\n      \"repereLiaison\": \"\",\n      \"tenant\": \"\",\n      \"detail\": \"\",\n      \"repCable\": \"\",\n      \"repAbout\": \"\",\n      \"actifAbout\": \"\",\n      \"commentaire\": \"\"\n     },\n     {\n      \"n\": \"10\",\n      \"reseau\": \"libre\",\n      \"repereLiaison\": \"\",\n      \"tenant\": \"\",\n      \"detail\": \"\",\n      \"repCable\": \"\",\n      \"repAbout\": \"\",\n      \"actifAbout\": \"\",\n      \"commentaire\": \"\"\n     },\n     {\n      \"n\": \"11\",\n      \"reseau\": \"libre\",\n      \"repereLiaison\": \"\",\n      \"tenant\": \"\",\n      \"detail\": \"\",\n      \"repCable\": \"\",\n      \"repAbout\": \"\",\n      \"actifAbout\": \"\",\n      \"commentaire\": \"\"\n     },\n     {\n      \"n\": \"12\",\n      \"reseau\": \"libre\",\n      \"repereLiaison\": \"\",\n      \"tenant\": \"\",\n      \"detail\": \"\",\n      \"repCable\": \"\",\n      \"repAbout\": \"\",\n      \"actifAbout\": \"\",\n      \"commentaire\": \"\"\n     }\n    ]\n   },\n   {\n    \"id\": \"xro02\",\n    \"baie\": \"CF-L2-01\",\n    \"tag\": \"CF-L2-01-RO01\",\n    \"libelle\": \"Tiroir optique du coffret ligne 2\",\n    \"position\": \"2\",\n    \"nbPorts\": \"12\",\n    \"typePort\": \"Fibre LC duplex\",\n    \"commentaire\": \"\",\n    \"raccords\": [\n     {\n      \"n\": \"1\",\n      \"reseau\": \"Trunk vers baie principale\",\n      \"repereLiaison\": \"WO-BAIE01-RO01/CF-L2-01-RO01-A\",\n      \"tenant\": \"BAIE-01-RO01\",\n      \"detail\": \"Rd\",\n      \"repCable\": \"F-001\",\n      \"repAbout\": \"API_L2_01 X1\",\n      \"actifAbout\": \"TX - LC en 1000baseSX\",\n      \"commentaire\": \"\"\n     },\n     {\n      \"n\": \"2\",\n      \"reseau\": \"Trunk vers baie principale\",\n      \"repereLiaison\": \"WO-BAIE01-RO01/CF-L2-01-RO01-A\",\n      \"tenant\": \"BAIE-01-RO01\",\n      \"detail\": \"Bk\",\n      \"repCable\": \"F-001\",\n      \"repAbout\": \"API_L2_01 X1\",\n      \"actifAbout\": \"RX - LC en 1000baseSX\",\n      \"commentaire\": \"\"\n     },\n     {\n      \"n\": \"3\",\n      \"reseau\": \"libre\",\n      \"repereLiaison\": \"\",\n      \"tenant\": \"\",\n      \"detail\": \"\",\n      \"repCable\": \"\",\n      \"repAbout\": \"\",\n      \"actifAbout\": \"\",\n      \"commentaire\": \"\"\n     },\n     {\n      \"n\": \"4\",\n      \"reseau\": \"libre\",\n      \"repereLiaison\": \"\",\n      \"tenant\": \"\",\n      \"detail\": \"\",\n      \"repCable\": \"\",\n      \"repAbout\": \"\",\n      \"actifAbout\": \"\",\n      \"commentaire\": \"\"\n     },\n     {\n      \"n\": \"5\",\n      \"reseau\": \"libre\",\n      \"repereLiaison\": \"\",\n      \"tenant\": \"\",\n      \"detail\": \"\",\n      \"repCable\": \"\",\n      \"repAbout\": \"\",\n      \"actifAbout\": \"\",\n      \"commentaire\": \"\"\n     },\n     {\n      \"n\": \"6\",\n      \"reseau\": \"libre\",\n      \"repereLiaison\": \"\",\n      \"tenant\": \"\",\n      \"detail\": \"\",\n      \"repCable\": \"\",\n      \"repAbout\": \"\",\n      \"actifAbout\": \"\",\n      \"commentaire\": \"\"\n     },\n     {\n      \"n\": \"7\",\n      \"reseau\": \"libre\",\n      \"repereLiaison\": \"\",\n      \"tenant\": \"\",\n      \"detail\": \"\",\n      \"repCable\": \"\",\n      \"repAbout\": \"\",\n      \"actifAbout\": \"\",\n      \"commentaire\": \"\"\n     },\n     {\n      \"n\": \"8\",\n      \"reseau\": \"libre\",\n      \"repereLiaison\": \"\",\n      \"tenant\": \"\",\n      \"detail\": \"\",\n      \"repCable\": \"\",\n      \"repAbout\": \"\",\n      \"actifAbout\": \"\",\n      \"commentaire\": \"\"\n     },\n     {\n      \"n\": \"9\",\n      \"reseau\": \"libre\",\n      \"repereLiaison\": \"\",\n      \"tenant\": \"\",\n      \"detail\": \"\",\n      \"repCable\": \"\",\n      \"repAbout\": \"\",\n      \"actifAbout\": \"\",\n      \"commentaire\": \"\"\n     },\n     {\n      \"n\": \"10\",\n      \"reseau\": \"libre\",\n      \"repereLiaison\": \"\",\n      \"tenant\": \"\",\n      \"detail\": \"\",\n      \"repCable\": \"\",\n      \"repAbout\": \"\",\n      \"actifAbout\": \"\",\n      \"commentaire\": \"\"\n     },\n     {\n      \"n\": \"11\",\n      \"reseau\": \"libre\",\n      \"repereLiaison\": \"\",\n      \"tenant\": \"\",\n      \"detail\": \"\",\n      \"repCable\": \"\",\n      \"repAbout\": \"\",\n      \"actifAbout\": \"\",\n      \"commentaire\": \"\"\n     },\n     {\n      \"n\": \"12\",\n      \"reseau\": \"libre\",\n      \"repereLiaison\": \"\",\n      \"tenant\": \"\",\n      \"detail\": \"\",\n      \"repCable\": \"\",\n      \"repAbout\": \"\",\n      \"actifAbout\": \"\",\n      \"commentaire\": \"\"\n     }\n    ]\n   }\n  ]\n }\n}\n" };
 /*! WerbAssets – Développé par @WerbHat */
 /* Identité du module : source unique utilisée par l'interface, le fichier de données et tous les exports.
@@ -225,7 +267,7 @@ const WERB = Object.freeze((() => {
   const bytes = [68, 195, 169, 118, 101, 108, 111, 112, 112, 195, 169, 32, 112, 97, 114, 32, 64, 87, 101, 114, 98, 72, 97, 116];
   const signature = new TextDecoder("utf-8").decode(new Uint8Array(bytes));
   const produit = "WerbAssets";
-  const version = "1.10.0";
+  const version = "1.14.0";
   return {
     id: "werbassets",
     produit, version, auteur: "@WerbHat", signature,
@@ -1866,6 +1908,10 @@ const WerbXlsx = (() => {
     ["typesPort", "Types de port (switch)", ["RJ45", "SFP", "SFP+", "QSFP"]],
     ["typesBandeau", "Types de port des bandeaux", ["RJ45", "Fibre LC duplex", "Fibre SC duplex", "T-SC Duplex", "Fibre MTP"]],
     ["typesWan", "Types de lien WAN", ["Fibre", "Cuivre (xDSL)", "4G / 5G", "MPLS", "Liaison louée", "Satellite"]],
+    // Couleurs de brin (1.13.0) : paires RJ45 (T568A/B), puis fibres optiques 1 à 12 (code TIA-598) et 13 à 24 (même couleur, traceur)
+    ["couleursBrin", "Couleurs de brin (RJ45, fibre optique)", ["Blanc/Orange", "Orange", "Blanc/Vert", "Vert", "Blanc/Bleu", "Bleu", "Blanc/Marron", "Marron", "Gris", "Blanc", "Rouge", "Noir", "Jaune", "Violet", "Rose", "Turquoise", "Bleu (traceur noir)", "Orange (traceur noir)", "Vert (traceur noir)", "Marron (traceur noir)", "Gris (traceur noir)", "Blanc (traceur noir)", "Rouge (traceur noir)", "Noir (traceur jaune)", "Jaune (traceur noir)", "Violet (traceur noir)", "Rose (traceur noir)", "Turquoise (traceur noir)"]],
+    ["typesCable", "Types de câble de liaison", ["Fibre multimode OM3", "Fibre multimode OM4", "Fibre monomode OS2", "Cuivre Cat 6 U/UTP", "Cuivre Cat 6A F/FTP", "Cuivre Cat 7 S/FTP", "Multipaire téléphonique", "Autre"]],
+    ["typesCordon", "Types de cordon de brassage", ["Cordon RJ45", "Jarretière optique LC-LC", "Jarretière optique SC-SC", "Jarretière optique LC-SC", "Autre"]],
   ];
   const refs = k => Object.assign(() => S.refs[k], { ref: k });   // « ref » : liste de choix du champ (emplois d'une valeur)
   const ETATS_CTRL = [["fait", "Fait"], ["afaire", "À faire"], ["na", "Non applicable"]];
@@ -1921,14 +1967,31 @@ const WerbXlsx = (() => {
     ports: { l: "Ports", obj: "Port", cle: "n", cols: [c("n", "N° port", "text", { cls: "num3" }), c("libelle", "Libellé"), c("type", "Type", "dl", { dl: "dl-typesPort", o: refs("typesPort"), cls: "sm" }),
       c("etat", "État", "select", { o: () => ETATS_PORT }), c("vlan", "ID VLAN", "text", { cls: "sm" }), c("ut", "Conf U/T VLAN", "select", { o: () => ["Untagged", "Tagged"] }),
       c("repere", "Repère câble"), c("about", "Aboutissant", "dl", { dl: "dl-about" }), c("commentaire", "Commentaire"), c("statut", "Statut", "select", { o: () => ETATS_ITF })] },
-    raccords: { l: "Raccordements", obj: "Port", cle: "n", cols: [c("n", "N°", "text", { cls: "num3" }), c("reseau", "Réseau / usage"), c("repereLiaison", "Repère câble liaison"), c("repereFil", "Repère fil/brin"),
-      c("tenant", "Libellé tenant"), c("detail", "Détail raccordement"), c("repCable", "Rep. câble"), c("repAbout", "Rep. aboutissant", "dl", { dl: "dl-about" }),
-      c("actifAbout", "Raccordement actif"), c("commentaire", "Commentaires")] },
+    // Raccordements (1.12.0) : à gauche l'arrière du bandeau (tenant : câble multibrin vers une autre baie), au centre le port,
+    // à droite l'avant (aboutissant : brassage vers un autre port, câble vers l'actif). « anciens » : libellés acceptés à l'import Excel.
+    raccords: { l: "Raccordements", obj: "Port", cle: "n", cols: [
+      c("tenant", "Tenant", "dl", { dl: "dl-tenants", cote: "t", aide: "Coffret ou baie (et bandeau) d'en face, à l'autre bout du câble de liaison : liste commune des coffrets et baies", anciens: ["Libellé tenant"] }),
+      c("repereLiaison", "Repère câble liaison", "dl", { dl: "dl-cables", cote: "t", aide: "Repère du câble multibrin qui part vers l'autre baie : choisi dans l'inventaire des câbles de liaison, un nouveau repère y est ajouté", anciens: ["Câble de liaison"] }),
+      c("typeCable", "Type de câble", "dl", { dl: "dl-typesCable", cote: "t", aide: "Type du câble de liaison (fibre OM3, cuivre Cat 6A…) : commun à tout le câble, tenu dans l'inventaire des câbles de liaison" }),
+      c("repereFil", "Brin", "dl", { dl: "dl-couleursBrin", cote: "t", aide: "Couleur ou repère du brin dans le câble de liaison : Blanc/Marron (paire RJ45), Bleu (fibre 1)… liste dans Référentiels", anciens: ["Repère fil/brin"] }),
+      c("detail", "Détail", "text", { cote: "t", aide: "Couleur de fibre, type de connecteur…", anciens: ["Détail raccordement"] }),
+      c("n", "N°", "text", { cls: "num3", cote: "p", aide: "Numéro du port sur le bandeau" }),
+      c("reseau", "Réseau / usage", "text", { cote: "a", aide: "Réseau ou usage du port ; « Libre » pour un port libre" }),
+      c("brasseVers", "Brassé vers", "dl", { dl: "dl-ports-bandeau", cote: "a", aide: "Port relié par un cordon ou une jarretière : 5 (même bandeau) ou BD-A2/12 (autre bandeau)" }),
+      c("cordon", "Cordon", "dl", { dl: "dl-typesCordon", o: refs("typesCordon"), cote: "a", aide: "Type de cordon ou de jarretière du brassage" }),
+      c("repCordon", "Repère cordon", "text", { cote: "a", aide: "Repère du cordon ou de la jarretière (C-101)" }),
+      c("repCable", "Repère câble", "text", { cote: "a", aide: "Repère du câble qui part du port vers l'actif", anciens: ["Rep. câble"] }),
+      c("repAbout", "Aboutissant", "dl", { dl: "dl-about", cote: "a", aide: "Équipement et port au bout du câble (SW_CORE01 port 1)", anciens: ["Rep. aboutissant"] }),
+      c("actifAbout", "Actif", "text", { cote: "a", aide: "TAG de l'actif raccordé", anciens: ["Raccordement actif"] }),
+      c("commentaire", "Commentaire", "text", { cote: "a", anciens: ["Commentaires"] })] },
   };
   const TABS_CAT = { parefeu: ["interfaces"], switch: ["vlans", "ports"], autre: [] };
   const TABS_FICHE = ["interfaces", "vlans", "ports"];
   const BANDEAU = [c("baie", "Baie", "baie"), c("tag", "TAG du bandeau"), c("libelle", "Libellé"), c("position", "Position dans la baie (U)", "text", { cls: "sm" }),
     c("nbPorts", "Nombre de ports", "num"), c("typePort", "Type de port", "dl", { dl: "dl-typesBandeau", o: refs("typesBandeau") }), c("commentaire", "Commentaire", "area")];
+  // Inventaire des câbles de liaison (1.14.0) : un câble multibrin entre deux coffrets ou baies
+  const COL_CABLE = [c("repere", "Repère câble liaison"), c("type", "Type de câble", "dl", { dl: "dl-typesCable", o: refs("typesCable") }), c("nbBrins", "Nombre de brins / fils", "num"),
+    c("tenant", "Tenant", "dl", { dl: "dl-tenants" }), c("aboutissant", "Aboutissant", "dl", { dl: "dl-tenants" }), c("longueur", "Longueur (m)"), c("commentaire", "Commentaire")];
   const COL_BAIE = [c("tag", "TAG de la baie"), c("libelle", "Libellé"), c("emplacement", "Emplacement")];
   const CHAMPS_ACTIF = ["id", "type", "famille", "zone", "criticite", "libelle", "emplacement", "coffret", "marque", "fonction", "modele", "firmware", "commentaire"];   // modele, firmware, commentaire : WerbMap 1.11
   const CHAMPS_REF = ["type", "famille", "zone", "libelle", "emplacement", "coffret", "marque", "modele", "firmware", "commentaire"];
@@ -1937,7 +2000,7 @@ const WerbXlsx = (() => {
   /* ===================================================== état (en mémoire seulement) */
   let S = null, ENV = { creeLe: "", journal: [] }, LIAISON = {}, fichier = { poignee: null, nom: "", modifie: null }, dirty = false, user = "";
   let vue = "tdb";
-  const ui = { coche: {}, arch: false, zone: {}, q: {}, baie: "", sel: null, retour: "", xcat: "parefeu", mode: "completer", jq: "", iq: "" };
+  const ui = { cq: "", coche: {}, arch: false, zone: {}, q: {}, baie: "", sel: null, retour: "", xcat: "parefeu", mode: "completer", jq: "", iq: "" };
   let IDX = new Map(), FIDX = new Map();   // TAG en majuscules → actif de l'inventaire, → fiche
   let SMSI_ERR = "", RAPPORT = null;
   let LISTES = {}, LISTES_GROUPE = null, LISTES_MSG = "";   // dernière fusion des listes du groupe (charte §5.9)
@@ -1994,7 +2057,7 @@ const WerbXlsx = (() => {
 
   /* ===================================================== modèle */
   function vide() {
-    return { site: { nom: "" }, versions: [], inventaire: { site: "", source: "", publieLe: "", chargeLe: "", actifs: [], zones: [], vlans: [], coffrets: [] }, fiches: [], baies: [], bandeaux: [], archives: { bandeaux: [] }, largeurs: {},
+    return { site: { nom: "" }, versions: [], inventaire: { site: "", source: "", publieLe: "", chargeLe: "", actifs: [], zones: [], vlans: [], coffrets: [] }, fiches: [], baies: [], bandeaux: [], cables: [], archives: { bandeaux: [] }, largeurs: {},
       refs: Object.fromEntries(REFS.map(([k, , d]) => [k, d.slice()])), listesGroupe: {} };   // listesGroupe : copie des valeurs du groupe { valeurs, majLe }
   }
   function nouvelleFiche(tag, cat = "") {
@@ -2049,6 +2112,9 @@ const WerbXlsx = (() => {
       .map(x => ({ v: +x.v, date: str(x.date), par: str(x.par), commentaire: str(x.commentaire), changements: Math.max(0, parseInt(x.changements, 10) || 0) }))
       .sort((a, c) => a.v - c.v);
     b.bandeaux = (Array.isArray(d.bandeaux) ? d.bandeaux : []).filter(x => x && typeof x === "object").map(normBandeau);
+    const vc = new Set();
+    b.cables = (Array.isArray(d.cables) ? d.cables : []).filter(x => x && typeof x === "object").map(normCable).filter(x => x.repere && !vc.has(LCLE(x.repere)) && vc.add(LCLE(x.repere)));
+    citerCables(b);   // base antérieure à 1.14.0 : câbles cités par les raccordements ajoutés à l'inventaire
     // Bandeaux archivés (TRV-4) : réserve hors brassage, impression et classeurs ; largeurs des colonnes par tableau (TRV-6)
     const ar = d.archives && Array.isArray(d.archives.bandeaux) ? d.archives.bandeaux : [];
     b.archives.bandeaux = ar.filter(x => x && typeof x === "object").map(x => Object.assign(normBandeau(x), { archive: { le: str(x.archive && x.archive.le), par: str(x.archive && x.archive.par) } }));
@@ -2143,7 +2209,221 @@ const WerbXlsx = (() => {
     return [...m.values()].sort((a, b) => parNumero(a.tag, b.tag));
   }
   const bandeauDe = id => S.bandeaux.find(b => b.id === id);
-  const raccordes = b => b.raccords.filter(r => (r.reseau && !/^libre$/i.test(r.reseau)) || r.repAbout || r.actifAbout).length;
+  const raccordes = b => b.raccords.filter(r => (r.reseau && !/^libre$/i.test(r.reseau)) || r.repAbout || r.actifAbout || r.brasseVers).length;
+
+  /* ===================================================== brassage entre ports (1.11.0) */
+  // « Brassé vers » d'un port : « 5 » (port du même bandeau) ou « BD-A2/12 » (port d'un autre bandeau, TAG/port).
+  // Le lien est tenu dans les deux sens : le port d'en face reçoit le lien retour, le même cordon et le même repère.
+  const portDe = (b, n) => (b ? b.raccords.find(x => String(x.n) === String(n)) : undefined);
+  function cibleLien(b, v, D = S) {   // → { b, r } (r absent : port inexistant), { b: null } (bandeau inconnu), null (vide)
+    v = String(v || "").trim(); if (!v) return null;
+    let m = /^(?:port\s*)?([^\s/]+)$/i.exec(v);
+    if (m) return { b, r: portDe(b, m[1]), n: m[1] };
+    m = /^(.+?)\s*[/·]\s*(?:port\s*)?([^\s/]+)$/i.exec(v);
+    if (!m) return { b: null, tag: v };
+    const ob = D.bandeaux.find(x => x.tag.toUpperCase() === m[1].trim().toUpperCase());
+    return ob ? { b: ob, r: portDe(ob, m[2]), n: m[2] } : { b: null, tag: m[1].trim() };
+  }
+  const refLien = (de, b, r) => (b === de ? String(r.n) : `${b.tag}/${r.n}`);
+  // Lien valide et réciproque : { b, r } du port d'en face, sinon null
+  function enFace(b, r, D = S) {
+    const c = cibleLien(b, r.brasseVers, D);
+    if (!c || !c.r || c.r === r) return null;
+    const retour = cibleLien(c.b, c.r.brasseVers, D);
+    return retour && retour.r === r ? c : null;
+  }
+  // Anomalies du brassage d'un bandeau : [port, message]
+  function anomaliesBrassage(b, D = S) {
+    const a = [];
+    b.raccords.forEach(r => {
+      if (!r.brasseVers) return;
+      const c = cibleLien(b, r.brasseVers, D);
+      if (!c.b) a.push([r.n, `brassé vers « ${r.brasseVers} » : bandeau inconnu`]);
+      else if (!c.r) a.push([r.n, `brassé vers ${c.b === b ? "le port " + c.n : c.b.tag + " port " + c.n} : port inexistant`]);
+      else if (c.r === r) a.push([r.n, "brassé vers lui-même"]);
+      else if (!enFace(b, r, D)) a.push([r.n, `lien vers ${refLien(b, c.b, c.r)} sans retour (le port d'en face est brassé ailleurs ou pas du tout)`]);
+    });
+    // Repère de cordon porté par plus de deux liens (plus de deux brins) dans la baie
+    const n = new Map();
+    D.bandeaux.filter(x => x.baie.toUpperCase() === b.baie.toUpperCase()).forEach(x => x.raccords.forEach(r => { if (r.repCordon && enFace(x, r, D)) n.set(LCLE(r.repCordon), (n.get(LCLE(r.repCordon)) || 0) + 1); }));
+    const vus = new Set();
+    b.raccords.forEach(r => { const k = LCLE(r.repCordon || ""); if (k && (n.get(k) || 0) > 4 && !vus.has(k)) { vus.add(k); a.push([r.n, `repère de cordon ${r.repCordon} sur ${n.get(k)} ports de la baie (plus de deux brins)`]); } });
+    return a;
+  }
+  // Liens à l'intérieur du bandeau, rangés en voies pour le dessin : { liens: [{ a, z, voie, coul, rep, type }], voies }
+  function voiesBrassage(b) {
+    const idx = new Map(b.raccords.map((r, i) => [r, i])), liens = [];
+    b.raccords.forEach((r, i) => { const c = enFace(b, r); if (c && c.b === b && idx.get(c.r) > i) liens.push({ a: i, z: idx.get(c.r), rep: r.repCordon, type: r.cordon }); });
+    liens.sort((x, y) => x.a - y.a || x.z - y.z);
+    const fin = [];
+    liens.forEach(l => { let v = fin.findIndex(f => f < l.a); if (v < 0) { v = fin.length; fin.push(-1); } fin[v] = l.z; l.voie = v; });
+    const cles = [...new Set(liens.map(l => l.rep ? LCLE(l.rep) : "#" + l.a))];
+    liens.forEach(l => { l.coul = cles.indexOf(l.rep ? LCLE(l.rep) : "#" + l.a) % 8; });
+    return { liens, voies: fin.length };
+  }
+  const PAS_VOIE = 9;
+  function caseBrassage(b, V, i) {
+    const r = b.raccords[i], h = [];
+    V.liens.filter(l => l.a <= i && l.z >= i).forEach(l => {
+      const x = 8 + l.voie * PAS_VOIE, pos = i === l.a ? "deb" : i === l.z ? "fin" : "mil";
+      const tip = esc(`Port ${b.raccords[l.a].n} ↔ port ${b.raccords[l.z].n}${l.rep ? " · " + l.rep : ""}${l.type ? " · " + l.type : ""}`);
+      h.push(`<i class="v ${pos} c${l.coul}" style="left:${x}px" title="${tip}"></i>`);
+      if (pos !== "mil") h.push(`<i class="h c${l.coul}" style="width:${x + 2}px" title="${tip}"></i>`);
+    });
+    const c = enFace(b, r);
+    if (c && c.b !== b) h.push(`<span class="ext" title="${esc(`Brassé vers ${c.b.tag} port ${c.r.n}${r.repCordon ? " · " + r.repCordon : ""}`)}">↗</span>`);
+    return `<td class="brs" style="width:${14 + V.voies * PAS_VOIE}px">${h.join("")}</td>`;
+  }
+  // Repère câble liaison : lignes consécutives du même câble regroupées (couleur, début et fin du groupe)
+  // Plages de lignes consécutives d'un même câble de liaison : [{ a, z }] (indices de début et de fin)
+  function plagesLiaison(l) {
+    const p = [];
+    l.forEach((r, i) => {
+      const v = LCLE(r.repereLiaison || "");
+      if (!v) return;
+      const der = p[p.length - 1];
+      if (der && der.z === i - 1 && LCLE(l[i - 1].repereLiaison || "") === v) der.z = i; else p.push({ a: i, z: i });
+    });
+    return p;
+  }
+  // Fusion visuelle (1.13.0) : Tenant et Câble de liaison dans un même encadré par câble ; sur les lignes suivantes du groupe,
+  // la valeur identique n'est pas répétée (elle réapparaît à la saisie) ; un tenant différent reste affiché.
+  // → par ligne : { t: classes de la case Tenant, l: classes de la case Câble de liaison }
+  function groupesLiaison(l) {
+    const g = l.map(() => ({ t: "", l: "", y: "" }));
+    plagesLiaison(l).forEach((x, k) => {
+      const ten = LCLE(l[x.a].tenant || "");
+      for (let i = x.a; i <= x.z; i++) {
+        const base = `liai g${k % 4}${i === x.a ? " deb" : ""}${i === x.z ? " fin" : ""}`, suite = i > x.a;
+        const tenMeme = !l[i].tenant || LCLE(l[i].tenant) === ten;
+        g[i] = { t: `${base} gt${suite && tenMeme ? " suite" : ""}${suite && !tenMeme ? " ecart" : ""}`, l: `${base} gl${suite ? " suite" : ""}`, y: `${base} gy${suite ? " suite" : ""}` };
+      }
+    });
+    return g;
+  }
+  // Saisie du tenant ou du câble de liaison sur la première ligne d'un groupe : appliquée à tout le groupe
+  // (câble : toutes les lignes ; tenant : lignes vides ou égales à l'ancienne valeur). false si la ligne n'ouvre pas un groupe.
+  function saisieGroupe(b, i, f, avant, v) {
+    const x = plagesLiaison(b.raccords).find(y => y.a === i && y.z > y.a);
+    if (!x) return false;
+    for (let j = x.a; j <= x.z; j++) {
+      const r = b.raccords[j], av = r[f] || "";
+      if (j > x.a && f === "tenant" && av && LCLE(av) !== LCLE(avant)) continue;
+      if (av === v) continue;
+      r[f] = v; journaliser("Modification", "Bandeau", b.tag, `Port ${r.n} · ${TAB.raccords.cols.find(c => c.f === f).l}${j > x.a ? " (groupe du câble)" : ""}`, av, v);
+    }
+    return true;
+  }
+  // Pastille de couleur d'un brin : « Blanc/Marron », « Bleu », « Bleu (traceur noir) »
+  const COULEURS_FIL = ["bleu", "orange", "vert", "marron", "gris", "blanc", "rouge", "noir", "jaune", "violet", "rose", "turquoise"];
+  function pastilleFil(v) {
+    const l = String(v || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").match(/[a-z]+/g) || [];
+    const c = l.filter(x => COULEURS_FIL.includes(x)).slice(0, 2);
+    if (!c.length) return "";
+    const fond = c.length === 1 ? `var(--fil-${c[0]})` : /traceur/.test(l.join(" ")) ? `linear-gradient(90deg, var(--fil-${c[0]}) 70%, var(--fil-${c[1]}) 70%)` : `linear-gradient(90deg, var(--fil-${c[0]}) 50%, var(--fil-${c[1]}) 50%)`;
+    return `<span class="fil" style="background:${fond}" title="${esc(v)}"></span>`;
+  }
+  // Saisie de « Brassé vers », « Cordon » ou « Repère cordon » : lien tenu des deux côtés ; false si la saisie est refusée
+  function lierPort(b, i, champ, v) {
+    const r = b.raccords[i]; if (!r) return false;
+    const lib = f => TAB.raccords.cols.find(x => x.f === f).l;
+    const poserR = (bb, rr, f, val) => { if ((rr[f] || "") !== val) { journaliser("Modification", "Bandeau", bb.tag, `Port ${rr.n} · ${lib(f)}`, rr[f] || "", val); rr[f] = val; } };
+    const delier = (bb, rr) => {   // retire le lien de rr et, s'il était réciproque, le lien retour (cordon et repère compris)
+      const c = enFace(bb, rr);
+      if (c) ["brasseVers", "cordon", "repCordon"].forEach(f => poserR(c.b, c.r, f, ""));
+      poserR(bb, rr, "brasseVers", "");
+    };
+    if (champ !== "brasseVers") {
+      const c = enFace(b, r);
+      poserR(b, r, champ, v);
+      if (c) poserR(c.b, c.r, champ, v);   // même cordon des deux côtés
+      return true;
+    }
+    if (!v) { delier(b, r); return true; }
+    const c = cibleLien(b, v);
+    if (!c.b) { toast(`« ${v} » : bandeau inconnu. Écrire le numéro d'un port du bandeau (5) ou « TAG du bandeau/port » (BD-A2/12).`, "err"); return false; }
+    if (!c.r) { toast(`Le port ${c.n} n'existe pas sur ${c.b.tag}.`, "err"); return false; }
+    if (c.r === r) { toast("Un port ne peut pas être brassé vers lui-même.", "err"); return false; }
+    const ref = refLien(b, c.b, c.r);
+    if (ref === r.brasseVers && enFace(b, r)) return true;
+    const occupe = enFace(c.b, c.r);
+    if (occupe && occupe.r !== r) toast(`${refLien(b, c.b, c.r) === String(c.r.n) ? "Le port " + c.r.n : c.b.tag + " port " + c.r.n} était brassé vers ${refLien(b, occupe.b, occupe.r)} : ce lien est remplacé.`, "");
+    if (enFace(b, r)) delier(b, r);
+    if (occupe) delier(c.b, c.r);
+    // Repère du cordon saisi auparavant dans « Repère câble » des deux ports : déplacé vers « Repère cordon »
+    if (!r.repCordon && !c.r.repCordon && r.repCable && LCLE(r.repCable) === LCLE(c.r.repCable || "")) {
+      const rep = r.repCable;
+      poserR(b, r, "repCordon", rep); poserR(c.b, c.r, "repCordon", rep); poserR(b, r, "repCable", ""); poserR(c.b, c.r, "repCable", "");
+      toast(`Repère ${rep} déplacé de « Repère câble » vers « Repère cordon » sur les deux ports.`, "ok");
+    }
+    poserR(b, r, "brasseVers", ref);
+    poserR(c.b, c.r, "brasseVers", refLien(c.b, b, r));
+    poserR(c.b, c.r, "cordon", r.cordon || c.r.cordon || ""); if (!r.cordon && c.r.cordon) poserR(b, r, "cordon", c.r.cordon);
+    poserR(c.b, c.r, "repCordon", r.repCordon || c.r.repCordon || ""); if (!r.repCordon && c.r.repCordon) poserR(b, r, "repCordon", c.r.repCordon);
+    return true;
+  }
+  // Après un import : lien retour posé quand le port d'en face n'est brassé nulle part
+  function completerRetours(D) {
+    let n = 0;
+    D.bandeaux.forEach(b => b.raccords.forEach(r => {
+      const c = cibleLien(b, r.brasseVers, D);
+      if (!c || !c.r || c.r === r || c.r.brasseVers) return;
+      c.r.brasseVers = refLien(c.b, b, r); if (!c.r.cordon) c.r.cordon = r.cordon; if (!c.r.repCordon) c.r.repCordon = r.repCordon; n++;
+    }));
+    return n;
+  }
+  /* ===================================================== câbles de liaison (1.14.0) */
+  const normCable = x => Object.assign({ id: str(x.id) || uid() }, Object.fromEntries(COL_CABLE.map(col => [col.f, str(x[col.f]).trim()])));
+  const cableDe = (rep, D = S) => { const k = LCLE(rep || ""); return k ? D.cables.find(x => LCLE(x.repere) === k) : undefined; };
+  // Valeur de remplissage (nc, n/a, -, ?, néant, aucun) : jamais ajoutée à l'inventaire des câbles
+  const repereVide = v => /^\s*(nc|n\.?c\.?|n\s*\/\s*a|na|-+|\?+|néant|neant|aucun|sans)\s*$/i.test(v || "");
+  const portsDuCable = (rep, D = S) => { const k = LCLE(rep || ""); return k ? D.bandeaux.flatMap(b => b.raccords.filter(r => LCLE(r.repereLiaison || "") === k).map(r => ({ b, r }))) : []; };
+  // Câbles cités par les raccordements et absents de l'inventaire : ajoutés (type, tenant et aboutissant repris du premier port)
+  function citerCables(D, journal = null) {
+    let n = 0;
+    D.bandeaux.forEach(b => b.raccords.forEach(r => {
+      if (!r.repereLiaison || repereVide(r.repereLiaison) || cableDe(r.repereLiaison, D)) return;
+      D.cables.push(normCable({ repere: r.repereLiaison, type: r.typeCable, tenant: r.tenant, aboutissant: [b.baie, b.tag].filter(Boolean).join(" / ") })); n++;
+      if (journal) journal(r.repereLiaison);
+    }));
+    D.cables.forEach(cb => synchroType(cb, D));
+    return n;
+  }
+  // Type du câble : l'inventaire fait foi ; à défaut, le premier type saisi sur un port ; recopié sur tous les ports du câble
+  function synchroType(cb, D = S, jr = false) {
+    const ports = portsDuCable(cb.repere, D);
+    if (!cb.type) { const t = ports.map(x => x.r.typeCable).find(Boolean); if (t) cb.type = t; }
+    ports.forEach(({ b, r }) => { if ((r.typeCable || "") !== cb.type) { if (jr) journaliser("Modification", "Bandeau", b.tag, `Port ${r.n} · Type de câble (inventaire)`, r.typeCable || "", cb.type); r.typeCable = cb.type; } });
+  }
+  // Après la saisie du repère ou du type de câble sur un port : inventaire tenu à jour
+  function apresSaisieCable(b, i, f, avant, v) {
+    const r = b.raccords[i];
+    if (f === "typeCable") {
+      if (!r.repereLiaison || repereVide(r.repereLiaison)) return;
+      const cb = cableDe(r.repereLiaison) || ajouterCable(b, r);
+      if ((cb.type || "") !== v) { journaliser("Modification", "Câble de liaison", cb.repere, "Type de câble", cb.type, v); cb.type = v; }
+      synchroType(cb, S, true); return;
+    }
+    if (f !== "repereLiaison" || !v || repereVide(v)) return;
+    let cb = cableDe(v);
+    if (!cb && avant) {   // câble renommé sur ses ports : l'inventaire suit s'il n'est plus cité ailleurs
+      const old = cableDe(avant);
+      if (old && !portsDuCable(avant).length) { journaliser("Modification", "Câble de liaison", old.repere, "Repère câble liaison", old.repere, v); old.repere = v; cb = old; toast(`Câble ${avant} renommé ${v} dans l'inventaire des câbles de liaison.`, "ok"); }
+    }
+    if (!cb) cb = ajouterCable(b, r);
+    synchroType(cb, S, true);
+  }
+  function ajouterCable(b, r) {
+    const cb = normCable({ repere: r.repereLiaison, type: r.typeCable, tenant: r.tenant, aboutissant: [b.baie, b.tag].filter(Boolean).join(" / ") });
+    S.cables.push(cb); journaliser("Ajout", "Câble de liaison", cb.repere, "", "", [cb.type, cb.tenant && "tenant " + cb.tenant].filter(Boolean).join(" · "));
+    toast(`Câble ${cb.repere} ajouté à l'inventaire des câbles de liaison.`, "ok");
+    return cb;
+  }
+  // TAG d'un bandeau renommé : liens des autres bandeaux mis à jour
+  function renommerLiens(ancien, nouveau) {
+    const re = new RegExp("^" + ancien.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + "\\s*/", "i");
+    S.bandeaux.forEach(b => b.raccords.forEach(r => { if (re.test(r.brasseVers || "")) { const v = r.brasseVers.replace(re, nouveau + "/"); journaliser("Modification", "Bandeau", b.tag, `Port ${r.n} · Brassé vers`, r.brasseVers, v); r.brasseVers = v; } }));
+  }
 
   /* ===================================================== inventaire WerbMap */
   function inventaireDepuis(pub, source) {
@@ -2182,6 +2462,9 @@ const WerbXlsx = (() => {
     if (k === "typesPort") return S.fiches.flatMap(f => f.ports.map(r => [r, "type", f.tag]));
     if (k === "typesBandeau") return S.bandeaux.map(b => [b, "typePort", b.tag]);
     if (k === "typesWan") return S.fiches.map(f => [f, "typeWan", f.tag]);
+    if (k === "couleursBrin") return S.bandeaux.flatMap(b => b.raccords.map(r => [r, "repereFil", b.tag]));
+    if (k === "typesCable") return S.cables.map(x => [x, "type", x.repere]);
+    if (k === "typesCordon") return S.bandeaux.flatMap(b => b.raccords.map(r => [r, "cordon", b.tag]));
     return [];
   }
   const emplois = (k, v) => champsListe(k).filter(([o, f]) => LCLE(o[f]) === LCLE(v)).length;
@@ -2296,6 +2579,10 @@ const WerbXlsx = (() => {
     else if ((Date.parse(AUJ()) - Date.parse(S.inventaire.chargeLe.slice(0, 10))) / 86400000 > 90) a.push(["b-warn", "Inventaire WerbMap", `Chargé le ${frDate(S.inventaire.chargeLe)} : à actualiser`, "inventaire"]);
     const orph = invCharge() ? orphelines() : [];
     if (orph.length) a.push(["b-warn", "Fiches orphelines", `${orph.length} fiche(s) d'asset absent(s) de WerbMap : ${orph.slice(0, 6).map(f => f.tag).join(", ")}${orph.length > 6 ? "…" : ""}`, catDe(orph[0].tag) || "autre"]);
+    const trop = S.cables.filter(cb => +cb.nbBrins && portsDuCable(cb.repere).length > +cb.nbBrins);
+    if (trop.length) a.push(["b-warn", "Câbles de liaison", trop.map(cb => `${cb.repere} : ${portsDuCable(cb.repere).length} ports raccordés pour ${cb.nbBrins} brins`).join(", "), "cables"]);
+    const anom = S.bandeaux.map(b => [b, anomaliesBrassage(b)]).filter(([, l]) => l.length);
+    if (anom.length) a.push(["b-warn", "Brassage entre ports", anom.map(([b, l]) => `${b.tag} (${l.length} : ${l.slice(0, 2).map(([n, m]) => "port " + n + " " + m).join(" ; ")}${l.length > 2 ? "…" : ""})`).join(", "), "brassage"]);
     ["parefeu", "switch"].forEach(k => {
       const l = assets(k);
       const vides = l.filter(x => avancement(x.f, k) === 0);
@@ -2310,7 +2597,7 @@ const WerbXlsx = (() => {
   const VUES = {};
   const MENU = [
     { g: "pilot", i: "📊", l: "Pilotage", c: "bleu", t: [["tdb", "Tableau de bord"]] },
-    { g: "assets", i: "🗂️", l: "Assets", c: "vert", t: [["parefeu", "🧱 Pare-feu"], ["switch", "🔀 Switch"], ["brassage", "🔌 Brassage"], ["autre", "📟 Autres assets"]] },
+    { g: "assets", i: "🗂️", l: "Assets", c: "vert", t: [["parefeu", "🧱 Pare-feu"], ["switch", "🔀 Switch"], ["brassage", "🔌 Brassage"], ["cables", "🧵 Câbles de liaison"], ["autre", "📟 Autres assets"]] },
     { g: "inv", i: "🗄️", l: "Inventaire WerbMap", c: "cyan", t: [["inventaire", "Actifs du site"]] },
     { g: "xl", i: "📥", l: "Saisie Excel", c: "ambre", t: [["excel", "Modèles, export et import"]] },
     { g: "adm", i: "⚙️", l: "Base", c: "ardoise", t: [["refs", "Référentiels"], ["werbsmsi", "Intégration WerbSMSI"], ["historique", "Historique"], ["apropos", "À propos"]] },
@@ -2363,14 +2650,31 @@ const WerbXlsx = (() => {
     const cl = [st, etatPort(k, r), k === "raccords" && /^libre$/i.test(r.reseau) ? "libre" : ""].filter(Boolean).join(" ");
     return cl ? ` class="${cl}"` : "";
   }
+  // Côtés du bandeau au-dessus des colonnes des raccordements : arrière (tenant), port, avant (aboutissant)
+  const COTES = { t: "◀ Arrière · tenant : câble multibrin vers une autre baie", p: "Port", a: "Avant · aboutissant : brassage, câble et actif ▶" };
+  function ligneCotes(cols, avant = "", apres = "", dessin = false) {
+    const g = [];
+    cols.forEach(col => { const k = col.cote || "", n = dessin && col.f === "n" ? 2 : 1; if (g.length && g[g.length - 1].k === k) g[g.length - 1].n += n; else g.push({ k, n }); });
+    return `<tr class="cotes">${avant}${g.map(x => `<th colspan="${x.n}" class="cote-${x.k}">${esc(COTES[x.k] || "")}</th>`).join("")}${apres}</tr>`;
+  }
   const legende = () => `<div class="legende"><span><i style="background:var(--etat-service)"></i>En service</span><span><i style="background:var(--etat-reserve)"></i>Réservé</span><span><i style="background:var(--etat-cours)"></i>En cours</span></div>`;
   function tableau(k, l, outils = "") {
-    const T = TAB[k];
+    const T = TAB[k], b = k === "raccords" ? cible() : null, V = b ? voiesBrassage(b) : null, G = b ? groupesLiaison(l) : [];
+    const anom = b ? anomaliesBrassage(b) : [];
+    const dessin = n => (V ? caseBrassage(b, V, n) : "");
+    const clsCol = (col, n) => [col.cls || (col.t === "area" ? "lg" : ""), b && G[n] && col.f === "repereLiaison" ? G[n].l : "", b && G[n] && col.f === "tenant" ? G[n].t : "", b && G[n] && col.f === "typeCable" ? G[n].y : "",
+      b && col.f === "n" ? "port-n" : "", b && col.f === "repereFil" ? "brin" : ""].filter(Boolean).join(" ");
+    // Ports proposés dans « Brassé vers » : ceux du bandeau (5), puis ceux des autres bandeaux de la baie (BD-A2/12)
+    const dlPorts = b ? `<datalist id="dl-ports-bandeau">${[...b.raccords.map(r => [String(r.n), `Port ${r.n}${r.reseau ? " · " + r.reseau : ""}${r.brasseVers ? " · brassé vers " + r.brasseVers : ""}`]),
+      ...S.bandeaux.filter(x => x !== b && x.baie.toUpperCase() === b.baie.toUpperCase()).flatMap(x => x.raccords.map(r => [`${x.tag}/${r.n}`, `${x.libelle || x.tag} · port ${r.n}${r.reseau ? " · " + r.reseau : ""}`]))]
+      .map(([v, t]) => `<option value="${esc(v)}">${esc(t)}</option>`).join("")}</datalist>` : "";
     return `<div class="card"><div class="row"><h2 style="margin:0">${esc(T.l)}</h2><span class="small muted">${l.length} ligne(s)</span><span class="spacer"></span>${outils}<button data-act="ligneAjout" data-tab="${k}">+ ${esc(T.obj)}</button></div>
       ${k === "interfaces" || k === "ports" ? legende() : ""}${k === "ports" ? `<div class="legende"><span><i class="ep actif"></i>Port ACTIF</span><span><i class="ep bloque"></i>Port BLOQUÉ</span></div>` : ""}
-      ${outilsTable(k)}<div class="tablewrap plein"><table class="t edit" data-table="${k}"><thead><tr>${caseTout(k, l)}${T.cols.map(col => `<th data-col="${col.f}">${esc(col.l)}</th>`).join("")}<th></th></tr></thead><tbody>
-      ${l.map((r, n) => `<tr${classeLigne(k, r)}>${caseT(k, n, r)}${T.cols.map(col => `<td class="${col.cls || (col.t === "area" ? "lg" : "")}">${champ(col, r[col.f], `${k}.${n}.${col.f}`)}</td>`).join("")}<td class="act"><button class="small danger" data-act="ligneSuppr" data-tab="${k}" data-i="${n}" title="Supprimer la ligne">✕</button></td></tr>`).join("")
-      || `<tr><td colspan="${T.cols.length + 2}" class="empty">Aucune ligne.</td></tr>`}</tbody></table></div></div>`;
+      ${b ? `<p class="small muted noprint" data-aide-brassage>À gauche du N°, l'arrière du bandeau (tenant : câble multibrin vers une autre baie) ; à droite, l'avant (aboutissant). « Brassé vers » : le numéro d'un port du bandeau (5) ou « TAG du bandeau/port » (BD-A2/12) ; le port d'en face reçoit le lien retour, le cordon et son repère. La colonne ⇅ dessine les liens entre ports du bandeau ; ↗ : lien vers un autre bandeau. Survolez un en-tête pour son explication.</p>` : ""}
+      ${anom.length ? `<div class="warnbox small" data-anomalies-brassage>${anom.map(([n, m]) => `Port ${esc(n)} : ${esc(m)}`).join("<br>")}</div>` : ""}${dlPorts}
+      ${outilsTable(k)}<div class="tablewrap plein"><table class="t edit${b ? " brassage" : ""}" data-table="${k}"><thead>${b ? ligneCotes(T.cols, "<th></th>", "<th></th>", !!V) : ""}<tr>${caseTout(k, l)}${T.cols.map(col => `<th data-col="${col.f}"${col.cote ? ` class="cote-${col.cote}"` : ""}${col.aide ? ` title="${esc(col.aide)}"` : ""}>${esc(col.l)}</th>${V && col.f === "n" ? `<th class="brs cote-p" title="Liens entre ports du bandeau">⇅</th>` : ""}`).join("")}<th></th></tr></thead><tbody>
+      ${l.map((r, n) => `<tr${classeLigne(k, r)}>${caseT(k, n, r)}${T.cols.map(col => `<td class="${clsCol(col, n)}">${champ(col, r[col.f], `${k}.${n}.${col.f}`)}${b && col.f === "repereFil" ? pastilleFil(r.repereFil) : ""}</td>${V && col.f === "n" ? dessin(n) : ""}`).join("")}<td class="act"><button class="small danger" data-act="ligneSuppr" data-tab="${k}" data-i="${n}" title="Supprimer la ligne">✕</button></td></tr>`).join("")
+      || `<tr><td colspan="${T.cols.length + (V ? 3 : 2)}" class="empty">Aucune ligne.</td></tr>`}</tbody></table></div></div>`;
   }
   /* ===================================================== outils des tables (charte §7.7) */
   // Tableaux des fiches et des bandeaux : sélection et suppression (une ligne est un port ou une interface : pas d'archivage) ;
@@ -2384,7 +2688,7 @@ const WerbXlsx = (() => {
   }
   const cochees = k => { const s = ui.coche[k] || new Set(); return lignesT(k).filter(r => s.has(r)); };
   // Colonnes proposées au remplacement : texte libre, ni clé (port, ID VLAN, n°, TAG), ni liste de choix
-  const colsRemplacer = k => defT(k).cols.filter(col => col.f !== defT(k).cle && (col.t === "text" || col.t === "area" || (col.t === "dl" && !col.o)));
+  const colsRemplacer = k => defT(k).cols.filter(col => col.f !== defT(k).cle && col.f !== "brasseVers" && (col.t === "text" || col.t === "area" || (col.t === "dl" && !col.o)));
   const nomLigneT = (k, r) => `${defT(k).obj} ${r[defT(k).cle] || "?"}`;
   function outilsTable(k) {
     const sel = cochees(k), larg = Object.keys(S.largeurs[k] || {}).length, nArch = k === "bandeaux" ? bandeauxBaie(S.archives.bandeaux, ui.baie).length : 0;
@@ -2526,6 +2830,28 @@ const WerbXlsx = (() => {
       ${tableau("raccords", b.raccords, `<button data-act="genRaccords">Générer les ports (${+b.nbPorts || 0})</button>`)}`;
   };
 
+  // Câbles de liaison (1.14.0) : inventaire des câbles multibrins entre coffrets ou baies, ports qui les raccordent
+  VUES.cables = () => {
+    const q = norm(ui.cq || ""), tous = S.cables.slice().sort((a, b) => parNumero(a.repere, b.repere));
+    const l = tous.filter(cb => !q || norm(COL_CABLE.map(col => cb[col.f]).join(" ")).includes(q));
+    const ro = WerbSocle.verrou.lectureSeule ? " disabled" : "";
+    const inp = (cb, f, ph = "") => { const col = COL_CABLE.find(x => x.f === f);
+      return `<input data-cab="${esc(cb.id)}" data-cf="${f}" value="${esc(cb[f] || "")}"${ph ? ` placeholder="${esc(ph)}"` : ""}${col.t === "dl" ? ` list="${col.dl}" autocomplete="off"` : ""}${col.t === "num" ? ` type="number" min="0" step="1"` : ""}${ro}>`; };
+    const ligne = cb => {
+      const ports = portsDuCable(cb.repere), n = ports.length, nb = +cb.nbBrins || 0;
+      const parB = [...new Map(ports.map(x => [x.b, ports.filter(y => y.b === x.b).map(y => y.r.n)])).entries()];
+      const ten = [...new Set(ports.map(x => x.r.tenant).filter(Boolean))].join(", "), ab = [...new Set(ports.map(x => [x.b.baie, x.b.tag].filter(Boolean).join(" / ")))].join(", ");
+      return `<tr data-cable="${esc(cb.repere)}"><td>${inp(cb, "repere")}</td><td>${inp(cb, "type")}</td><td class="sm">${inp(cb, "nbBrins")}</td><td>${inp(cb, "tenant", ten)}</td><td>${inp(cb, "aboutissant", ab)}</td><td class="sm">${inp(cb, "longueur")}</td>
+        <td class="n" data-brins>${n}${nb ? " / " + nb : ""}${nb && n > nb ? " " + badge("plus de ports que de brins", "b-ko") : nb && n < nb ? ` <span class="small muted">${nb - n} libre(s)</span>` : ""}</td>
+        <td class="small">${parB.map(([b, ns]) => `<a href="#" data-act="ouvrirBandeau" data-id="${esc(b.id)}">${esc([b.baie, b.tag].filter(Boolean).join(" / "))}</a> <span class="muted">(port${ns.length > 1 ? "s" : ""} ${esc(ns.join(", "))})</span>`).join("<br>") || `<span class="muted">aucun port</span>`}</td>
+        <td>${inp(cb, "commentaire")}</td><td class="act"><button class="small danger" data-act="cableSuppr" data-id="${esc(cb.id)}"${n || ro ? ` disabled title="${n ? "Câble raccordé : retirez d'abord son repère des ports" : ""}"` : ` title="Retirer le câble de l'inventaire"`}>✕</button></td></tr>`;
+    };
+    return `<h1>🧵 Câbles de liaison</h1><p class="sub">Inventaire des câbles multibrins entre coffrets ou baies : repère, type, nombre de brins ou de fils, tenant et aboutissant, ports des bandeaux qui les raccordent. Un repère saisi dans un bandeau (colonne « Repère câble liaison ») est ajouté ici ; le type se tient ici ou dans le bandeau, sur tous les ports du câble.</p>
+      <div class="card"><div class="row" style="margin-bottom:8px"><input placeholder="🔍 Filtrer" id="filtreCables" value="${esc(ui.cq || "")}" style="max-width:260px"><span class="small muted">${l.length} câble(s) · ${l.reduce((x, cb) => x + portsDuCable(cb.repere).length, 0)} port(s) raccordé(s)</span><span class="spacer"></span><button class="primary" data-act="cableAjout"${ro}>+ Câble</button></div>
+      <div class="tablewrap plein"><table class="t edit" data-table="cables"><thead><tr>${COL_CABLE.slice(0, 6).map(col => `<th>${esc(col.l)}</th>`).join("")}<th title="Ports des bandeaux raccordés sur ce câble / nombre de brins">Brins raccordés</th><th>Bandeaux (ports)</th><th>Commentaire</th><th></th></tr></thead><tbody>
+      ${l.map(ligne).join("") || `<tr><td colspan="10" class="empty">${tous.length ? "Aucun câble ne correspond au filtre." : "Aucun câble : saisissez un repère dans la colonne « Repère câble liaison » d'un bandeau, ou + Câble."}</td></tr>`}</tbody></table></div></div>`;
+  };
+
   VUES.inventaire = () => {
     const inv = S.inventaire, q = ui.iq.toLowerCase();
     const l = inv.actifs.filter(a => !q || CHAMPS_ACTIF.some(f => String(a[f] || "").toLowerCase().includes(q)));
@@ -2607,6 +2933,7 @@ const WerbXlsx = (() => {
       { k: "baies", nom: "Baies", cle: "tag", cols: COL_BAIE, rappro: "TAG de la baie" },
       { k: "bandeaux", nom: "Bandeaux", cle: "tag", cols: BANDEAU, rappro: "TAG du bandeau (la baie est créée si elle n'existe pas)" },
       { k: "raccords", nom: "Raccordements", cle: "bandeau", cols: [c("bandeau", "TAG du bandeau"), ...TAB.raccords.cols], rappro: "TAG du bandeau et N°" },
+      { k: "cables", nom: "Câbles de liaison", cle: "repere", cols: COL_CABLE, rappro: "Repère câble liaison (un repère cité dans les raccordements est ajouté)" },
     ];
     return [
       { k: "fiches", nom: CAT[cat].l, cle: "tag", cols: [...COL_ID, ...champsCat(cat)], info: [1, 2, 3, 4], rappro: "TAG (un TAG absent de WerbMap crée une fiche orpheline)" },
@@ -2641,6 +2968,7 @@ const WerbXlsx = (() => {
         baies: baiesListe().map(b => [b.tag, (b.loc || {}).libelle || "", (b.loc || {}).emplacement || ""]),
         bandeaux: bx.map(b => BANDEAU.map(col => b[col.f])),
         raccords: bx.flatMap(b => b.raccords.map(r => [b.tag, ...TAB.raccords.cols.map(col => r[col.f])])),
+        cables: S.cables.slice().sort((a, b) => parNumero(a.repere, b.repere)).map(cb => COL_CABLE.map(col => cb[col.f])),
       };
     }
     const l = assets(k).sort((a, b) => parNumero(a.i.zone || "~", b.i.zone || "~") || parNumero(a.tag, b.tag));
@@ -2688,7 +3016,7 @@ const WerbXlsx = (() => {
     const h = l.findIndex((x, i) => i < 20 && x && x.some(v => norm(v) === cle));
     if (h < 0) return { nom, lignes: [], ignorees: [], sansTitre: true };
     const map = {}, ignorees = [];
-    l[h].forEach((v, j) => { const n = norm(v); if (!n) return; const col = d.cols.find(x => norm(x.l) === n || norm(x.f) === n); if (col) map[j] = col.f; else ignorees.push(String(v)); });
+    l[h].forEach((v, j) => { const n = norm(v); if (!n) return; const col = d.cols.find(x => norm(x.l) === n || norm(x.f) === n || (x.anciens || []).some(y => norm(y) === n)); if (col) map[j] = col.f; else ignorees.push(String(v)); });
     const out = [];
     for (let i = h + 1; i < l.length; i++) {
       if (!l[i]) continue;
@@ -2864,6 +3192,25 @@ const WerbXlsx = (() => {
       if (!b) { R.rejets.push([LR.nom, n, o.bandeau, "Bandeau inconnu : à déclarer dans la feuille Bandeaux"]); return null; }
       return { obj: b, tag: b.tag };
     }, "Bandeau");
+    if (LR) { const n = completerRetours(D); if (n) R.avert.push([LR.nom, "", "", `${n} lien(s) retour de brassage complété(s) sur le port d'en face`]); }
+    const LC = lues.cables;
+    D.cables = D.cables || [];
+    if (LC) for (const { n, o } of LC.lignes) {
+      if (!o.repere) { R.rejets.push([LC.nom, n, "", "Repère du câble manquant"]); continue; }
+      let cb = cableDe(o.repere, D);
+      if (!cb) { cb = normCable({ repere: o.repere }); D.cables.push(cb); R.creees++; R.touchees.set(cb, "creee"); journalImport(R, "Ajout", "Câble de liaison", cb.repere, "", "", "Import Excel"); }
+      R.vues.add(cb);
+      let ch = 0;
+      COL_CABLE.forEach(col => {
+        if (col.f === "repere" || !o[col.f] || o[col.f] === cb[col.f]) return;
+        const v = valeurImport(R, LC.nom, n, cb.repere, col, o[col.f]);
+        if (v === null || v === cb[col.f]) return;
+        journalImport(R, "Modification", "Câble de liaison", cb.repere, col.l, cb[col.f], v + " (import Excel)"); cb[col.f] = v; ch++;
+      });
+      R.champs += ch; if (ch && !R.touchees.has(cb)) R.touchees.set(cb, "maj");
+    }
+    const nc = citerCables(D, rep => journalImport(R, "Ajout", "Câble de liaison", rep, "", "", "Import Excel (cité par un raccordement)"));
+    if (nc) R.avert.push([LR ? LR.nom : "Raccordements", "", "", `${nc} câble(s) de liaison cité(s) par les raccordements ajouté(s) à l'inventaire`]);
   }
   function rapportHtml(R) {
     const kpi = (v, l, cl = "") => `<div class="kpi${cl ? " " + cl : ""}"><div class="v">${v}</div><div class="l">${esc(l)}</div></div>`;
@@ -2880,7 +3227,7 @@ const WerbXlsx = (() => {
 
   /* ===================================================== impression (PDF par le navigateur) */
   const kv = l => `<table class="kv">${l.map(([x, v]) => `<tr><th>${esc(x)}</th><td>${esc(v ?? "")}</td></tr>`).join("")}</table>`;
-  const tableStatique = (cols, l, k = "") => `<table><thead><tr>${cols.map(col => `<th>${esc(col.l)}</th>`).join("")}</tr></thead><tbody>${l.length
+  const tableStatique = (cols, l, k = "") => `<table><thead>${cols.some(col => col.cote) ? ligneCotes(cols) : ""}<tr>${cols.map(col => `<th>${esc(col.l)}</th>`).join("")}</tr></thead><tbody>${l.length
     ? l.map(r => `<tr${etatPort(k, r) ? ` class="${etatPort(k, r)}"` : ""}>${cols.map(col => `<td>${esc(r[col.f] ?? "")}</td>`).join("")}</tr>`).join("") : `<tr><td colspan="${cols.length}">Aucune ligne.</td></tr>`}</tbody></table>`;
   function impressionFiche(tag) {
     const i = identite(tag), cat = catDe(tag) || "autre", f = ficheDe(tag) || nouvelleFiche(tag);
@@ -2915,7 +3262,8 @@ const WerbXlsx = (() => {
     ${blocAide("🚀", "Démarrer", `<ol><li><b>✨ Nouvelle base</b>, <b>📂 Ouvrir une base</b> ou <b>🧪 Base d'exemple</b> (site fictif LYON).</li><li><b>Intégration WerbSMSI</b> : choisir l'espace et le site, <b>Rattacher</b> : l'inventaire WerbMap du site est chargé.</li><li>Sans espace : dans WerbMap, <b>⬇ Exporter la publication</b> ; ici, <b>Inventaire WerbMap › Importer une publication WerbMap…</b></li></ol>`)}
     ${blocAide("🗂️", "Assets par type et par zone", `<ul><li>Le menu <b>Assets</b> donne un raccourci par type. Les onglets du haut sont les <b>zones</b> publiées par WerbMap ; « Sans zone » regroupe les actifs absents du plan IP.</li><li>Le type WerbMap décide de la page (« Pare-feu », « Commutateur (Switch) »…) ; la fiche peut imposer une autre catégorie.</li><li>Cliquer une ligne ouvre la fiche. Identité (TAG, libellé, emplacement, marque) : reprise de WerbMap. Configuration : saisie ici.</li><li><b>Fiche orpheline</b> : l'actif a disparu de WerbMap ; la fiche est conservée avec la dernière identité connue. <b>Effacer la fiche</b> la supprime.</li></ul>`)}
     ${blocAide("🔀", "Interfaces et ports", `<ul><li>Pare-feu : <b>Générer Ethernet 1…N</b> crée les ports physiques ; ajouter une ligne de type VLAN par sous-interface. Le masque est déduit de la notation CIDR (10.1.1.0/24).</li><li>Switch : renseigner le nombre de ports RJ45 et SFP, puis <b>Générer les ports</b> (bloqués par défaut, la bonne pratique pour un port inutilisé).</li><li>Couleurs : vert en service, rouge réservé, orange en cours.</li></ul>`)}
-    ${blocAide("🔌", "Brassage", `<p>Un onglet par baie : coffrets de l'inventaire WerbMap et baies créées ici. <b>+ Bandeau</b> crée un bandeau et ses ports ; pour chaque port : réseau, repère du câble de liaison, bandeau d'en face (tenant), repère et actif d'aboutissement (le TAG est proposé).</p>`)}
+    ${blocAide("🧵", "Câbles de liaison", `<p><b>Assets › Câbles de liaison</b> : inventaire des câbles multibrins entre coffrets ou baies (repère, type, nombre de brins, tenant, aboutissant, longueur) et des ports qui les raccordent. Un repère saisi dans un bandeau y est ajouté ; le type et le repère modifiés dans l'inventaire sont reportés sur tous les ports du câble. Un câble qui a plus de ports raccordés que de brins est signalé.</p>`)}
+    ${blocAide("🔌", "Brassage", `<p>Un onglet par baie : coffrets de l'inventaire WerbMap et baies créées ici. <b>+ Bandeau</b> crée un bandeau et ses ports ; pour chaque port, à gauche l'<b>arrière</b> (tenant : coffret ou baie d'en face, repère et type du câble de liaison multibrin — un encadré par câble, saisis une fois sur la première ligne pour tout le groupe —, brin : couleur proposée dans la liste, détail), au centre le <b>N°</b>, à droite l'<b>avant</b> (aboutissant : réseau, brassage vers un autre port, câble, équipement et actif au bout ; le TAG est proposé).</p><p><b>Brassage entre ports</b> : dans « Brassé vers », le numéro d'un port du bandeau (5) ou « TAG du bandeau/port » (BD-A2/12) ; le port d'en face reçoit le lien retour, le cordon et son repère. La colonne ⇅ dessine les liens (une couleur par cordon) ; les lignes d'un même câble de liaison sont regroupées. Un lien sans retour ou vers un port inexistant est signalé.</p>`)}
     ${blocAide("📥", "Saisie Excel", `<ol><li><b>Saisie Excel</b> : choisir le type, <b>⇩ Modèle de saisie</b> (une ligne par asset de l'inventaire) ou <b>⇩ Exporter les fiches</b> (avec les données).</li><li>Remplir le classeur hors de l'outil, sans changer les titres de colonnes.</li><li><b>⇧ Importer un classeur</b> : lire le rapport (créations, mises à jour, lignes rejetées et motifs), puis <b>Appliquer</b> et enregistrer la base.</li></ol>`)}
     ${blocAide("🖨", "Imprimer", `<p><b>🖨 Imprimer / PDF</b> sur une fiche ou un bandeau, <b>Imprimer les fiches de l'onglet</b> pour une zone entière, <b>Imprimer la baie</b> pour tous ses bandeaux. Choisir « Enregistrer au format PDF » dans la fenêtre d'impression.</p>`)}
     ${blocAide("🔐", "Bon à savoir", `<p>La base contient la configuration des équipements (adresses IP, VLAN, numéros de série) : rangez-la dans <code>SMSI_&lt;SIGLE&gt;\\sites\\&lt;CODE&gt;\\inventaires\\</code>, réservé à l'équipe du site. <b>Ne saisissez jamais de mot de passe ni de clé.</b> Le module ne publie rien.</p>`)}`;
@@ -2957,7 +3305,7 @@ const WerbXlsx = (() => {
     if (!S) { menu.rendre({ vide: true, pied: sig }); return; }
     const cnt = Object.fromEntries(CATS.map(x => [x.k, assets(x.k).length]));
     const al = alertes().filter(a => a[0] === "b-ko").length;
-    Object.assign(cnt, { brassage: S.bandeaux.length, inventaire: S.inventaire.actifs.length, tdb: al || undefined });
+    Object.assign(cnt, { cables: S.cables.length, brassage: S.bandeaux.length, inventaire: S.inventaire.actifs.length, tdb: al || undefined });
     const actif = vue === "fiche" ? catDe(ui.sel.tag) || "inventaire" : vue === "bandeau" ? "brassage" : vue;
     menu.rendre({ vide: false, actif, compteurs: cnt, pied: sig });
   }
@@ -2966,7 +3314,9 @@ const WerbXlsx = (() => {
     const o = l => [...new Map(l.filter(x => x[0]).map(x => [x[0], x])).values()].map(([v, t]) => `<option value="${esc(v)}">${esc(t || "")}</option>`).join("");
     const about = [...S.inventaire.actifs.map(a => [a.id, [a.libelle, a.type].filter(Boolean).join(" · ")]), ...orphelines().map(f => [f.tag, f.ref.libelle]), ...S.bandeaux.map(b => [b.tag, "Bandeau " + b.baie])];
     const reseaux = S.fiches.flatMap(f => f.interfaces.map(r => [r.reseau, r.vlanId ? "VLAN " + r.vlanId : ""]));
-    $("#datalists").innerHTML = `<datalist id="dl-about">${o(about)}</datalist><datalist id="dl-reseaux">${o(reseaux)}</datalist>`
+    const tenants = [...baiesListe().map(b => [b.tag, (b.cof && b.cof.libelle) || (b.loc && b.loc.libelle) || (b.inv ? "Coffret WerbMap" : "Baie")]), ...S.bandeaux.map(b => [`${b.baie} / ${b.tag}`, b.libelle || "Bandeau"])];
+    const cables = S.cables.map(x => [x.repere, [x.type, x.nbBrins && x.nbBrins + " brins", x.tenant && x.aboutissant ? `${x.tenant} ↔ ${x.aboutissant}` : x.tenant || x.aboutissant].filter(Boolean).join(" · ")]);
+    $("#datalists").innerHTML = `<datalist id="dl-about">${o(about)}</datalist><datalist id="dl-reseaux">${o(reseaux)}</datalist><datalist id="dl-tenants">${o(tenants)}</datalist><datalist id="dl-cables">${o(cables)}</datalist>`
       + REFS.map(([k]) => `<datalist id="dl-${k}">${o(S.refs[k].map(x => [x]))}</datalist>`).join("");
   }
   // Sélecteur CSS qui retrouve un champ après un nouveau rendu
@@ -3164,6 +3514,21 @@ const WerbXlsx = (() => {
     largeursDefaut(el) { const k = el.dataset.t; delete S.largeurs[k]; journaliser("Modification", "Présentation", (TAB[k] || CAT[k] || { l: k === "inventaire" ? "Inventaire WerbMap" : "Bandeaux" }).l, "Largeurs des colonnes", "", "automatiques"); marquer(); render(); },
     baie(el) { ui.baie = el.dataset.tag; ui.coche.bandeaux = new Set(); render(); },
     ouvrirFiche(el) { ouvrirFiche(el.dataset.tag, vue === "fiche" ? ui.retour : vue); },
+    async cableAjout() {
+      const t = S.refs.typesCable || [];
+      const v = await saisir("Nouveau câble de liaison", [["repere", "Repère câble liaison", ""], ["type", "Type de câble", t[0] || "", t], ["nbBrins", "Nombre de brins / fils", "12"], ["tenant", "Tenant (coffret ou baie)", ""], ["aboutissant", "Aboutissant (coffret ou baie)", ""]], "Créer");
+      if (!v) return;
+      const rep = String(v.repere || "").trim();
+      if (!rep) { toast("Le repère du câble est obligatoire.", "err"); return; }
+      if (cableDe(rep)) { toast(`Le câble ${rep} existe déjà.`, "err"); return; }
+      const cb = normCable(Object.assign({}, v, { repere: rep, nbBrins: /^\d+$/.test(String(v.nbBrins || "").trim()) ? String(+v.nbBrins) : "" }));
+      S.cables.push(cb); journaliser("Ajout", "Câble de liaison", cb.repere, "", "", [cb.type, cb.nbBrins && cb.nbBrins + " brins"].filter(Boolean).join(" · ")); marquer(); render();
+    },
+    async cableSuppr(el) {
+      const cb = S.cables.find(x => x.id === el.dataset.id);
+      if (!cb || portsDuCable(cb.repere).length || !(await confirmer(`Retirer le câble <b>${esc(cb.repere)}</b> de l'inventaire ?`, "Retirer"))) return;
+      S.cables.splice(S.cables.indexOf(cb), 1); journaliser("Suppression", "Câble de liaison", cb.repere); marquer(); render();
+    },
     ouvrirBandeau(el) { ui.sel = { t: "bandeau", id: el.dataset.id }; vue = "bandeau"; render(); $("#main").scrollTop = 0; },
     // Procédure de sécurisation : « Non applicable » sur toutes les lignes, ou sur celles d'une section (data-s)
     async ctrlNA(el) {
@@ -3211,6 +3576,7 @@ const WerbXlsx = (() => {
     async ligneSuppr(el) {
       const x = cible(), t = el.dataset.tab, i = +el.dataset.i, r = x[t][i], T = TAB[t];
       if (Object.values(r).some(Boolean) && !(await confirmer(`Supprimer la ligne ${esc(T.obj.toLowerCase())} <b>${esc(r[T.cle] || i + 1)}</b> ?`, "Supprimer"))) return;
+      if (t === "raccords" && r.brasseVers) lierPort(x, i, "brasseVers", "");
       x[t].splice(i, 1); journaliser("Suppression", objetCible(x), x.tag, T.obj, r[T.cle], ""); marquer(); render();
     },
     async vlansWerbMap() {
@@ -3276,6 +3642,7 @@ const WerbXlsx = (() => {
     async bandeauSuppr() {
       const b = cible();
       if (!b || !(await confirmer(`Supprimer le bandeau <b>${esc(b.tag)}</b> et ses ${b.raccords.length} raccordement(s) ?`, "Supprimer"))) return;
+      b.raccords.forEach((r, i) => { const c = enFace(b, r); if (c && c.b !== b) lierPort(b, i, "brasseVers", ""); });
       S.bandeaux.splice(S.bandeaux.indexOf(b), 1); journaliser("Suppression", "Bandeau", b.tag); marquer(); ui.baie = b.baie; ui.sel = null; vue = "brassage"; render();
     },
     imprimerFiche() { const f = cible(); imprimer(impressionFiche(f.tag), CAT[catDe(f.tag) || "autre"].obj, f.tag); },
@@ -3364,6 +3731,19 @@ const WerbXlsx = (() => {
       if (avant !== l.join(", ")) { journaliser("Modification", "Référentiel", d.ref, "", avant, l.join(", ")); marquer(); }
       rerender(); return;
     }
+    if (d.cab) {   // inventaire des câbles de liaison (1.14.0)
+      const cb = S.cables.find(x => x.id === d.cab), f = d.cf; if (!cb || !f) return;
+      let v = el.value.trim(); if (f === "nbBrins" && v !== "") v = String(Math.max(0, Math.round(+v) || 0));
+      const avant = cb[f] || ""; if (avant === v) return;
+      if (f === "repere") {
+        if (!v) { toast("Le repère du câble est obligatoire.", "err"); render(); return; }
+        if (S.cables.some(x => x !== cb && LCLE(x.repere) === LCLE(v))) { toast(`Le câble ${v} existe déjà.`, "err"); render(); return; }
+        portsDuCable(avant).forEach(({ b, r }) => { journaliser("Modification", "Bandeau", b.tag, `Port ${r.n} · Repère câble liaison`, r.repereLiaison, v); r.repereLiaison = v; });
+      }
+      cb[f] = v; journaliser("Modification", "Câble de liaison", cb.repere, COL_CABLE.find(x => x.f === f).l, avant, v);
+      if (f === "type") synchroType(cb, S, true);
+      marquer(); rerender(); return;
+    }
     if (d.bk) {
       let b = S.baies.find(x => x.tag.toUpperCase() === d.baie.toUpperCase());
       const v = el.value.trim();
@@ -3381,12 +3761,20 @@ const WerbXlsx = (() => {
     if (ui.sel.t === "bandeau" && d.k === "tag" && (!v || [...S.bandeaux, ...S.archives.bandeaux].some(b => b !== x && b.tag.toUpperCase() === v.toUpperCase()))) {
       toast(v ? `Le bandeau ${v} existe déjà.` : "Le TAG du bandeau est obligatoire.", "err"); rerender(); return;
     }
+    const mb = ui.sel.t === "bandeau" ? /^raccords\.(\d+)\.(brasseVers|cordon|repCordon)$/.exec(d.k) : null;
+    if (mb) { if (lierPort(x, +mb[1], mb[2], v)) marquer(); rerender(); return; }
+    if (ui.sel.t === "bandeau" && d.k === "tag") renommerLiens(avant, v);
+    const mg = ui.sel.t === "bandeau" ? /^raccords\.(\d+)\.(repereLiaison|tenant|typeCable)$/.exec(d.k) : null;
+    if (mg) {
+      if (!saisieGroupe(x, +mg[1], mg[2], avant, v)) { poser(x, d.k, v); journaliser("Modification", objetCible(x), x.tag, libelleChemin(x, d.k), avant, v); }
+      apresSaisieCable(x, +mg[1], mg[2], avant, v); marquer(); rerender(); return;
+    }
     poser(x, d.k, v);
     journaliser("Modification", objetCible(x), x.tag, libelleChemin(x, d.k), avant, v);
     const m = /^interfaces\.(\d+)\.cidr$/.exec(d.k), r = m ? x.interfaces[+m[1]] : null, mq = r ? masqueCidr(v) : "";
     if (mq && !r.masque) { r.masque = mq; journaliser("Modification", objetCible(x), x.tag, libelleChemin(x, `interfaces.${m[1]}.masque`), "", mq + " (déduit du CIDR)"); }
     marquer();
-    if (el.tagName === "SELECT" || mq || ["cat", "nbRj45", "nbSfp", "nbPorts", "tag", "libelle"].includes(d.k)) rerender(); else renderNav();
+    if (el.tagName === "SELECT" || mq || ["cat", "nbRj45", "nbSfp", "nbPorts", "tag", "libelle"].includes(d.k) || /^raccords\.\d+\.(repereLiaison|tenant|repereFil)$/.test(d.k)) rerender(); else renderNav();
   }
 
   document.addEventListener("click", e => {
@@ -3408,7 +3796,7 @@ const WerbXlsx = (() => {
     if (S) appliquer(el);
   });
   document.addEventListener("input", e => {
-    const el = e.target, champFiltre = el.id === "filtreJournal" ? "jq" : el.id === "filtreInv" ? "iq" : null;
+    const el = e.target, champFiltre = el.id === "filtreJournal" ? "jq" : el.id === "filtreInv" ? "iq" : el.id === "filtreCables" ? "cq" : null;
     if (!champFiltre && el.dataset.q === undefined) return;
     if (champFiltre) ui[champFiltre] = el.value; else ui.q[el.dataset.q] = el.value;
     const pos = el.selectionStart; render();

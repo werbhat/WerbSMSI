@@ -1,7 +1,7 @@
 # WerbAssets
 
 > Fiches de configuration des assets réseau d'un site : pare-feu, switch, brassage des baies et autres équipements
-> Version **1.10.0** — Développé par **@WerbHat**
+> Version **1.14.0** — Développé par **@WerbHat**
 
 ---
 
@@ -105,7 +105,7 @@ Fiche générique : informations générales, IP d'administration, mode d'accès
 
 - **Onglets par baie** : les coffrets cités par l'inventaire WerbMap et les baies créées ici (libellé, emplacement). Les actifs WerbMap rangés dans la baie sont rappelés.
 - **Bandeaux** (TAG, libellé, position en U, nombre et type de ports : RJ45, fibre LC ou SC duplex…), créés avec leurs ports.
-- **Raccordements** port par port : réseau ou usage, repère du câble de liaison, libellé tenant (bandeau d'en face), détail (couleur de fibre, type), repère câble, repère et raccordement de l'actif d'aboutissement.
+- **Raccordements** port par port, rangés comme le bandeau (1.12.0) : à gauche l'**arrière** (tenant : bandeau d'en face, câble de liaison multibrin vers une autre baie, brin, détail), au centre le **N°**, à droite l'**avant** (aboutissant : réseau ou usage, brassé vers, cordon, repère cordon, repère câble, aboutissant, actif, commentaire) ; explication de chaque colonne en infobulle ; **brassage entre ports** (1.11.0) : port d'en face (même bandeau ou autre bandeau), cordon et repère du cordon, lien tenu dans les deux sens, dessiné dans la colonne ⇅, lignes d'un même câble de liaison regroupées.
 
 ### 📥 Saisie Excel
 
@@ -133,7 +133,7 @@ Fiche générique : informations générales, IP d'administration, mode d'accès
 - **🗑 Supprimer baie** (rouge, entre « + Baie » et « + Bandeau ») : pour une baie **créée dans WerbAssets**, avec ses bandeaux et leurs raccordements, après une confirmation qui les dénombre ; tracé au journal. Un coffret de l'inventaire WerbMap ne se supprime pas ici : il se retire dans WerbMap.
 - **Ports d'un switch** : la ligne est **vert clair** pour un port ACTIF et **rouge pâle** pour un port BLOQUÉ, à l'écran (thèmes clair et sombre) comme à l'impression ; la couleur suit tout changement d'état.
 - Colonnes **N°** (ports, raccordements) étroites : la largeur d'un numéro jusqu'à 100.
-- **Raccordements** : colonne **Repère fil/brin** après *Repère câble liaison*, à l'écran, à l'impression, dans le modèle de saisie, l'export et l'import Excel (un ancien classeur sans cette colonne s'importe sans erreur).
+- **Raccordements** : colonne **Repère fil/brin** (« Brin » depuis 1.12.0) après *Repère câble liaison* (« Câble de liaison »), à l'écran, à l'impression, dans le modèle de saisie, l'export et l'import Excel (un ancien classeur sans cette colonne s'importe sans erreur).
 
 ### 🗂 Versions de la base (1.9.0)
 
@@ -180,8 +180,9 @@ Les guides sont des fichiers Markdown du dossier `guides/`, lisibles aussi hors 
 | `inventaire` | objet | Copie de la publication WerbMap : `site`, `source`, `publieLe`, `chargeLe`, `actifs` (TAG, type, famille, zone, libellé, emplacement, coffret, marque…), `zones` (identifiant, nom, SL-T) |
 | `fiches` | liste | Une fiche par asset : `tag`, `cat` (catégorie imposée, vide = selon le type WerbMap), `ref` (dernière identité connue), champs de configuration, `interfaces`, `vlans`, `ports`, `controles` (`{ code: { etat, valeur } }`) |
 | `baies` | liste | Baies saisies ou complétées ici : `tag`, `libelle`, `emplacement` |
-| `bandeaux` | liste | `baie`, `tag`, `libelle`, `position`, `nbPorts`, `typePort`, `commentaire`, `raccords` |
-| `refs` | objet | listes de choix `typesPort`, `typesBandeau`, `typesWan` : valeurs du groupe puis valeurs propres au site |
+| `cables` | liste | câbles de liaison (1.14.0) : `id`, `repere`, `type`, `nbBrins`, `tenant`, `aboutissant`, `longueur`, `commentaire` |
+| `bandeaux` | liste | `baie`, `tag`, `libelle`, `position`, `nbPorts`, `typePort`, `commentaire`, `raccords` (dont `brasseVers` « 5 » ou « TAG/5 », `cordon`, `repCordon`, 1.11.0) |
+| `refs` | objet | listes de choix `typesPort`, `typesBandeau`, `typesWan`, `typesCordon` (1.11.0), `couleursBrin` (1.13.0), `typesCable` (1.14.0) : valeurs du groupe puis valeurs propres au site |
 | `listesGroupe` | objet | copie des valeurs publiées par le groupe, par liste : `{ valeurs, majLe }` (travail sans l'espace) |
 
 - Une fiche sans aucune saisie n'est pas enregistrée (elle se recrée à l'ouverture), sauf si son asset est absent de l'inventaire.
@@ -256,7 +257,7 @@ python <WerbSMSI>\charte\outils\werb_charte.py publier .
 
 ## Historique des versions
 
-Version courante : **1.10.0** de novembre 2026 — coffrets de WerbMap dans le brassage (`site:coffrets`), colonne Coffret dans les listes, « Non applicable » en un clic dans la procédure de sécurisation. Versions précédentes : **1.9.0** de novembre 2026 — versions de la base : commentaire obligatoire à chaque enregistrement, page Versions, journal par version. Versions précédentes : **1.8.0** de novembre 2026 — colonne « Position (U) » dans les listes d'assets ; VLAN de WerbMap importables dans les fiches pare-feu et switch. Versions précédentes : **1.7.0** de novembre 2026 — guide « Maîtriser et durcir les assets du site » et lecteur de guides (❓ Aide, accueil). Versions précédentes : **1.6.0** d'octobre 2026 — sélection multiple et archivage, chercher / remplacer, largeur des colonnes (socle 1.9.0). Versions précédentes : **1.5.1** d'octobre 2026 — correctif : 🖨 PDF du bandeau ; **1.5.0** d'octobre 2026 — bandeau commun (socle 1.8.0, TRV-7) ; **1.4.0** d'octobre 2026 — suppression d'une baie, colonnes N° étroites, couleur des ports selon l'état, repère fil/brin ; **1.3.0** d'octobre 2026 — modèle, version firmware et commentaire repris de WerbMap ; **1.2.0** d'octobre 2026 — thème clair / sombre (socle 1.7.1) ; **1.1.0** d'octobre 2026 — page Référentiels (types de port, de bandeau, de lien WAN) et listes de choix reçues du groupe (charte §5.9) ; **1.0.0** d'octobre 2026 — première version : fiches pare-feu, switch et autres assets par type et par zone d'après l'inventaire WerbMap, procédure de sécurisation, brassage des baies, saisie Excel avec rapport d'import, impression. Détail dans [CHANGELOG.md](CHANGELOG.md).
+Version courante : **1.14.0** de novembre 2026 — inventaire des câbles de liaison (type, brins, tenant, aboutissant, ports raccordés), type de câble dans le groupe du câble, tenant choisi parmi les coffrets et baies. Versions précédentes : **1.13.0** de novembre 2026 — câble de liaison fusionné avec le tenant (un encadré par câble, saisie appliquée au groupe), couleurs de brin RJ45 et fibre optique. Versions précédentes : **1.12.0** de novembre 2026 — raccordements rangés par côté (arrière/tenant à gauche du N°, avant/aboutissant à droite), libellés harmonisés. Versions précédentes : **1.11.0** de novembre 2026 — brassage entre ports (lien dans les deux sens, cordon et repère), dessin des liens et groupes du câble de liaison. Versions précédentes : **1.10.0** de novembre 2026 — coffrets de WerbMap dans le brassage (`site:coffrets`), colonne Coffret dans les listes, « Non applicable » en un clic dans la procédure de sécurisation. Versions précédentes : **1.9.0** de novembre 2026 — versions de la base : commentaire obligatoire à chaque enregistrement, page Versions, journal par version. Versions précédentes : **1.8.0** de novembre 2026 — colonne « Position (U) » dans les listes d'assets ; VLAN de WerbMap importables dans les fiches pare-feu et switch. Versions précédentes : **1.7.0** de novembre 2026 — guide « Maîtriser et durcir les assets du site » et lecteur de guides (❓ Aide, accueil). Versions précédentes : **1.6.0** d'octobre 2026 — sélection multiple et archivage, chercher / remplacer, largeur des colonnes (socle 1.9.0). Versions précédentes : **1.5.1** d'octobre 2026 — correctif : 🖨 PDF du bandeau ; **1.5.0** d'octobre 2026 — bandeau commun (socle 1.8.0, TRV-7) ; **1.4.0** d'octobre 2026 — suppression d'une baie, colonnes N° étroites, couleur des ports selon l'état, repère fil/brin ; **1.3.0** d'octobre 2026 — modèle, version firmware et commentaire repris de WerbMap ; **1.2.0** d'octobre 2026 — thème clair / sombre (socle 1.7.1) ; **1.1.0** d'octobre 2026 — page Référentiels (types de port, de bandeau, de lien WAN) et listes de choix reçues du groupe (charte §5.9) ; **1.0.0** d'octobre 2026 — première version : fiches pare-feu, switch et autres assets par type et par zone d'après l'inventaire WerbMap, procédure de sécurisation, brassage des baies, saisie Excel avec rapport d'import, impression. Détail dans [CHANGELOG.md](CHANGELOG.md).
 
 ---
 

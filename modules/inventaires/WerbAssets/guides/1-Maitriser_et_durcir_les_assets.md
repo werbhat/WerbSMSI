@@ -160,7 +160,7 @@ Quand il faut le faire quand même :
 - [ ] Actif créé dans WerbMap (TAG, type, zone, coffret) et inventaire publié
 - [ ] Inventaire rechargé dans WerbAssets, fiche créée (modèle, numéro de série, firmware, administrateur, adresse d'administration)
 - [ ] Interfaces, VLAN et ports saisis ; ports inutilisés bloqués
-- [ ] Raccordements saisis dans le brassage, câbles repérés aux deux extrémités (repère câble, repère fil / brin, aboutissant)
+- [ ] Raccordements saisis dans le brassage, câbles repérés aux deux extrémités (repère câble, repère fil / brin, aboutissant) ; cordons et jarretières entre ports saisis dans « Brassé vers », avec leur repère
 - [ ] Procédure de configuration et de sécurisation : chaque point **Fait** ou **Non applicable** (avec la raison)
 - [ ] Configuration sauvegardée après durcissement, sauvegarde inscrite au registre, restauration testée
 - [ ] Mot de passe d'administration rangé dans le coffre-fort

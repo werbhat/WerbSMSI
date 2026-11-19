@@ -1,7 +1,7 @@
 # WerbCartoSI
 
 > Registre des schémas d'architecture d'un site : exigences couvertes, versions, revues, approbation, liens vers les fichiers
-> Version **1.10.1** — Développé par **@WerbHat**
+> Version **1.10.3** — Développé par **@WerbHat**
 
 ---
 
@@ -185,7 +185,7 @@ Puis relisez le modèle dans Visio et republiez le module (nouvelle version). Le
 
 ## Historique des versions
 
-Version courante : **1.10.1** de novembre 2026 — couverture par SI : nom du SI seul, sans son identifiant. 1.10.0 : ébauche « Zones et conduits » générée depuis WerbMap (aperçu, Visio, fiche brouillon). 1.9.0 : annexe « Matrice des flux » tirée de WerbMap et dossier de preuve imprimable. 1.8.0 : empreinte du fichier approuvé, contrôles avant approbation, revue déclenchée par les changements de WerbMap, vue Échéances. 1.7.0 : non-applicabilité justifiée (site ou SI) et couverture SI × exigence selon la portée de l'exigence et la sensibilité du SI ; ancien libellé « Flux et cloisonnement » renommé à l'ouverture. 1.6.0 : guide « Les schémas attendus, un par un » avec un exemple annoté par catégorie d'exigence, repères précis et corrigés, codes EX- expliqués. 1.5.0 : modèles Visio « Zones et conduits », « Accès distants et interconnexions », « Architecture d'administration ». 1.4.0 : modèle « Sauvegarde et reprise ». 1.3.0 : publication de la couverture des exigences (`site:cartographies`). 1.2.0 : liens vers WerbMap, couverture des SI, historique des versions. 1.1.0 : modèles de schémas Visio et création depuis un modèle. 1.0.0 : registre des schémas d'architecture d'un site par catégorie d'exigence. Détail dans [CHANGELOG.md](CHANGELOG.md).
+Version courante : **1.10.3** de novembre 2026 — cases des SI liés d'un schéma : nom du SI seul. 1.10.2 : SI affichés par leur nom seul partout (détail d'une exigence, dossier de preuve, filtre, périmètre de l'ébauche, tableau de bord). 1.10.1 : couverture par SI : nom du SI seul, sans son identifiant. 1.10.0 : ébauche « Zones et conduits » générée depuis WerbMap (aperçu, Visio, fiche brouillon). 1.9.0 : annexe « Matrice des flux » tirée de WerbMap et dossier de preuve imprimable. 1.8.0 : empreinte du fichier approuvé, contrôles avant approbation, revue déclenchée par les changements de WerbMap, vue Échéances. 1.7.0 : non-applicabilité justifiée (site ou SI) et couverture SI × exigence selon la portée de l'exigence et la sensibilité du SI ; ancien libellé « Flux et cloisonnement » renommé à l'ouverture. 1.6.0 : guide « Les schémas attendus, un par un » avec un exemple annoté par catégorie d'exigence, repères précis et corrigés, codes EX- expliqués. 1.5.0 : modèles Visio « Zones et conduits », « Accès distants et interconnexions », « Architecture d'administration ». 1.4.0 : modèle « Sauvegarde et reprise ». 1.3.0 : publication de la couverture des exigences (`site:cartographies`). 1.2.0 : liens vers WerbMap, couverture des SI, historique des versions. 1.1.0 : modèles de schémas Visio et création depuis un modèle. 1.0.0 : registre des schémas d'architecture d'un site par catégorie d'exigence. Détail dans [CHANGELOG.md](CHANGELOG.md).
 
 ---
 
