@@ -169,7 +169,7 @@
       "chemin": "modules/inventaires/WerbAssets",
       "depot": "../WerbAssets",
       "etat": "publie",
-      "version": "1.14.0",
+      "version": "1.21.1",
       "etape": "connaitre"
     },
     {
@@ -209,7 +209,7 @@
       "chemin": "modules/conformite/WerbPresta",
       "depot": "../WerbPresta",
       "etat": "publie",
-      "version": "1.6.1",
+      "version": "1.7.0",
       "etape": "exigences"
     },
     {

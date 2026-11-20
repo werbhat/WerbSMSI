@@ -3,6 +3,87 @@
 Toutes les évolutions notables de WerbAssets sont consignées ici.
 Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/), numérotation [SemVer](https://semver.org/lang/fr/).
 
+## [1.21.1] — 2026-11
+
+### Corrections
+- **Thème sombre : listes de choix illisibles** dans les lignes ACTIF / BLOQUÉ des ports d'un switch (État, Statut, Conf U/T VLAN…) : le champ, transparent pour laisser voir la couleur de la ligne, ouvrait sa liste sur un fond blanc avec un texte clair. Les options de toutes les listes prennent désormais le fond et la couleur des champs du thème (sombre comme clair).
+
+## [1.21.0] — 2026-11
+
+### Ajouts
+- **Statut** dans les **raccordements du brassage** (dernière colonne, côté avant) et les **interfaces réseau** des machines et autres assets, comme les ports des switch : En service, Réservé, En cours ; ligne colorée et légende des couleurs à l'écran (imprimé en texte, comme sur les switch) ; colonne des classeurs Excel ; proposée dans Remplir la sélection.
+
+### Changements
+- Interfaces réseau : la colonne *État* (même liste) devient *Statut*, placée en dernière colonne comme sur les switch ; les valeurs saisies sont reprises, l'en-tête Excel « État » reste accepté.
+
+### Format de données
+- `bandeaux[].raccords[].statut` ; `fiches[].nics[].statut` (ancien `etat`, repris à l'ouverture). Schéma inchangé.
+
+## [1.20.0] — 2026-11
+
+### Changements
+- **Port par défaut** : la fiche d'un autre asset reçoit un « Port 1 » dans ses interfaces réseau à l'ouverture (et à l'impression) quand elle n'en a aucun. Resté vide, ce port ne compte pas : une fiche sans autre saisie n'est pas enregistrée.
+- **Interfaces réseau** : colonnes *Adresse MAC*, *Adresse IP* et *ID VLAN* retirées, ces informations sont tenues dans WerbMap. Restent : interface, type, réseau, état, Brassé vers, repère câble, aboutissant final, commentaire.
+- **Menu Assets** réordonné : 🖥️ Machines en tête, puis Pare-feu, Switch, Autres assets (sous Switch), Brassage, Carnet de câbles.
+
+### Format de données
+- `fiches[].nics[]` : champs `mac`, `ip`, `vlan` retirés (ignorés à l'ouverture d'une base 1.19.0). Schéma inchangé.
+
+## [1.19.0] — 2026-11
+
+### Ajouts
+- **Catégorie Machines** (menu *Assets › 🖥️ Machines*) : les machines physiques de l'inventaire WerbMap (famille « physique » : serveurs, hyperviseurs, postes de travail), par zone, jusqu'ici écartées. Les machines virtuelles restent hors de WerbAssets. Fiche : informations générales, **Système et administration** (système d'exploitation, rôle / fonction, IP d'administration, IP de gestion iDRAC / iLO / IPMI, mode d'accès, documentation, notes) ; pas de procédure de sécurisation. Fiche complète : modèle et système d'exploitation.
+- **Interfaces réseau** des machines et des **autres assets** : tableau ajouté à leur fiche, une ligne par **+ Interface** — interface (eth0, NIC1, iDRAC), type (physique, gestion, agrégat, virtuelle, Wi-Fi), adresse MAC, adresse IP, ID VLAN, réseau, état, **Brassé vers**, repère câble, aboutissant final, commentaire.
+- **Brassé vers** d'une interface réseau : comme pour les switch, le port du bandeau reçoit l'actif et l'aboutissant final (« SRV_SCADA01 port NIC1 ») et le repère câble ; interface renommée, lien effacé ou déplacé : le bandeau suit ; anomalies signalées. Le repère câble d'une interface est listé au carnet de câbles.
+- Tableau de bord : fiches machine complètes, colonne Machines par zone. Excel : classeur **Machines** (feuilles Assets et Interfaces réseau) ; feuille Interfaces réseau dans le classeur Autres assets. Remplir la sélection et Chercher / remplacer disponibles sur les interfaces réseau.
+
+### Format de données
+- `fiches[].nics` : liste `{ nom, type, mac, ip, vlan, reseau, etat, brasseVers, repere, about, commentaire }` ; champs de fiche `os`, `role`, `ipGestion`. Catégorie `machine`. Schéma inchangé.
+
+## [1.18.0] — 2026-11
+
+### Ajouts
+- **✏️ Remplir la sélection** (saisie rapide), à côté de *Chercher / remplacer* dans les tableaux des fiches et des bandeaux (interfaces, VLAN, ports, raccordements, liste des bandeaux) : cocher les lignes, puis saisir une valeur et cocher la ou les colonnes à remplir. Aperçu des cellules modifiées, *Appliquer (n)* ; Entrée applique, Échap ferme ; valeur vide pour effacer. Le bouton indique le nombre de lignes cochées et reste grisé sans sélection.
+- Colonnes proposées : toutes, sauf l'identifiant de la ligne (port, ID VLAN, N°, TAG) et *Brassé vers* (un lien par port). Liste fermée (État, Statut, Type, DHCP, Conf U/T VLAN) : valeur de la liste exigée, casse corrigée (« actif » → « ACTIF ») ; une seule colonne cochée : ses valeurs proposées à la saisie.
+- Les règles de la saisie case par case s'appliquent : repère cordon et cordon recopiés sur le port d'en face, repère câble liaison ajouté au carnet de câbles, masque déduit du CIDR. Chaque cellule est tracée au journal (« remplir la sélection »).
+
+### Format de données
+- Aucun changement. Schéma inchangé.
+
+## [1.17.0] — 2026-11
+
+### Changements
+- **« Repère cordon ou câble »** : les colonnes *Repère cordon* et *Repère câble* des raccordements sont fusionnées en une seule (repère du cordon, de la jarretière ou du câble qui part du port, vers un autre port ou vers l'actif). Le lien « Brassé vers » recopie toujours le repère sur le port d'en face ; un port de switch brassé vers le bandeau y reporte son repère câble.
+- **Groupe du repère** : les lignes consécutives de même *Repère cordon ou câble* forment un seul encadré qui englobe *Cordon* (type), *Repère cordon ou câble*, *Aboutissant final* et *Actif* ; valeurs identiques non répétées sur les lignes suivantes (visibles à la saisie) ; saisie sur la première ligne appliquée au groupe (repère : toutes les lignes ; type, aboutissant final, actif : lignes vides ou égales à l'ancienne valeur). Un type de cordon ou un actif différent dans le groupe est signalé en couleur d'alerte ; un aboutissant final différent (paire vers deux ports) est affiché normalement. Les groupes séparés *Repère câble* et *Actif* de la 1.15.0 disparaissent.
+- Carnet de câbles : un cordon par repère, usage déduit du port (brassé vers un autre port : brassage ; sinon raccordement d'un actif).
+- Excel : une seule colonne *Repère cordon ou câble* ; un classeur antérieur s'importe (*Repère cordon*, *Repère câble* et *Rep. câble* acceptés, la valeur non vide l'emporte).
+
+### Format de données
+- `bandeaux[].raccords[].repCable` supprimé : repris dans `repCordon` à l'ouverture d'une base antérieure ; si les deux repères existaient et différaient, le repère câble est gardé dans le commentaire du port (« Repère câble : … »). Schéma inchangé.
+
+## [1.16.0] — 2026-11
+
+### Ajouts
+- **Carnet de câbles** (menu *Assets › 📒 Carnet de câbles*, ancienne page *Câbles de liaison*) : il répertorie les **câbles de liaison** (inventaire inchangé) et les **cordons de brassage**. Un cordon par repère, relevé dans les bandeaux (« Repère cordon » : cordon ou jarretière entre deux ports ; « Repère câble » : cordon vers l'actif) et dans les ports des switch (« Repère câble ») : usage (brassage entre ports, raccordement d'un actif), type, liens (BD-A1/1 ↔ BD-A1/5, BD-A1/3 → SW_CORE01 port 3), baie(s), nombre de ports. Un même cordon vu du switch et du bandeau n'apparaît qu'une fois.
+- Repère ou type d'un cordon modifié dans le carnet : reporté sur tous ses ports (journal) ; un repère déjà employé est refusé. Types différents selon les ports et repère de brassage porté par plus de deux liens : signalés. Le filtre porte sur les deux tableaux.
+
+### Format de données
+- Aucun changement : les cordons sont lus dans les raccordements et les fiches. Schéma inchangé.
+
+## [1.15.0] — 2026-11
+
+### Ajouts
+- **« Brassé vers » sur les pare-feu et les switch** : nouvelle colonne des **interfaces** d'un pare-feu (après *État*) et des **ports** d'un switch (avant *Repère câble*) ; on y désigne le port du bandeau où arrive le cordon, « TAG du bandeau/port » (BD-A2/12), proposé dans la liste des ports des bandeaux (baie, bandeau, réseau, actif déjà raccordé). Le port du bandeau reçoit en retour l'**actif** (TAG) et l'**aboutissant final** (« SW_CORE01 port 3 ») ; le repère câble du port de switch est repris s'il manque sur le bandeau. Effacer ou déplacer le lien libère le port du bandeau (actif, aboutissant final et repère câble posés par le lien) ; un port du bandeau déjà visé par un autre actif est repris (message). Port ou interface renommé, bandeau renommé : liens mis à jour.
+- Contrôles : lien vers un bandeau ou un port inexistant, port du bandeau visé deux fois, port du bandeau qui indique un autre actif — signalés dans la fiche et au tableau de bord.
+- **Paires de cordons** : les lignes consécutives d'un bandeau qui ont le même **Repère cordon** (avec le type de cordon), le même **Repère câble** ou le même **Actif** (avec l'aboutissant final) sont regroupées dans un encadré, comme le câble de liaison : valeur non répétée sur les lignes suivantes (visible à la saisie), saisie sur la première ligne appliquée à tout le groupe (le cordon des ports d'en face suit) ; un type de cordon différent dans le groupe est signalé en couleur d'alerte.
+- Import Excel : « Brassé vers » des pare-feu et switch lu et écrit ; les ports des bandeaux sans actif reçoivent l'actif et l'aboutissant final (avertissement du rapport).
+
+### Changements
+- **Aboutissant** devient **Aboutissant final** dans les raccordements des bandeaux et les ports des switch (l'ancien en-tête reste accepté à l'import Excel). L'aboutissant d'un câble de liaison (inventaire des câbles) garde son nom.
+
+### Format de données
+- `fiches[].interfaces[].brasseVers`, `fiches[].ports[].brasseVers` (« TAG/port »). Schéma inchangé.
+
 ## [1.14.0] — 2026-11
 
 ### Ajouts

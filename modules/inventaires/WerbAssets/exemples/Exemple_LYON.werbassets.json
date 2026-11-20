@@ -418,8 +418,9 @@
       "etat": "ACTIF",
       "vlan": "200",
       "ut": "Untagged",
+      "brasseVers": "BAIE-01-BS01/3",
       "repere": "C-003",
-      "about": "BAIE-01-BS01 port 3",
+      "about": "PC_ING01",
       "commentaire": "",
       "statut": "En service"
      },
@@ -811,10 +812,10 @@
       "repereLiaison": "C-101",
       "tenant": "Salle de contrôle prise P01",
       "detail": "RJ45",
-      "repCable": "C-101",
       "repAbout": "PC_ING01",
       "actifAbout": "PC_ING01",
-      "commentaire": ""
+      "commentaire": "",
+      "repCordon": "C-101"
      },
      {
       "n": "2",
@@ -822,7 +823,6 @@
       "repereLiaison": "",
       "tenant": "",
       "detail": "",
-      "repCable": "",
       "repAbout": "",
       "actifAbout": "",
       "commentaire": ""
@@ -833,10 +833,10 @@
       "repereLiaison": "C-003",
       "tenant": "SW_CORE01",
       "detail": "RJ45",
-      "repCable": "C-003",
       "repAbout": "SW_CORE01 port 3",
       "actifAbout": "SW_CORE01",
-      "commentaire": ""
+      "commentaire": "",
+      "repCordon": "C-003"
      },
      {
       "n": "4",
@@ -844,7 +844,6 @@
       "repereLiaison": "",
       "tenant": "",
       "detail": "",
-      "repCable": "",
       "repAbout": "",
       "actifAbout": "",
       "commentaire": ""
@@ -855,7 +854,6 @@
       "repereLiaison": "",
       "tenant": "",
       "detail": "",
-      "repCable": "",
       "repAbout": "",
       "actifAbout": "",
       "commentaire": ""
@@ -866,7 +864,6 @@
       "repereLiaison": "",
       "tenant": "",
       "detail": "",
-      "repCable": "",
       "repAbout": "",
       "actifAbout": "",
       "commentaire": ""
@@ -877,7 +874,6 @@
       "repereLiaison": "",
       "tenant": "",
       "detail": "",
-      "repCable": "",
       "repAbout": "",
       "actifAbout": "",
       "commentaire": ""
@@ -888,7 +884,6 @@
       "repereLiaison": "",
       "tenant": "",
       "detail": "",
-      "repCable": "",
       "repAbout": "",
       "actifAbout": "",
       "commentaire": ""
@@ -899,7 +894,6 @@
       "repereLiaison": "",
       "tenant": "",
       "detail": "",
-      "repCable": "",
       "repAbout": "",
       "actifAbout": "",
       "commentaire": ""
@@ -910,7 +904,6 @@
       "repereLiaison": "",
       "tenant": "",
       "detail": "",
-      "repCable": "",
       "repAbout": "",
       "actifAbout": "",
       "commentaire": ""
@@ -921,7 +914,6 @@
       "repereLiaison": "",
       "tenant": "",
       "detail": "",
-      "repCable": "",
       "repAbout": "",
       "actifAbout": "",
       "commentaire": ""
@@ -932,7 +924,6 @@
       "repereLiaison": "",
       "tenant": "",
       "detail": "",
-      "repCable": "",
       "repAbout": "",
       "actifAbout": "",
       "commentaire": ""
@@ -943,7 +934,6 @@
       "repereLiaison": "",
       "tenant": "",
       "detail": "",
-      "repCable": "",
       "repAbout": "",
       "actifAbout": "",
       "commentaire": ""
@@ -954,7 +944,6 @@
       "repereLiaison": "",
       "tenant": "",
       "detail": "",
-      "repCable": "",
       "repAbout": "",
       "actifAbout": "",
       "commentaire": ""
@@ -965,7 +954,6 @@
       "repereLiaison": "",
       "tenant": "",
       "detail": "",
-      "repCable": "",
       "repAbout": "",
       "actifAbout": "",
       "commentaire": ""
@@ -976,7 +964,6 @@
       "repereLiaison": "",
       "tenant": "",
       "detail": "",
-      "repCable": "",
       "repAbout": "",
       "actifAbout": "",
       "commentaire": ""
@@ -987,7 +974,6 @@
       "repereLiaison": "",
       "tenant": "",
       "detail": "",
-      "repCable": "",
       "repAbout": "",
       "actifAbout": "",
       "commentaire": ""
@@ -998,7 +984,6 @@
       "repereLiaison": "",
       "tenant": "",
       "detail": "",
-      "repCable": "",
       "repAbout": "",
       "actifAbout": "",
       "commentaire": ""
@@ -1009,7 +994,6 @@
       "repereLiaison": "",
       "tenant": "",
       "detail": "",
-      "repCable": "",
       "repAbout": "",
       "actifAbout": "",
       "commentaire": ""
@@ -1020,7 +1004,6 @@
       "repereLiaison": "",
       "tenant": "",
       "detail": "",
-      "repCable": "",
       "repAbout": "",
       "actifAbout": "",
       "commentaire": ""
@@ -1031,7 +1014,6 @@
       "repereLiaison": "",
       "tenant": "",
       "detail": "",
-      "repCable": "",
       "repAbout": "",
       "actifAbout": "",
       "commentaire": ""
@@ -1042,7 +1024,6 @@
       "repereLiaison": "",
       "tenant": "",
       "detail": "",
-      "repCable": "",
       "repAbout": "",
       "actifAbout": "",
       "commentaire": ""
@@ -1053,7 +1034,6 @@
       "repereLiaison": "",
       "tenant": "",
       "detail": "",
-      "repCable": "",
       "repAbout": "",
       "actifAbout": "",
       "commentaire": ""
@@ -1064,7 +1044,6 @@
       "repereLiaison": "nc",
       "tenant": "CF-L2-01",
       "detail": "",
-      "repCable": "",
       "repAbout": "",
       "actifAbout": "",
       "commentaire": "À retirer après la mise en service de la fibre"
@@ -1087,10 +1066,10 @@
       "repereLiaison": "WO-BAIE01-RO01/CF-L2-01-RO01-A",
       "tenant": "CF-L2-01-RO01",
       "detail": "Rd",
-      "repCable": "F-001",
       "repAbout": "SW_CORE01 port 25",
       "actifAbout": "TX - LC en 1000baseSX",
-      "commentaire": ""
+      "commentaire": "",
+      "repCordon": "F-001"
      },
      {
       "n": "2",
@@ -1098,10 +1077,10 @@
       "repereLiaison": "WO-BAIE01-RO01/CF-L2-01-RO01-A",
       "tenant": "CF-L2-01-RO01",
       "detail": "Bk",
-      "repCable": "F-001",
       "repAbout": "SW_CORE01 port 25",
       "actifAbout": "RX - LC en 1000baseSX",
-      "commentaire": ""
+      "commentaire": "",
+      "repCordon": "F-001"
      },
      {
       "n": "3",
@@ -1109,7 +1088,6 @@
       "repereLiaison": "",
       "tenant": "",
       "detail": "",
-      "repCable": "",
       "repAbout": "",
       "actifAbout": "",
       "commentaire": ""
@@ -1120,7 +1098,6 @@
       "repereLiaison": "",
       "tenant": "",
       "detail": "",
-      "repCable": "",
       "repAbout": "",
       "actifAbout": "",
       "commentaire": ""
@@ -1131,7 +1108,6 @@
       "repereLiaison": "",
       "tenant": "",
       "detail": "",
-      "repCable": "",
       "repAbout": "",
       "actifAbout": "",
       "commentaire": ""
@@ -1142,7 +1118,6 @@
       "repereLiaison": "",
       "tenant": "",
       "detail": "",
-      "repCable": "",
       "repAbout": "",
       "actifAbout": "",
       "commentaire": ""
@@ -1153,7 +1128,6 @@
       "repereLiaison": "",
       "tenant": "",
       "detail": "",
-      "repCable": "",
       "repAbout": "",
       "actifAbout": "",
       "commentaire": ""
@@ -1164,7 +1138,6 @@
       "repereLiaison": "",
       "tenant": "",
       "detail": "",
-      "repCable": "",
       "repAbout": "",
       "actifAbout": "",
       "commentaire": ""
@@ -1175,7 +1148,6 @@
       "repereLiaison": "",
       "tenant": "",
       "detail": "",
-      "repCable": "",
       "repAbout": "",
       "actifAbout": "",
       "commentaire": ""
@@ -1186,7 +1158,6 @@
       "repereLiaison": "",
       "tenant": "",
       "detail": "",
-      "repCable": "",
       "repAbout": "",
       "actifAbout": "",
       "commentaire": ""
@@ -1197,7 +1168,6 @@
       "repereLiaison": "",
       "tenant": "",
       "detail": "",
-      "repCable": "",
       "repAbout": "",
       "actifAbout": "",
       "commentaire": ""
@@ -1208,7 +1178,6 @@
       "repereLiaison": "",
       "tenant": "",
       "detail": "",
-      "repCable": "",
       "repAbout": "",
       "actifAbout": "",
       "commentaire": ""
@@ -1231,10 +1200,10 @@
       "repereLiaison": "WO-BAIE01-RO01/CF-L2-01-RO01-A",
       "tenant": "BAIE-01-RO01",
       "detail": "Rd",
-      "repCable": "F-001",
       "repAbout": "API_L2_01 X1",
       "actifAbout": "TX - LC en 1000baseSX",
-      "commentaire": ""
+      "commentaire": "",
+      "repCordon": "F-001"
      },
      {
       "n": "2",
@@ -1242,10 +1211,10 @@
       "repereLiaison": "WO-BAIE01-RO01/CF-L2-01-RO01-A",
       "tenant": "BAIE-01-RO01",
       "detail": "Bk",
-      "repCable": "F-001",
       "repAbout": "API_L2_01 X1",
       "actifAbout": "RX - LC en 1000baseSX",
-      "commentaire": ""
+      "commentaire": "",
+      "repCordon": "F-001"
      },
      {
       "n": "3",
@@ -1253,7 +1222,6 @@
       "repereLiaison": "",
       "tenant": "",
       "detail": "",
-      "repCable": "",
       "repAbout": "",
       "actifAbout": "",
       "commentaire": ""
@@ -1264,7 +1232,6 @@
       "repereLiaison": "",
       "tenant": "",
       "detail": "",
-      "repCable": "",
       "repAbout": "",
       "actifAbout": "",
       "commentaire": ""
@@ -1275,7 +1242,6 @@
       "repereLiaison": "",
       "tenant": "",
       "detail": "",
-      "repCable": "",
       "repAbout": "",
       "actifAbout": "",
       "commentaire": ""
@@ -1286,7 +1252,6 @@
       "repereLiaison": "",
       "tenant": "",
       "detail": "",
-      "repCable": "",
       "repAbout": "",
       "actifAbout": "",
       "commentaire": ""
@@ -1297,7 +1262,6 @@
       "repereLiaison": "",
       "tenant": "",
       "detail": "",
-      "repCable": "",
       "repAbout": "",
       "actifAbout": "",
       "commentaire": ""
@@ -1308,7 +1272,6 @@
       "repereLiaison": "",
       "tenant": "",
       "detail": "",
-      "repCable": "",
       "repAbout": "",
       "actifAbout": "",
       "commentaire": ""
@@ -1319,7 +1282,6 @@
       "repereLiaison": "",
       "tenant": "",
       "detail": "",
-      "repCable": "",
       "repAbout": "",
       "actifAbout": "",
       "commentaire": ""
@@ -1330,7 +1292,6 @@
       "repereLiaison": "",
       "tenant": "",
       "detail": "",
-      "repCable": "",
       "repAbout": "",
       "actifAbout": "",
       "commentaire": ""
@@ -1341,7 +1302,6 @@
       "repereLiaison": "",
       "tenant": "",
       "detail": "",
-      "repCable": "",
       "repAbout": "",
       "actifAbout": "",
       "commentaire": ""
@@ -1352,7 +1312,6 @@
       "repereLiaison": "",
       "tenant": "",
       "detail": "",
-      "repCable": "",
       "repAbout": "",
       "actifAbout": "",
       "commentaire": ""

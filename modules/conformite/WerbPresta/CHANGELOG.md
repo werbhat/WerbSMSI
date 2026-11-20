@@ -3,6 +3,15 @@
 Toutes les évolutions notables de WerbPresta sont consignées ici.
 Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/), numérotation [SemVer](https://semver.org/lang/fr/).
 
+## [1.7.0] — 2026-11
+
+### Ajouts
+- **Documents en anglais pour le prestataire** : dans la fiche (carte *Cahier d'exigences cyber*), **Langue** Français / English, enregistrée avec le prestataire. En anglais : le **cahier d'exigences** (*Cybersecurity requirements specification* : purpose, scope, requirement level, requirements, terms), le **questionnaire** (*Yes / Partial / No / Not applicable*, commitment) et le **guide du prestataire** (*Meeting your client's cybersecurity requirements*, traduction complète du guide 3 : maturity levels, four steps, requirement by requirement, action plan, resources). Listes de la fiche traduites (type de prestataire, interventions, accès, privilèges, données confiées), niveau et justification, dates au format AAAA-MM-JJ, mentions du modèle Word d'entreprise ; fichiers suffixés `_EN`. Le **rapport d'évaluation**, document interne, reste en français.
+- **Modèle de questionnaire bilingue** : intitulé de domaine et **exigence en anglais** à côté du texte français (*Modèle de questionnaire*, export Excel). Les 13 domaines et 37 exigences proposés sont traduits ; une base existante reçoit les traductions à l'ouverture pour les textes non modifiés. Exigence modifiée ou ajoutée sans traduction : texte français repris, signalé dans la fiche et à la génération. Le modèle publié pour le groupe transporte les traductions.
+
+### Format de données
+- `prestataires[].cahier.langue` (`fr` ou `en`) ; `modele.domaines[].titre_en`, `modele.domaines[].exigences[].texte_en`. Schéma inchangé.
+
 ## [1.6.1] — 2026-11
 
 ### Changements

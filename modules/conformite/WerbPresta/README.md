@@ -1,7 +1,7 @@
 # WerbPresta
 
 > Prestataires d'un site : fiche, périmètre et actifs où ils interviennent, accès, criticité, questionnaire et cahier d'exigences cyber (IEC 62443-2-4, NIS2)
-> Version **1.6.1** — Développé par **@WerbHat**
+> Version **1.7.0** — Développé par **@WerbHat**
 
 ---
 
@@ -36,7 +36,7 @@ WerbPresta/
 │   └── exemples.py              ← produit la base d'exemple (et la range dans l'espace de démonstration)
 ├── sources/
 │   ├── build.py                 ← assemblage du livrable
-│   ├── src/                     ← index.html, style.css, scripts, questionnaire_defaut.json (modèle de questionnaire proposé)
+│   ├── src/                     ← index.html, style.css, scripts, questionnaire_defaut.json (modèle de questionnaire proposé, bilingue), guide_prestataire_en.md (guide du prestataire en anglais)
 │   └── vendor/bibliotheques.js  ← JSZip et docx figés (empreinte contrôlée)
 └── tests/                       ← tests Playwright dans Microsoft Edge
 ```
@@ -61,7 +61,7 @@ WerbPresta/
 | 📊 Pilotage › Tableau de bord | Prestataires actifs, avec accès à distance, avec accès permanent, actifs couverts ; prestataires par criticité ; points d'attention de toutes les fiches |
 | 🤝 Prestataires › Liste | ID (`PR-001`…), raison sociale, type, statut, SI, zones, actifs couverts, accès à distance, criticité, échéance, points d'attention ; **➕ Prestataire** ; **prestataires proposés** (publiés par WerbGouvernance ou WerbIEC62443, absents de la liste) ajoutés en un clic ; suppression avec confirmation |
 | 🤝 Fiche prestataire | **Identité** (type, statut, contrat, échéance, interlocuteur sécurité par sa fonction, certifications) ; **périmètre** (interventions, SI, zones et actifs reçus de WerbMap ; actifs d'un SI ou d'une zone couverts d'office ; filtre) ; **accès** (sur site, à distance : aucun / à la demande / permanent, moyen, privilèges, comptes **sans mot de passe**, supports amovibles) ; **données confiées** ; **criticité** détaillée ; suivi (prochaine revue, commentaire) |
-| 🤝 Fiche › Cahier d'exigences cyber | **Niveau** automatique (renforcé si criticité élevée ou accès à distance) ou choisi ; **exigences proposées** (essentielles, renforcées selon le niveau, dont la condition correspond à la situation : accès à distance, supports, privilèges, données personnelles), ajustées (retirée, ajoutée, ↺ revenir à la proposition) ; **📄 cahier d'exigences** et **📝 questionnaire à remettre** en Word (oui / partiel / non / sans objet, commentaire et preuve, engagement), habillés du modèle de l'entreprise (1.1.0) |
+| 🤝 Fiche › Cahier d'exigences cyber | **Niveau** automatique (renforcé si criticité élevée ou accès à distance) ou choisi ; **exigences proposées** (essentielles, renforcées selon le niveau, dont la condition correspond à la situation : accès à distance, supports, privilèges, données personnelles), ajustées (retirée, ajoutée, ↺ revenir à la proposition) ; **📄 cahier d'exigences** et **📝 questionnaire à remettre** en Word (oui / partiel / non / sans objet, commentaire et preuve, engagement), habillés du modèle de l'entreprise (1.1.0) ; **Langue** des documents remis (1.7.0) : français ou **anglais** — cahier, questionnaire et guide du prestataire ; le rapport d'évaluation reste en français |
 | 🤝 Fiche › Évaluation | Réponses du prestataire saisies par le client (**oui / partiel / non / sans objet**, commentaire et preuve), **score** par domaine et global (oui 1, partiel ½, non 0, sans objet exclu), **écarts** (action demandée, échéance, statut, en retard signalé), **📄 rapport d'évaluation Word**, **🗄 archivage** (historique : date, score, écarts, version du modèle ; prochaine revue à 12 mois) (1.2.0) |
 | 🤝 Fiche › Suivi | Prochaine revue, commentaire, **documents reçus** (type, libellé, date, validité ; expiré signalé), **incidents** (date, description, suite) (1.2.0) |
 | 🤝 Écarts | Écarts de tous les prestataires : ouverts d'abord, par échéance, en retard signalés (1.2.0) |
@@ -158,7 +158,7 @@ python <WerbSMSI>\charte\outils\werb_charte.py publier .
 
 ## Historique des versions
 
-Version courante : **1.6.1** de novembre 2026 — intitulé du guide du prestataire : « Répondre aux exigences de cybersécurité du client ». Versions précédentes : **1.6.0** de novembre 2026 — bouton « 📘 Guide du prestataire (Word) » (guide d'accompagnement à son nom, exigences de son cahier signalées). Versions précédentes : **1.5.0** de novembre 2026 — guide « Accompagner le prestataire dans sa montée en maturité » (paliers, exigence par exigence, plan de progrès). Version précédente : **1.4.0** d'octobre 2026 — niveau groupe : consolidation des évaluations des sites, modèle de questionnaire commun publié et repris par les sites. Version précédente : **1.3.0** d'octobre 2026 — publication `site:evaluationsPrestataires` pour WerbEBIOS, WerbMap et WerbPCR. Version précédente : **1.2.0** d'octobre 2026 — évaluation des prestataires (réponses, score par domaine, écarts, historique, rapport Word), documents reçus et incidents. Version précédente : **1.1.0** d'octobre 2026 — modèle de questionnaire (13 domaines, IEC 62443-2-4, NIS2, ISO 27001), cahier d'exigences cyber et questionnaire Word par prestataire. Version précédente : **1.0.0** d'octobre 2026 — première version : liste de référence des prestataires du site, fiche (périmètre et actifs, accès, données), criticité, couverture des actifs. Détail dans [CHANGELOG.md](CHANGELOG.md).
+Version courante : **1.7.0** de novembre 2026 — cahier d'exigences, questionnaire et guide du prestataire en anglais (langue choisie dans la fiche) ; modèle de questionnaire bilingue. Versions précédentes : **1.6.1** de novembre 2026 — intitulé du guide du prestataire : « Répondre aux exigences de cybersécurité du client » ; **1.6.0** de novembre 2026 — bouton « 📘 Guide du prestataire (Word) » (guide d'accompagnement à son nom, exigences de son cahier signalées). Versions précédentes : **1.5.0** de novembre 2026 — guide « Accompagner le prestataire dans sa montée en maturité » (paliers, exigence par exigence, plan de progrès). Version précédente : **1.4.0** d'octobre 2026 — niveau groupe : consolidation des évaluations des sites, modèle de questionnaire commun publié et repris par les sites. Version précédente : **1.3.0** d'octobre 2026 — publication `site:evaluationsPrestataires` pour WerbEBIOS, WerbMap et WerbPCR. Version précédente : **1.2.0** d'octobre 2026 — évaluation des prestataires (réponses, score par domaine, écarts, historique, rapport Word), documents reçus et incidents. Version précédente : **1.1.0** d'octobre 2026 — modèle de questionnaire (13 domaines, IEC 62443-2-4, NIS2, ISO 27001), cahier d'exigences cyber et questionnaire Word par prestataire. Version précédente : **1.0.0** d'octobre 2026 — première version : liste de référence des prestataires du site, fiche (périmètre et actifs, accès, données), criticité, couverture des actifs. Détail dans [CHANGELOG.md](CHANGELOG.md).
 
 ---
 
