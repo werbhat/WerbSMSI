@@ -1,7 +1,7 @@
 # WerbEBIOS
 
 > Analyse de risques EBIOS Risk Manager (ANSSI) du groupe et des sites : 5 ateliers, MITRE ATT&CK, rapport Word
-> Version **1.9.0** — Développé par **@WerbHat**
+> Version **1.12.0** — Développé par **@WerbHat**
 
 ---
 
@@ -186,7 +186,7 @@ python <WerbSMSI>\charte\outils\werb_charte.py publier .
 
 ## Historique des versions
 
-Version courante : **1.9.0** de novembre 2026 — publication au site des valeurs métier et des valeurs métier portées par chaque bien support (WerbPCR). Versions précédentes : **1.8.0** d'octobre 2026 — maturité et confiance des parties prenantes proposées depuis WerbPresta ; **1.7.0** d'octobre 2026 — critères et besoin de sécurité des événements redoutés, échelle « Besoin de sécurité », publication `site:evenementsRedoutes` pour WerbPCR (EBI-1). Versions précédentes : **1.6.0** d'octobre 2026 — sélection multiple et archivage, chercher / remplacer, largeur des colonnes (socle 1.9.0) ; **1.5.0** d'octobre 2026 — bandeau commun (socle 1.8.0, TRV-7) ; **1.4.0** d'octobre 2026 — SI de WerbMap repris comme biens supports, risques publiés avec leurs actifs (MAP-7.4) ; **1.3.0** d'octobre 2026 — thème clair / sombre (socle 1.7.1) ; **1.2.0** d'octobre 2026 — verrou commun des bases (lecture seule ou prise de main, bandeau « Ouvert par … ») ; **1.1.0** — guides d'accompagnement en mode lecture dans le menu ❓ Aide. La 1.0.0 était la première version : 5 ateliers, MITRE ATT&CK, rapport Word, intégration groupe / sites. Détail dans [CHANGELOG.md](CHANGELOG.md).
+Version courante : **1.12.0** de novembre 2026 — fichiers exportés nommés « SIGLE-SITE_… », nom du site dans les titres (socle 1.12.0). Précédente : **1.11.0** de novembre 2026 — base demandée par le portail ouverte directement quand l'espace est chargé dans le portail (socle 1.11.0). Précédente : **1.10.0** de novembre 2026 — identification unique : ouvert depuis le portail WerbSMSI, le module reprend le nom saisi dans le portail, sans écran « Votre nom » (socle 1.10.0). Précédente : **1.9.0** de novembre 2026 — publication au site des valeurs métier et des valeurs métier portées par chaque bien support (WerbPCR). Versions précédentes : **1.8.0** d'octobre 2026 — maturité et confiance des parties prenantes proposées depuis WerbPresta ; **1.7.0** d'octobre 2026 — critères et besoin de sécurité des événements redoutés, échelle « Besoin de sécurité », publication `site:evenementsRedoutes` pour WerbPCR (EBI-1). Versions précédentes : **1.6.0** d'octobre 2026 — sélection multiple et archivage, chercher / remplacer, largeur des colonnes (socle 1.9.0) ; **1.5.0** d'octobre 2026 — bandeau commun (socle 1.8.0, TRV-7) ; **1.4.0** d'octobre 2026 — SI de WerbMap repris comme biens supports, risques publiés avec leurs actifs (MAP-7.4) ; **1.3.0** d'octobre 2026 — thème clair / sombre (socle 1.7.1) ; **1.2.0** d'octobre 2026 — verrou commun des bases (lecture seule ou prise de main, bandeau « Ouvert par … ») ; **1.1.0** — guides d'accompagnement en mode lecture dans le menu ❓ Aide. La 1.0.0 était la première version : 5 ateliers, MITRE ATT&CK, rapport Word, intégration groupe / sites. Détail dans [CHANGELOG.md](CHANGELOG.md).
 
 ---
 

@@ -11,7 +11,7 @@ Un auditeur ne demande pas « un schéma » : il demande **la preuve** que le SI
 |---|---|---|
 | **Type de schéma** | Qu'est-ce que c'est ? (sa forme) | « Réseau physique (câblage, baies) » |
 | **Catégorie d'exigence** (`EX-…`) | Qu'est-ce que ça prouve ? | `EX-RESEAU` et `EX-LOCAUX` |
-| **Repères** | Quel texte le demande ? | NIS2 CARTOGRAPHIE.a, ISO/IEC 27001 A.7.12, guide d'hygiène de l'ANSSI mesure 4 |
+| **Repères** | Quel texte le demande ? | NIS2 5.A.1-EI/EE, ISO/IEC 27001 A.7.12, guide d'hygiène de l'ANSSI mesure 4 |
 
 Chaque catégorie est attendue soit **pour chaque SI**, soit **pour les SI sensibles**, soit **une fois pour le site** : c'est sa portée, qui règle la *couverture par SI* (guide [Tenir le registre des schémas](1-Tenir_le_registre_des_schemas.md), §6). Une catégorie qui ne concerne pas le site se déclare **non applicable**, avec sa justification : elle ne se laisse pas « non couverte ».
 
@@ -69,7 +69,7 @@ Cliquez sur une image pour l'agrandir.
 
 | Référentiel | Exigence |
 |---|---|
-| NIS2 (objectifs de sécurité de l'ANSSI) | Règle 1, RECENSEMENT_SI (recenser les SI, exclusions justifiées) ; règle 7, **CARTOGRAPHIE.a** (cartographie à jour, assez détaillée pour le maintien en condition de sécurité et la gestion d'incident) |
+| NIS2 | Objectif 1, 1.1 à 1.3 (recenser les SI, exclusions justifiées) ; objectif 5, **5.A.1-EI/EE** (cartographie à jour, assez détaillée pour le maintien en condition de sécurité et la gestion d'incident) |
 | Directive (UE) 2022/2555 | Art. 21 §2 i) : gestion des actifs |
 | ISO/IEC 27001:2022 | A.5.9 : inventaire des informations et autres actifs associés |
 | IEC 62443 | 62443-3-2 ZCR 1 : identification du système étudié ; 62443-3-3 SR 7.8 : inventaire des composants |
@@ -97,7 +97,7 @@ Cliquez sur une image pour l'agrandir.
 
 | Référentiel | Exigence |
 |---|---|
-| NIS2 (objectifs de sécurité de l'ANSSI) | Règle 9, **CLOISONNEMENT.a à d** : SI cloisonnés entre eux et vis-à-vis des tiers ; sous-systèmes étudiés, justifiés et cloisonnés |
+| NIS2 | Objectif 7, **7.A.1-EI/EE à 7.A.4-EE** : SI cloisonnés entre eux et vis-à-vis des tiers ; sous-systèmes étudiés, justifiés et cloisonnés |
 | IEC 62443 | 62443-3-2 **ZCR 3** : découpage en zones et conduits ; SL-T fixé par l'évaluation détaillée des risques (ZCR 5) ; 62443-3-3 SR 5.1 (segmentation du réseau), SR 5.2 (protection des frontières de zone) |
 | ISO/IEC 27001:2022 | A.8.22 : cloisonnement des réseaux |
 | ANSSI | Guide d'hygiène, mesure 19 : segmenter le réseau et cloisonner les zones ; « La cybersécurité des systèmes industriels » (classes de cybersécurité) |
@@ -124,7 +124,7 @@ Cliquez sur une image pour l'agrandir.
 
 | Référentiel | Exigence |
 |---|---|
-| NIS2 (objectifs de sécurité de l'ANSSI) | Règle 9, **FILTRAGE.a et b** : communications nécessaires définies et documentées ; CLOISONNEMENT.g et h : seules les interconnexions nécessaires |
+| NIS2 | Objectif 7, **7.B.1-EI/EE et 7.B.2-EE** : communications nécessaires définies et documentées ; 7.A.7-EI/EE et 7.A.8-EE : seules les interconnexions nécessaires |
 | ISO/IEC 27001:2022 | A.8.20 (sécurité des réseaux), A.8.21 (sécurité des services réseau), A.8.22 (cloisonnement des réseaux) |
 | IEC 62443-3-3 | SR 5.1, SR 5.2 (protection des frontières de zone, refus par défaut) |
 | ANSSI, guide d'hygiène | Mesures 19 (cloisonnement), 22 (passerelle d'accès sécurisé à Internet), 23 (cloisonner les services visibles depuis Internet) |
@@ -151,7 +151,7 @@ Cliquez sur une image pour l'agrandir.
 
 | Référentiel | Exigence |
 |---|---|
-| NIS2 (objectifs de sécurité de l'ANSSI) | CARTOGRAPHIE.a : ressources matérielles et interconnexions identifiables |
+| NIS2 | 5.A.1-EI/EE : ressources matérielles et interconnexions identifiables |
 | ISO/IEC 27001:2022 | A.8.20 (sécurité des réseaux), A.7.12 (sécurité du câblage), A.5.9 (inventaire) |
 | IEC 62443-3-3 | SR 7.8 : inventaire des composants |
 | ANSSI, guide d'hygiène | Mesures 4 (schéma du réseau) et 7 (n'autoriser la connexion qu'aux équipements maîtrisés) |
@@ -179,7 +179,7 @@ Cliquez sur une image pour l'agrandir.
 
 | Référentiel | Exigence |
 |---|---|
-| NIS2 (objectifs de sécurité de l'ANSSI) | Règle 14, COMPTES_ADMIN (comptes d'administration) ; règle 15 (entités essentielles), **ADMINISTRATION.a** (réseau d'administration dédié), **.g** (liaison physique dédiée), **.h** (cloisonnement et filtrage respectés) |
+| NIS2 | Objectif 11, 11.A (comptes d'administration) ; objectif 19 (entités essentielles), **19.1-EE** (réseau d'administration dédié), **19.7-EE** (liaison physique dédiée), **19.8-EE** (cloisonnement et filtrage respectés) |
 | ISO/IEC 27001:2022 | A.8.2 (droits d'accès à privilèges), A.8.5 (authentification sécurisée), A.8.15 (journalisation) |
 | IEC 62443-3-3 | SR 1.1 (identification et authentification des utilisateurs humains), SR 2.1 (application des autorisations), SR 2.8 (événements journalisés) |
 | ANSSI | Guide d'hygiène, mesures 27 (pas d'Internet depuis les postes d'administration), 28 (réseau d'administration dédié et cloisonné), 29 (droits d'administration limités) ; recommandations relatives à l'administration sécurisée des SI |
@@ -206,7 +206,7 @@ Cliquez sur une image pour l'agrandir.
 
 | Référentiel | Exigence |
 |---|---|
-| NIS2 (objectifs de sécurité de l'ANSSI) | Règle 10, **ACCES_DISTANTS.a** (accès à travers un SI tiers protégés par un chiffrement conforme aux recommandations de l'ANSSI) ; règle 4, ECOSYSTEME.a (cartographie de l'écosystème : prestataires, accès) ; CLOISONNEMENT.g et h |
+| NIS2 | Objectif 8, **8.1-EI/EE** (accès à travers un SI tiers protégés par un chiffrement conforme aux recommandations de l'ANSSI) ; objectif 3, 3.A.1-EI/EE (cartographie de l'écosystème : prestataires, accès) ; 7.A.7-EI/EE et 7.A.8-EE |
 | Directive (UE) 2022/2555 | Art. 21 §2 d) (sécurité de la chaîne d'approvisionnement) et j) (authentification multifacteur, communications sécurisées) |
 | ISO/IEC 27001:2022 | A.5.19 à A.5.22 (relations avec les fournisseurs), A.6.7 (travail à distance), A.5.14 (transfert de l'information) |
 | IEC 62443-3-3 | SR 1.13 (accès via des réseaux non sûrs), SR 5.2 (protection des frontières de zone) |
@@ -236,7 +236,7 @@ Cliquez sur une image pour l'agrandir.
 
 | Référentiel | Exigence |
 |---|---|
-| NIS2 (objectifs de sécurité de l'ANSSI) | Règle 18, **CONTINUITE_ACTIVITE.a** (procédures de sauvegarde et de restauration), **.c** (tests au moins une fois par an), **.d** (sauvegardes protégées, par exemple hors ligne), **.f** (PCA et PRA, entités essentielles) |
+| NIS2 | Objectif 13, **13.1-EI/EE** (procédures de sauvegarde et de restauration), **13.2-EI/EE** (tests au moins une fois par an), **13.3-EI/EE** (sauvegardes protégées, par exemple hors ligne), **13.6-EE** (PCA et PRA, entités essentielles) |
 | Directive (UE) 2022/2555 | Art. 21 §2 c) : continuité des activités, gestion des sauvegardes, reprise |
 | ISO/IEC 27001:2022 | A.8.13 (sauvegarde des informations), A.5.30 (préparation des TIC pour la continuité), A.8.14 (redondance) |
 | IEC 62443-3-3 | SR 7.3 (sauvegarde du système), SR 7.4 (restauration et reconstitution) |
@@ -264,7 +264,7 @@ Cliquez sur une image pour l'agrandir.
 
 | Référentiel | Exigence |
 |---|---|
-| NIS2 (objectifs de sécurité de l'ANSSI) | Règle 8, **ACCES_PHYSIQUES.b** : protection physique des locaux, salles serveurs et locaux techniques (vidéosurveillance, gardiennage, alarme) |
+| NIS2 | Objectif 6, **6.2-EE** (entités essentielles) : protection physique des locaux, salles serveurs et locaux techniques (vidéosurveillance, gardiennage, alarme) |
 | Directive (UE) 2022/2555 | Art. 21 §2 : approche « tous risques », qui couvre l'environnement physique des SI |
 | ISO/IEC 27001:2022 | A.7.1 à A.7.4 (périmètres, entrées, bureaux et salles, surveillance), A.7.5 (menaces physiques et environnementales), A.7.8 (emplacement du matériel), A.7.11 (services généraux), A.7.12 (câblage) |
 | ANSSI, guide d'hygiène | Mesure 26 : contrôler et protéger l'accès aux salles serveurs et aux locaux techniques |
@@ -282,4 +282,4 @@ Cliquez sur une image pour l'agrandir.
 
 Les modèles Visio fournis pour EX-ZONES, EX-ACCES, EX-ADMIN et EX-REPRISE reprennent ces conventions : voir [Préparer les modèles de schémas](2-Preparer_les_modeles_de_schemas.md).
 
-> **À propos des repères.** Ils indiquent les exigences que le schéma aide à démontrer, pas une équivalence officielle entre référentiels. Les codes NIS2 (CARTOGRAPHIE.a, CLOISONNEMENT.a…) sont ceux des objectifs de sécurité publiés par l'ANSSI, repris par WerbNIS2. Les numéros de mesures de l'ANSSI sont ceux du guide d'hygiène informatique (version 2.0, 42 mesures).
+> **À propos des repères.** Ils indiquent les exigences que le schéma aide à démontrer, pas une équivalence officielle entre référentiels. Les codes NIS2 (5.A.1-EI/EE, 7.A.1-EI/EE…) sont les identifiants des moyens acceptables de conformité du référentiel NIS2, repris par WerbNIS2 1.12.0 ; le suffixe indique si la mesure est attendue d'une entité importante et essentielle (EI/EE) ou des seules entités essentielles (EE). Les numéros de mesures de l'ANSSI sont ceux du guide d'hygiène informatique (version 2.0, 42 mesures).

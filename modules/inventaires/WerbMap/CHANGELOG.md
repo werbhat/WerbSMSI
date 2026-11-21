@@ -3,6 +3,24 @@
 Toutes les évolutions notables de WerbMap sont consignées ici.
 Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/), numérotation [SemVer](https://semver.org/lang/fr/).
 
+
+
+## [1.33.0] — 2026-11
+
+### Modifications
+- **Nommage des fichiers exportés** (socle 1.12.0, charte §7.8) : les rapports, classeurs, documents, CSV et PDF produits par le module commencent par le code du groupe et celui du site, « SIGLE-SITE_ » (« SIGLE_ » pour une base du groupe), par exemple `GDI-LYON_…` ; les codes déjà présents dans le nom ne sont pas répétés. Les fichiers de base gardent leur nom ; hors espace (sigle inconnu), les noms ne changent pas.
+
+### Développement
+- Socle 1.12.0 (`WerbSocle.nommage` : `contexte`, `fichier`, `nomSite`, `libelleSite`, `nomGroupe`).
+
+## [1.32.0] — 2026-11
+
+### Modifications
+- **Ouverture directe de la base demandée par le portail** (socle 1.11.0, charte §5.5) : ouvert depuis la puce d'une base du portail WerbSMSI, l'espace étant chargé dans le portail (🔗 Raccourcis), le module ouvre la base aussitôt, sans le bouton « 📂 Ouvrir … » ; la connexion au compte de la base (identifiant, mot de passe) est ensuite demandée comme avant. Si l'espace n'est pas accessible sans fenêtre (raccourci désactivé, autorisation d'Edge à donner), le bouton reste proposé comme avant.
+
+### Développement
+- Socle 1.11.0 (`WerbSocle.lien.ouvrirSansClic()`).
+
 ## [1.31.0] — 2026-11
 
 ### Ajouts

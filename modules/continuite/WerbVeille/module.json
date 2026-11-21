@@ -2,7 +2,7 @@
   "charte": "1.0",
   "id": "werbveille",
   "produit": "WerbVeille",
-  "version": "1.10.5",
+  "version": "1.13.0",
   "dateVersion": "2026-11",
   "auteur": "@WerbHat",
   "signature": "Développé par @WerbHat",
@@ -15,7 +15,7 @@
   "entree": "application/WerbVeille.html",
   "empreinte": {
     "algo": "SHA-256",
-    "valeur": "c1a7da232308699c0ec0924f812177747837c6a58d0400136999f588aeeb031a"
+    "valeur": "1fc3833106cd1c1d9325c2bf89c8d2040ee27121f1af06ffd6157acbea64e860"
   },
   "donnees": {
     "format": "WERBVEILLE",

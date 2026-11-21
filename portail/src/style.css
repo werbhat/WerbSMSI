@@ -40,6 +40,11 @@ button:disabled { opacity: .5; cursor: default; }
 #topbar button.tb-sauv:hover { background: #ffd970; }
 #topbar button.tb-sauv.fait { background: transparent; color: #fff; border-color: rgba(255,255,255,.4); font-weight: 400; }
 #topbar button.tb-sauv:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+#topbar button.tb-user { background: transparent; color: #fff; border: 1px solid rgba(255,255,255,.4); max-width: 260px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+#topbar button.tb-user:hover { background: rgba(255,255,255,.12); }
+#topbar button.tb-user.anonyme { border-style: dashed; }
+#topbar button.tb-user:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+.fen input#identNom { width: 100%; max-width: 360px; }
 table.t { width: 100%; border-collapse: collapse; }
 table.t th, table.t td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
 table.t th { font-size: 12px; color: var(--muted); font-weight: 600; background: var(--th); }

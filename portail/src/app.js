@@ -15,7 +15,8 @@
 
   // État en mémoire seulement
   const P = { vue: "accueil", site: "", groupe: null, pubGroupe: null, sites: {}, basesGroupe: null, verif: null, chargement: false, manquants: [],
-    raccourcis: WerbSocle.preference.lire("raccourcis", true), raccourciOk: null };
+    raccourcis: WerbSocle.preference.lire("raccourcis", true), raccourciOk: null,
+    utilisateur: "" };   // nom saisi une fois à l'ouverture du portail (1.16.0), transmis aux modules ouverts d'ici ; mémoire seulement
 
   WerbSocle.activerPurgeAutomatique();
 
@@ -153,7 +154,8 @@
   // Lien qui ouvre le module sur une base de l'espace (#werbsmsi=…) ; null si le module ne sait pas l'ouvrir.
   function lienBase(m, b, site = "") {
     const url = lienModule(m);
-    return url && m.manifeste.ouvertureParLien ? WerbSocle.lien.creer(url, { groupeId: P.groupe.groupeId, fichier: b.chemin, site, libelle: b.libelle || "", espace: E.nom, theme: WerbSocle.theme.mode }) : null;
+    return url && m.manifeste.ouvertureParLien ? WerbSocle.lien.creer(url, { groupeId: P.groupe.groupeId, fichier: b.chemin, site, libelle: b.libelle || "", espace: E.nom, theme: WerbSocle.theme.mode, utilisateur: P.utilisateur,
+      sigle: P.groupe.sigle || "", organisation: P.groupe.organisation || "", siteNom: ((P.groupe.sites || []).find(x => x.code === site) || {}).nom || "" }) : null;   // sigle, organisation, nom du site : nommage des exports (§7.8)
   }
   // Verrou valable d'une base (charte §5.7) : texte « Ouverte par X depuis 14:32 », sinon « »
   const ouvertePar = b => WerbSocle.verrou.actif(b.verrou) ? `Ouverte par ${b.verrou.par} ${WerbSocle.verrou.quand(b.verrou.depuis)}` : "";
@@ -191,7 +193,8 @@
 
   function tuileModule(m, niveau) {
     const man = m.manifeste;
-    const lien = lienModule(m) && WerbSocle.lien.avecTheme(lienModule(m), WerbSocle.theme.mode);   // thème transmis (charte §7.5)
+    const lien = lienModule(m) && WerbSocle.lien.avecContexte(lienModule(m), { theme: WerbSocle.theme.mode, utilisateur: P.utilisateur,
+      sigle: E.ouvert && P.groupe ? P.groupe.sigle || "" : "", organisation: E.ouvert && P.groupe ? P.groupe.organisation || "" : "" });   // thème (§7.5), nom (§5.5), nommage des exports (§7.8)
     const etat = { publie: ["publié", "b-ok"], "a-integrer": ["à intégrer", "b-warn"], "a-creer": ["à créer", ""] }[m.etat] || [m.etat, ""];
     return `<div class="tile"><h3>${esc(man ? man.produit : libelleModule(m.id))}</h3>
       <div class="desc">${esc(man ? man.description : "")}</div>
@@ -630,7 +633,7 @@ ${sites.map(s => `    ├── ${s.code || "?"}/  (werbsmsi.site.json, ${DOSSIE
       <p><button data-act="assistant" data-k="espace">🏗️ Ouvrir la mise en place</button></p>`)}
     ${etape(1, "📝", "Créer la base dans le module", "bleu", `<ol>
       <li>Sur la carte <b>WerbExploitation</b>, cliquer <b>Ouvrir</b> : le module s'ouvre dans un nouvel onglet.</li>
-      <li>Saisir votre nom, puis <b>✨ Nouvelle base</b>. Le module affiche <b>Intégration WerbSMSI</b>.</li>
+      <li>Si vous vous êtes identifié dans le portail (<b>👤</b> du bandeau), le module ne redemande pas votre nom ; sinon, le saisir. Puis <b>✨ Nouvelle base</b>. Le module affiche <b>Intégration WerbSMSI</b>.</li>
       <li><b>Choisir l'espace…</b> : dans la fenêtre de Windows, aller jusqu'au dossier <code>SMSI_&lt;SIGLE&gt;</code> et cliquer « Sélectionner un dossier ».</li>
       <li>Choisir le site <b>LYON</b>, puis <b>Rattacher</b> : la base est liée au site et l'inventaire WerbMap publié est chargé.</li></ol>
       <div class="infobox small"><b>WerbMap</b> : sur l'écran d'accès, <b>➕ Créer une nouvelle base…</b> demande tout de suite l'emplacement (étape 2), puis le compte administrateur ; rattacher ensuite dans <b>Administration › Intégration WerbSMSI</b>.<br>
@@ -648,8 +651,8 @@ ${sites.map(s => `    ├── ${s.code || "?"}/  (werbsmsi.site.json, ${DOSSIE
       <li>La puce passe au vert <span class="chip">📍 LYON</span> : la base est inscrite dans <code>sites/LYON/werbsmsi.site.json</code>.</li></ol>`)}
     ${etape(4, "🚀", "Utiliser le raccourci", "cyan", `<ol>
       <li>Cliquer la puce <span class="chip">📍 LYON</span> : le module s'ouvre dans un nouvel onglet.</li>
-      <li>Saisir votre nom ; l'encadré « Base demandée par le portail » propose <b>📂 Ouvrir cette base</b>.</li>
-      <li>Avec l'option <b>🔗 Raccourcis</b> du portail (cochée par défaut, en haut à droite), le module reçoit le dossier de l'espace : la base s'ouvre directement ; Edge peut demander d'<b>autoriser</b> l'accès.</li>
+      <li>Votre nom est repris du portail (<b>👤</b>) ; sans identification, le module le demande.</li>
+      <li>Avec l'option <b>🔗 Raccourcis</b> du portail (cochée par défaut, en haut à droite), l'espace chargé dans le portail est confié au module : <b>la base s'ouvre directement</b>, sans autre clic (portail 1.17.0, socle 1.11.0). Si Edge demande d'abord d'<b>autoriser</b> l'accès, le module affiche l'encadré « Base demandée par le portail » et son bouton <b>📂 Ouvrir</b>.</li>
       <li>Sans raccourci (portail fermé, option décochée ou refus d'Edge), la fenêtre de Windows demande un <b>dossier</b> : choisir celui de l'espace (<code>SMSI_&lt;SIGLE&gt;</code>), du site (<code>LYON</code>) ou du module (<code>exploitation</code>), puis « Sélectionner un dossier ». Inutile d'aller jusqu'au fichier : la base est trouvée et s'ouvre, puis s'enregistre à sa place.</li>
       <li>Astuce : épinglez le dossier de l'espace dans <b>Accès rapide</b> de l'Explorateur Windows (clic droit › Épingler) ; il sera à un clic dans cette fenêtre.</li></ol>`)}
     ${etape(0, "🩺", "Si la puce n'apparaît pas", "rouge", `<div class="tablewrap"><table class="t"><thead><tr><th>Symptôme</th><th>Cause probable</th></tr></thead><tbody>
@@ -674,6 +677,10 @@ ${sites.map(s => `    ├── ${s.code || "?"}/  (werbsmsi.site.json, ${DOSSIE
 
   /* ===================================================== rendu */
   function renderTopbar() {
+    const u = $("#tb-user");
+    if (u) u.innerHTML = `<button class="tb-user${P.utilisateur ? "" : " anonyme"}" data-act="identifier" title="${esc(P.utilisateur
+      ? `Identifié(e) : ${P.utilisateur}. Les modules ouverts depuis le portail ne redemandent pas votre nom. Cliquer pour changer.`
+      : "Indiquez votre nom une fois : les modules ouverts depuis le portail ne le redemanderont pas.")}">👤 ${esc(P.utilisateur || "S'identifier")}</button>`;
     $("#tb-espace").textContent = E.ouvert ? `${P.groupe ? P.groupe.organisation : ""} — dossier ${E.nom}` : "Aucun espace ouvert";
     const titre = P.raccourcis ? (P.raccourciOk === false ? "Edge a refusé de mémoriser le dossier : les modules demanderont le dossier." : "Le dossier de l'espace est confié aux modules ouverts depuis les puces : pas de navigation dans l'Explorateur. Effacé à la fermeture du portail.")
       : "Désactivé : chaque module ouvert depuis une puce demandera le dossier de l'espace.";
@@ -716,7 +723,7 @@ ${sites.map(s => `    ├── ${s.code || "?"}/  (werbsmsi.site.json, ${DOSSIE
     if (P.chargement) { m.innerHTML = `<p class="muted">Lecture de l'espace…</p>`; return; }
     const vue = (P.vue === "groupe" || P.vue === "site") && !P.groupe ? "accueil" : P.vue;
     m.innerHTML = VUES[vue]();
-    if (vue === "accueil") setTimeout(proposerDemo, 0);   // invitation à ouvrir l'espace de démonstration
+    if (vue === "accueil") setTimeout(proposerIdentification, 0);   // identification, puis invitation à ouvrir l'espace de démonstration
   }
 
   /* ===================================================== actions */
@@ -1099,7 +1106,9 @@ ${sites.map(s => `    ├── ${s.code || "?"}/  (werbsmsi.site.json, ${DOSSIE
         SV.mdp = SV.saisie.m; SV.saisie = { m: "", m2: "" };
       }
       const mdp = SV.chiffrer ? SV.mdp : "";
-      const nom = `Sauvegarde_${(P.groupe.sigle || "SMSI").replace(/[^\w-]+/g, "_")}_${perimetre === "complet" ? "complet" : perimetre === "groupe" ? "groupe" : perimetre.slice(5)}_${new Date().toISOString().slice(0, 16).replace(/[-:]/g, "").replace("T", "_")}.zip`;
+      // Nom : « SIGLE_ » (espace complet, groupe) ou « SIGLE-SITE_ » (un site), charte §7.8
+      const sg = (P.groupe.sigle || "SMSI").replace(/[^\w-]+/g, "_");
+      const nom = `${perimetre.startsWith("site:") ? `${sg}-${perimetre.slice(5)}` : sg}_Sauvegarde_${perimetre === "complet" ? "complet" : perimetre === "groupe" ? "groupe" : "site"}_${new Date().toISOString().slice(0, 16).replace(/[-:]/g, "").replace("T", "_")}.zip`;
       SV.travail = true; render();
       try {
         const { fichiers, illisibles } = await collecter(perimetre);
@@ -1157,7 +1166,7 @@ ${sites.map(s => `    ├── ${s.code || "?"}/  (werbsmsi.site.json, ${DOSSIE
         const remplaces = aEcrire.filter(x => x.c.etat === "different").map(x => ({ chemin: x.f.chemin }));
         if (avant && remplaces.length) {
           const ill = [], entrees = await lireFichiers(remplaces, ill);
-          const r = await ecrireArchive(`Avant_restauration_${(P.groupe.sigle || "SMSI").replace(/[^\w-]+/g, "_")}_${new Date().toISOString().slice(0, 16).replace(/[-:]/g, "").replace("T", "_")}.zip`, entrees,
+          const r = await ecrireArchive(`${(P.groupe.sigle || "SMSI").replace(/[^\w-]+/g, "_")}_Avant_restauration_${new Date().toISOString().slice(0, 16).replace(/[-:]/g, "").replace("T", "_")}.zip`, entrees,
             manifesteDe("complet", SV.auteur || "portail", remplaces.filter(x => x.sha256), ill, `copie avant restauration de ${a.nom}`), a.chiffree ? a.mdp : SV.chiffrer ? SV.mdp : "");
           res.avant = r.nom;
         }
@@ -1205,6 +1214,9 @@ ${sites.map(s => `    ├── ${s.code || "?"}/  (werbsmsi.site.json, ${DOSSIE
     async copierChemin(el) { await copier(el.dataset.chemin, "Chemin copié (relatif au dossier de l'espace)."); },
     async copierCommandes(el) { await copier(el.previousElementSibling.textContent, "Commandes copiées : collez-les dans PowerShell, depuis le dossier WerbSMSI."); },
     demo() { fenetreDemo(); },
+    identifier() { fenetreIdentification(); },
+    identValider() { validerIdentification(); },
+    identFermer() { fermerIdentification(); },
     ouvrirDemo() { ouvrirDemo(); },
     async copierDemo() { await copier(cheminDemo(), "Chemin de l'espace de démonstration copié."); },
     demoFermer() { const f = $("#demo-fen"); if (f) f.remove(); },
@@ -1405,6 +1417,45 @@ ${sites.map(s => `    ├── ${s.code || "?"}/  (werbsmsi.site.json, ${DOSSIE
     }, 0);
   });
   document.addEventListener("toggle", e => { if (e.target.matches && e.target.matches("details.lg")) { if (e.target.open) LG.ouvertes.add(e.target.dataset.l); else LG.ouvertes.delete(e.target.dataset.l); } }, true);
+
+  /* Identification unique (1.16.0, charte §5.5) : le nom (« Prénom NOM ») est demandé une fois, à l'ouverture du portail, et
+     transmis dans le lien des modules ouverts d'ici (#werbsmsi=…, champ u) : leur écran « Votre nom » ne s'affiche pas, le journal et
+     le verrou le reçoivent. Il préremplit aussi « Réalisée par » (sauvegarde) et « Publiée par » (listes de choix). Gardé en mémoire
+     seulement (rien dans le navigateur, §1) : redemandé au rechargement du portail. Identification déclarative, comme le verrou :
+     l'accès aux données reste celui des dossiers du drive (P3) ; les comptes propres à un module (WerbMap) ne sont pas concernés. */
+  let identProposee = false;
+  function proposerIdentification() {
+    if (!identProposee && !P.utilisateur && P.vue === "accueil") { identProposee = true; fenetreIdentification(); return; }
+    if (!$("#ident-fen")) proposerDemo();
+  }
+  function fenetreIdentification() {
+    if ($("#ident-fen")) return;
+    const v = document.createElement("div");
+    v.id = "ident-fen"; v.className = "fen-back";
+    v.innerHTML = `<div class="fen" role="dialog" aria-modal="true" aria-labelledby="ident-titre"><h2 id="ident-titre">👤 Qui utilise WerbSMSI ?</h2>
+      <p>Indiquez votre nom une seule fois : les modules ouverts depuis le portail le reprennent pour leur journal, leurs publications et le verrou des bases, sans vous le redemander.</p>
+      <label class="f" for="identNom">Votre nom</label><input id="identNom" placeholder="Prénom NOM" maxlength="60" autocomplete="name" value="${esc(P.utilisateur)}">
+      <p class="small muted">Gardé en mémoire tant que le portail reste ouvert, jamais enregistré. L'accès aux données reste celui des dossiers du drive.</p>
+      <div class="fen-a"><span class="spacer"></span><button data-act="identFermer">Plus tard</button><button class="primary" data-act="identValider">Continuer</button></div></div>`;
+    v.addEventListener("keydown", e => { if (e.key === "Escape") fermerIdentification(); if (e.key === "Enter" && e.target.id === "identNom") validerIdentification(); });
+    document.body.appendChild(v);
+    const n = v.querySelector("#identNom"); n.focus(); n.select();
+  }
+  function fermerIdentification() {
+    const f = $("#ident-fen"); if (f) f.remove();
+    if (P.vue === "accueil") proposerDemo();
+  }
+  function validerIdentification() {
+    const n = $("#identNom"), nom = WerbSocle.lien.nettoyerNom(n ? n.value : "");
+    if (!nom) { toast("Saisissez votre nom (Prénom NOM).", "err"); if (n) n.focus(); return; }
+    const ancien = P.utilisateur;
+    P.utilisateur = nom;
+    if (!SV.auteur || SV.auteur === ancien) SV.auteur = nom;   // « Réalisée par » de la sauvegarde
+    if (!LG.auteur || LG.auteur === ancien) LG.auteur = nom;   // « Publiée par » des listes de choix
+    const f = $("#ident-fen"); if (f) f.remove();
+    render();
+    toast(`Bonjour ${nom} : les modules ouverts depuis le portail ne vous redemanderont pas votre nom.`, "ok");
+  }
 
   /* Espace de démonstration : livré avec WerbSMSI, à un emplacement fixe par rapport au portail. Un navigateur ne peut pas ouvrir
      un dossier par son chemin : la fenêtre donne le chemin complet, le copie et ouvre le sélecteur de dossier ; il reste à le coller.

@@ -73,7 +73,7 @@ def main() -> int:
         pg.on("pageerror", lambda e: erreurs.append(str(e)))
         pg.on("dialog", lambda d: d.accept())
         pg.goto(f"http://127.0.0.1:{srv.server_address[1]}/portail/WerbSMSI.html")
-        pg.wait_for_timeout(200); pg.locator("#demo-fen [data-act=demoFermer]").click() if pg.locator("#demo-fen").count() else None   # invitation à la démo (portail 1.8.0)
+        pg.wait_for_timeout(200); pg.locator("#ident-fen [data-act=identFermer]").click() if pg.locator("#ident-fen").count() else None; pg.wait_for_timeout(150); pg.locator("#demo-fen [data-act=demoFermer]").click() if pg.locator("#demo-fen").count() else None   # invitation à la démo (portail 1.8.0)
         opfs = lambda action, chemin, data=None: pg.evaluate(OPFS, [action, chemin, base64.b64encode(data).decode() if data is not None else None])
         lire = lambda chemin: base64.b64decode(opfs("lire", chemin))
         for chemin, data in demo.items():
@@ -102,7 +102,7 @@ def main() -> int:
         pg.fill("#svAuteur", "Alice MARTIN")
         action("[data-act=sauvegarder]", "sauv")
         archives = opfs("lister", "SAUV")
-        ok(len(archives) == 1 and archives[0].startswith("Sauvegarde_GDI_complet_") and archives[0].endswith(".zip"), f"archive écrite dans le fichier choisi : {archives}")
+        ok(len(archives) == 1 and archives[0].startswith("GDI_Sauvegarde_complet_") and archives[0].endswith(".zip"), f"archive écrite dans le fichier choisi : {archives}")
         complete = lire(f"SAUV/{archives[0]}")
         z = zipfile.ZipFile(io.BytesIO(complete))
         ok(z.testzip() is None, "archive .zip valide (lue par Python, CRC contrôlés)")
@@ -120,13 +120,13 @@ def main() -> int:
         print("Sauvegarde d'un site")
         pg.select_option("#svPerim", "site:LYON")
         action("[data-act=sauvegarder]", "sauv")
-        site = next(n for n in opfs("lister", "SAUV") if "_LYON_" in n)
+        site = next(n for n in opfs("lister", "SAUV") if n.startswith("GDI-LYON_Sauvegarde_site_"))   # nommage SIGLE-SITE_ (portail 1.18.0)
         zs = zipfile.ZipFile(io.BytesIO(lire(f"SAUV/{site}")))
         ok(all(n.startswith("sites/LYON/") for n in zs.namelist() if n != "werbsmsi.sauvegarde.json")
            and len(zs.namelist()) - 1 == sum(1 for c in demo if c.startswith("sites/LYON/")), "site LYON : uniquement sites/LYON/")
         avant = pg.get_attribute("#svEtat", "data-sauv")
         action("#topbar [data-act=sauvegarderBandeau]", "sauv")   # attend une nouvelle sauvegarde terminée
-        ok(pg.get_attribute("#svEtat", "data-sauv") != avant and all("_LYON_" in x or "_complet_" in x for x in opfs("lister", "SAUV")) and bt.inner_text().startswith("💾 Sauvegardé à "),
+        ok(pg.get_attribute("#svEtat", "data-sauv") != avant and all(x.startswith("GDI-LYON_Sauvegarde_site_") or "_complet_" in x for x in opfs("lister", "SAUV")) and bt.inner_text().startswith("💾 Sauvegardé à "),
            "bandeau : sauvegarde lancée directement, avec l'auteur et le périmètre de la session (site LYON)")
 
         print("Vérification")
@@ -174,7 +174,7 @@ def main() -> int:
         pg.wait_for_selector("#main .infobox:has-text('Restauration du')")
         ok(lire(f"SMSI/{expl}") == demo[expl] and lire(f"SMSI/{ebios}") == demo[ebios], "fichiers restaurés à l'identique (modifié et supprimé)")
         ok(json.loads(lire(f"SMSI/{nis2}"))["verrou"]["par"] == "Carole PETIT", "base verrouillée non touchée")
-        avant = next((n for n in opfs("lister", "SAUV") if n.startswith("Avant_restauration_")), None)
+        avant = next((n for n in opfs("lister", "SAUV") if n.startswith("GDI_Avant_restauration_")), None)
         za = zipfile.ZipFile(io.BytesIO(lire(f"SAUV/{avant}"))) if avant else None
         ok(za is not None and za.namelist() == ["werbsmsi.sauvegarde.json", expl] and b"\"modifie\": 1" in za.read(expl),
            "copie préalable : la version remplacée est sauvegardée")
@@ -191,7 +191,7 @@ def main() -> int:
         pg.fill("#svMdp2", MDP)
         action("[data-act=sauvegarder]", "sauv")
         chiffree = pg.inner_text("#main .infobox b")   # même nom que l'archive en clair si la même minute : remplacée
-        ok(chiffree in opfs("lister", "SAUV") and chiffree.startswith("Sauvegarde_GDI_complet_"), f"archive chiffrée écrite : {chiffree}")
+        ok(chiffree in opfs("lister", "SAUV") and chiffree.startswith("GDI_Sauvegarde_complet_"), f"archive chiffrée écrite : {chiffree}")
         brut = lire(f"SAUV/{chiffree}")
         ok("Mot de passe défini pour cette session" in pg.inner_text("[data-sv-chiffre]") and "chiffrée" in pg.inner_text("#main .infobox"),
            "compte rendu : archive chiffrée, mot de passe gardé pour la session")
@@ -255,7 +255,7 @@ def main() -> int:
         pg.wait_for_function("() => document.getElementById('main').innerText.includes('1 fichier(s) restauré(s)')")
         ok(lire(f"SMSI/{expl}") == demo[expl], "fichier restauré à l'identique depuis l'archive chiffrée")
         import re
-        copie = (re.search(r"copie préalable : (Avant_restauration_\S+\.zip)", pg.inner_text("#main")) or [None, None])[1]   # même minute : nom réutilisé
+        copie = (re.search(r"copie préalable : (GDI_Avant_restauration_\S+\.zip)", pg.inner_text("#main")) or [None, None])[1]   # même minute : nom réutilisé
         zc = pyzipper.AESZipFile(io.BytesIO(lire(f"SAUV/{copie}"))) if copie else None
         if zc:
             zc.setpassword(MDP.encode())

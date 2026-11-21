@@ -5,6 +5,62 @@ Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/), num
 
 
 
+
+
+
+
+## [1.12.2] — 2026-11
+
+### Changements
+- Le référentiel s'affiche « NIS2 », sans numéro de version : titre de la grille « Grille d'audit NIS2 », libellé « NIS2 (17/03/2026) », À propos, reprise de la grille 2025, guides ; nouvelles bases enregistrées avec `"referentiel": "NIS2"` (les bases existantes s'ouvrent sans changement).
+
+## [1.12.1] — 2026-11
+
+### Changements
+- Le référentiel est désormais nommé **NIS2** partout : grille, tableau de bord, rapport, aide, guides, base d'exemple (`"referentiel": "NIS2"`). Les bases déjà enregistrées s'ouvrent sans reprise (seule la présence du champ `referentiel` est contrôlée).
+- Titre de la grille : « Grille d'audit NIS2 » ; libellé du référentiel sans l'éditeur.
+
+### Développement
+- Outil d'extraction renommé `outils/extraire_nis2.py`, test du référentiel renommé `tests/test_referentiel.py`.
+
+## [1.12.0] — 2026-11
+
+### Modifications
+- **Référentiel NIS2** (17/03/2026, document de travail) à la place de la grille 2025 (classeur « Règles et audits NIS2 ») : **20 objectifs de sécurité** (pilier, articles de la directive NIS2, rappel de l'objectif, moyen de s'en prévaloir, justification et risques) et **152 moyens acceptables de conformité** en 28 rubriques, avec leurs identifiants officiels (`1.1-EI/EE`, `5.B.1-EE`…).
+- **Attendu d'une EI / d'une EE** pour chaque mesure (colonnes du référentiel NIS2) : étiquettes **EI ✓ / ✗** et **EE ✓ / ✗** ; le **statut** de l'entité fixe les mesures applicables (76 pour une entité importante, 152 pour une entité essentielle) ; une mesure non attendue est grisée, sans cotation et exclue de la couverture. Objectifs 16 à 20 marqués « EE seulement ». Deux mesures dont l'identifiant ne concorde pas avec les colonnes (12.6-EI/EE, 14.5-EE) : la colonne fait foi, signalé (⚠).
+- **Filtre d'applicabilité** dans la grille : applicables à l'entité, attendues d'une EI, attendues d'une EE, réservées aux EE, non applicables. Recherche insensible aux ligatures (« coeur » trouve « cœur »).
+- **Reprise des bases de la grille 2025** à l'ouverture : 146 points sur 152 reportés sur la mesure NIS2 correspondante (textes appariés un pour un, relus), état des règles sur l'objectif correspondant, actions suivant leur point ; cotations sans correspondance gardées dans **Base › Reprise de la grille 2025** (à reporter, « Marquer comme traité »), exportées en Excel ; reprise tracée au journal.
+- Éléments de preuve reçus (WerbCartoSI, WerbExploitation, WerbAcademie) rattachés aux mesures NIS2 équivalentes (5.A.1, 7.A.x, 13.1 à 13.3, 4.2, 2.A.1, 15.1…).
+- Export Excel : rubrique, « Attendu d'une EI / d'une EE », applicabilité ; feuille **Objectifs** (pilier, entités, articles NIS2).
+- Base d'exemple : entité importante, objectifs 1 à 12 audités, 13 à 15 planifiés.
+
+### Développement
+- `outils/extraire_nis2.py` (PDF du référentiel NIS2 → `referentiel.js` : objectifs, rubriques, mesures ; lignes de tableau délimitées par les filets) et `outils/migration_grille2025.json` ; schéma de données **2** ; test `tests/test_referentiel.py`.
+
+## [1.11.0] — 2026-11
+
+### Modifications
+- **Nommage des fichiers exportés** (socle 1.12.0, charte §7.8) : les rapports, classeurs, documents, CSV et PDF produits par le module commencent par le code du groupe et celui du site, « SIGLE-SITE_ » (« SIGLE_ » pour une base du groupe), par exemple `GDI-LYON_…` ; les codes déjà présents dans le nom ne sont pas répétés. Les fichiers de base gardent leur nom ; hors espace (sigle inconnu), les noms ne changent pas. Titres (page, classeur, rapport Word, feuille Informations) : **nom du site** plutôt que son code.
+
+### Développement
+- Socle 1.12.0 (`WerbSocle.nommage` : `contexte`, `fichier`, `nomSite`, `libelleSite`, `nomGroupe`).
+
+## [1.10.0] — 2026-11
+
+### Modifications
+- **Ouverture directe de la base demandée par le portail** (socle 1.11.0, charte §5.5) : ouvert depuis la puce d'une base du portail WerbSMSI, l'espace étant chargé dans le portail (🔗 Raccourcis), le module ouvre la base aussitôt, sans le bouton « 📂 Ouvrir … ». Si l'espace n'est pas accessible sans fenêtre (raccourci désactivé, autorisation d'Edge à donner), le bouton reste proposé comme avant.
+
+### Développement
+- Socle 1.11.0 (`WerbSocle.lien.ouvrirSansClic()`).
+
+## [1.9.0] — 2026-11
+
+### Modifications
+- **Identification unique depuis le portail** (socle 1.10.0, charte §5.5) : ouvert depuis le portail WerbSMSI 1.16.0 (bouton *Ouvrir* ou puce d'une base), le module reprend le nom saisi une fois dans le portail ; l'écran « Votre nom » ne s'affiche plus, le journal, les publications et le verrou de la base reçoivent ce nom. Ouvert seul, le module demande le nom comme avant.
+
+### Développement
+- Socle 1.10.0 (`WerbSocle.lien.utilisateur()`, nom transmis dans le lien `#werbsmsi=…`, champ `u`).
+
 ## [1.8.1] — 2026-11
 
 ### Modifications

@@ -145,7 +145,7 @@
       "chemin": "modules/gouvernance/WerbGouvernance",
       "depot": "../WerbGouvernance",
       "etat": "publie",
-      "version": "1.13.0",
+      "version": "1.16.0",
       "etape": "gouverner"
     },
     {
@@ -153,7 +153,7 @@
       "chemin": "modules/gouvernance/WerbReferentiels",
       "depot": "../WerbReferentiels",
       "etat": "publie",
-      "version": "1.5.1",
+      "version": "1.6.2",
       "etape": "gouverner"
     },
     {
@@ -161,7 +161,7 @@
       "chemin": "modules/inventaires/WerbMap",
       "depot": "../WerbMap",
       "etat": "publie",
-      "version": "1.31.0",
+      "version": "1.33.0",
       "etape": "connaitre"
     },
     {
@@ -169,7 +169,7 @@
       "chemin": "modules/inventaires/WerbAssets",
       "depot": "../WerbAssets",
       "etat": "publie",
-      "version": "1.21.1",
+      "version": "1.24.0",
       "etape": "connaitre"
     },
     {
@@ -177,7 +177,7 @@
       "chemin": "modules/inventaires/WerbCartoSI",
       "depot": "../WerbCartoSI",
       "etat": "publie",
-      "version": "1.10.3",
+      "version": "1.14.2",
       "etape": "connaitre"
     },
     {
@@ -185,7 +185,7 @@
       "chemin": "modules/risques/WerbEBIOS",
       "depot": "../WerbEBIOS",
       "etat": "publie",
-      "version": "1.9.0",
+      "version": "1.12.0",
       "etape": "risques"
     },
     {
@@ -193,7 +193,7 @@
       "chemin": "modules/conformite/WerbNIS2",
       "depot": "../WerbNIS2",
       "etat": "publie",
-      "version": "1.8.1",
+      "version": "1.12.2",
       "etape": "exigences"
     },
     {
@@ -201,7 +201,7 @@
       "chemin": "modules/conformite/WerbIEC62443",
       "depot": "../WerbIEC62443",
       "etat": "publie",
-      "version": "1.11.0",
+      "version": "1.14.0",
       "etape": "exigences"
     },
     {
@@ -209,7 +209,7 @@
       "chemin": "modules/conformite/WerbPresta",
       "depot": "../WerbPresta",
       "etat": "publie",
-      "version": "1.7.0",
+      "version": "1.11.0",
       "etape": "exigences"
     },
     {
@@ -217,7 +217,7 @@
       "chemin": "modules/conformite/WerbRGPD",
       "depot": "../WerbRGPD",
       "etat": "publie",
-      "version": "1.0.0",
+      "version": "1.4.0",
       "etape": "exigences"
     },
     {
@@ -225,7 +225,7 @@
       "chemin": "modules/exploitation/WerbExploitation",
       "depot": "../WerbExploitation",
       "etat": "publie",
-      "version": "1.35.0",
+      "version": "1.38.0",
       "etape": "controler"
     },
     {
@@ -233,7 +233,7 @@
       "chemin": "modules/exploitation/WerbRecette",
       "depot": "../WerbRecette",
       "etat": "publie",
-      "version": "1.8.0",
+      "version": "1.11.0",
       "etape": "controler"
     },
     {
@@ -241,7 +241,7 @@
       "chemin": "modules/exploitation/WerbPentest",
       "depot": "../WerbPentest",
       "etat": "publie",
-      "version": "1.7.0",
+      "version": "1.10.0",
       "etape": "controler"
     },
     {
@@ -249,7 +249,7 @@
       "chemin": "modules/continuite/WerbPCR",
       "depot": "../WerbPCR",
       "etat": "publie",
-      "version": "1.7.0",
+      "version": "1.10.0",
       "etape": "resilience"
     },
     {
@@ -257,7 +257,7 @@
       "chemin": "modules/continuite/WerbVeille",
       "depot": "../WerbVeille",
       "etat": "publie",
-      "version": "1.10.5",
+      "version": "1.13.0",
       "etape": "resilience"
     },
     {
@@ -265,7 +265,7 @@
       "chemin": "modules/continuite/WerbAcademie",
       "depot": "../WerbAcademie",
       "etat": "publie",
-      "version": "1.7.0",
+      "version": "1.10.0",
       "etape": "competences"
     }
   ]

@@ -73,19 +73,19 @@ Toutes les planches spécialisées ont la même organisation : le dessin en haut
 
 | Modèle | Points NIS2 qu'il aide à prouver |
 |---|---|
-| Zones et conduits | CLOISONNEMENT.a à d, FILTRAGE.a et b (et IEC 62443-3-2) |
-| Accès distants et interconnexions | ECOSYSTEME.a, CLOISONNEMENT.g et h, ACCES_DISTANTS.a |
-| Architecture d'administration | ADMINISTRATION.a, g et h |
-| Sauvegarde et reprise | CONTINUITE_ACTIVITE.a, d et f (et .c par la date du test, à confirmer par le registre de WerbExploitation) |
+| Zones et conduits | 7.A.1-EI/EE à 7.A.4-EE, 7.B.1-EI/EE et 7.B.2-EE (et IEC 62443-3-2) |
+| Accès distants et interconnexions | 3.A.1-EI/EE, 7.A.7-EI/EE et 7.A.8-EE, 8.1-EI/EE |
+| Architecture d'administration | 19.1-EE, 19.7-EE et 19.8-EE (entités essentielles) |
+| Sauvegarde et reprise | 13.1-EI/EE, 13.3-EI/EE et 13.6-EE (et 13.2-EI/EE par la date du test, à confirmer par le registre de WerbExploitation) |
 
 Le modèle « Sauvegarde et reprise » répond aux questions de l'auditeur sur la continuité :
 
 | Question de l'auditeur | Où sur la planche | Point NIS2 |
 |---|---|---|
-| Qu'est-ce qui est sauvegardé, et à quelle fréquence ? | Les flèches pleines vers le stockage de sauvegarde, avec leur heure | CONTINUITE_ACTIVITE.a |
-| Une copie échappe-t-elle à un rançongiciel ? | Le cadre orange en pointillés : support déconnecté, lieu protégé | CONTINUITE_ACTIVITE.d |
-| Dans quel ordre redémarrer, en combien de temps ? | Le bandeau « Ordre de redémarrage », avec RTO et RPO | CONTINUITE_ACTIVITE.f |
-| La restauration a-t-elle été testée ? | La flèche en pointillés, avec la date et la durée du dernier essai | CONTINUITE_ACTIVITE.c |
+| Qu'est-ce qui est sauvegardé, et à quelle fréquence ? | Les flèches pleines vers le stockage de sauvegarde, avec leur heure | 13.1-EI/EE |
+| Une copie échappe-t-elle à un rançongiciel ? | Le cadre orange en pointillés : support déconnecté, lieu protégé | 13.3-EI/EE |
+| Dans quel ordre redémarrer, en combien de temps ? | Le bandeau « Ordre de redémarrage », avec RTO et RPO | 13.6-EE |
+| La restauration a-t-elle été testée ? | La flèche en pointillés, avec la date et la durée du dernier essai | 13.2-EI/EE |
 
 En remplissant la planche :
 

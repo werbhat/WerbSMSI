@@ -16,6 +16,7 @@ import json
 import sys
 import tempfile
 import threading
+import urllib.parse
 from pathlib import Path
 
 from playwright.sync_api import sync_playwright
@@ -105,6 +106,17 @@ def main() -> int:
         print("— Accueil")
         page.wait_for_selector("h1:has-text('WerbSMSI')")
         page.wait_for_timeout(200)
+        print("— Identification unique (portail 1.16.0)")
+        idf = page.locator("#ident-fen")
+        check(idf.count() == 1 and page.locator("#demo-fen").count() == 0 and page.evaluate("document.activeElement.id") == "identNom",
+              "à l'ouverture : nom demandé une fois (champ actif), avant l'invitation à la démo")
+        check("S'identifier" in page.inner_text("#tb-user"), "bandeau : 👤 S'identifier")
+        page.click("#ident-fen [data-act=identValider]"); page.wait_for_timeout(150)
+        check(idf.count() == 1 and "Saisissez votre nom" in page.inner_text("#toasts"), "nom vide refusé")
+        page.click("#ident-fen [data-act=identFermer]"); page.wait_for_timeout(200)
+        check(idf.count() == 0, "« Plus tard » : le portail fonctionne sans nom (les modules le demanderont)")
+        lien_u = lambda h: (json.loads(urllib.parse.unquote(h.split("#werbsmsi=")[1])).get("u") if h and "#werbsmsi=" in h else None)
+        check(all(lien_u(h) is None for h in page.eval_on_selector_all("#main .tile a.btn.primary", "l => l.map(a => a.getAttribute('href'))")), "sans nom : rien de transmis aux modules")
         fen = page.locator("#demo-fen")
         check(fen.count() == 1 and "Découvrir WerbSMSI avec l'espace de démonstration" in fen.inner_text() and "demo/SMSI_GROUPE_DEMO" in page.inner_text("#demo-chemin"),
               "invitation à ouvrir l'espace de démonstration, avec son chemin")
@@ -117,6 +129,15 @@ def main() -> int:
         page.click("#main [data-act=demo]"); page.wait_for_timeout(150)
         check(page.locator("#demo-fen").count() == 1, "bouton « Espace de démonstration… » de l'accueil : fenêtre rouverte")
         page.click("#demo-fen [data-act=demoFermer]"); page.wait_for_timeout(150)
+        page.click("#tb-user [data-act=identifier]"); page.wait_for_timeout(150)
+        page.fill("#identNom", "  Camille <b>TEST</b> "); page.press("#identNom", "Enter"); page.wait_for_timeout(200)
+        check(idf.count() == 0 and "Camille bTEST/b" in page.inner_text("#tb-user"), "bandeau 👤 : identification (Entrée), nom nettoyé")
+        page.click("#tb-user [data-act=identifier]"); page.wait_for_timeout(150)
+        check(page.input_value("#identNom") == "Camille bTEST/b", "👤 : nom actuel proposé pour le changer")
+        page.fill("#identNom", "Camille TEST"); page.click("#ident-fen [data-act=identValider]"); page.wait_for_timeout(200)
+        hrefs = page.eval_on_selector_all("#main .tile a.btn.primary", "l => l.map(a => a.getAttribute('href'))")
+        check(hrefs and all(lien_u(h) == "Camille TEST" for h in hrefs), f"bouton « Ouvrir » des {len(hrefs)} modules : nom transmis dans le lien")
+        check(page.evaluate("[localStorage.getItem('werb.werbsmsi.utilisateur'), sessionStorage.length]")[0] is None, "nom non enregistré dans le navigateur")
         ETAPES = sorted(REGISTRE["etapes"], key=lambda e: e["ordre"])
         etapes = page.locator("#main .card.rub h2").all_inner_texts()
         check(len(etapes) == len(ETAPES) and all(" ".join(r.split()).endswith(e["libelle"]) and str(e["ordre"]) in r for r, e in zip(etapes, ETAPES)),
@@ -142,7 +163,7 @@ def main() -> int:
         check(page.locator(".card.etape").count() == 7, "aide : prérequis, 4 étapes, dépannage, bon à savoir")
         capture(page, "portail_aide")
         page.click("#sidebar [data-wnav=accueil]")
-        liens = sorted(page.eval_on_selector_all("a.btn.primary", "l => l.map(a => a.getAttribute('href'))"))
+        liens = sorted(h.split("#")[0] for h in page.eval_on_selector_all("a.btn.primary", "l => l.map(a => a.getAttribute('href'))"))   # nom transmis après « #werbsmsi= » (1.16.0)
         check(liens == sorted(f"../{x}" for x in LIVRABLES), f"un lien par module publié ({len(liens)})")
         check(all(page.request.get(base + "portail/" + l).status == 200 for l in liens), "chaque lien mène au livrable")
         a_integrer = sum(1 for m in REGISTRE["modules"] if m.get("etat") == "a-integrer")
@@ -262,9 +283,8 @@ def main() -> int:
         with ctx.expect_page() as nouvelle:
             ti.locator("a.chip:has-text('Groupe')").click()
         mod = nouvelle.value
-        mod.wait_for_selector("#login-name")
-        mod.fill("#login-name", "Prénom TEST"); mod.click("[data-act=login]"); mod.click("[data-act=openLink]")
         mod.wait_for_selector("#tb-status .pill:has-text('Groupe')")
+        check(mod.locator("#login-name").count() == 0, "WerbIEC62443 : ni écran « Votre nom » ni clic, projet du groupe ouvert directement (socle 1.11.0)")
         check("Exigences cadre du groupe" in mod.inner_text("#tb-project"), "WerbIEC62443 : projet du groupe ouvert depuis le portail (pastille « Groupe »)")
         mod.click("#sidebar [data-wnav=werbsmsi]")
         check(mod.is_visible("text=Rattaché au groupe") and mod.is_visible("h2:has-text('Niveau groupe')") and not mod.is_visible("text=Publier vers le site"),
@@ -275,27 +295,33 @@ def main() -> int:
         with ctx.expect_page() as nouvelle:
             te.locator("a.chip:has-text('LYON')").click()
         mod = nouvelle.value
-        mod.wait_for_selector("#nomUtil")
-        mod.evaluate("() => { window.showDirectoryPicker = async () => { throw new Error('sélecteur appelé'); }; }")   # le raccourci doit l'éviter
-        mod.fill("#nomUtil", "Prénom TEST"); mod.click("[data-act=entrer]")
-        check(mod.is_visible("text=Base demandée par le portail"), "module ouvert sur l'accueil avec la base demandée")
-        mod.click("[data-act=ouvrirLien]")
         mod.wait_for_selector("#tb-status:has-text('Site LYON')")
+        check(mod.locator("#nomUtil").count() == 0 and mod.locator("[data-act=ouvrirLien]").count() == 0,
+              "ouverture directe : ni écran « Votre nom », ni bouton « Ouvrir cette base » (espace chargé dans le portail, socle 1.11.0)")
+        nm = mod.evaluate("[WerbSocle.nommage.prefixe(), WerbSocle.nommage.fichier('LYON_WerbExploitation_2026-11-21.xlsx'), WerbSocle.nommage.libelleSite('LYON'), WerbSocle.nommage.fichier('Exploitation_LYON.werbexploitation.json')]")
+        sg = json.loads(page.evaluate(LIRE, "SMSI/werbsmsi.groupe.json"))
+        nom_lyon = next((x.get("nom") for x in (sg.get("data") or sg).get("sites", []) if x.get("code") == "LYON"), "LYON")
+        sigle = (sg.get("data") or sg).get("sigle")
+        check(nm[0] == f"{sigle}-LYON" and nm[1] == f"{sigle}-LYON_WerbExploitation_2026-11-21.xlsx" and nm[2] == nom_lyon and nm[3] == "Exploitation_LYON.werbexploitation.json",
+              f"nommage des exports : préfixe {nm[0]}, nom du site « {nm[2]} » pour les titres, base inchangée (socle 1.12.0)")
         check("Exploitation_LYON" in mod.inner_text("#tb-base") and "werbsmsi=" not in mod.url, "🔗 raccourci : base du site LYON ouverte sans sélecteur de dossier, lien retiré de l'adresse")
         mod.click("#tb-actions [data-act=enregistrer]")
         mod.fill("#versionCom", "Version de test"); mod.click("#modal-root [data-version] [data-x=oui]")   # WerbExploitation 1.13 : commentaire de version
         mod.wait_for_timeout(400)
         j = json.loads(page.evaluate(LIRE, "SMSI/sites/LYON/exploitation/Exploitation_LYON.werbexploitation.json"))
-        check(any(e.get("par") == "Prénom TEST" and e.get("action") in ("Enregistrement", "Version") for e in j["journal"]), "enregistrement à sa place dans l'espace (sans sélecteur de fichier)")
+        check(any(e.get("par") == "Camille TEST" and e.get("action") in ("Enregistrement", "Version") for e in j["journal"]), "enregistrement à sa place dans l'espace (sans sélecteur de fichier), journal au nom saisi dans le portail")
         mod.close()
         page.uncheck("#optRaccourcis")
         page.wait_for_timeout(300)
         with ctx.expect_page() as nouvelle:
             tuile("WerbGouvernance").locator("a.chip:has-text('Groupe')").click()
         mod = nouvelle.value
-        mod.wait_for_selector("#nomUtil")
+        mod.wait_for_selector("[data-act=ouvrirLien]")
+        mod.wait_for_timeout(400)
+        check(mod.is_visible("text=Base demandée par le portail") and mod.locator("#tb-status:has-text('Groupe')").count() == 0,
+              "🔗 Raccourcis décoché : pas d'ouverture directe, le bouton « Ouvrir cette base » reste proposé")
         mod.evaluate("() => { window.showDirectoryPicker = async () => { throw new Error('sélecteur appelé'); }; }")
-        mod.fill("#nomUtil", "Prénom TEST"); mod.click("[data-act=entrer]"); mod.click("[data-act=ouvrirLien]")
+        mod.click("[data-act=ouvrirLien]")
         mod.wait_for_timeout(400)
         check("sélecteur appelé" in mod.inner_text("#toasts"), "option 🔗 Raccourcis décochée : raccourci effacé, le module redemande le dossier")
         mod.close()
@@ -304,8 +330,6 @@ def main() -> int:
         with ctx.expect_page() as nouvelle:
             tuile("WerbGouvernance").locator("a.chip:has-text('Groupe')").click()
         mod = nouvelle.value
-        mod.wait_for_selector("#nomUtil")
-        mod.fill("#nomUtil", "Prénom TEST"); mod.click("[data-act=entrer]"); mod.click("[data-act=ouvrirLien]")
         mod.wait_for_selector("#tb-status:has-text('Groupe')")
         check("Gouvernance_GDI" in mod.inner_text("#tb-base"), "WerbGouvernance : base du groupe ouverte depuis l'espace")
         mod.close()

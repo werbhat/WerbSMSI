@@ -1,5 +1,5 @@
 <!doctype html>
-<!-- WerbRGPD v1.0.0 – Développé par @WerbHat – build novembre 2026 -->
+<!-- WerbRGPD v1.4.0 – Développé par @WerbHat – build novembre 2026 -->
 <html lang="fr">
 <head>
 <meta charset="utf-8">
@@ -9,7 +9,7 @@
 <title>WerbRGPD</title>
 <meta name="application-name" content="WerbRGPD">
 <meta name="author" content="@WerbHat">
-<meta name="generator" content="WerbRGPD v1.0.0 – Développé par @WerbHat">
+<meta name="generator" content="WerbRGPD v1.4.0 – Développé par @WerbHat">
 <meta name="description" content="Conformité RGPD d'un site : registre des traitements, violations de données (72 h), demandes d'exercice des droits, sous-traitants">
 <style>/*! WerbRGPD – Développé par @WerbHat */
 :root {
@@ -57,6 +57,10 @@ button:hover { border-color: var(--navy-2); }
 button.primary { background: var(--navy-fond); border-color: var(--navy-fond); color: #fff; }
 button.danger { color: var(--ko); }
 button.small { padding: 2px 8px; font-size: 12px; }
+/* Lien en forme de bouton (aide : ouverture de WerbReferentiels, 1.4.0) */
+a.btn { display: inline-block; font: inherit; padding: 5px 12px; border: 1px solid var(--line); border-radius: 5px; background: var(--card); color: var(--ink); text-decoration: none; }
+a.btn:hover { border-color: var(--navy-2); }
+a.btn.primary { background: var(--navy-fond); border-color: var(--navy-fond); color: #fff; }
 button:disabled { opacity: .5; cursor: default; }
 /* Lien ou sélecteur de fichier présentés comme un bouton (ouverture dans Visio, modèle du poste) */
 .bt-lien, .bt-fichier { display: inline-block; font: inherit; padding: 5px 12px; border: 1px solid var(--line); border-radius: 5px; background: var(--card); color: var(--ink); cursor: pointer; text-decoration: none; }
@@ -169,7 +173,7 @@ const WERB = Object.freeze((() => {
   const bytes = [68, 195, 169, 118, 101, 108, 111, 112, 112, 195, 169, 32, 112, 97, 114, 32, 64, 87, 101, 114, 98, 72, 97, 116];
   const signature = new TextDecoder("utf-8").decode(new Uint8Array(bytes));
   const produit = "WerbRGPD";
-  const version = "1.0.0";
+  const version = "1.4.0";
   return {
     id: "werbrgpd",
     produit, version, auteur: "@WerbHat", signature,
@@ -188,13 +192,13 @@ const WERB = Object.freeze((() => {
 window.WERB = WERB;
 console.info(`%c${WERB.produit}%c v${WERB.version} — ${WERB.signature}`, "font-weight:bold;color:#1f3864", "color:#595959");
 
-/*! WerbSMSI socle 1.9.0 – Développé par @WerbHat */
+/*! WerbSMSI socle 1.12.0 – Développé par @WerbHat */
 /* Fonctions communes à tous les modules WerbSMSI (charte 1.0).
    Copier ce fichier tel quel dans sources/src/ : ne pas le modifier dans un module,
    faire évoluer la version de la charte à la place.
    Prérequis : signature.js chargé avant (objet global WERB). */
 const WerbSocle = Object.freeze((() => {
-  const VERSION = "1.9.0";
+  const VERSION = "1.12.0";
   const FAMILLE = "WERBSMSI";
   const TAILLE_MAX = 20 * 1024 * 1024;
   const prefixe = () => `werb.${WERB.id}.`;
@@ -356,7 +360,7 @@ const WerbSocle = Object.freeze((() => {
   const verrou = (() => {
     const SESSION = Math.random().toString(36).slice(2, 10) + Date.now().toString(36);
     const DUREE_H = 12;
-    let utilisateur = "", etat = { mode: "aucun" }, rappel = null, surveillance = false;
+    let utilisateur = nomDuLien(), etat = { mode: "aucun" }, rappel = null, surveillance = false;   // nom transmis par le portail (§5.5)
     const STYLE = `
 .werb-verrou:empty{display:none}
 .werb-verrou{display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:999px;font-size:12px;font-weight:600;white-space:nowrap;background:#e1f3e5;color:#1d6631;border:1px solid #b7dfc1}
@@ -552,6 +556,7 @@ const WerbSocle = Object.freeze((() => {
       surChangement(fn) { rappel = typeof fn === "function" ? fn : null; },
       get etat() { return { mode: etat.mode, par: etat.v ? etat.v.par : "", depuis: etat.v ? etat.v.depuis : "", libre: etat.libre || "" }; },
       get lectureSeule() { return etat.mode === "lecture"; },
+      get utilisateur() { return utilisateur; },
       afficher,
     });
   })();
@@ -729,11 +734,13 @@ const WerbSocle = Object.freeze((() => {
       return new Promise(ok => { try { const r = indexedDB.deleteDatabase(BASE_RACCOURCIS); r.onsuccess = r.onerror = r.onblocked = () => ok(); } catch (e) { ok(); } });
     }
     // Module : ouvre l'espace d'un groupe depuis le raccourci du portail (autorisation d'Edge au besoin). Renvoie true si l'espace est ouvert.
-    async function depuisRaccourci(groupeId) {
+    // { demander: false } (1.11.0) : sans fenêtre d'autorisation, seulement si Edge autorise déjà l'accès (ouverture sans clic).
+    async function depuisRaccourci(groupeId, { demander = true } = {}) {
       try {
         const e = await transaction("readonly", s => s.get(groupeId));
         if (!e || !e.poignee) return false;
         let p = await e.poignee.queryPermission({ mode: "readwrite" });
+        if (p !== "granted" && !demander) return false;
         if (p !== "granted") p = await e.poignee.requestPermission({ mode: "readwrite" });
         if (p !== "granted") return false;
         await adopter(e.poignee);
@@ -957,7 +964,9 @@ const WerbSocle = Object.freeze((() => {
     });
   })();
 
-  function telecharger(contenu, nom, type = "application/octet-stream") {
+  // Nom du fichier : préfixe « SIGLE-SITE_ » de l'espace (charte §7.8, socle 1.12.0), sauf base du module et { brut: true }
+  function telecharger(contenu, nom, type = "application/octet-stream", { brut = false } = {}) {
+    if (!brut) nom = nommage.fichier(nom);
     const url = URL.createObjectURL(contenu instanceof Blob ? contenu : new Blob([contenu], { type }));
     const a = Object.assign(document.createElement("a"), { href: url, download: nom });
     document.body.appendChild(a); a.click(); a.remove();
@@ -972,14 +981,25 @@ const WerbSocle = Object.freeze((() => {
     try { const d = JSON.parse(decodeURIComponent(m[1])); return d && typeof d === "object" ? d : null; } catch (e) { return null; }
   }
   const themeDuLien = d => (d && (d.th === "clair" || d.th === "sombre") ? d.th : "");
+  // Nom de l'utilisateur (« Prénom NOM ») : texte court, sans caractère de contrôle ni de balisage. Identification déclarative (§5.5).
+  function nettoyerNom(v) {
+    return typeof v === "string" ? v.replace(/[\u0000-\u001f\u007f]/g, " ").replace(/[<>"`\\]/g, "").replace(/\s+/g, " ").trim().slice(0, 60) : "";
+  }
+  // Nom transmis par le portail dans le lien (#werbsmsi=…, champ u), lu au chargement de la page ; « » s'il n'y en a pas
+  function nomDuLien() { const d = lireLien(); return d ? nettoyerNom(d.u) : ""; }
   // Le portail ouvre un module avec « #werbsmsi=<JSON> » : { g: groupeId, f: chemin de la base dans l'espace, s: site, l: libellé,
-  // e: nom du dossier de l'espace }. Rien n'est conservé : le lien ne contient qu'un chemin relatif, le module redemande un dossier.
+  // e: nom du dossier de l'espace, th: thème, u: nom de l'utilisateur identifié dans le portail }. Rien n'est conservé : le lien ne contient qu'un chemin relatif, le module redemande un dossier.
   // En file://, Edge ne retient pas le dernier dossier choisi : on accepte donc le dossier de l'espace, du site ou du module.
+  const nomInitial = nomDuLien();
   const lien = Object.freeze({
     // theme (facultatif) : mode choisi dans le portail (« clair » ou « sombre » ; « auto » n'est pas transmis), §7.5
-    creer(url, { groupeId, fichier, site = "", libelle = "", espace: nomEspace = "", theme: th = "" }) {
+    // utilisateur (facultatif, 1.10.0) : nom saisi une fois dans le portail ; le module n'affiche pas son écran « Votre nom », §5.5
+    // sigle, organisation, siteNom (facultatifs, 1.12.0) : nommage des fichiers exportés et titres (§7.8) quand l'espace n'est pas ouvert dans le module
+    creer(url, { groupeId, fichier, site = "", libelle = "", espace: nomEspace = "", theme: th = "", utilisateur: u = "", sigle = "", organisation = "", siteNom = "" }) {
       const d = { g: groupeId, f: fichier, s: site, l: libelle, e: nomEspace };
+      if (sigle) d.gs = String(sigle); if (organisation) d.go = String(organisation); if (siteNom) d.sn = String(siteNom);
       if (th === "clair" || th === "sombre") d.th = th;
+      if (nettoyerNom(u)) d.u = nettoyerNom(u);
       return `${url}#werbsmsi=${encodeURIComponent(JSON.stringify(d))}`;
     },
     lire() {
@@ -988,9 +1008,21 @@ const WerbSocle = Object.freeze((() => {
         ? { groupeId: d.g, fichier: d.f, site: String(d.s || ""), libelle: String(d.l || ""), espace: String(d.e || ""), theme: themeDuLien(d) } : null;
     },
     // Lien vers un module sans base : seulement le thème choisi dans le portail (rien si « auto »)
-    avecTheme(url, th) { return th === "clair" || th === "sombre" ? `${url}#werbsmsi=${encodeURIComponent(JSON.stringify({ th }))}` : url; },
+    avecTheme(url, th) { return lien.avecContexte(url, { theme: th }); },
+    // Lien vers un module sans base : thème et nom de l'utilisateur identifié dans le portail (1.10.0) ; url seule s'il n'y a rien à transmettre
+    avecContexte(url, { theme: th = "", utilisateur: u = "", sigle = "", organisation = "" } = {}) {
+      const d = {};
+      if (sigle) d.gs = String(sigle); if (organisation) d.go = String(organisation);
+      if (th === "clair" || th === "sombre") d.th = th;
+      if (nettoyerNom(u)) d.u = nettoyerNom(u);
+      return Object.keys(d).length ? `${url}#werbsmsi=${encodeURIComponent(JSON.stringify(d))}` : url;
+    },
     // Thème seul transmis par le portail (lien sans base, ou avant que le module ne lise la demande)
     theme() { return themeDuLien(lireLien()); },
+    // Nom de l'utilisateur transmis par le portail (1.10.0), lu au chargement de la page : il reste disponible après lien.effacer().
+    // Le module l'utilise à la place de son écran « Votre nom » ; le verrou (§5.7) le connaît déjà. « » s'il n'y en a pas.
+    utilisateur() { return nomInitial; },
+    nettoyerNom,
     effacer() { try { history.replaceState(null, "", location.pathname + location.search); } catch (e) { /* sans effet */ } },
     // Dossiers que l'utilisateur peut choisir pour atteindre la base : espace, puis chaque dossier du chemin (site, module).
     dossiersPossibles(demande) {
@@ -1001,6 +1033,19 @@ const WerbSocle = Object.freeze((() => {
     consigne(demande) {
       const l = lien.dossiersPossibles(demande);
       return `Portail ouvert sur l'espace : il suffit d'autoriser l'accès si Edge le demande. Sinon, dans la fenêtre qui s'ouvre, choisissez le dossier ${l.map(x => `« ${x} »`).join(", ").replace(/, ([^,]*)$/, " ou $1")} puis « Sélectionner un dossier » : inutile d'aller jusqu'au fichier.`;
+    },
+    // Ouverture sans clic (1.11.0, §5.5) : la base demandée par le lien s'ouvre sans le bouton « Ouvrir cette base » quand le module
+    // est prêt (utilisateur connu) et que l'espace est déjà accessible sans aucune fenêtre : espace ouvert dans la page, ou raccourci du
+    // portail qu'Edge autorise déjà. ouvrir : action du module qui ouvre la base (charge, prend le verrou, efface le lien).
+    // { demander: true } : après un geste de l'utilisateur (« Continuer »), Edge peut demander l'autorisation ; jamais de sélecteur.
+    // Renvoie true si la base a été demandée au module ; sinon le module garde son bouton.
+    async ouvrirSansClic(pret, ouvrir, { demander = false } = {}) {
+      const d = lien.lire();
+      if (!pret || !d || typeof ouvrir !== "function") return false;
+      const accessible = (espace.ouvert && espace.groupe && espace.groupe.groupeId === d.groupeId) || await espace.depuisRaccourci(d.groupeId, { demander });
+      if (!accessible || !lien.lire()) return false;
+      await ouvrir();
+      return true;
     },
     // Ouvre la base demandée et en prend le verrou (§5.7, sauf { verrou: false }). Renvoie { poignee, nom, texte, modifie, lecture }. Si le dossier choisi est l'espace, il est aussi ouvert
     // (publications, rattachement) ; sinon la base est cherchée sous le dossier choisi, par la fin de son chemin.
@@ -1036,6 +1081,63 @@ const WerbSocle = Object.freeze((() => {
       throw new Error(`Le dossier « ${d.name} » ne mène pas à ${demande.fichier}. ${lien.consigne(demande)}`);
     },
   });
+
+  /* ---------- Nommage des fichiers exportés et titres des documents (charte §7.8, socle 1.12.0) ---------- */
+
+  // Fichier exporté (rapport, classeur, document, CSV, PDF…) : « SIGLE-SITE_<nom>.ext » pour une base de site, « SIGLE_<nom>.ext » au
+  // niveau du groupe ; les codes déjà présents dans le nom sont retirés (pas de doublon). Sans sigle connu (module seul, hors espace),
+  // le nom est inchangé. Les fichiers de base du module (WERB.extension) gardent leur nom. Titres : nom du site et de l'organisation,
+  // plutôt que leurs codes (nomSite, nomGroupe). Sigle, organisation et sites : espace ouvert dans le module, sinon lien du portail.
+  const nommage = (() => {
+    let contexte = null;
+    const init = lireLien() || {};
+    const texte = v => (typeof v === "string" ? v.trim() : "");
+    const code = v => texte(v).toUpperCase().replace(/[^A-Z0-9_-]+/g, "");
+    const ctx = () => { try { return (contexte && contexte()) || {}; } catch (e) { return {}; } };
+    const grp = () => (espace.ouvert && espace.groupe ? espace.groupe : null);
+    // Code du site de la base ouverte (« » au niveau du groupe) : contexte déclaré par le module, sinon site du lien du portail
+    const site = () => code(contexte ? ctx().site : init.s);
+    const sigle = () => code(grp() ? grp().sigle : init.gs);
+    function prefixe() { const g = sigle(), s = site(); return g ? (s && s !== g ? `${g}-${s}` : g) : ""; }
+    function nomSite(c) {
+      c = code(c === undefined ? site() : c);
+      if (!c) return "";
+      const s = grp() && (grp().sites || []).find(x => code(x.code) === c);
+      if (s && texte(s.nom)) return texte(s.nom);
+      const k = ctx();
+      if (code(k.site) === c && texte(k.siteNom)) return texte(k.siteNom);
+      if (code(init.s) === c && texte(init.sn)) return texte(init.sn);
+      return c;
+    }
+    const nomGroupe = () => texte(grp() ? grp().organisation : init.go) || sigle();
+    // Titre : nom du site s'il est connu, sinon « Site CODE » ; « » sans site
+    function libelleSite(c) { const k = code(c === undefined ? site() : c); if (!k) return ""; const n = nomSite(k); return n === k ? `Site ${k}` : n; }
+    const echapper = x => x.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    function fichier(nom) {
+      nom = String(nom || "");
+      const p = prefixe(), ext = String((typeof WERB !== "undefined" && WERB.extension) || "");
+      if (!p || !nom || (ext && nom.toLowerCase().endsWith(ext.toLowerCase())) || nom.toUpperCase().startsWith(p + "_")) return nom;
+      const i = nom.lastIndexOf("."), base = i > 0 ? nom.slice(0, i) : nom, suffixe = i > 0 ? nom.slice(i) : "";
+      let reste = base;
+      for (const c of [p, sigle(), site(), "SITE"].filter(Boolean).sort((a, b) => b.length - a.length)) {
+        reste = reste.replace(new RegExp(`(^|[_ ])${echapper(c)}(?=[_ ]|$)`, "g"), "$1");   // codes en majuscules : « Site », « Fiche_site » restent
+      }
+      reste = reste.replace(/[_ ]{2,}/g, "_").replace(/^[_ -]+|[_ -]+$/g, "");
+      return `${p}_${reste || (typeof WERB !== "undefined" ? WERB.produit : "export")}${suffixe}`;
+    }
+    // PDF : « Enregistrer au format PDF » propose le titre de la page comme nom de fichier ; le titre est préfixé le temps de l'impression
+    let titreAvant = null;
+    if (typeof window !== "undefined" && typeof document !== "undefined") {
+      window.addEventListener("beforeprint", () => { if (!prefixe()) return; titreAvant = document.title; document.title = fichier(document.title.replace(/ – /g, "_").replace(/\s+/g, "_")); });
+      window.addEventListener("afterprint", () => { if (titreAvant !== null) { document.title = titreAvant; titreAvant = null; } });
+    }
+    return Object.freeze({
+      // fn : () => ({ site: code du site de la base ouverte, « » au groupe ; siteNom : nom du site si le module le connaît })
+      contexte(fn) { contexte = typeof fn === "function" ? fn : null; },
+      prefixe, fichier, nomSite, libelleSite, nomGroupe,
+      get sigle() { return sigle(); }, get site() { return site(); },
+    });
+  })();
 
   /* ---------- Menu latéral commun (charte §7.1) ---------- */
 
@@ -1298,7 +1400,7 @@ body.wt-glisse{cursor:col-resize!important;user-select:none!important}
     if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", poser); else bandeau.menuBouton();
   }
 
-  return Object.freeze({ VERSION, FAMILLE, LOGO, afficherLogo, purger, preference, activerPurgeAutomatique, esc, enveloppe, lireEnveloppe, qualifier, decomposer, sha256, accesDirect, ouvrir, enregistrer, telecharger, espace, lien, menu, bandeau, tables, TEINTES, teinteCss, verrou, listes, theme });
+  return Object.freeze({ VERSION, FAMILLE, LOGO, afficherLogo, purger, preference, activerPurgeAutomatique, esc, enveloppe, lireEnveloppe, qualifier, decomposer, sha256, accesDirect, ouvrir, enregistrer, telecharger, espace, lien, nommage, menu, bandeau, tables, TEINTES, teinteCss, verrou, listes, theme });
 })());
 window.WerbSocle = WerbSocle;
 
@@ -1815,7 +1917,7 @@ const WerbXlsx = (() => {
   const H72 = 72 * 3600000;
 
   /* ===================================================== état (en mémoire seulement) */
-  let S = null, ENV = { creeLe: "", journal: [] }, LIAISON = {}, fichier = { poignee: null, nom: "", modifie: null }, dirty = false, user = "";
+  let S = null, ENV = { creeLe: "", journal: [] }, LIAISON = {}, fichier = { poignee: null, nom: "", modifie: null }, dirty = false, user = WerbSocle.lien.utilisateur();   // nom saisi dans le portail (socle 1.10.0, charte §5.5) : pas d'écran « Votre nom »
   let vue = "tdb";
   const ui = { sel: null, q: "", fb: "", fs: "", arch: false, coche: {}, fa: "", jq: "" };   // sel : { t: "T" | "V" | "D" | "ST", id } fiche ouverte
   const SMSI = { err: "" };
@@ -2107,7 +2209,7 @@ const WerbXlsx = (() => {
   VUES.tdb = () => {
     const act = S.traitements.filter(t => t.statut !== "arrete"), al = alertes(), dO = S.demandes.filter(ouverteD);
     const vNot = S.violations.filter(v => ["anotifier", "retard"].includes(etatV(v)[0])), dRet = dO.filter(retardD);
-    return `<h1>Conformité RGPD${LIAISON.site ? " – site " + esc(LIAISON.site) : ""}</h1><p class="sub">Registre des traitements, violations de données, demandes d'exercice des droits et sous-traitants du site : la documentation qui prouve la conformité (principe de responsabilité).</p>
+    return `<h1>Conformité RGPD${LIAISON.site ? " – " + esc(WerbSocle.nommage.libelleSite(LIAISON.site)) : ""}</h1><p class="sub">Registre des traitements, violations de données, demandes d'exercice des droits et sous-traitants du site : la documentation qui prouve la conformité (principe de responsabilité).</p>
       <div class="kpis">${kpi(act.length, "Traitements en service ou en projet", false, "traitements")}${kpi(act.filter(t => pointsT(t).length).length, "Traitements à compléter", act.some(t => pointsT(t).length), "traitements")}
         ${kpi(act.filter(aipdAFaire).length, "AIPD à faire", act.some(aipdAFaire), "traitements")}
         ${kpi(vNot.length, "Violations à notifier (72 h)", vNot.length > 0, "violations")}${kpi(`${dO.length}${dRet.length ? ` (${dRet.length} en retard)` : ""}`, "Demandes en cours", dRet.length > 0, "demandes")}
@@ -2292,6 +2394,12 @@ const WerbXlsx = (() => {
     <tr><td class="muted">Base</td><td>Format <code>${esc(WERB.format)}</code> v${WERB.schema} · extension <code>${esc(WERB.extension)}</code></td></tr>
     <tr><td class="muted">Environnement WerbSMSI</td><td>Rubrique « Conformité &amp; exigences », niveau site · charte ${esc(WERB.charte)} · socle ${esc(WerbSocle.VERSION)}</td></tr></tbody></table></div>`;
   WerbGuides.guides().forEach(g => { VUES[g.id] = () => WerbGuides.vue(g.id, { lien: lienGuide }); });
+  /* Référentiel RGPD de WerbReferentiels (module de lecture, rubrique gouvernance) : ouvert sur une page précise par son adresse
+     (#guide:…, sans rien conserver). Chemin relatif des modules publiés : modules/<rubrique>/<Produit>/application/<Produit>.html. */
+  const lienReferentiels = id => `../../../gouvernance/WerbReferentiels/application/WerbReferentiels.html#${encodeURIComponent(id)}`;
+  const REF_RGPD = [["guide:6-rgpd-0-carte", "Carte RGPD"], ["guide:6-rgpd-2-principes-et-bases-legales", "Principes et bases légales"],
+    ["guide:6-rgpd-3-droits-des-personnes", "Droits des personnes"], ["guide:6-rgpd-4-obligations-du-responsable", "Obligations du responsable"],
+    ["guide:6-rgpd-5-securite-et-cyber", "Sécurité et cyber"], ["guide:6-rgpd-6-cas-industriels", "Cas industriels"], ["guide:6-rgpd-7-modeles-et-checklists", "Modèles et listes de contrôle"]];
   VUES.aide = () => `<h1>❓ Guide de ${esc(WERB.produit)}</h1><p class="sub">${esc(WERB.description)}</p>
     <div class="card"><h2>Démarche</h2><ol>
       <li><b>Intégration WerbSMSI</b> : ouvrir l'espace, rattacher la base au site (SI et actifs de WerbMap, prestataires de WerbPresta) ; ranger la base dans <code>sites/&lt;CODE&gt;/conformite/</code>.</li>
@@ -2301,7 +2409,12 @@ const WerbXlsx = (() => {
       <li><b>Violations de données</b> : tout enregistrer ; le module calcule l'échéance des 72 h et signale la notification due.</li>
       <li><b>Demandes d'exercice des droits</b> : date de réception, droit, réponse ; échéance d'un mois calculée.</li>
       <li><b>📊 Export Excel</b> : le registre et les autres tableaux, à présenter en contrôle.</li></ol>
-      <p class="small">Le référentiel <b>RGPD</b> de WerbReferentiels détaille le règlement, les cas industriels et les modèles.</p></div>
+      </div>
+    <div class="card" data-referentiel-rgpd><h2>📖 Le RGPD dans WerbReferentiels</h2>
+      <p>Le module de lecture <b>WerbReferentiels</b> (rubrique Gouvernance) détaille le règlement : principes et bases légales, droits des personnes, obligations du responsable, sécurité, cas industriels, modèles et listes de contrôle, sources officielles.</p>
+      <div class="row"><a class="btn primary" href="${esc(lienReferentiels(REF_RGPD[0][0]))}" target="_blank" rel="noopener" title="Ouvrir WerbReferentiels sur la carte RGPD, dans un nouvel onglet">📖 Ouvrir la carte RGPD ↗</a></div>
+      <p class="small" style="margin-top:8px">Aller directement à : ${REF_RGPD.slice(1).map(([id, l]) => `<a href="${esc(lienReferentiels(id))}" target="_blank" rel="noopener">${esc(l)}</a>`).join(" · ")}</p>
+      <p class="small muted">S'ouvre dans un nouvel onglet, depuis le dossier WerbSMSI (<code>modules/gouvernance/WerbReferentiels/</code>). Si la page ne s'ouvre pas, WerbReferentiels n'est pas publié à côté de ce module.</p></div>
     ${WerbGuides.guides().length ? `<div class="card"><h2>📚 Guides</h2>${WerbGuides.cartes(lienGuide)}</div>` : ""}`;
 
   /* ===================================================== rendu */
@@ -2375,7 +2488,7 @@ const WerbXlsx = (() => {
       feuilleXl("Archivés", [["id", "ID", 9], ["nom", "Traitement", 32], [t => t.archive.le.slice(0, 10), "Archivé le", 14], [t => t.archive.par, "Par", 20]], S.archives.traitements),
     ];
     const og = S.organisme;
-    const tete = { nom: "Informations", largeurs: [32, 70], lignes: [[T1("Rubrique"), T1("Valeur")], ["Site", LIAISON.site || ""], ["Responsable de traitement", og.responsable], ["DPO", og.dpo], ["Référent du site", og.referent],
+    const tete = { nom: "Informations", largeurs: [32, 70], lignes: [[T1("Rubrique"), T1("Valeur")], ["Site", WerbSocle.nommage.nomSite(LIAISON.site) || ""], ["Responsable de traitement", og.responsable], ["DPO", og.dpo], ["Référent du site", og.referent],
       ["Contact pour les droits", og.contact], ["Base", fichier.nom || "(non enregistrée)"], ["Produit", WERB.ligne], ["Date de l'export", WerbXlsx.date(jour)], ["Exporté par", user],
       ["Classification", "Diffusion restreinte (conformité RGPD du site)"], [], [T1("Feuille"), T1("Lignes")], ...feuilles.map(f => [f.nom, String(f.lignes.length - 1)])] };
     try {
@@ -2401,7 +2514,7 @@ const WerbXlsx = (() => {
   }
   const OBJETS = { T: "Traitement", V: "Violation", D: "Demande", ST: "Sous-traitant" };
   const ACTIONS = {
-    entrer() { const v = $("#nomUtil").value.trim(); if (!v) { toast("Saisissez votre nom.", "err"); return; } user = v; WerbSocle.verrou.identifier(v); render(); },
+    entrer() { const v = $("#nomUtil").value.trim(); if (!v) { toast("Saisissez votre nom.", "err"); return; } user = v; WerbSocle.verrou.identifier(v); render(); WerbSocle.lien.ouvrirSansClic(v, () => ACTIONS.ouvrirLienPortail(), { demander: true }); },
     nouveau() { S = vide(); LIAISON = {}; ENV = { creeLe: "", journal: [] }; fichier = { poignee: null, nom: "", modifie: null }; journaliser("Création", "Base"); vue = "werbsmsi"; dirty = true; render(); },
     async exemple() {
       if (dirty && !(await confirmer("Des modifications ne sont pas enregistrées. Ouvrir la base d'exemple quand même ?", "Ouvrir"))) return;
@@ -2548,7 +2661,9 @@ const WerbXlsx = (() => {
   });
   window.addEventListener("beforeunload", e => { if (dirty) { e.preventDefault(); e.returnValue = ""; } });
 
+  WerbSocle.nommage.contexte(() => ({ site: LIAISON.site || "" }));   // nommage des exports « SIGLE-SITE_ » et titres (socle 1.12.0, charte §7.8)
   render();
+  WerbSocle.lien.ouvrirSansClic(user, () => ACTIONS.ouvrirLienPortail());   // base demandée par le portail : ouverte sans clic si l'espace est accessible (socle 1.11.0)
 })();
 </script>
 </body>

@@ -67,6 +67,7 @@ def main() -> int:
         pg.on("dialog", lambda d: d.accept())
         pg.goto(f"http://127.0.0.1:{srv.server_address[1]}/portail/WerbSMSI.html")
         pg.wait_for_selector("h1:has-text('WerbSMSI')"); pg.wait_for_timeout(200)
+        pg.locator("#ident-fen [data-act=identFermer]").click() if pg.locator("#ident-fen").count() else None; pg.wait_for_timeout(150)   # identification (portail 1.16.0) : « Plus tard »
         if pg.locator("#demo-fen").count():
             pg.click("#demo-fen [data-act=demoFermer]")
         main_ = lambda: pg.inner_text("#main")

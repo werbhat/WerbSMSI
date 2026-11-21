@@ -4,6 +4,25 @@ Toutes les évolutions notables de WerbReferentiels sont consignées ici.
 Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/), numérotation [SemVer](https://semver.org/lang/fr/).
 
 
+## [1.6.2] — 2026-11
+
+### Changements
+- Réf. croisée WerbSMSI : le référentiel est affiché « NIS2 », sans numéro de version (tuile et titre de la matrice) ; la tuile n'a plus de sous-titre quand il répète son nom.
+
+## [1.6.1] — 2026-11
+
+### Changements
+- Réf. croisée WerbSMSI : le référentiel des mesures EI / EE est nommé **NIS2** (tuile, matrice, aide), clé `nis2` de la table des exigences.
+
+## [1.6.0] — 2026-11
+
+### Ajouts
+- **🔀 Réf. croisée WerbSMSI** (bouton de l'accueil et entrée du menu 🧭 Référentiels) : où chaque exigence est utilisée dans les modules WerbSMSI, pour le référentiel NIS2, l'annexe A d'ISO/IEC 27001:2022, IEC 62443-3-3 (SR, RE), IEC 62443-3-2 (ZCR), le guide d'hygiène de l'ANSSI et les catégories `EX-…` de WerbCartoSI.
+  - **Vue d'ensemble** : carte de chaleur modules × référentiels (nombre d'identifiants utilisés, ◆ référentiel embarqué ou défini par le module) ; un clic ouvre la matrice filtrée sur le module.
+  - **Tuiles** par référentiel avec la part des exigences reprises dans les modules.
+  - **Matrice** exigences × modules, groupée par objectif, thème ou FR : ◆ référentiel embarqué, ● citation déclarée, ○ repère cité dans un texte ; colonne Σ (modules qui reprennent l'exigence) ; filtres texte, reprises / non reprises, module, attendu EI / EE (NIS2) ; une ligne se déplie sur le texte de l'exigence et les fichiers qui la citent (lien direct vers les pages de WerbReferentiels).
+  - Données : `sources/src/croisee.js`, **produit** par la charte WerbSMSI (`werb_charte.py exigences`, table des exigences §5.10) et figé à la construction : le module reste autonome, sans lecture de fichier à l'exécution.
+
 ## [1.5.1] — 2026-11
 
 ### Changements

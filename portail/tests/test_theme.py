@@ -44,7 +44,7 @@ def main() -> int:
         pg = nav.new_page(viewport={"width": 1300, "height": 800}, color_scheme="dark")
         pg.on("pageerror", lambda e: erreurs.append(str(e)))
         pg.goto(f"http://127.0.0.1:{srv.server_address[1]}/portail/WerbSMSI.html")
-        pg.wait_for_timeout(200); pg.locator("#demo-fen [data-act=demoFermer]").click() if pg.locator("#demo-fen").count() else None   # invitation à la démo (portail 1.8.0)
+        pg.wait_for_timeout(200); pg.locator("#ident-fen [data-act=identFermer]").click() if pg.locator("#ident-fen").count() else None; pg.wait_for_timeout(150); pg.locator("#demo-fen [data-act=demoFermer]").click() if pg.locator("#demo-fen").count() else None   # invitation à la démo (portail 1.8.0)
         pg.wait_for_selector("h1:has-text('WerbSMSI')")
         style = lambda sel, prop: pg.eval_on_selector(sel, f"e => getComputedStyle(e).{prop}")
         liens = lambda: pg.eval_on_selector_all(".tile a.btn.primary", "l => l.map(a => a.getAttribute('href'))")

@@ -4,6 +4,75 @@ Toutes les évolutions notables de l'environnement WerbSMSI (charte, portail, ou
 Les modules ont chacun leur propre CHANGELOG.
 Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/), numérotation [SemVer](https://semver.org/lang/fr/).
 
+## [0.41.0] — 2026-11
+
+### Changements
+- **Référentiel nommé « NIS2 » partout** (textes et identifiants) : WerbNIS2 1.12.1, WerbCartoSI 1.14.1 et WerbReferentiels 1.6.1 publiés, puis **WerbReferentiels 1.6.2**, **WerbNIS2 1.12.2** et **WerbCartoSI 1.14.2** publiés (« NIS2 » sans numéro de version partout) ; table des exigences (charte §5.10) — clé `nis2` du catalogue et de `usages.json`, fonction `nis2()` et expression `RE_NIS2` de `exigences.py`, charte, tests ; base de démonstration NIS2 du site LYON régénérée (`"referentiel": "NIS2"`). Seul le motif d'en-tête de page lu dans le PDF par `extraire_nis2.py` garde l'ancien nom (indispensable à l'extraction) ; le PDF source a été retiré de `Temp/`.
+
+## [0.40.0] — 2026-11
+
+### Changements
+- **WerbReferentiels 1.6.0 publié** : bouton **🔀 Réf. croisée WerbSMSI** (accueil et menu 🧭 Référentiels) — table visuelle exigences × modules pour le référentiel NIS2, ISO/IEC 27001 annexe A, IEC 62443-3-3 et 3-2, l'hygiène ANSSI et les catégories `EX-…` : vue d'ensemble modules × référentiels en carte de chaleur, part des exigences reprises par référentiel, matrice détaillée (◆ référentiel embarqué, ● citation déclarée, ○ repère cité dans un texte) avec filtres (texte, reprises, module, EI / EE) et fichiers qui citent chaque exigence.
+- **Table des exigences — réf. croisée** (charte §5.10) : `werb_charte.py exigences` produit aussi `WerbReferentiels/sources/src/croisee.js` (fonction `croisee()` de `charte/outils/exigences.py` : usages déclarés, citations relevées et référentiels embarqués, hors tests et outils de développement ; texte des mesures du référentiel NIS2 repris de WerbNIS2). Ce fichier n'est jamais parcouru par le relevé des citations. L'audit de WerbReferentiels avertit si `croisee.js` est en retard sur la table ; `test_exigences.py` contrôle qu'il est à jour.
+
+## [0.39.0] — 2026-11
+
+### Changements
+- **Table des exigences, étape 3** (charte §5.10) : quatre référentiels ajoutés au catalogue — **ISO/IEC 27001:2022 annexe A** (93 mesures, identifiants seulement), **IEC 62443-3-3** (100 SR et RE, repris de WerbIEC62443), **IEC 62443-3-2** (ZCR 1 à 7), **guide d'hygiène de l'ANSSI** (42 mesures, repris de WerbReferentiels). Mode **relevé** : leurs repères, écrits en texte dans les modules, sont relevés automatiquement (plages dépliées : « A.5.19 à A.5.22 », « mesures 19, 22, 23 »…), sans déclaration ; l'audit refuse un identifiant inexistant et `impacts` les prend en compte. 346 citations relevées dans 10 dépôts (WerbGouvernance, WerbExploitation, WerbCartoSI, WerbReferentiels…), toutes connues. Les repères en texte libre de WerbCartoSI n'ont pas besoin d'être restructurés.
+
+## [0.38.0] — 2026-11
+
+### Changements
+- **Table des exigences, étape 2** (charte §5.10) :
+  - **Contrôle à l'audit** (`werb_charte.py audit`, dépôt de développement) : identifiants des référentiels du catalogue (mesures NIS2, catégories `EX-…`, pages de WerbReferentiels) relevés dans les sources, guides, tests et outils du module ; **erreur** pour un identifiant inconnu du catalogue (référence cassée, publication refusée), **avertissement** pour une citation non déclarée ou un usage introuvable. Les 17 dépôts sont conformes (WerbNIS2 : 80 citations, WerbRGPD : 10, WerbMap : 4).
+  - **Commande `werb_charte.py impacts`** : catalogue enregistré comparé à celui des sources actuelles — identifiants supprimés, modifiés (texte, attendu EI / EE, rattachement), ajoutés ; fichiers à reprendre et modules à republier.
+  - `usages.json` complété (23 usages, 180 citations : tests de WerbMap et WerbNIS2 citant les catégories `EX-…`, pages de WerbReferentiels du script vidéo). Test `test_exigences.py` étendu (contrôle d'audit, évolution simulée du référentiel NIS2).
+
+## [0.37.0] — 2026-11
+
+### Changements
+- **Table des exigences** (charte §5.10, étape 1) — `charte/exigences/` : `referentiels.json`, catalogue produit depuis les dépôts des modules (NIS2 : 152 mesures avec attendu EI / EE et empreinte du texte, 20 objectifs, 28 rubriques ; 8 catégories `EX-…` de WerbCartoSI ; 35 pages de WerbReferentiels) ; `usages.json`, tenu à la main, qui dit où chaque identifiant est cité (22 usages, 168 citations : WerbNIS2, WerbCartoSI, WerbRGPD, script vidéo). Commande `werb_charte.py exigences` (outil `charte/outils/exigences.py`) : catalogue régénéré et usages vérifiés. Test `charte/tests/test_exigences.py` : catalogue à jour, erreurs détectées, toute citation trouvée dans les modules déclarée.
+
+## [0.36.0] — 2026-11
+
+### Changements
+- **WerbRGPD 1.4.0 publié** : aide › « Le RGPD dans WerbReferentiels » — bouton qui ouvre WerbReferentiels directement sur la carte RGPD (nouvel onglet), et raccourcis vers les pages principes et bases légales, droits des personnes, obligations, sécurité, cas industriels, modèles.
+
+## [0.35.0] — 2026-11
+
+### Changements
+- **WerbNIS2 1.12.0 publié** : référentiel **NIS2** (17/03/2026) à la place de la grille 2025 — 20 objectifs de sécurité (pilier, articles de la directive, rappel, justification), 152 moyens acceptables de conformité en 28 rubriques avec leurs identifiants officiels (1.1-EI/EE, 5.B.1-EE…) et les colonnes **« Attendu d'une EI » / « Attendu d'une EE »** : étiquettes EI / EE sur chaque mesure, mesures applicables selon le statut (76 pour une entité importante, 152 pour une entité essentielle), **filtre d'applicabilité**, objectifs 16 à 20 réservés aux EE. Bases de la grille 2025 reprises à l'ouverture (146 points sur 152 reportés ; les autres cotations gardées dans « Reprise de la grille 2025 »). Base de démonstration (LYON) régénérée au référentiel NIS2.
+- **WerbCartoSI 1.14.0 publié** : repères NIS2 des catégories d'exigence et des guides aux identifiants du référentiel NIS2 (5.A.1-EI/EE, 7.A.1-EI/EE à 7.A.4-EE, 13.1-EI/EE…).
+- Script de tournage vidéo (`docs_build/video/outils/tournage.py`) : cotation de la mesure 13.1-EI/EE au lieu du point CARTOGRAPHIE.a.
+
+## [0.34.0] — 2026-11
+
+### Changements
+- **Nommage des fichiers exportés et titres des documents** (charte §7.8, socle 1.12.0, portail 1.18.0) — tout fichier produit par un module commence par le code du groupe et celui du site : `SIGLE-SITE_<nom>` (`GDI-LYON_Rapport_EBIOS_2026-11-21.docx`), `SIGLE_<nom>` pour une base du groupe ; codes déjà présents dans le nom retirés ; fichiers de base inchangés ; PDF nommé de même. Dans les titres (page, classeur, balise `SITE` des rapports Word, feuille Informations), le **nom** du site plutôt que son code.
+  - **Socle 1.12.0** : `WerbSocle.nommage` (`contexte`, `fichier`, `nomSite`, `libelleSite`, `nomGroupe`) ; `WerbSocle.telecharger` applique la règle (`{ brut: true }` pour l'éviter) ; titre préfixé pendant l'impression. Liens du portail : sigle, organisation et nom du site (`gs`, `go`, `sn`). Nouveau test `charte/tests/test_nommage.py`.
+  - **Portail 1.18.0** : liens enrichis ; archives de sauvegarde nommées `SIGLE_Sauvegarde_…` (`SIGLE-SITE_Sauvegarde_site_…` pour un site) et `SIGLE_Avant_restauration_…`.
+- **WerbAcademie 1.10.0 publié**, **WerbAssets 1.24.0 publié**, **WerbCartoSI 1.13.0 publié**, **WerbEBIOS 1.12.0 publié**, **WerbExploitation 1.38.0 publié**, **WerbGouvernance 1.16.0 publié**, **WerbIEC62443 1.14.0 publié**, **WerbMap 1.33.0 publié**, **WerbNIS2 1.11.0 publié**, **WerbPCR 1.10.0 publié**, **WerbPentest 1.10.0 publié**, **WerbPresta 1.10.0 publié**, **WerbRGPD 1.3.0 publié**, **WerbRecette 1.11.0 publié**, **WerbVeille 1.13.0 publié** : socle 1.12.0, exports nommés `SIGLE-SITE_…`, nom du site dans les titres.
+- **WerbPresta 1.11.0 publié** : cahier d'exigences et rapport d'évaluation avec le **nom du site** (« sur le site Usine de Lyon », page de garde) au lieu de son code.
+
+## [0.33.0] — 2026-11
+
+### Changements
+- **Ouverture directe de la base depuis le portail** (charte §5.5, socle 1.11.0, portail 1.17.0) — espace chargé dans le portail (🔗 Raccourcis), un clic sur la puce d'une base ouvre le module **directement sur cette base**, sans le bouton « 📂 Ouvrir cette base » à confirmer. Si Edge doit d'abord autoriser l'accès, ou si le raccourci est désactivé, le bouton reste proposé ; jamais de sélecteur de dossier sans clic.
+  - **Socle 1.11.0** : `WerbSocle.lien.ouvrirSansClic(pret, ouvrir, { demander })` ; `espace.depuisRaccourci(groupeId, { demander: false })` sans fenêtre d'autorisation.
+  - **Portail 1.17.0** : aide « créer la base d'un site » (étape 4) à jour.
+  - **WerbMap** : la base s'ouvre directement, puis la connexion au compte (identifiant, mot de passe) est demandée comme avant.
+- **WerbAcademie 1.9.0 publié**, **WerbAssets 1.23.0 publié**, **WerbCartoSI 1.12.0 publié**, **WerbEBIOS 1.11.0 publié**, **WerbExploitation 1.37.0 publié**, **WerbGouvernance 1.15.0 publié**, **WerbIEC62443 1.13.0 publié**, **WerbMap 1.32.0 publié**, **WerbNIS2 1.10.0 publié**, **WerbPCR 1.9.0 publié**, **WerbPentest 1.9.0 publié**, **WerbPresta 1.9.0 publié**, **WerbRGPD 1.2.0 publié**, **WerbRecette 1.10.0 publié**, **WerbVeille 1.12.0 publié** : socle 1.11.0, base demandée par le portail ouverte sans clic.
+
+## [0.32.0] — 2026-11
+
+### Changements
+- **Identification unique** (charte §5.5 et §5.7, socle 1.10.0, portail 1.16.0) — le nom de l'utilisateur est demandé **une fois, à l'ouverture du portail**, et transmis aux modules ouverts depuis le portail : leur écran « Votre nom » ne s'affiche plus.
+  - **Socle 1.10.0** : nom dans le lien `#werbsmsi=…` (champ `u`) ; `WerbSocle.lien.creer({ …, utilisateur })`, `WerbSocle.lien.avecContexte(url, { theme, utilisateur })`, `WerbSocle.lien.utilisateur()`, `WerbSocle.lien.nettoyerNom()` ; le verrou connaît le nom dès le chargement (`verrou.utilisateur`). Nouveau test `charte/tests/test_identification.py`.
+  - **Portail 1.16.0** : fenêtre « 👤 Qui utilise WerbSMSI ? » à l'ouverture (avant l'invitation à la démo ; « Plus tard » possible), bouton **👤** du bandeau pour s'identifier ou changer de nom ; nom transmis par le bouton *Ouvrir* et par les puces des bases ; « Réalisée par » (sauvegarde) et « Publiée par » (listes de choix) préremplis. Gardé en mémoire seulement (P2).
+  - Identification déclarative, comme le verrou : aucun droit supplémentaire, l'accès aux données reste celui des dossiers (P3). **WerbMap** garde ses comptes (identifiant, mot de passe, rôle) ; **WerbReferentiels** ne demande pas de nom.
+- **WerbAcademie** : sources 1.7.0 récupérées des copies de conflit Synology (le dépôt du module contenait encore les sources 1.5.0) ; reconstruction identique au livrable 1.7.0 publié avant d'appliquer la 1.8.0.
+- **WerbAssets 1.22.0 publié**, **WerbCartoSI 1.11.0 publié**, **WerbEBIOS 1.10.0 publié**, **WerbExploitation 1.36.0 publié**, **WerbGouvernance 1.14.0 publié**, **WerbIEC62443 1.12.0 publié**, **WerbNIS2 1.9.0 publié**, **WerbPCR 1.8.0 publié**, **WerbPentest 1.8.0 publié**, **WerbPresta 1.8.0 publié**, **WerbRGPD 1.1.0 publié**, **WerbRecette 1.9.0 publié**, **WerbVeille 1.11.0 publié**, **WerbAcademie 1.8.0 publié** : socle 1.10.0, nom repris du portail (pas d'écran « Votre nom » quand le module est ouvert depuis le portail).
+
 ## [0.31.0] — 2026-11
 
 ### Changements

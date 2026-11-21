@@ -1,7 +1,7 @@
 # WerbIEC62443
 
 > Gestion des exigences de cybersécurité **IEC 62443** pour les projets OT / systèmes industriels
-> Version **1.11.0** — Développé par **@WerbHat**
+> Version **1.14.0** — Développé par **@WerbHat**
 
 ---
 
@@ -295,7 +295,7 @@ Empreintes et provenance : voir [SECURITY.md](SECURITY.md).
 
 ## Historique des versions
 
-Version courante : **1.11.0** d'octobre 2026 — le cahier d'exigences renvoie au cahier d'exigences cyber de WerbPresta. Version précédente : **1.10.0** d'octobre 2026 — sélection multiple et archivage, chercher / remplacer, largeur des colonnes (socle 1.9.0). Versions précédentes : **1.9.0** d'octobre 2026 — bandeau commun (socle 1.8.0, TRV-7) ; **1.8.0** d'octobre 2026 — thème clair / sombre (socle 1.7.1) ; **1.7.0** d'octobre 2026 — verrou commun des bases (lecture seule ou prise de main, bandeau « Ouvert par … ») ; **1.6.0** — note de cadrage (objectifs, périmètre, fiche système, contraintes, RACI, approbation) et plan de traitement (actions, priorités, critères de réussite, proposition depuis les écarts). La 1.5.0 a apporté les guides d'accompagnement en mode lecture dans le menu ❓ Aide. La 1.4.0 a apporté le menu latéral commun WerbSMSI, le niveau groupe et le modèle Word commun de l'espace. La 1.3.1 ignore les zones publiées sans SL-T ; la 1.3.0 a apporté l'intégration à WerbSMSI, le format de fichier au schéma 2, la CSP sans `'unsafe-eval'` et l'assemblage en Python seul. Détail de toutes les versions dans [CHANGELOG.md](CHANGELOG.md).
+Version courante : **1.14.0** de novembre 2026 — fichiers exportés nommés « SIGLE-SITE_… », nom du site dans les titres (socle 1.12.0). Précédente : **1.13.0** de novembre 2026 — base demandée par le portail ouverte directement quand l'espace est chargé dans le portail (socle 1.11.0). Précédente : **1.12.0** de novembre 2026 — identification unique : ouvert depuis le portail WerbSMSI, le module reprend le nom saisi dans le portail, sans écran « Votre nom » (socle 1.10.0). Précédente : **1.11.0** d'octobre 2026 — le cahier d'exigences renvoie au cahier d'exigences cyber de WerbPresta. Version précédente : **1.10.0** d'octobre 2026 — sélection multiple et archivage, chercher / remplacer, largeur des colonnes (socle 1.9.0). Versions précédentes : **1.9.0** d'octobre 2026 — bandeau commun (socle 1.8.0, TRV-7) ; **1.8.0** d'octobre 2026 — thème clair / sombre (socle 1.7.1) ; **1.7.0** d'octobre 2026 — verrou commun des bases (lecture seule ou prise de main, bandeau « Ouvert par … ») ; **1.6.0** — note de cadrage (objectifs, périmètre, fiche système, contraintes, RACI, approbation) et plan de traitement (actions, priorités, critères de réussite, proposition depuis les écarts). La 1.5.0 a apporté les guides d'accompagnement en mode lecture dans le menu ❓ Aide. La 1.4.0 a apporté le menu latéral commun WerbSMSI, le niveau groupe et le modèle Word commun de l'espace. La 1.3.1 ignore les zones publiées sans SL-T ; la 1.3.0 a apporté l'intégration à WerbSMSI, le format de fichier au schéma 2, la CSP sans `'unsafe-eval'` et l'assemblage en Python seul. Détail de toutes les versions dans [CHANGELOG.md](CHANGELOG.md).
 
 ---
 

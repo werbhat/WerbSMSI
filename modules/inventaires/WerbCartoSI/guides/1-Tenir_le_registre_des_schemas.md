@@ -10,7 +10,7 @@ WerbCartoSI tient le **registre** des schémas d'un site. Il ne dessine pas : le
 | Notion | Ce que c'est | Exemple |
 |---|---|---|
 | **Type de schéma** | Sa nature | Réseau logique, zones et conduits, architecture d'administration |
-| **Catégorie d'exigence** (code `EX-…`) | Ce qu'il permet de démontrer | `EX-ZONES` « Zones et conduits » (NIS2 CLOISONNEMENT, IEC 62443-3-2), `EX-CARTO` « Cartographie du SI » (NIS2 CARTOGRAPHIE.a, ISO/IEC 27001 A.5.9) |
+| **Catégorie d'exigence** (code `EX-…`) | Ce qu'il permet de démontrer | `EX-ZONES` « Zones et conduits » (NIS2 7.A, IEC 62443-3-2), `EX-CARTO` « Cartographie du SI » (NIS2 5.A.1-EI/EE, ISO/IEC 27001 A.5.9) |
 | **Couverture** | L'exigence a-t-elle au moins un schéma approuvé et revu à temps ? | Couverte, à revoir, en cours, non couverte |
 
 **EX = exigence** : `EX-ZONES` se lit « exigence : zones et conduits ». Ce n'est ni un exemple, ni un numéro de schéma (les schémas sont numérotés `SCH-001`…).

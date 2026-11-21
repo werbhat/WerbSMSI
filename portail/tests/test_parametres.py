@@ -71,6 +71,7 @@ def main() -> int:
         def ouvrir_portail():
             pg.goto(url)
             pg.wait_for_timeout(200)
+            pg.locator("#ident-fen [data-act=identFermer]").click() if pg.locator("#ident-fen").count() else None; pg.wait_for_timeout(150)   # identification (portail 1.16.0) : « Plus tard »
             if pg.locator("#demo-fen").count():
                 pg.locator("#demo-fen [data-act=demoFermer]").click()
             pg.wait_for_selector("h1:has-text('WerbSMSI')")

@@ -99,9 +99,9 @@ Une organisation qui tient déjà un SMSI (ISO/IEC 27001) ou une démarche IEC 6
 ## 7. Dans WerbNIS2
 
 - **Entité et site** : identification, assujettissement (statut EE ou EI, secteur, déclaration), dirigeant et point de contact, périmètre et systèmes d'information réglementés (SIR).
-- **Grille d'audit** : 152 points de contrôle en 28 thématiques, qui déclinent **20 règles** ; chacun se cote (OK, PL +, PL −, NC, N/A) avec sa preuve et sa justification.
-- **Couverture** par thématique et par règle, **plan d'actions** des écarts, **rapport** d'audit imprimable.
-- Les indicateurs de formation publiés par WerbAcademie sont rappelés en regard des points qui demandent une preuve de formation.
+- **Grille d'audit** : les 152 moyens acceptables de conformité du **référentiel NIS2**, en 28 rubriques, qui déclinent **20 objectifs de sécurité** ; chacun indique s'il est attendu d'une entité importante (EI) et d'une entité essentielle (EE), et se cote (OK, PL +, PL −, NC, N/A) avec sa preuve et sa justification. Le statut de l'entité fixe les mesures applicables : 76 pour une EI, 152 pour une EE.
+- **Couverture** par rubrique et par objectif, **plan d'actions** des écarts, **rapport** d'audit imprimable.
+- Les indicateurs de formation publiés par WerbAcademie sont rappelés en regard des mesures qui demandent une preuve de formation.
 
 La méthode détaillée est dans le guide suivant : [Conduire un audit NIS2](1-Conduire_audit_NIS2.md).
 

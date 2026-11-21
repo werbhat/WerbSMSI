@@ -1,5 +1,5 @@
 <!doctype html>
-<!-- WerbGouvernance v1.13.0 – Développé par @WerbHat – build novembre 2026 -->
+<!-- WerbGouvernance v1.16.0 – Développé par @WerbHat – build novembre 2026 -->
 <html lang="fr">
 <head>
 <meta charset="utf-8">
@@ -9,7 +9,7 @@
 <title>WerbGouvernance</title>
 <meta name="application-name" content="WerbGouvernance">
 <meta name="author" content="@WerbHat">
-<meta name="generator" content="WerbGouvernance v1.13.0 – Développé par @WerbHat">
+<meta name="generator" content="WerbGouvernance v1.16.0 – Développé par @WerbHat">
 <meta name="description" content="Gouvernance du SMSI du groupe : politique, rôles, socle de mesures, procédures, revues et plan d'actions">
 <style>/*! WerbGouvernance – Développé par @WerbHat */
 :root {
@@ -184,7 +184,7 @@ const WERB = Object.freeze((() => {
   const bytes = [68, 195, 169, 118, 101, 108, 111, 112, 112, 195, 169, 32, 112, 97, 114, 32, 64, 87, 101, 114, 98, 72, 97, 116];
   const signature = new TextDecoder("utf-8").decode(new Uint8Array(bytes));
   const produit = "WerbGouvernance";
-  const version = "1.13.0";
+  const version = "1.16.0";
   return {
     id: "werbgouvernance",
     produit, version, auteur: "@WerbHat", signature,
@@ -203,13 +203,13 @@ const WERB = Object.freeze((() => {
 window.WERB = WERB;
 console.info(`%c${WERB.produit}%c v${WERB.version} — ${WERB.signature}`, "font-weight:bold;color:#1f3864", "color:#595959");
 
-/*! WerbSMSI socle 1.9.0 – Développé par @WerbHat */
+/*! WerbSMSI socle 1.12.0 – Développé par @WerbHat */
 /* Fonctions communes à tous les modules WerbSMSI (charte 1.0).
    Copier ce fichier tel quel dans sources/src/ : ne pas le modifier dans un module,
    faire évoluer la version de la charte à la place.
    Prérequis : signature.js chargé avant (objet global WERB). */
 const WerbSocle = Object.freeze((() => {
-  const VERSION = "1.9.0";
+  const VERSION = "1.12.0";
   const FAMILLE = "WERBSMSI";
   const TAILLE_MAX = 20 * 1024 * 1024;
   const prefixe = () => `werb.${WERB.id}.`;
@@ -371,7 +371,7 @@ const WerbSocle = Object.freeze((() => {
   const verrou = (() => {
     const SESSION = Math.random().toString(36).slice(2, 10) + Date.now().toString(36);
     const DUREE_H = 12;
-    let utilisateur = "", etat = { mode: "aucun" }, rappel = null, surveillance = false;
+    let utilisateur = nomDuLien(), etat = { mode: "aucun" }, rappel = null, surveillance = false;   // nom transmis par le portail (§5.5)
     const STYLE = `
 .werb-verrou:empty{display:none}
 .werb-verrou{display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:999px;font-size:12px;font-weight:600;white-space:nowrap;background:#e1f3e5;color:#1d6631;border:1px solid #b7dfc1}
@@ -567,6 +567,7 @@ const WerbSocle = Object.freeze((() => {
       surChangement(fn) { rappel = typeof fn === "function" ? fn : null; },
       get etat() { return { mode: etat.mode, par: etat.v ? etat.v.par : "", depuis: etat.v ? etat.v.depuis : "", libre: etat.libre || "" }; },
       get lectureSeule() { return etat.mode === "lecture"; },
+      get utilisateur() { return utilisateur; },
       afficher,
     });
   })();
@@ -744,11 +745,13 @@ const WerbSocle = Object.freeze((() => {
       return new Promise(ok => { try { const r = indexedDB.deleteDatabase(BASE_RACCOURCIS); r.onsuccess = r.onerror = r.onblocked = () => ok(); } catch (e) { ok(); } });
     }
     // Module : ouvre l'espace d'un groupe depuis le raccourci du portail (autorisation d'Edge au besoin). Renvoie true si l'espace est ouvert.
-    async function depuisRaccourci(groupeId) {
+    // { demander: false } (1.11.0) : sans fenêtre d'autorisation, seulement si Edge autorise déjà l'accès (ouverture sans clic).
+    async function depuisRaccourci(groupeId, { demander = true } = {}) {
       try {
         const e = await transaction("readonly", s => s.get(groupeId));
         if (!e || !e.poignee) return false;
         let p = await e.poignee.queryPermission({ mode: "readwrite" });
+        if (p !== "granted" && !demander) return false;
         if (p !== "granted") p = await e.poignee.requestPermission({ mode: "readwrite" });
         if (p !== "granted") return false;
         await adopter(e.poignee);
@@ -972,7 +975,9 @@ const WerbSocle = Object.freeze((() => {
     });
   })();
 
-  function telecharger(contenu, nom, type = "application/octet-stream") {
+  // Nom du fichier : préfixe « SIGLE-SITE_ » de l'espace (charte §7.8, socle 1.12.0), sauf base du module et { brut: true }
+  function telecharger(contenu, nom, type = "application/octet-stream", { brut = false } = {}) {
+    if (!brut) nom = nommage.fichier(nom);
     const url = URL.createObjectURL(contenu instanceof Blob ? contenu : new Blob([contenu], { type }));
     const a = Object.assign(document.createElement("a"), { href: url, download: nom });
     document.body.appendChild(a); a.click(); a.remove();
@@ -987,14 +992,25 @@ const WerbSocle = Object.freeze((() => {
     try { const d = JSON.parse(decodeURIComponent(m[1])); return d && typeof d === "object" ? d : null; } catch (e) { return null; }
   }
   const themeDuLien = d => (d && (d.th === "clair" || d.th === "sombre") ? d.th : "");
+  // Nom de l'utilisateur (« Prénom NOM ») : texte court, sans caractère de contrôle ni de balisage. Identification déclarative (§5.5).
+  function nettoyerNom(v) {
+    return typeof v === "string" ? v.replace(/[\u0000-\u001f\u007f]/g, " ").replace(/[<>"`\\]/g, "").replace(/\s+/g, " ").trim().slice(0, 60) : "";
+  }
+  // Nom transmis par le portail dans le lien (#werbsmsi=…, champ u), lu au chargement de la page ; « » s'il n'y en a pas
+  function nomDuLien() { const d = lireLien(); return d ? nettoyerNom(d.u) : ""; }
   // Le portail ouvre un module avec « #werbsmsi=<JSON> » : { g: groupeId, f: chemin de la base dans l'espace, s: site, l: libellé,
-  // e: nom du dossier de l'espace }. Rien n'est conservé : le lien ne contient qu'un chemin relatif, le module redemande un dossier.
+  // e: nom du dossier de l'espace, th: thème, u: nom de l'utilisateur identifié dans le portail }. Rien n'est conservé : le lien ne contient qu'un chemin relatif, le module redemande un dossier.
   // En file://, Edge ne retient pas le dernier dossier choisi : on accepte donc le dossier de l'espace, du site ou du module.
+  const nomInitial = nomDuLien();
   const lien = Object.freeze({
     // theme (facultatif) : mode choisi dans le portail (« clair » ou « sombre » ; « auto » n'est pas transmis), §7.5
-    creer(url, { groupeId, fichier, site = "", libelle = "", espace: nomEspace = "", theme: th = "" }) {
+    // utilisateur (facultatif, 1.10.0) : nom saisi une fois dans le portail ; le module n'affiche pas son écran « Votre nom », §5.5
+    // sigle, organisation, siteNom (facultatifs, 1.12.0) : nommage des fichiers exportés et titres (§7.8) quand l'espace n'est pas ouvert dans le module
+    creer(url, { groupeId, fichier, site = "", libelle = "", espace: nomEspace = "", theme: th = "", utilisateur: u = "", sigle = "", organisation = "", siteNom = "" }) {
       const d = { g: groupeId, f: fichier, s: site, l: libelle, e: nomEspace };
+      if (sigle) d.gs = String(sigle); if (organisation) d.go = String(organisation); if (siteNom) d.sn = String(siteNom);
       if (th === "clair" || th === "sombre") d.th = th;
+      if (nettoyerNom(u)) d.u = nettoyerNom(u);
       return `${url}#werbsmsi=${encodeURIComponent(JSON.stringify(d))}`;
     },
     lire() {
@@ -1003,9 +1019,21 @@ const WerbSocle = Object.freeze((() => {
         ? { groupeId: d.g, fichier: d.f, site: String(d.s || ""), libelle: String(d.l || ""), espace: String(d.e || ""), theme: themeDuLien(d) } : null;
     },
     // Lien vers un module sans base : seulement le thème choisi dans le portail (rien si « auto »)
-    avecTheme(url, th) { return th === "clair" || th === "sombre" ? `${url}#werbsmsi=${encodeURIComponent(JSON.stringify({ th }))}` : url; },
+    avecTheme(url, th) { return lien.avecContexte(url, { theme: th }); },
+    // Lien vers un module sans base : thème et nom de l'utilisateur identifié dans le portail (1.10.0) ; url seule s'il n'y a rien à transmettre
+    avecContexte(url, { theme: th = "", utilisateur: u = "", sigle = "", organisation = "" } = {}) {
+      const d = {};
+      if (sigle) d.gs = String(sigle); if (organisation) d.go = String(organisation);
+      if (th === "clair" || th === "sombre") d.th = th;
+      if (nettoyerNom(u)) d.u = nettoyerNom(u);
+      return Object.keys(d).length ? `${url}#werbsmsi=${encodeURIComponent(JSON.stringify(d))}` : url;
+    },
     // Thème seul transmis par le portail (lien sans base, ou avant que le module ne lise la demande)
     theme() { return themeDuLien(lireLien()); },
+    // Nom de l'utilisateur transmis par le portail (1.10.0), lu au chargement de la page : il reste disponible après lien.effacer().
+    // Le module l'utilise à la place de son écran « Votre nom » ; le verrou (§5.7) le connaît déjà. « » s'il n'y en a pas.
+    utilisateur() { return nomInitial; },
+    nettoyerNom,
     effacer() { try { history.replaceState(null, "", location.pathname + location.search); } catch (e) { /* sans effet */ } },
     // Dossiers que l'utilisateur peut choisir pour atteindre la base : espace, puis chaque dossier du chemin (site, module).
     dossiersPossibles(demande) {
@@ -1016,6 +1044,19 @@ const WerbSocle = Object.freeze((() => {
     consigne(demande) {
       const l = lien.dossiersPossibles(demande);
       return `Portail ouvert sur l'espace : il suffit d'autoriser l'accès si Edge le demande. Sinon, dans la fenêtre qui s'ouvre, choisissez le dossier ${l.map(x => `« ${x} »`).join(", ").replace(/, ([^,]*)$/, " ou $1")} puis « Sélectionner un dossier » : inutile d'aller jusqu'au fichier.`;
+    },
+    // Ouverture sans clic (1.11.0, §5.5) : la base demandée par le lien s'ouvre sans le bouton « Ouvrir cette base » quand le module
+    // est prêt (utilisateur connu) et que l'espace est déjà accessible sans aucune fenêtre : espace ouvert dans la page, ou raccourci du
+    // portail qu'Edge autorise déjà. ouvrir : action du module qui ouvre la base (charge, prend le verrou, efface le lien).
+    // { demander: true } : après un geste de l'utilisateur (« Continuer »), Edge peut demander l'autorisation ; jamais de sélecteur.
+    // Renvoie true si la base a été demandée au module ; sinon le module garde son bouton.
+    async ouvrirSansClic(pret, ouvrir, { demander = false } = {}) {
+      const d = lien.lire();
+      if (!pret || !d || typeof ouvrir !== "function") return false;
+      const accessible = (espace.ouvert && espace.groupe && espace.groupe.groupeId === d.groupeId) || await espace.depuisRaccourci(d.groupeId, { demander });
+      if (!accessible || !lien.lire()) return false;
+      await ouvrir();
+      return true;
     },
     // Ouvre la base demandée et en prend le verrou (§5.7, sauf { verrou: false }). Renvoie { poignee, nom, texte, modifie, lecture }. Si le dossier choisi est l'espace, il est aussi ouvert
     // (publications, rattachement) ; sinon la base est cherchée sous le dossier choisi, par la fin de son chemin.
@@ -1051,6 +1092,63 @@ const WerbSocle = Object.freeze((() => {
       throw new Error(`Le dossier « ${d.name} » ne mène pas à ${demande.fichier}. ${lien.consigne(demande)}`);
     },
   });
+
+  /* ---------- Nommage des fichiers exportés et titres des documents (charte §7.8, socle 1.12.0) ---------- */
+
+  // Fichier exporté (rapport, classeur, document, CSV, PDF…) : « SIGLE-SITE_<nom>.ext » pour une base de site, « SIGLE_<nom>.ext » au
+  // niveau du groupe ; les codes déjà présents dans le nom sont retirés (pas de doublon). Sans sigle connu (module seul, hors espace),
+  // le nom est inchangé. Les fichiers de base du module (WERB.extension) gardent leur nom. Titres : nom du site et de l'organisation,
+  // plutôt que leurs codes (nomSite, nomGroupe). Sigle, organisation et sites : espace ouvert dans le module, sinon lien du portail.
+  const nommage = (() => {
+    let contexte = null;
+    const init = lireLien() || {};
+    const texte = v => (typeof v === "string" ? v.trim() : "");
+    const code = v => texte(v).toUpperCase().replace(/[^A-Z0-9_-]+/g, "");
+    const ctx = () => { try { return (contexte && contexte()) || {}; } catch (e) { return {}; } };
+    const grp = () => (espace.ouvert && espace.groupe ? espace.groupe : null);
+    // Code du site de la base ouverte (« » au niveau du groupe) : contexte déclaré par le module, sinon site du lien du portail
+    const site = () => code(contexte ? ctx().site : init.s);
+    const sigle = () => code(grp() ? grp().sigle : init.gs);
+    function prefixe() { const g = sigle(), s = site(); return g ? (s && s !== g ? `${g}-${s}` : g) : ""; }
+    function nomSite(c) {
+      c = code(c === undefined ? site() : c);
+      if (!c) return "";
+      const s = grp() && (grp().sites || []).find(x => code(x.code) === c);
+      if (s && texte(s.nom)) return texte(s.nom);
+      const k = ctx();
+      if (code(k.site) === c && texte(k.siteNom)) return texte(k.siteNom);
+      if (code(init.s) === c && texte(init.sn)) return texte(init.sn);
+      return c;
+    }
+    const nomGroupe = () => texte(grp() ? grp().organisation : init.go) || sigle();
+    // Titre : nom du site s'il est connu, sinon « Site CODE » ; « » sans site
+    function libelleSite(c) { const k = code(c === undefined ? site() : c); if (!k) return ""; const n = nomSite(k); return n === k ? `Site ${k}` : n; }
+    const echapper = x => x.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    function fichier(nom) {
+      nom = String(nom || "");
+      const p = prefixe(), ext = String((typeof WERB !== "undefined" && WERB.extension) || "");
+      if (!p || !nom || (ext && nom.toLowerCase().endsWith(ext.toLowerCase())) || nom.toUpperCase().startsWith(p + "_")) return nom;
+      const i = nom.lastIndexOf("."), base = i > 0 ? nom.slice(0, i) : nom, suffixe = i > 0 ? nom.slice(i) : "";
+      let reste = base;
+      for (const c of [p, sigle(), site(), "SITE"].filter(Boolean).sort((a, b) => b.length - a.length)) {
+        reste = reste.replace(new RegExp(`(^|[_ ])${echapper(c)}(?=[_ ]|$)`, "g"), "$1");   // codes en majuscules : « Site », « Fiche_site » restent
+      }
+      reste = reste.replace(/[_ ]{2,}/g, "_").replace(/^[_ -]+|[_ -]+$/g, "");
+      return `${p}_${reste || (typeof WERB !== "undefined" ? WERB.produit : "export")}${suffixe}`;
+    }
+    // PDF : « Enregistrer au format PDF » propose le titre de la page comme nom de fichier ; le titre est préfixé le temps de l'impression
+    let titreAvant = null;
+    if (typeof window !== "undefined" && typeof document !== "undefined") {
+      window.addEventListener("beforeprint", () => { if (!prefixe()) return; titreAvant = document.title; document.title = fichier(document.title.replace(/ – /g, "_").replace(/\s+/g, "_")); });
+      window.addEventListener("afterprint", () => { if (titreAvant !== null) { document.title = titreAvant; titreAvant = null; } });
+    }
+    return Object.freeze({
+      // fn : () => ({ site: code du site de la base ouverte, « » au groupe ; siteNom : nom du site si le module le connaît })
+      contexte(fn) { contexte = typeof fn === "function" ? fn : null; },
+      prefixe, fichier, nomSite, libelleSite, nomGroupe,
+      get sigle() { return sigle(); }, get site() { return site(); },
+    });
+  })();
 
   /* ---------- Menu latéral commun (charte §7.1) ---------- */
 
@@ -1313,7 +1411,7 @@ body.wt-glisse{cursor:col-resize!important;user-select:none!important}
     if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", poser); else bandeau.menuBouton();
   }
 
-  return Object.freeze({ VERSION, FAMILLE, LOGO, afficherLogo, purger, preference, activerPurgeAutomatique, esc, enveloppe, lireEnveloppe, qualifier, decomposer, sha256, accesDirect, ouvrir, enregistrer, telecharger, espace, lien, menu, bandeau, tables, TEINTES, teinteCss, verrou, listes, theme });
+  return Object.freeze({ VERSION, FAMILLE, LOGO, afficherLogo, purger, preference, activerPurgeAutomatique, esc, enveloppe, lireEnveloppe, qualifier, decomposer, sha256, accesDirect, ouvrir, enregistrer, telecharger, espace, lien, nommage, menu, bandeau, tables, TEINTES, teinteCss, verrou, listes, theme });
 })());
 window.WerbSocle = WerbSocle;
 
@@ -38919,7 +39017,7 @@ window.WerbPssiDoc = WerbPssiDoc;
   const PROC_TEXTES = [["objet", "Objet"], ["perimetre", "Domaine d'application"], ["refsN", "Références"], ["declencheur", "Déclencheurs"], ["lien", "Lien vers le document SMSI"]];
 
   /* ===================================================== état (en mémoire seulement) */
-  let S = null, ENV = { creeLe: "", journal: [] }, LIAISON = {}, fichier = { poignee: null, nom: "", modifie: null }, dirty = false, user = "";
+  let S = null, ENV = { creeLe: "", journal: [] }, LIAISON = {}, fichier = { poignee: null, nom: "", modifie: null }, dirty = false, user = WerbSocle.lien.utilisateur();   // nom saisi dans le portail (socle 1.10.0, charte §5.5) : pas d'écran « Votre nom »
   let vue = "tdb";
   const ui = { pid: "", redige: false, jq: "", sel: {}, arch: {}, pe: 0, pssiDoc: "", charteApercu: false };   // pe : phase affichée de l'assistant PSSI   // sel : lignes cochées par table (TRV-4) ; arch : archivées affichées
   const SMSI = { sites: {}, pubGroupe: null, err: "" };
@@ -40072,7 +40170,7 @@ window.WerbPssiDoc = WerbPssiDoc;
             Object.entries(S.pssi.regles.items).filter(([, x]) => x.decision).map(([id, x]) => Object.assign({ id }, x)))] : []),
           feuilleXl("Fiches de procédure", [[r => ((S.procedures || []).find(p => p.id === r.pid) || {}).code || "", "Procédure", 14], ...ETAPE_COLS.map(c => [c.f, c.l])], S.etapes || [])]);
     },
-    entrer() { const v = $("#nomUtil").value.trim(); if (!v) { toast("Saisissez votre nom.", "err"); return; } user = v; WerbSocle.verrou.identifier(v); render(); },
+    entrer() { const v = $("#nomUtil").value.trim(); if (!v) { toast("Saisissez votre nom.", "err"); return; } user = v; WerbSocle.verrou.identifier(v); render(); WerbSocle.lien.ouvrirSansClic(v, () => ACTIONS.ouvrirLien(), { demander: true }); },
     nouveau() { S = vide(); LIAISON = {}; ENV = { creeLe: "", journal: [] }; fichier = { poignee: null, nom: "", modifie: null }; journaliser("Création", "Base"); vue = "politique"; dirty = true; render(); },
     // Base d'exemple intégrée au livrable (module.json › exemple) : ouverte en mémoire, sans fichier associé
     async exemple() {
@@ -40213,7 +40311,9 @@ window.WerbPssiDoc = WerbPssiDoc;
   });
   window.addEventListener("beforeunload", e => { if (dirty) { e.preventDefault(); e.returnValue = ""; } });
 
+  WerbSocle.nommage.contexte(() => ({ site: "" }));   // base du groupe : exports « SIGLE_ » (socle 1.12.0, charte §7.8)
   render();
+  WerbSocle.lien.ouvrirSansClic(user, () => ACTIONS.ouvrirLien());   // base demandée par le portail : ouverte sans clic si l'espace est accessible (socle 1.11.0)
 })();
 </script>
 </body>

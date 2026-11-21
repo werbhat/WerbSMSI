@@ -74,7 +74,7 @@ def main() -> int:
         dialogues = []
         pg.on("dialog", lambda d: (dialogues.append(d.message), d.accept()))
         pg.goto(f"http://127.0.0.1:{srv.server_address[1]}/portail/WerbSMSI.html")
-        pg.wait_for_timeout(200); pg.locator("#demo-fen [data-act=demoFermer]").click() if pg.locator("#demo-fen").count() else None   # invitation à la démo (portail 1.8.0)
+        pg.wait_for_timeout(200); pg.locator("#ident-fen [data-act=identFermer]").click() if pg.locator("#ident-fen").count() else None; pg.wait_for_timeout(150); pg.locator("#demo-fen [data-act=demoFermer]").click() if pg.locator("#demo-fen").count() else None   # invitation à la démo (portail 1.8.0)
         opfs = lambda action, chemin, texte=None: pg.evaluate(OPFS, [action, chemin, texte])
         publication = lambda: json.loads(opfs("lire", "SMSI/publications/werbsmsi.json"))
         listes = lambda: {x["id"]: x for x in publication()["data"]["listes"]}
