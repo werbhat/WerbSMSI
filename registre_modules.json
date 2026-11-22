@@ -145,7 +145,7 @@
       "chemin": "modules/gouvernance/WerbGouvernance",
       "depot": "../WerbGouvernance",
       "etat": "publie",
-      "version": "1.16.0",
+      "version": "1.20.0",
       "etape": "gouverner"
     },
     {
@@ -185,7 +185,7 @@
       "chemin": "modules/risques/WerbEBIOS",
       "depot": "../WerbEBIOS",
       "etat": "publie",
-      "version": "1.12.0",
+      "version": "1.19.1",
       "etape": "risques"
     },
     {

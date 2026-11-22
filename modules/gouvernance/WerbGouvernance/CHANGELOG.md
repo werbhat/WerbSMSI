@@ -8,6 +8,52 @@ Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/), num
 
 
 
+## [1.20.0] — 2026-11
+
+### Ajouts — revue de direction : notes de préparation
+- Carte **🧭 Préparer les éléments d'entrée** : zone **📝 Notes de préparation**, interne à la revue (points à vérifier, personnes à solliciter, chiffres à demander) — reprise ni dans les éléments d'entrée ni dans le compte rendu.
+- **Note par élément** (a à g, formation) : pour les éléments à rédiger (b, c, e, g), la note devient le texte de l'élément (« b) Enjeux externes et internes : … ») et peut être ajoutée aux éléments d'entrée ; pour les éléments calculés (a, d, f, formation), elle complète la proposition (« … Note : … »). Chaque élément reste une ligne des éléments d'entrée (retours à la ligne remplacés).
+- Notes enregistrées dans la base avec la revue ; chaque modification est tracée au journal ; non modifiables une fois la revue approuvée.
+
+## [1.19.0] — 2026-11
+
+### Ajouts — documents maîtrisés : politique et procédures (ISO/IEC 27001 § 7.5)
+Le mécanisme des revues de direction (fichier lié, approbation après contrôles, empreinte SHA-256, historique) s'applique désormais à la **politique de sécurité** et à chaque **procédure** :
+- **Politique et périmètre** : carte **📑 Document maîtrisé** — document de politique lié (espace `groupe/gouvernance/politique/`, https ou chemin réseau ; remplace l'ancien champ « Lien vers le document »), **approbation après les 7 contrôles d'ISO/IEC 27001 § 5.2** (adaptée à la mission, objectifs, engagements, information documentée, communication, parties intéressées), empreinte, vérifications, historique ; l'approbation pose la date d'approbation (et la prochaine revue à un an si elle manque), une nouvelle version l'efface.
+- **Fiches de procédure** : même carte — document lié (espace `groupe/gouvernance/procedures/`…), **approbation après les 6 contrôles du § 7.5.2 et 7.5.3** (identification, format, revue et approbation, disponibilité, protection, maîtrise des modifications) ; l'approbation passe la procédure en « Validée », pose la date de validation et la prochaine revue selon la fréquence ; une nouvelle version la repasse en « Brouillon ».
+- L'ancien lien texte de la politique et des procédures est repris comme lien du document (https ou chemin) ; il reste écrit dans le champ texte pour les anciennes versions.
+- Points d'attention : politique approuvée ou procédure validée sans document lié, document introuvable dans l'espace, modifié depuis l'approbation, empreinte non relevée.
+
+### Développement
+- Le code des revues devient un mécanisme commun de **document maîtrisé** (fonctions `normDoc`, `lierDoc`, `approuverDoc`, `empreinteFichier`, `nouvelleVersionDoc`, cartes `fichierHtml`, `empreinteHtml`, `historiqueHtml`) adapté à chaque objet par un descripteur (`dRevue`, `dPolitique`, `dProcedure`). Test `tests/test_documents.py` ; `test_revues.py` suit les nouveaux sélecteurs.
+
+## [1.18.0] — 2026-11
+
+### Ajouts — revue de direction : actions décidées et éléments d'entrée
+- **Plan d'actions relié aux revues** : colonne **Revue** (RD-xx) ; point d'attention pour une action issue d'une revue sans revue indiquée, ou rattachée à une revue introuvable.
+- Fiche d'une revue : carte **🎯 Actions décidées lors de cette revue** (§ 9.3.3) — actions rattachées, modifiables sur place (action, responsable, échéance, statut), actions en retard signalées, bilan ; **+ Action décidée** crée l'action dans le plan, rattachée à la revue.
+- Fiche d'une revue : carte **🧭 Préparer les éléments d'entrée** (§ 9.3.2), propositions à vérifier :
+  - **a)** état des actions des revues précédentes (bilan, actions encore ouvertes et leurs échéances) ;
+  - **d)** performance : actions issues d'audits, d'incidents et d'écarts au socle, conformité publiée par les sites, mesures du socle non appliquées par site ;
+  - **f)** risques : synthèses publiées par les sites (WerbEBIOS : risques, résiduels élevés, sans traitement décidé) et actions issues des analyses de risques ;
+  - compétences et sensibilisation (WerbAcademie) ;
+  - **b), c), e), g)** : à rédiger, avec une aide.
+  Chaque élément s'ajoute en une ligne des « Éléments d'entrée », mis à jour sans doublon par un nouvel ajout (« à jour » / « à mettre à jour ») ; la reprise est tracée à l'historique et au journal.
+
+### Développement
+- Composant **guides.js 1.3.0** de la charte (images dans les guides), à la place de la 1.2.0 : l'avertissement de l'audit disparaît.
+
+## [1.17.0] — 2026-11
+
+### Ajouts — revue de direction : compte rendu lié et traçabilité (comme les schémas de WerbCartoSI)
+- **Fiche de chaque revue de direction** (bouton **📋 Fiche** de la nouvelle colonne *Compte rendu* du tableau) : date, version du compte rendu, statut (Brouillon, En validation, Approuvée), approbateur (fonction de direction), participants, éléments d'entrée, décisions.
+- **Compte rendu lié** : fichier référencé, jamais copié dans la base, rangé dans l'espace WerbSMSI (`groupe/gouvernance/revues/`, choix dans la liste du dossier, création du dossier, vérification de présence), à une adresse https (ouverture dans un nouvel onglet) ou sur un chemin réseau.
+- **Approbation** par la direction après les **contrôles d'ISO/IEC 27001 § 9.3** (éléments d'entrée a à g du § 9.3.2, décisions du § 9.3.3), tous exigés, avec l'approbateur et le compte rendu lié ; la fiche approuvée est verrouillée.
+- **Empreinte SHA-256** du compte rendu relevée à l'approbation (espace) ou depuis un fichier du poste ; vérification dans l'espace à son ouverture ou à la demande, comparaison avec un fichier du poste ; **compte rendu modifié depuis l'approbation** signalé, avec **Approuver à nouveau…**.
+- **Historique (traçabilité)** de chaque revue, enregistré dans la base : création, compte rendu lié ou remplacé, changements de statut, approbation (approbateur, liste des contrôles, empreinte), empreinte relevée, vérifications (identique ou modifié, espace ou poste), nouvelles versions (version précédente, nature du changement). Chaque action est aussi inscrite au journal.
+- **📌 Nouvelle version…** : repasse la revue en brouillon, à faire approuver.
+- Points d'attention : compte rendu non lié ou non approuvé pour une revue passée, introuvable dans l'espace, modifié depuis l'approbation, empreinte non relevée, adresse web invalide, dernière revue de direction de plus de 12 mois.
+
 ## [1.16.0] — 2026-11
 
 ### Modifications

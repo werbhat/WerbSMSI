@@ -7,6 +7,91 @@ Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/), num
 
 
 
+## [1.19.1] — 2026-11
+
+### Développement
+- Composant **guides.js 1.3.0** de la charte (images dans les guides), à la place de la 1.2.0 : l'avertissement de l'audit disparaît.
+
+## [1.19.0] — 2026-11
+
+### Modifications — vérification de l'atelier 4 sur le guide EBIOS RM (ANSSI, version 1.5 de septembre 2024)
+Le guide demande de coter la **vraisemblance élémentaire** de chaque action élémentaire (jugement d'expert ou métriques, en confrontant les ressources et la motivation de la source de risque au socle de sécurité et aux vulnérabilités), puis d'évaluer la **vraisemblance globale** à partir de ces vraisemblances élémentaires, « par exemple » sur le **mode opératoire de moindre effort** pour la source de risque ; ou de l'estimer directement (**méthode expresse**, moins précise). Il ne décrit ni échelle de probabilité de succès, ni échelle de difficulté technique, ni grille les combinant : le détail est renvoyé à un supplément de fiches méthodologiques, non fourni.
+- Méthode **« vraisemblances élémentaires »** (ancienne « standard ») : chaque action est cotée sur l'échelle de vraisemblance **V1 à V4** (au lieu d'une échelle de probabilité de succès propre au module).
+- Méthode **avancée** (probabilité de succès × difficulté technique) conservée mais présentée comme **complément du module, hors guide**, dans la fiche, les échelles et le rapport.
+- **Modes opératoires** : colonne **MO** (MO1 à MO4) dans la séquence d'attaque ; les actions d'un même mode opératoire s'enchaînent, des modes opératoires différents sont des alternatives. Vraisemblance proposée = celle du **mode opératoire de moindre effort** (le plus vraisemblable), chaque mode opératoire valant son action la moins vraisemblable (règle du module, indiquée comme telle). Graphe d'attaque : flèches par mode opératoire (MO2 en tirets, MO3 en pointillés), mention « MO2 · » sur les actions ; rapport Word idem.
+- **Échelle de vraisemblance** : descriptions du guide (V1 « La source de risque a peu de chance d'atteindre son objectif visé… » à V4 « … va certainement atteindre son objectif visé… ») pour les nouvelles analyses ; les analyses existantes gardent leurs descriptions.
+- Nouveau point d'attention, demandé par le guide (« faire un rapprochement entre la vraisemblance et la pertinence du couple SR/OV ») : vraisemblance à rapprocher de la pertinence du couple quand l'écart est d'au moins 2 niveaux.
+
+## [1.18.0] — 2026-11
+
+### Ajouts
+- **Liens vers le site MITRE ATT&CK** sur la page *Référentiel MITRE ATT&CK* : site, matrices Enterprise et ICS, nouveautés des versions, données STIX ; chaque tactique et chaque technique (sous-techniques comprises) renvoie à sa fiche sur attack.mitre.org, dans un nouvel onglet.
+- **Mise à jour du référentiel dans le module** : bouton **📥 Choisir les fichiers STIX…** (fichiers `enterprise-attack.json` et/ou `ics-attack.json` téléchargés chez MITRE) ; rapport des changements avant application (renommées, remplacées, ajoutées, retirées, matrices non fournies), mode sélection ou complet ; application **à la session** ou **enregistrement dans l'espace WerbSMSI** (`modeles/WerbEBIOS_mitre-attack.json`, auteur et date). À l'ouverture de l'espace, ce référentiel remplace celui embarqué s'il est plus récent (un référentiel d'espace plus ancien est ignoré et signalé) ; **↺ Revenir au référentiel embarqué**. Les analyses ne sont pas modifiées.
+- **Référentiel embarqué mis à jour : ATT&CK Enterprise v20.1 et ICS v20.1** (données du 5 novembre 2026), 21 tactiques et 116 techniques : T1219 renommée « Remote Access Tools » ; techniques révoquées par MITRE remplacées par celles qu'il indique : T1562 → T1685 *Disable or Modify Tools*, T0857 → T1693.001 *System Firmware*, T0839 → T1693.002 *Module Firmware*, T0855 → T1692.001 *Command Message*, T0856 → T1692.002 *Reporting Message*.
+
+### Modifications
+- `outils/maj_mitre.py` : une technique révoquée est désormais **remplacée** à la même place par celle que MITRE indique (auparavant retirée) ; les sous-techniques ajoutées comme remplaçantes sont reconnues aux mises à jour suivantes.
+
+### Développement
+- `sources/src/mitre-maj.js` (`EbiosMitreMaj`) : règles de mise à jour du référentiel, sans état, identiques à l'outil en ligne de commande. Test `tests/test_mitre_import.py` (liens, import, session, espace, rechargement, référentiel d'espace plus ancien).
+
+## [1.17.0] — 2026-11
+
+### Ajouts
+- **Version du référentiel MITRE ATT&CK** affichée en tête de la page *Référentiel MITRE ATT&CK* (versions Enterprise et ICS, date des données, nombre de tactiques et de techniques, date de mise à jour), dans *À propos* et dans la mention finale du rapport Word. Le référentiel actuel est indiqué « version ATT&CK non relevée » tant que l'outil n'a pas été passé.
+- **Outil `outils/maj_mitre.py`** : met à jour le référentiel embarqué à partir des données STIX publiées par MITRE (github.com/mitre-attack/attack-stix-data), en fichiers locaux ou téléchargées avec `--telecharger` (aucun accès réseau sans cette option). Mode *sélection* (par défaut : noms mis à jour, techniques révoquées ou dépréciées retirées avec leur remplaçante signalée) ou `--complet` (toutes les techniques actives de chaque tactique, sans sous-technique). Rapport seul par défaut, écriture avec `--ecrire` ; le bloc est délimité par les repères `<mitre:debut>` / `<mitre:fin>` de `referentiels.js`.
+
+### Modifications
+- **Portefeuille plus rapide** : inventaire des dossiers `risques/` en parallèle ; seuls les fichiers nouveaux ou modifiés depuis la dernière lecture (date ou taille) sont relus et recalculés, les autres viennent d'un cache de session (en mémoire : rien n'est conservé dans le navigateur) ; lectures par lots de 6 en parallèle ; vignettes affichées au fil de la lecture avec un compteur ; bilan affiché (« 44 fichier(s) en 63 ms : 40 lu(s), 4 depuis le cache »).
+
+### Développement
+- **Calculs EBIOS RM extraits dans `sources/src/calculs.js`** (`EbiosCalculs`) : fonctions sans état qui reçoivent l'analyse en paramètre (pertinence, menace et zones, gravité, niveaux brut et résiduel, vraisemblance des actions et proposée, acceptation, points d'attention, KPI), date du jour injectable, `EbiosCalculs.pour(A)` pour des fonctions liées. `app.js` les applique à l'analyse ouverte ; le portefeuille calcule les autres analyses sans plus remplacer la variable globale de l'analyse ouverte.
+- Tests : `tests/test_calculs.py` (calculs seuls, résultats attendus calculés à la main, date fixée, deux analyses côte à côte, analyse non modifiée), `tests/test_maj_mitre.py` (outil MITRE sur bundles STIX synthétiques et copie de `referentiels.js`) ; `test_portefeuille.py` complété (cache, 44 analyses, fichier modifié seul relu).
+
+## [1.16.0] — 2026-11
+
+### Ajouts — compléments du guide EBIOS Risk Manager
+- **Atelier 2 · cartographie des sources de risque** (page Couples SR/OV) : un secteur par source de risque, chaque couple placé sur l'anneau de sa pertinence (centre = 4), plein s'il est retenu, creux s'il est écarté ; légende triée par pertinence.
+- **Atelier 3 · menace résiduelle de l'écosystème** : dans la fiche d'une partie prenante, **mesures sur l'écosystème** (mesures du PACS) et **cotation résiduelle** (dépendance, pénétration, maturité, confiance après mesures ; une valeur vide reprend la cotation initiale) ; colonnes **Menace résiduelle** et **Zone résiduelle**. La cartographie de l'écosystème montre la **menace initiale et la menace résiduelle** côte à côte, avec le passage de zone. Mesures : colonne « Parties prenantes traitées ».
+- **Atelier 4 · méthodes de cotation de la vraisemblance** : par scénario opérationnel, méthode **expresse** (cotation directe), **standard** (probabilité de succès de chaque action) ou **avancée** (probabilité de succès et difficulté technique, combinées par une grille). **Vraisemblance proposée** = celle de l'action la moins vraisemblable, avec le bouton **Appliquer** ; colonne « V proposée ». Échelles *Probabilité de succès* (1 à 4), *Difficulté technique* (0 à 4) et grille 4 × 5 modifiables dans Base › Échelles et matrice (grille par défaut à adapter).
+- **Atelier 4 · graphe d'attaque** dans la fiche du scénario opérationnel : une colonne par phase (Connaître, Rentrer, Trouver, Exploiter), les actions numérotées dans l'ordre de la séquence, reliées par des flèches, bordées selon leur vraisemblance.
+- **Atelier 5 · cadre de suivi des risques** : **propriétaire du risque** ; **acceptation formelle** du risque résiduel (accepté par, le, valable jusqu'au) et colonne Acceptation (à accepter, acceptée, expirée) ; carte **Cadre de suivi des risques** (instance, périodicité, dernière et prochaine revue, indicateurs) avec **✔ Revue effectuée aujourd'hui** qui calcule la prochaine revue.
+- Points d'attention : partie prenante restant en zone de danger après mesures, mesures sans cotation résiduelle, actions à coter, vraisemblance différente de la valeur proposée, risque résiduel non accepté, acceptation expirée, cadre de suivi non défini, revue en retard.
+- KPI : « Risques résiduels acceptés formellement » ; « Parties prenantes en zone de danger » compte désormais la zone après mesures.
+- Rapport Word : § 4.2 *Mesures sur l'écosystème et menace résiduelle*, méthode de cotation et cotation des actions au § 5, § 6.6 *Cadre de suivi des risques* (avec propriétaires et acceptations).
+
+## [1.15.0] — 2026-11
+
+### Ajouts
+- **Portefeuille des analyses** (menu **🗂️ Analyses › Portefeuille et KPI**, en tête du menu, et bouton de l'accueil sans analyse ouverte) : pilotage des analyses EBIOS RM d'année en année. Une analyse = une **référence** (préfixe des publications) = un fichier ; chaque revue est une nouvelle analyse, l'historique est conservé.
+  - Lecture de l'espace WerbSMSI : `groupe/risques/` et `sites/<CODE>/risques/`, sous-dossiers compris (`risques/archives/`…), sans prendre de verrou ; l'analyse ouverte est ajoutée avec ses KPI du moment.
+  - **Vignettes** rangées par périmètre (groupe, sites), de la plus récente à la plus ancienne : année, référence, statut, nom, date, version, origine, niveaux de risque bruts et résiduels (barres), risques, taux de traitement, mesures terminées, conformité au socle, points à traiter ; signalements « référence en double » et « référence à renseigner ». Filtres périmètre et statut.
+  - **📂 Ouvrir** depuis une vignette (verrou de la base pris comme à l'ouverture habituelle).
+  - **⧉ Dupliquer** (une vignette ou l'analyse ouverte) : nouvelle référence proposée (année avancée, jamais une référence existante, contrôle à la saisie), nom et version ; tout le contenu est repris, statut « En cours », origine tracée au journal ; option pour effacer les vraisemblances et cotations résiduelles à réévaluer. La copie est créée dans le dossier de l'analyse d'origine (`EBIOS_<site>_<référence>.werbebios.json`, refus si le fichier existe) ; hors espace, « Enregistrer sous » est proposé. L'analyse d'origine n'est pas modifiée.
+  - **Évolution des KPI** d'un périmètre : 15 indicateurs (risques, risques bruts et résiduels élevés, réduction du risque, risques traités, mesures, mesures terminées, mesures en retard, conformité au socle, parties prenantes en zone de danger, points à traiter, valeurs métier, événements redoutés, couples retenus, scénarios stratégiques) et barres de niveaux, des analyses les plus anciennes aux plus récentes, avec tendance ▲ ▼ (vert = amélioration, rouge = dégradation).
+- Étude : **statut de l'analyse** (En cours, Validée, Archivée) et **Dupliquée de** (référence d'origine).
+- Point d'attention « Référence de l'étude non renseignée ».
+
+### Modifications
+- **Nom de fichier proposé à l'enregistrement** : `EBIOS_<site ou Groupe>_<référence>.werbebios.json` (auparavant `EBIOS_<site>.werbebios.json`), pour ne pas écraser l'analyse de l'année précédente. Les fichiers existants gardent leur nom.
+
+## [1.14.0] — 2026-11
+
+### Ajouts
+- **Note « 💡 Aide à la saisie de cette page »** sous le titre de 20 pages (tableau de bord, cartographies, toutes les pages des ateliers 1 à 5, rapport, échelles, intégration WerbSMSI, journal) : à quoi sert la page, ce qu'il faut renseigner champ par champ (ou comment la lire) et conseils de méthode EBIOS RM. Le bouton **−** en haut à droite réduit la note, **+** la rouvre ; l'état est gardé page par page pendant la session (rien n'est conservé dans le navigateur). Masqué à l'impression.
+
+### Modifications
+- Présentation de l'atelier 5 : la **figure 3 du guide EBIOS Risk Manager** (lien entre les différents ateliers) remplace le schéma redessiné.
+
+### Développement
+- `sources/figures/*.png` : figures intégrées en URI `data:` par `build.py` (`window.WERB_FIGURES`).
+
+## [1.13.0] — 2026-11
+
+### Ajouts
+- **Page « Présentation » en tête de chaque menu d'atelier** (A1 à A5) : descriptif de l'atelier repris du guide EBIOS Risk Manager de l'ANSSI (« Une démarche itérative en 5 ateliers »), notes du guide (approche par conformité à l'atelier 1, itérations entre ateliers 3 et 4, appréciation des risques aux ateliers 2 à 4, scénario de risque à l'atelier 5), pages du menu avec leur nombre de lignes, fil des 5 ateliers et lien vers l'atelier suivant.
+- Atelier 5 : schéma du **lien entre les différents ateliers** (figure 3 du guide) : couple SR/OV → scénarios stratégiques (gravité) → scénarios opérationnels (vraisemblance) → scénarios de risque (niveau de risque).
+
 ## [1.12.0] — 2026-11
 
 ### Modifications

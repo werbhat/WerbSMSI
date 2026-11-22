@@ -4,6 +4,22 @@ Toutes les évolutions notables de l'environnement WerbSMSI (charte, portail, ou
 Les modules ont chacun leur propre CHANGELOG.
 Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/), numérotation [SemVer](https://semver.org/lang/fr/).
 
+## [0.42.0] — 2026-11
+
+### Changements
+- **WerbGouvernance 1.20.0 publié** : notes de préparation de la revue de direction — notes internes et une note par élément d'entrée (texte des éléments à rédiger, complément des éléments calculés).
+- **WerbGouvernance 1.19.0 publié** : politique de sécurité et procédures en documents maîtrisés (ISO/IEC 27001 § 7.5) — fichier lié (espace `groupe/gouvernance/politique/` et `…/procedures/`, https ou chemin réseau), approbation après les contrôles du § 5.2 (politique) et du § 7.5 (procédures), empreinte SHA-256, fichier modifié signalé, historique ; mécanisme commun aux revues de direction.
+- **WerbGouvernance 1.18.0 publié** : plan d'actions relié aux revues de direction (colonne Revue), actions décidées dans la fiche de la revue, préparation des éléments d'entrée du § 9.3.2 depuis le plan d'actions et les publications des sites (risques WerbEBIOS, conformité, formation) ; composant guides 1.3.0.
+- **WerbEBIOS 1.19.1 publié** : composant guides 1.3.0 de la charte.
+- **WerbGouvernance 1.17.0 publié** : revue de direction comme les schémas de WerbCartoSI — fiche de chaque revue, compte rendu lié (espace `groupe/gouvernance/revues/`, https ou chemin réseau), approbation après les contrôles d'ISO/IEC 27001 § 9.3, empreinte SHA-256 et compte rendu modifié signalé, historique de traçabilité, nouvelles versions.
+- **WerbEBIOS 1.19.0 publié** : atelier 4 aligné sur le guide EBIOS RM v1.5 (2024) — vraisemblances élémentaires sur l'échelle V1 à V4, modes opératoires alternatifs et proposition sur le mode opératoire de moindre effort, méthode avancée signalée comme complément du module, descriptions de l'échelle de vraisemblance du guide, rapprochement vraisemblance / pertinence du couple SR/OV.
+- **WerbEBIOS 1.18.0 publié** : liens vers attack.mitre.org (site, matrices, fiche de chaque tactique et technique) ; mise à jour du référentiel MITRE dans le module par import des fichiers STIX (session ou espace WerbSMSI, `modeles/WerbEBIOS_mitre-attack.json`) ; référentiel embarqué passé en ATT&CK Enterprise et ICS v20.1.
+- **WerbEBIOS 1.17.0 publié** : calculs EBIOS RM extraits dans `calculs.js` (sans état, testés seuls) ; portefeuille plus rapide (cache de session, lectures parallèles, affichage progressif) ; version du référentiel MITRE ATT&CK affichée et outil `outils/maj_mitre.py` pour le mettre à jour depuis les données STIX de MITRE.
+- **WerbEBIOS 1.16.0 publié** : compléments du guide EBIOS RM — cartographie des sources de risque (atelier 2), mesures sur l'écosystème et menace résiduelle (atelier 3), méthodes de cotation standard et avancée avec vraisemblance proposée et graphe d'attaque (atelier 4), propriétaire, acceptation formelle des risques résiduels et cadre de suivi des risques (atelier 5).
+- **WerbEBIOS 1.15.0 publié** : portefeuille des analyses EBIOS RM (menu 🗂️ Analyses et accueil) — vignettes par référence lues dans `groupe/risques/` et `sites/<CODE>/risques/`, ouverture, duplication pour la revue annuelle (nouvelle référence, origine tracée), évolution des KPI par périmètre ; statut de l'analyse ; fichier nommé `EBIOS_<site>_<référence>`.
+- **WerbEBIOS 1.14.0 publié** : note « 💡 Aide à la saisie de cette page » réductible (− / +) sous le titre de 20 pages (rôle de la page, champs à renseigner, conseils EBIOS RM) ; figure 3 du guide EBIOS RM (lien entre les ateliers) dans la présentation de l'atelier 5.
+- **WerbEBIOS 1.13.0 publié** : page « Présentation » en tête de chaque menu d'atelier (A1 à A5) — descriptif et notes du guide EBIOS Risk Manager de l'ANSSI, pages du menu, lien entre les ateliers (figure 3 du guide) à l'atelier 5.
+
 ## [0.41.0] — 2026-11
 
 ### Changements

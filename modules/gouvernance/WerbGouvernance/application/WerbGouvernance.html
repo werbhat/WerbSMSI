@@ -1,5 +1,5 @@
 <!doctype html>
-<!-- WerbGouvernance v1.16.0 – Développé par @WerbHat – build novembre 2026 -->
+<!-- WerbGouvernance v1.20.0 – Développé par @WerbHat – build novembre 2026 -->
 <html lang="fr">
 <head>
 <meta charset="utf-8">
@@ -9,7 +9,7 @@
 <title>WerbGouvernance</title>
 <meta name="application-name" content="WerbGouvernance">
 <meta name="author" content="@WerbHat">
-<meta name="generator" content="WerbGouvernance v1.16.0 – Développé par @WerbHat">
+<meta name="generator" content="WerbGouvernance v1.20.0 – Développé par @WerbHat">
 <meta name="description" content="Gouvernance du SMSI du groupe : politique, rôles, socle de mesures, procédures, revues et plan d'actions">
 <style>/*! WerbGouvernance – Développé par @WerbHat */
 :root {
@@ -155,6 +155,13 @@ label.chk-in input { width: auto; }
 .pssi-mode > span { flex: 1; }
 .pssi-mode.on { border-color: var(--navy-2); box-shadow: 0 0 0 2px var(--navy-2) inset; }
 .pssi-modes-info { margin-top: 10px; padding: 8px 12px; border-radius: 6px; background: var(--warn-bg); color: var(--warn-t); }
+/* Revue de direction : compte rendu lié et traçabilité (1.17.0) */
+.rv-cell { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; }
+.bt-fichier, .bt-lien { display: inline-flex; align-items: center; gap: 4px; padding: 4px 10px; border: 1px solid var(--line); border-radius: 5px; background: var(--card); color: var(--ink); cursor: pointer; text-decoration: none; }
+.bt-fichier:hover, .bt-lien:hover { border-color: var(--navy-2); }
+.bt-fichier:has(input:disabled) { opacity: .5; cursor: not-allowed; }
+.rv-retard td { background: var(--ko-bg); }
+.rv-note { margin-top: 6px; min-height: 0; font-size: 12px; }
 </style>
 </head>
 <body>
@@ -184,7 +191,7 @@ const WERB = Object.freeze((() => {
   const bytes = [68, 195, 169, 118, 101, 108, 111, 112, 112, 195, 169, 32, 112, 97, 114, 32, 64, 87, 101, 114, 98, 72, 97, 116];
   const signature = new TextDecoder("utf-8").decode(new Uint8Array(bytes));
   const produit = "WerbGouvernance";
-  const version = "1.16.0";
+  const version = "1.20.0";
   return {
     id: "werbgouvernance",
     produit, version, auteur: "@WerbHat", signature,
@@ -1415,7 +1422,7 @@ body.wt-glisse{cursor:col-resize!important;user-select:none!important}
 })());
 window.WerbSocle = WerbSocle;
 
-/*! WerbSMSI guides 1.2.0 – Développé par @WerbHat */
+/*! WerbSMSI guides 1.3.0 – Développé par @WerbHat */
 /* Guides d'accompagnement des modules WerbSMSI (charte §7.4) : documents Markdown rangés dans le dossier guides/ du module,
    intégrés au livrable par le build (window.WERB_GUIDES = [{ fichier, texte }]) et affichés en mode lecture dans le menu ❓ Aide.
    Un fichier peut être rangé dans un sous-dossier (« 1-ANSSI/0-carte.md ») : les guides sont alors regroupés par dossier
@@ -1427,9 +1434,14 @@ window.WerbSocle = WerbSocle;
    interne, ancre ignorée). Tout le HTML du texte est échappé, sauf les commentaires
    <!-- … --> placés entre deux blocs, qui ne sont pas affichés ; le premier porte la signature du guide (charte §7.4).
    Thème clair / sombre (charte §7.5, 1.2.0) : fonds sur les variables communes (--card, --info-bg…, repli clair), valeurs sombres
-   propres au lecteur à l'écran seulement ; titres sous texte blanc sur --navy-fond ; impression en clair. */
+   propres au lecteur à l'écran seulement ; titres sous texte blanc sur --navy-fond ; impression en clair.
+   Images (1.3.0) : une ligne seule « ![légende](images/schema.svg) » affiche une figure légendée, agrandie au clic. L'image est
+   rangée dans le dossier des guides (images/ par exemple) et intégrée au livrable par le build en data: URI
+   (window.WERB_GUIDES_IMAGES = { "images/schema.svg": "data:image/svg+xml;base64,…" }) : rien n'est chargé hors de la page
+   (CSP img-src data:). Seuls les formats SVG, PNG, JPEG et WebP sont acceptés ; une image absente est signalée à sa place.
+   L'image porte son propre fond (opaque) : le lecteur n'en ajoute pas, et l'atténue légèrement en thème sombre. */
 const WerbGuides = Object.freeze((() => {
-  const VERSION = "1.1.0";
+  const VERSION = "1.3.0";
   const esc = s => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
   const sansAccent = s => s.normalize("NFD").replace(/[̀-ͯ]/g, "");
 
@@ -1444,6 +1456,18 @@ const WerbGuides = Object.freeze((() => {
       if (p === "..") parts.pop(); else if (p && p !== ".") parts.push(p);
     }
     return parts.join("/");
+  }
+  // Image d'un guide, intégrée par le build : data: URI d'une image (SVG, PNG, JPEG, WebP), sinon null
+  const RE_IMAGE = /^data:image\/(?:svg\+xml|png|jpeg|webp);base64,[A-Za-z0-9+/]+=*$/;
+  function image(url) {
+    const imgs = globalThis.WERB_GUIDES_IMAGES && typeof globalThis.WERB_GUIDES_IMAGES === "object" ? globalThis.WERB_GUIDES_IMAGES : {};
+    const v = Object.prototype.hasOwnProperty.call(imgs, cheminRelatif(url)) ? imgs[cheminRelatif(url)] : null;
+    return typeof v === "string" && RE_IMAGE.test(v) ? v : null;
+  }
+  function figure(lib, url) {
+    const src = image(url);
+    if (!src) return `<p class="wg-absent-img" title="Image absente : ${esc(cheminRelatif(url))}">🖼 ${esc(lib || cheminRelatif(url))} (image absente)</p>`;
+    return `<figure class="wg-fig"><img src="${src}" alt="${esc(lib)}" data-werb-zoom title="Cliquer pour agrandir">${lib ? `<figcaption>${enLigne(lib)}</figcaption>` : ""}</figure>`;
   }
   function enLigne(s, liens = true) {
     const gardes = [];
@@ -1509,6 +1533,7 @@ const WerbGuides = Object.freeze((() => {
         continue;
       }
       if (/^\s*([-*_])(\s*\1){2,}\s*$/.test(l)) { html.push("<hr>"); i++; continue; } // filet
+      if ((m = l.match(/^\s*!\[([^\]]*)\]\(([^)\s]+)\)\s*$/))) { html.push(figure(m[1], m[2])); i++; continue; } // image seule sur sa ligne
       if (l.includes("|") && i + 1 < lignes.length && estSeparateur(lignes[i + 1])) { // tableau
         const tete = cellules(l), alig = cellules(lignes[i + 1]).map(c => c.endsWith(":") ? (c.startsWith(":") ? "center" : "right") : "");
         const st = k => alig[k] ? ` style="text-align:${alig[k]}"` : "";
@@ -1685,6 +1710,13 @@ const WerbGuides = Object.freeze((() => {
 .wg-som .wg-s1{font-weight:600;margin-top:3px}
 .wg-som .wg-s2{padding-left:16px;color:var(--wg-m);font-size:12.5px}
 .wg-pied{display:flex;justify-content:space-between;gap:10px;margin-top:28px;padding-top:14px;border-top:1px solid var(--wg-l)}
+.wg-fig{margin:16px 0 18px;text-align:center}
+.wg-fig img{max-width:100%;height:auto;border:1px solid var(--wg-l);border-radius:8px;cursor:zoom-in}
+@media screen{:root[data-theme=sombre] .wg-fig img{filter:brightness(.88)}}
+.wg-fig figcaption{font-size:13px;color:var(--wg-m);margin-top:6px;font-style:italic}
+.wg-absent-img{color:var(--wg-m);border:1px dashed var(--wg-l);border-radius:6px;padding:8px 10px}
+.wg-zoom{position:fixed;inset:0;z-index:10000;background:rgba(10,14,20,.86);display:flex;align-items:center;justify-content:center;padding:2vh 2vw;cursor:zoom-out}
+.wg-zoom img{max-width:100%;max-height:100%;background:#fff;border-radius:6px;box-shadow:0 8px 40px rgba(0,0,0,.5)}
 .wg-cartes{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px;margin:8px 0}
 .wg-carte{display:flex;gap:10px;align-items:center;text-align:left;border:1px solid var(--line,#dfe3ea);border-left:5px solid var(--navy-2,#2e5090);background:var(--card,#fff);border-radius:8px;padding:10px 12px;cursor:pointer;font:inherit;color:inherit;white-space:normal}
 .wg-carte:hover{background:var(--wg-f,#f6f8fc)}
@@ -1693,7 +1725,7 @@ const WerbGuides = Object.freeze((() => {
 .wg-ct small{color:var(--muted,#5d6676)}
 .wmenu .wm-it[data-wnav^="guide:"],.wmenu .wm-it[data-wnav^="guide:"] span{white-space:normal;line-height:1.3}
 @media (max-width:1100px){.wg-corps{grid-template-columns:minmax(0,1fr)}.wg-som{position:static;max-height:none;order:-1}}
-@media print{.wg-tete,.wg-som,.wg-pied{display:none}.wg-doc{border:0;padding:0;max-width:none}}`;
+@media print{.wg-tete,.wg-som,.wg-pied,.wg-zoom{display:none}.wg-doc{border:0;padding:0;max-width:none}.wg-fig{break-inside:avoid}.wg-fig img{border:0}}`;
 
   if (typeof document !== "undefined" && document.head && !document.getElementById("werb-guides-style")) {
     const st = document.createElement("style");
@@ -1702,12 +1734,27 @@ const WerbGuides = Object.freeze((() => {
     document.head.appendChild(st);
     // Sommaire : défilement vers la section sans toucher à l'adresse de la page
     document.addEventListener("click", e => {
+      // Image agrandie : un clic l'ouvre en plein écran, un second clic (ou Échap) la referme
+      const z = document.querySelector(".wg-zoom");
+      if (z && (e.target === z || z.contains(e.target))) { z.remove(); return; }
+      const im = e.target.closest && e.target.closest("img[data-werb-zoom]");
+      if (im) {
+        const fond = document.createElement("div");
+        fond.className = "wg-zoom";
+        fond.setAttribute("role", "dialog");
+        const grand = document.createElement("img");
+        grand.src = im.src; grand.alt = im.alt;
+        fond.appendChild(grand);
+        document.body.appendChild(fond);
+        return;
+      }
       const a = e.target.closest && e.target.closest("[data-werb-ancre]");
       if (!a) return;
       e.preventDefault();
       const cible = document.getElementById(a.dataset.werbAncre);
       if (cible) cible.scrollIntoView({ behavior: "smooth", block: "start" });
     });
+    document.addEventListener("keydown", e => { if (e.key === "Escape") { const z = document.querySelector(".wg-zoom"); if (z) z.remove(); } });
   }
 
   return { VERSION, rendre, guides: liste_guides, trouver, entrees, dossiers, cartes, vue };
@@ -39011,7 +39058,7 @@ window.WerbPssiDoc = WerbPssiDoc;
     revues: { titre: "Revues de direction", obj: "Revue de direction", prefixe: "RD-", sub: "Éléments d'entrée, décisions et participants de chaque revue (ISO/IEC 27001 § 9.3).",
       cols: [col("id", "ID", "text", null, "80px"), col("date", "Date", "date", null, "140px"), col("participants", "Participants", "area"), col("entrees", "Éléments d'entrée", "area"), col("decisions", "Décisions", "area")] },
     actions: { titre: "Plan d'actions", obj: "Action", prefixe: "A-", sub: "Actions issues des revues, des audits, des analyses de risques et des écarts au socle constatés sur les sites.",
-      cols: [col("id", "ID", "text", null, "70px"), col("titre", "Action", "area"), col("origine", "Origine", "select", () => ORIGINES, "150px"), col("site", "Site", "text", null, "80px"), col("responsable", "Responsable"), col("echeance", "Échéance", "date", null, "140px"), col("statut", "Statut", "select", () => ACT_STATS, "110px"), col("commentaire", "Commentaire", "area")] },
+      cols: [col("id", "ID", "text", null, "70px"), col("titre", "Action", "area"), col("origine", "Origine", "select", () => ORIGINES, "150px"), col("revue", "Revue", "select", () => S.revues.map(r => r.id), "100px"), col("site", "Site", "text", null, "80px"), col("responsable", "Responsable"), col("echeance", "Échéance", "date", null, "140px"), col("statut", "Statut", "select", () => ACT_STATS, "110px"), col("commentaire", "Commentaire", "area")] },
   };
   const ETAPE_COLS = [col("phase", "Phase"), col("section", "Section"), col("etape", "Étape", "area"), col("role", "Responsable"), col("moyens", "Moyens", "area"), col("preuve", "Preuve"), col("lien", "Lien")];
   const PROC_TEXTES = [["objet", "Objet"], ["perimetre", "Domaine d'application"], ["refsN", "Références"], ["declencheur", "Déclencheurs"], ["lien", "Lien vers le document SMSI"]];
@@ -39062,11 +39109,13 @@ window.WerbPssiDoc = WerbPssiDoc;
     const o = d.organisation || {};
     b.organisation.nom = str(o.nom); b.organisation.perimetre = str(o.perimetre);
     Object.keys(b.organisation.politique).forEach(k => { if (o.politique && o.politique[k] !== undefined) b.organisation.politique[k] = str(o.politique[k]); });
+    b.organisation.politique.doc = docDepuisLien(normDoc({}, (o.politique || {}).doc), b.organisation.politique.lien);   // document maîtrisé (1.19.0)
     const champs = cols => cols.map(c => c.f);
     const ligne = (k, T, x) => {
       const r = {};
       champs(T.cols).forEach(f => { const c = T.cols.find(c => c.f === f); r[f] = c.t === "bool" ? x[f] === true : c.t === "liste" ? (Array.isArray(x[f]) ? x[f].map(str).filter(Boolean) : []) : str(x[f]); });
-      if (k === "procedures") { r.id = str(x.id) || uid(); PROC_TEXTES.forEach(([f]) => r[f] = str(x[f])); }
+      if (k === "procedures") { r.id = str(x.id) || uid(); PROC_TEXTES.forEach(([f]) => r[f] = str(x[f])); r.doc = docDepuisLien(normDoc({}, x.doc), r.lien); }
+      if (k === "revues") normRevue(r, x);   // compte rendu lié, approbation, empreinte, historique (1.17.0)
       if (x.archive && typeof x.archive === "object") r.archive = { le: str(x.archive.le), par: str(x.archive.par) };
       return r;
     };
@@ -39165,6 +39214,7 @@ window.WerbPssiDoc = WerbPssiDoc;
         SMSI.sites[s.code] = info ? { accessible: true, pub: await E.publications("site", s.code) } : { accessible: false };
       }
     } catch (e) { SMSI.err = e.message; }
+    await verifierDocs();
   }
   const objetsSite = (code, nom) => (((SMSI.sites[code] || {}).pub || {}).objets || {})[nom] || [];
   const sitesLisibles = () => (E.groupe ? E.groupe.sites || [] : []).filter(s => (SMSI.sites[s.code] || {}).accessible);
@@ -39225,6 +39275,9 @@ window.WerbPssiDoc = WerbPssiDoc;
     S.procedures.filter(x => !S.etapes.some(s => s.pid === x.id)).forEach(x => a.push(["b-warn", "Procédure " + (x.code || x.titre), "Aucune étape décrite"]));
     S.actions.filter(x => x.echeance && x.echeance < j && !["Terminée", "Abandonnée"].includes(x.statut)).forEach(x => a.push(["b-ko", "Action " + x.id, `Échéance dépassée (${frDate(x.echeance)})`]));
     S.mesures.filter(m => !m.references.length).forEach(m => a.push(["b-warn", "Mesure " + m.id, "Aucune référence normative"]));
+    alertesRevues(j).forEach(x => a.push(x));
+    S.actions.filter(x => x.origine === "Revue de direction" && !x.revue).forEach(x => a.push(["b-warn", "Action " + x.id, "Issue d'une revue de direction : indiquez laquelle (colonne Revue)"]));
+    S.actions.filter(x => x.revue && !S.revues.some(r => r.id === x.revue)).forEach(x => a.push(["b-warn", "Action " + x.id, `Revue ${x.revue} introuvable`]));
     S.roles.filter(r => r.niveau === "groupe" && !r.titulaire).forEach(r => a.push(["b-warn", "Rôle " + r.id, "Rôle du groupe sans titulaire"]));
     if (S.pssi) {
       const c = comptesRegles();
@@ -39271,7 +39324,8 @@ window.WerbPssiDoc = WerbPssiDoc;
       <label class="f">Périmètre du SMSI</label><textarea data-org="perimetre">${esc(o.perimetre)}</textarea></div>
       <div class="card"><h2>Politique de sécurité</h2><div class="grid g3">${fld("titre", "Titre")}${fld("reference", "Référence documentaire")}${fld("version", "Version")}
       ${fld("approbateur", "Approuvée par")}${fld("dateApprobation", "Date d'approbation", "date")}${fld("prochaineRevue", "Prochaine revue", "date")}</div>
-      ${fld("lien", "Lien vers le document")}${fld("resume", "Engagements principaux (résumé)", "area")}</div>`;
+      ${fld("resume", "Engagements principaux (résumé)", "area")}</div>
+      ${ficheDocHtml(dPolitique(), `Version <b>${esc(p.version || "—")}</b> · approbateur <b>${esc(p.approbateur || "à renseigner ci-dessus")}</b> · ${p.dateApprobation ? `approuvée le ${esc(frDate(p.dateApprobation))}` : "non approuvée"}${p.prochaineRevue ? ` · prochaine revue le ${esc(frDate(p.prochaineRevue))}` : ""}. L'approbation pose la date d'approbation (et la prochaine revue à un an si elle manque) ; une nouvelle version efface la date d'approbation.`)}`;
   };
 
   function tableHtml(key, lignes = S[key], { ordre = false } = {}) {
@@ -39286,11 +39340,11 @@ window.WerbPssiDoc = WerbPssiDoc;
     };
     const outils = !!TABLES[key], sel = ui.sel[key] || new Set(), arch = outils && ui.arch[key] ? (S.archives[key] || []) : [];
     const coche = r => outils ? `<td class="sel noprint"><input type="checkbox" data-sel="${key}" data-pos="${S[key].includes(r) ? "a" : "z"}${(S[key].includes(r) ? S[key] : S.archives[key]).indexOf(r)}"${sel.has(r) ? " checked" : ""} aria-label="Sélectionner"></td>` : "";
-    return `<div class="tablewrap"><table class="t" data-table="${key}"><thead><tr>${outils ? `<th class="sel noprint"><input type="checkbox" data-selall="${key}"${lignes.length && lignes.every(r => sel.has(r)) ? " checked" : ""} title="Tout sélectionner" aria-label="Tout sélectionner"></th>` : ""}${T.cols.map(c => `<th data-col="${c.f}"${c.w ? ` style="width:${c.w}"` : ""}>${esc(c.l)}</th>`).join("")}<th style="width:${ordre ? 120 : 60}px"></th></tr></thead><tbody>
-      ${lignes.map(r => { const i = S[key].indexOf(r); return `<tr>${coche(r)}${T.cols.map(c => `<td${c.t === "bool" ? ' class="c"' : ""}>${champ(c, r, i)}</td>`).join("")}<td>${ordre ? `<button class="small" data-act="monter" data-i="${i}" title="Monter">▲</button><button class="small" data-act="descendre" data-i="${i}" title="Descendre">▼</button>` : ""}
+    return `<div class="tablewrap"><table class="t" data-table="${key}"><thead><tr>${outils ? `<th class="sel noprint"><input type="checkbox" data-selall="${key}"${lignes.length && lignes.every(r => sel.has(r)) ? " checked" : ""} title="Tout sélectionner" aria-label="Tout sélectionner"></th>` : ""}${T.cols.map(c => `<th data-col="${c.f}"${c.w ? ` style="width:${c.w}"` : ""}>${esc(c.l)}</th>`).join("")}${key === "revues" ? `<th style="width:190px">Compte rendu</th>` : ""}<th style="width:${ordre ? 120 : 60}px"></th></tr></thead><tbody>
+      ${lignes.map(r => { const i = S[key].indexOf(r); return `<tr>${coche(r)}${T.cols.map(c => `<td${c.t === "bool" ? ' class="c"' : ""}>${champ(c, r, i)}</td>`).join("")}${key === "revues" ? `<td>${celluleRevue(r)}</td>` : ""}<td>${ordre ? `<button class="small" data-act="monter" data-i="${i}" title="Monter">▲</button><button class="small" data-act="descendre" data-i="${i}" title="Descendre">▼</button>` : ""}
         ${key === "procedures" ? `<button class="small" data-act="fiche" data-id="${esc(r.id)}" title="Fiche de procédure">📄</button>` : ""}<button class="small danger" data-act="suppr" data-t="${key}" data-i="${i}" title="Supprimer">✕</button></td></tr>`; }).join("")
-      || `<tr><td colspan="${T.cols.length + (outils ? 2 : 1)}" class="empty">Aucune ligne.</td></tr>`}
-      ${arch.map(r => `<tr class="archivee" title="${esc(`Archivée le ${frDate(r.archive && r.archive.le)}${r.archive && r.archive.par ? " par " + r.archive.par : ""}`)}">${coche(r)}${T.cols.map(c => `<td>${esc(Array.isArray(r[c.f]) ? r[c.f].join(", ") : c.t === "bool" ? (r[c.f] ? "oui" : "") : r[c.f])}</td>`).join("")}<td>🗄</td></tr>`).join("")}</tbody></table></div>`;
+      || `<tr><td colspan="${T.cols.length + (outils ? 2 : 1) + (key === "revues" ? 1 : 0)}" class="empty">Aucune ligne.</td></tr>`}
+      ${arch.map(r => `<tr class="archivee" title="${esc(`Archivée le ${frDate(r.archive && r.archive.le)}${r.archive && r.archive.par ? " par " + r.archive.par : ""}`)}">${coche(r)}${T.cols.map(c => `<td>${esc(Array.isArray(r[c.f]) ? r[c.f].join(", ") : c.t === "bool" ? (r[c.f] ? "oui" : "") : r[c.f])}</td>`).join("")}${key === "revues" ? `<td>${celluleRevue(r)}</td>` : ""}<td>🗄</td></tr>`).join("")}</tbody></table></div>`;
   }
   // Outils des tables (charte §7.7, socle 1.9.0) : chercher / remplacer (TRV-5), archivées (TRV-4), largeurs (TRV-6), barre de sélection.
   // Une ligne archivée est déplacée dans S.archives[table] avec { le, par } : hors publication, alertes, tableau de bord et compteurs.
@@ -39337,6 +39391,429 @@ window.WerbPssiDoc = WerbPssiDoc;
       <span class="small muted">${!r ? "Créez d'abord la revue." : deja ? `Déjà dans ${esc(r.id)}.` : `Revue la plus récente : ${esc(r.id)}${r.date ? " du " + esc(frDate(r.date)) : ""}.`}</span></div></div>`;
   }
 
+  /* ===================================================== documents maîtrisés : fichier lié, approbation, empreinte, historique
+     (1.17.0 pour les revues de direction, généralisé en 1.19.0 à la politique et aux procédures — ISO/IEC 27001 § 7.5)
+     Comme les schémas de WerbCartoSI : le document est un fichier référencé, jamais copié dans la base : dans l'espace WerbSMSI
+     (un dossier par nature sous groupe/gouvernance/), à une adresse https ou sur un chemin réseau. L'approbation suit une liste de
+     contrôles propre à la nature du document ; l'empreinte SHA-256 du fichier est alors relevée et un fichier modifié depuis est
+     signalé (vérification à l'ouverture de l'espace, à la demande ou sur un fichier du poste). L'historique de chaque document trace
+     liens, approbations, empreintes, vérifications et nouvelles versions ; chaque action est aussi inscrite au journal.
+     Un « descripteur » (dRevue, dPolitique, dProcedure) adapte ce mécanisme commun aux champs de chaque objet. */
+  const DM_LIENS = [["espace", "Espace WerbSMSI"], ["https", "Adresse web (https)"], ["chemin", "Chemin réseau ou lecteur"]];
+  const RV_LIENS = DM_LIENS;
+  const RV_STATUTS = [["brouillon", "Brouillon", "b-muted"], ["validation", "En validation", "b-info"], ["approuvee", "Approuvée", "b-ok"]];
+  const DOSSIER_REVUES = "groupe/gouvernance/revues";
+  // Contrôles avant approbation d'un compte rendu : éléments d'entrée (§ 9.3.2 a à g) et de sortie (§ 9.3.3) d'ISO/IEC 27001:2022
+  const RV_CONTROLES = [
+    "a) État des actions décidées lors des revues de direction précédentes",
+    "b) Changements des enjeux externes et internes pertinents pour le SMSI",
+    "c) Changements des besoins et attentes des parties intéressées pertinents pour le SMSI",
+    "d) Retours sur la performance de la sécurité de l'information : non-conformités et actions correctives, résultats de la surveillance et des mesures, résultats d'audit, atteinte des objectifs",
+    "e) Retours des parties intéressées",
+    "f) Résultats de l'appréciation des risques et état du plan de traitement des risques",
+    "g) Opportunités d'amélioration continue",
+    "Sorties : décisions sur les opportunités d'amélioration et sur les changements à apporter au SMSI consignées dans le compte rendu",
+  ];
+  // Politique de sécurité de l'information : ISO/IEC 27001:2022 § 5.2 a à g
+  const POL_CONTROLES = [
+    "a) Adaptée à la mission de l'organisme",
+    "b) Comprend des objectifs de sécurité de l'information ou fournit un cadre pour les fixer",
+    "c) Comprend l'engagement de satisfaire aux exigences applicables liées à la sécurité de l'information",
+    "d) Comprend l'engagement d'œuvrer pour l'amélioration continue du SMSI",
+    "e) Disponible sous forme d'information documentée",
+    "f) Communiquée au sein de l'organisme",
+    "g) Mise à la disposition des parties intéressées, le cas échéant",
+  ];
+  // Procédure (information documentée) : ISO/IEC 27001:2022 § 7.5.2 et 7.5.3
+  const PROC_CONTROLES = [
+    "Identification et description : titre, code, version, date, propriétaire (§ 7.5.2 a)",
+    "Format et support appropriés : langue, gabarit, support papier ou électronique (§ 7.5.2 b)",
+    "Revue et approbation du caractère approprié et adéquat (§ 7.5.2 c)",
+    "Disponible et adaptée à l'utilisation, là et quand elle est nécessaire (§ 7.5.3 a)",
+    "Convenablement protégée : confidentialité, utilisation inappropriée, perte d'intégrité (§ 7.5.3 b)",
+    "Diffusion, accès, stockage, conservation et maîtrise des modifications organisés (§ 7.5.3 c, d)",
+  ];
+  const DOSSIER_POLITIQUE = "groupe/gouvernance/politique", DOSSIER_PROCEDURES = "groupe/gouvernance/procedures";
+  const RE_SHA_DM = /^[0-9a-f]{64}$/;
+  // Liste de choix valeur / libellé (opt ne prend que des valeurs)
+  const optP = (paires, cur, vide) => (vide !== undefined ? `<option value="">${esc(vide)}</option>` : "") + paires.map(([v, l]) => `<option value="${esc(v)}"${String(v) === String(cur ?? "") ? " selected" : ""}>${esc(l)}</option>`).join("");
+  const EMP_DM = {}, VERIF_DM = {};   // session seulement : empreinte relue (clé → { sha256, change }) et présence du fichier (clé → bool)
+  const sv = (v, max) => str(v).slice(0, max);
+  // Partie « document » d'un objet : lien, empreinte de l'approbation, historique
+  function normDoc(c, x) {
+    x = x && typeof x === "object" ? x : {};
+    const l = x.lien && typeof x.lien === "object" ? x.lien : {};
+    c.lien = { type: DM_LIENS.some(t => t[0] === l.type) ? l.type : "", valeur: sv(l.valeur, 1000) };
+    const e = x.empreinte;
+    c.empreinte = e && typeof e === "object" && RE_SHA_DM.test(e.sha256 || "") ? { sha256: e.sha256, taille: Math.max(0, Math.round(+e.taille) || 0), le: sv(e.le, 40), version: sv(e.version, 40), source: e.source === "poste" ? "poste" : "espace" } : null;
+    c.historique = (Array.isArray(x.historique) ? x.historique : []).filter(h => h && typeof h === "object").slice(-500).map(h => Object.assign(
+      { date: sv(h.date, 40), evenement: sv(h.evenement, 200), version: sv(h.version, 40), precedente: sv(h.precedente, 40), par: sv(h.par, 200), approbateur: sv(h.approbateur, 200), commentaire: sv(h.commentaire, 1000), fichier: sv(h.fichier, 1000) },
+      RE_SHA_DM.test(h.empreinte || "") ? { empreinte: h.empreinte } : {}, Array.isArray(h.controles) ? { controles: h.controles.slice(0, 20).map(c => sv(c, 300)) } : {}));
+    return c;
+  }
+  // Ancien champ texte « Lien » (politique, procédures) repris comme lien du document
+  const docDepuisLien = (doc, texte) => { if (!doc.lien.valeur && texte) doc.lien = { type: /^https:\/\//i.test(texte) ? "https" : "chemin", valeur: sv(texte, 1000) }; return doc; };
+  function normRevue(r, x) {
+    r.version = sv(x.version, 40) || "1.0";
+    r.statut = RV_STATUTS.some(t => t[0] === x.statut) ? x.statut : "brouillon";
+    r.approbateur = sv(x.approbateur, 200); r.approuveLe = sv(x.approuveLe, 10);
+    // Notes de préparation (1.20.0) : notes générales (internes) et une note par élément d'entrée (a à g, formation)
+    const pr = x.preparation && typeof x.preparation === "object" ? x.preparation : {}, el = pr.elements && typeof pr.elements === "object" ? pr.elements : {};
+    r.preparation = { notes: sv(pr.notes, 4000), elements: Object.fromEntries(Object.entries(el).filter(([k, v]) => /^([a-g]|formation)$/.test(k) && str(v).trim()).map(([k, v]) => [k, sv(v, 2000)])) };
+    return normDoc(r, x);
+  }
+  const histDoc = (D, h) => D.doc.historique.push(Object.assign({ date: new Date().toISOString(), par: user, version: D.version(), precedente: "", approbateur: "", commentaire: "", fichier: "" }, h));
+  const historiser = (r, h) => histDoc(dRevue(r), h);
+  const RV = () => S.revues.find(x => x.id === ui.rid);
+  const httpsOkRv = v => /^https:\/\/\S+$/i.test(v || "");
+  const plusMois = (d, m) => { const x = new Date(d); if (isNaN(x)) return ""; x.setMonth(x.getMonth() + m); return x.toISOString().slice(0, 10); };
+  const versionSuivante = v => { const m = /^(\d+)\.(\d+)$/.exec(v || ""); return m ? `${m[1]}.${+m[2] + 1}` : (v ? v + "-2" : "1.1"); };
+  const courteSha = h => h ? h.slice(0, 12) + "…" : "";
+  const rvStatut = r => RV_STATUTS.find(t => t[0] === r.statut) || RV_STATUTS[0];
+  const MOIS_FREQ = { Annuelle: 12, Semestrielle: 6, Trimestrielle: 3 };
+
+  /* ---------------- descripteurs : adaptation du mécanisme à chaque objet */
+  function dRevue(r) {
+    return { cle: "rv:" + r.id, nature: "Revue de direction", nom: r.id, doc: r, libDoc: "compte rendu", LibDoc: "Compte rendu", dossier: DOSSIER_REVUES,
+      ph: `${DOSSIER_REVUES}/${r.id}_compte-rendu_signe.pdf`, controles: RV_CONTROLES, ctrlAide: "Cochez chaque élément présent dans le compte rendu",
+      version: () => r.version, setVersion: v => { r.version = v; }, approuve: () => r.statut === "approuvee", approbateur: () => r.approbateur,
+      lienAttendu: () => r.statut === "approuvee" || !!(r.date && r.date < auj()),
+      approuverMeta: re => { r.statut = "approuvee"; if (!r.approuveLe || re) r.approuveLe = auj(); }, brouillon: () => { r.statut = "brouillon"; r.approuveLe = ""; } };
+  }
+  function dPolitique() {
+    const p = S.organisation.politique;
+    if (!p.doc) p.doc = docDepuisLien(normDoc({}, {}), p.lien);
+    return { cle: "pol", nature: "Politique", nom: p.reference || "Politique", doc: p.doc, libDoc: "document de politique", LibDoc: "Document de politique", dossier: DOSSIER_POLITIQUE,
+      ph: `${DOSSIER_POLITIQUE}/${p.reference || "PSSI"}_v${p.version || "1.0"}.pdf`, controles: POL_CONTROLES, ctrlAide: "Cochez chaque exigence d'ISO/IEC 27001 § 5.2 satisfaite par le document",
+      version: () => p.version, setVersion: v => { p.version = v; }, approuve: () => !!p.dateApprobation, approbateur: () => p.approbateur, lienAttendu: () => !!p.dateApprobation,
+      approuverMeta: re => { if (!p.dateApprobation || re) p.dateApprobation = auj(); if (!p.prochaineRevue || p.prochaineRevue < auj()) p.prochaineRevue = plusMois(auj(), 12); },
+      brouillon: () => { p.dateApprobation = ""; }, syncLien: v => { p.lien = v; } };
+  }
+  function dProcedure(x) {
+    if (!x.doc) x.doc = docDepuisLien(normDoc({}, {}), x.lien);
+    return { cle: "pr:" + x.id, nature: "Procédure", nom: x.code, doc: x.doc, libDoc: "document de la procédure", LibDoc: "Document de la procédure", dossier: DOSSIER_PROCEDURES,
+      ph: `${DOSSIER_PROCEDURES}/${x.code || "PRO"}_v${x.version || "1.0"}.pdf`, controles: PROC_CONTROLES, ctrlAide: "Cochez chaque exigence d'ISO/IEC 27001 § 7.5 satisfaite par le document",
+      version: () => x.version, setVersion: v => { x.version = v; }, approuve: () => x.statut === "Validée", approbateur: () => x.approb, lienAttendu: () => x.statut === "Validée",
+      approuverMeta: re => { x.statut = "Validée"; if (!x.dateValid || re) x.dateValid = auj(); if (!x.revue || x.revue < auj()) x.revue = plusMois(auj(), MOIS_FREQ[x.frequence] || 12); },
+      brouillon: () => { x.statut = "Brouillon"; x.dateValid = ""; }, syncLien: v => { x.lien = v; } };
+  }
+  const tousDocs = () => S ? [...S.revues.map(dRevue), dPolitique(), ...S.procedures.map(dProcedure)] : [];
+  // Document de la page affichée (une seule fiche à la fois)
+  function docCourant() {
+    if (!S) return null;
+    if (vue === "revue") { const r = RV(); return r ? dRevue(r) : null; }
+    if (vue === "politique") return dPolitique();
+    if (vue === "etapes") { const x = S.procedures.find(y => y.id === ui.pid) || S.procedures[0]; return x ? dProcedure(x) : null; }
+    return null;
+  }
+  const verrouLien = D => D.approuve() && !!D.doc.empreinte;
+  // Points à traiter liés au fichier du document
+  function pointsDoc(D, j = auj()) {
+    const a = [], l = D.doc.lien, e = EMP_DM[D.cle];
+    if (!l.type || !l.valeur) { if (D.lienAttendu()) a.push(["b-warn", `aucun ${D.libDoc} lié`]); }
+    else if (l.type === "https" && !httpsOkRv(l.valeur)) a.push(["b-warn", "adresse web invalide (https:// attendu)"]);
+    if (l.type === "espace" && VERIF_DM[D.cle] === false) a.push(["b-ko", `${D.libDoc} introuvable dans l'espace`]);
+    if (e && e.change) a.push(["b-ko", `${D.libDoc} modifié depuis l'approbation de la version ${D.doc.empreinte ? D.doc.empreinte.version : D.version()} (empreinte différente)`]);
+    if (D.approuve() && l.valeur && !D.doc.empreinte) a.push(["b-warn", `empreinte du ${D.libDoc} non relevée`]);
+    return a;
+  }
+  function pointsRevue(r, j = auj()) {
+    const a = pointsDoc(dRevue(r), j);
+    if (r.statut !== "approuvee" && r.date && r.date < j) a.push(["b-warn", "compte rendu non approuvé"]);
+    return a;
+  }
+  function alertesRevues(j) {
+    const a = [];
+    S.revues.forEach(r => pointsRevue(r, j).forEach(([cl, m]) => a.push([cl, "Revue " + r.id, m])));
+    const d = derniereRevue();
+    if (d && d.date && plusMois(d.date, 12) < j) a.push(["b-warn", "Revue de direction", `Dernière revue le ${frDate(d.date)} : plus de 12 mois`]);
+    pointsDoc(dPolitique(), j).forEach(([cl, m]) => a.push([cl, "Politique", m]));
+    S.procedures.filter(x => x.statut !== "Obsolète").forEach(x => pointsDoc(dProcedure(x), j).forEach(([cl, m]) => a.push([cl, "Procédure " + (x.code || x.titre), m])));
+    return a;
+  }
+  function celluleRevue(r) {
+    const st = rvStatut(r), ico = { espace: "📁", https: "🌐", chemin: "🖧" }[r.lien.type] || "", pts = pointsRevue(r);
+    return `<div class="rv-cell">${badge(st[1], st[2])} ${ico ? `<span title="${esc(r.lien.valeur)}">${ico}</span>` : `<span class="small muted">sans fichier</span>`}
+      ${pts.some(p => p[0] === "b-ko") ? badge("à traiter", "b-ko") : pts.length ? badge(`${pts.length} point(s)`, "b-warn") : ""}
+      <button class="small" data-act="ficheRevue" data-id="${esc(r.id)}" title="Fiche de la revue : compte rendu, approbation, historique">📋 Fiche</button></div>`;
+  }
+  // Lien vers le fichier : tracé au journal et dans l'historique du document
+  function lierDoc(D, lien) {
+    const av = D.doc.lien.valeur;
+    D.doc.lien = lien; delete EMP_DM[D.cle]; if (D.syncLien) D.syncLien(lien.valeur);
+    journaliser("Modification", D.nature, D.nom, D.LibDoc, av, lien.valeur);
+    if (lien.valeur && lien.valeur !== av) histDoc(D, { evenement: av ? `${D.LibDoc} remplacé` : `${D.LibDoc} lié`, fichier: lien.valeur, commentaire: av ? `auparavant : ${av}` : "" });
+    marquer();
+  }
+  function appliquerLien(el) {
+    const D = docCourant(); if (!D || verrouLien(D)) return;
+    const l = { ...D.doc.lien, [el.dataset.dml]: el.value.trim() }; if (el.dataset.dml === "type") { l.valeur = ""; delete VERIF_DM[D.cle]; }
+    lierDoc(D, l); render();
+  }
+  function appliquerRevue(el) {
+    const r = RV(); if (!r) return;
+    const f = el.dataset.rv, av = r[f], v = el.value.trim();
+    if (f === "statut" && v === "approuvee") { el.value = av; return; }   // l'approbation passe par les contrôles
+    r[f] = v; if (av === v) return;
+    journaliser("Modification", "Revue de direction", r.id, { version: "Version", statut: "Statut", approbateur: "Approbateur" }[f] || f, av, v);
+    if (f === "statut") historiser(r, { evenement: `Statut : ${rvStatut(r)[1]}`, commentaire: `auparavant : ${(RV_STATUTS.find(t => t[0] === av) || [0, av])[1]}` });
+    marquer(); render();
+  }
+  async function choisirDoc() {
+    const D = docCourant(); if (!D || !espaceOk()) return;
+    let l = null; try { l = await E.lister(D.dossier); } catch (e) { l = null; }
+    const fichiers = (l || []).filter(x => x.type === "file").sort((a, b) => a.nom.localeCompare(b.nom, "fr"));
+    $("#dmChoix").innerHTML = fichiers.length ? `<div class="infobox small" style="margin-top:8px"><b>Fichiers de <code>${esc(D.dossier)}/</code></b><table class="t" style="margin-top:6px"><tbody>
+      ${fichiers.map(f => `<tr><td class="mono">${esc(f.nom)}</td><td class="small muted">${Math.max(1, Math.round(f.taille / 1024))} Ko · ${esc(frDate(f.modifie))}</td><td><button class="small" data-act="dmPrendre" data-nom="${esc(f.nom)}">Lier</button></td></tr>`).join("")}</tbody></table></div>`
+      : `<div class="warnbox small" style="margin-top:8px">${l ? `Aucun fichier dans <code>${esc(D.dossier)}/</code> : déposez-y le document, puis recommencez.` : `Dossier <code>${esc(D.dossier)}/</code> absent. <button class="small" data-act="dmCreerDossier">📁 Créer le dossier</button>`}</div>`;
+  }
+  async function fichierDocEspace(D) {
+    const l = D.doc.lien; if (l.type !== "espace" || !l.valeur || !E.ouvert) return null;
+    try { return await E.fichier(l.valeur); } catch (e) { return null; }
+  }
+  // Présence des fichiers rangés dans l'espace et comparaison des empreintes (lecture seule)
+  async function verifierDocs() {
+    if (!S || !E.ouvert) return 0;
+    let n = 0;
+    for (const D of tousDocs().filter(x => x.doc.lien.type === "espace" && x.doc.lien.valeur)) {
+      const f = await fichierDocEspace(D); VERIF_DM[D.cle] = !!f;
+      if (!f) { n++; continue; }
+      if (D.approuve() && D.doc.empreinte) { try { const sha = await WerbSocle.sha256(f); EMP_DM[D.cle] = { sha256: sha, change: sha !== D.doc.empreinte.sha256 }; } catch (e) { /* non vérifiée */ } }
+    }
+    return n;
+  }
+  const verifierRevues = verifierDocs;
+  async function approuverDoc() {
+    const D = docCourant(); if (!D) return;
+    const ctrl = [...document.querySelectorAll("[data-dmctrl]")], manquants = ctrl.filter(c => !c.checked).length, l = D.doc.lien;
+    if (!String(D.approbateur() || "").trim()) { toast("Indiquez l'approbateur avant d'approuver.", "err"); return; }
+    if (!l.type || !l.valeur) { toast(`Liez d'abord le ${D.libDoc}.`, "err"); return; }
+    if (manquants) { toast(`${manquants} contrôle(s) non coché(s) : chaque contrôle doit être satisfait par le ${D.libDoc}.`, "err"); return; }
+    let empreinte = null;
+    if (l.type === "espace") {
+      const f = await fichierDocEspace(D);
+      if (!f) { toast(E.ouvert ? `${D.LibDoc} introuvable dans l'espace : vérifiez le lien.` : `Ouvrez l'espace WerbSMSI pour relever l'empreinte du ${D.libDoc}.`, "err"); return; }
+      empreinte = { sha256: await WerbSocle.sha256(f), taille: f.size, le: new Date().toISOString(), version: D.version(), source: "espace" };
+    }
+    const reappro = D.approuve() && !!D.doc.empreinte;
+    D.approuverMeta(reappro);
+    if (empreinte) { D.doc.empreinte = empreinte; EMP_DM[D.cle] = { sha256: empreinte.sha256, change: false }; } else if (reappro) { D.doc.empreinte = null; delete EMP_DM[D.cle]; }
+    histDoc(D, { evenement: reappro ? `Nouvelle approbation (${D.libDoc} modifié)` : "Approbation", approbateur: D.approbateur(), fichier: l.valeur,
+      commentaire: empreinte ? "" : `${D.libDoc} hors de l'espace : empreinte à relever depuis un fichier du poste`, controles: D.controles.slice(), ...(empreinte ? { empreinte: empreinte.sha256 } : {}) });
+    journaliser("Approbation", D.nature, D.nom, "Approbation", "", `approuvé par ${D.approbateur()}${empreinte ? ` (SHA-256 ${courteSha(empreinte.sha256)})` : ""}`);
+    ui.dmAppro = null; marquer(); render(); toast(`${D.nom} approuvé${empreinte ? ` : empreinte du ${D.libDoc} relevée` : ""}.`, "ok");
+  }
+  async function verifierEmpreinteDoc() {
+    const D = docCourant(); if (!D) return;
+    const f = await fichierDocEspace(D);
+    if (!f) { VERIF_DM[D.cle] = false; render(); toast(`${D.LibDoc} introuvable dans l'espace.`, "err"); return; }
+    VERIF_DM[D.cle] = true; await empreinteFichier(D, f, "espace");
+  }
+  const empreintePoste = f => { const D = docCourant(); if (D) empreinteFichier(D, f, "poste"); };
+  // Relève l'empreinte (document approuvé sans empreinte) ou la compare à celle de l'approbation
+  async function empreinteFichier(D, f, source) {
+    const sha = await WerbSocle.sha256(f), fic = source === "poste" ? `${f.name} (fichier du poste)` : D.doc.lien.valeur;
+    if (!D.doc.empreinte) {
+      if (!D.approuve()) { toast("L'empreinte se relève à l'approbation.", "err"); return; }
+      D.doc.empreinte = { sha256: sha, taille: f.size, le: new Date().toISOString(), version: D.version(), source };
+      EMP_DM[D.cle] = { sha256: sha, change: false };
+      histDoc(D, { evenement: "Empreinte relevée", fichier: fic, empreinte: sha });
+      journaliser("Empreinte", D.nature, D.nom, "SHA-256", "", sha); marquer(); render(); toast(`Empreinte du ${D.libDoc} relevée.`, "ok"); return;
+    }
+    const change = sha !== D.doc.empreinte.sha256; EMP_DM[D.cle] = { sha256: sha, change };
+    histDoc(D, { evenement: change ? `Vérification : ${D.libDoc} modifié` : `Vérification : ${D.libDoc} identique`, fichier: fic, empreinte: sha });
+    journaliser("Vérification", D.nature, D.nom, "Empreinte", courteSha(D.doc.empreinte.sha256), `${courteSha(sha)}${change ? " (différente)" : " (identique)"}`); marquer();
+    render(); toast(change ? `Le ${D.libDoc} a changé depuis son approbation.` : `${D.LibDoc} identique à celui approuvé.`, change ? "err" : "ok");
+  }
+  function nouvelleVersionDoc() {
+    const D = docCourant(); if (!D || !ui.dmNv || ui.dmNv.cle !== D.cle) return;
+    const v = ($("#dmNvVersion") || {}).value.trim(), c = ($("#dmNvComment") || {}).value.trim(), prec = D.version();
+    if (!v || v === prec) { toast("Indiquez un numéro de version différent de l'actuel.", "err"); return; }
+    if (!c) { toast("Décrivez la nature du changement : elle figure dans l'historique.", "err"); return; }
+    D.setVersion(v); D.brouillon(); D.doc.empreinte = null; delete EMP_DM[D.cle];
+    histDoc(D, { evenement: "Nouvelle version", precedente: prec, commentaire: c, fichier: D.doc.lien.valeur });
+    journaliser("Nouvelle version", D.nature, D.nom, "Version", prec, v); ui.dmNv = null; marquer(); render(); toast(`${D.nom} : version ${v}, à faire approuver.`, "ok");
+  }
+
+  /* ---------------- cartes communes de la fiche d'un document */
+  const pointsHtml = pts => pts.length ? `<div class="warnbox" data-dm-points><b>Points à traiter</b><ul style="margin:4px 0 0">${pts.map(([cl, m]) => `<li>${badge(cl === "b-ko" ? "à traiter" : "à vérifier", cl)} ${esc(m)}</li>`).join("")}</ul></div>` : "";
+  function approbationHtml(D) {
+    const v = EMP_DM[D.cle];
+    if (ui.dmAppro !== D.cle || (verrouLien(D) && !(v && v.change))) return "";
+    return `<div class="card" data-dm-appro><h2>Avant d'approuver ${esc(D.nom)} — version ${esc(D.version())}</h2>
+      <p class="small muted">Approbateur : <b>${esc(D.approbateur() || "à renseigner")}</b>. ${esc(D.ctrlAide)} : la liste est inscrite dans l'historique avec l'approbation.</p>
+      ${D.controles.map((c, k) => `<label class="chk-in" style="display:flex;gap:6px;margin:4px 0"><input type="checkbox" data-dmctrl="${k}"> ${esc(c)}</label>`).join("")}
+      <div class="row" style="margin-top:8px"><button class="primary" data-act="dmApprouver">✔ Approuver</button><button data-act="dmAnnulerAppro">Annuler</button>
+        <span class="small muted">${D.doc.lien.type === "espace" ? (E.ouvert ? `L'empreinte du ${esc(D.libDoc)} sera relevée dans l'espace.` : "Ouvrez l'espace pour relever l'empreinte.") : `${esc(D.LibDoc)} hors de l'espace : relevez ensuite l'empreinte depuis le fichier du poste.`}</span></div></div>`;
+  }
+  function fichierHtml(D) {
+    const l = D.doc.lien, ro = verrouLien(D), dis = ro ? " disabled" : "";
+    const ph = l.type === "espace" ? D.ph : l.type === "https" ? "https://…" : `\\\\serveur\\partage\\SMSI\\${D.ph.split("/").pop()}`;
+    return `<div class="card" data-dm-fichier><h2>${esc(D.LibDoc)} (fichier)</h2><p class="small muted">WerbGouvernance référence le fichier : il ne le copie jamais dans sa base. Rangez-le dans l'espace (<code>${esc(D.dossier)}/</code>) : le module vérifie sa présence et son empreinte.</p>
+      <div class="fiche"><div><label class="f">Emplacement</label><select data-dml="type"${dis}>${optP(DM_LIENS, l.type, "—")}</select></div>
+        <div class="lg"><label class="f">${l.type === "espace" ? "Chemin dans l'espace" : l.type === "https" ? "Adresse web (https://…)" : "Chemin (serveur, partage ou lecteur)"}</label><input data-dml="valeur" value="${esc(l.valeur)}" placeholder="${esc(ph)}"${ro || !l.type ? " disabled" : ""}></div></div>
+      ${l.type === "espace" ? `<div class="row noprint" style="margin-top:8px">${ro ? "" : `<button class="small" data-act="dmChoisir"${espaceOk() ? "" : ' disabled title="Ouvrez l\'espace et rattachez la base au groupe (Intégration WerbSMSI)"'}>📁 Choisir dans ${esc(D.dossier)}/…</button>`}
+        <button class="small" data-act="dmVerifier"${E.ouvert ? "" : " disabled"}>🔎 Vérifier la présence</button>${VERIF_DM[D.cle] === true ? badge("présent dans l'espace", "b-ok") : VERIF_DM[D.cle] === false ? badge("introuvable", "b-ko") : ""}</div><div id="dmChoix"></div>` : ""}
+      ${l.type === "https" && httpsOkRv(l.valeur) ? `<div class="row" style="margin-top:8px"><a class="bt-lien" href="${esc(l.valeur)}" target="_blank" rel="noopener noreferrer">🌐 Ouvrir le ${esc(D.libDoc)}</a></div>` : ""}</div>`;
+  }
+  function empreinteHtml(D) {
+    const e = D.doc.empreinte, v = EMP_DM[D.cle], ok = D.approuve();
+    const etatE = !e ? "" : !v ? badge("non vérifiée dans cette session", "b-muted") : v.change ? badge(`${D.libDoc} modifié depuis l'approbation`, "b-ko") : badge(`identique au ${D.libDoc} approuvé`, "b-ok");
+    return `<div class="card" data-dm-empreinte><h2>Empreinte du ${esc(D.libDoc)} approuvé</h2>
+      <p class="small muted">À l'approbation, le module calcule l'empreinte SHA-256 du fichier : le document montré en audit doit être celui qui a été approuvé. Un fichier modifié sans nouvelle version est signalé. Rien du fichier n'est conservé, seulement son empreinte.</p>
+      ${e ? `<p>SHA-256 <code class="small" data-sha title="${esc(e.sha256)}">${esc(e.sha256)}</code><br><span class="small">${Math.max(1, Math.round(e.taille / 1024))} Ko · version ${esc(e.version)} · relevée le ${esc(frDate(e.le))} ${e.source === "poste" ? "(fichier du poste)" : "(espace)"}</span> ${etatE}</p>`
+        : `<p class="muted small">Aucune empreinte${ok ? " : document hors de l'espace, ou approuvé sans passer par les contrôles. Approuvez-le (contrôles), ou relevez l'empreinte depuis l'espace ou un fichier du poste." : " : elle sera relevée à l'approbation."}</p>`}
+      <div class="row noprint">${D.doc.lien.type === "espace" ? `<button class="small" data-act="dmVerifierEmp"${E.ouvert && (e || ok) ? "" : " disabled"}>🔎 ${e ? "Vérifier" : "Relever"} dans l'espace</button>` : ""}
+        <label class="bt-fichier small">📂 ${e ? "Comparer avec" : "Relever depuis"} un fichier du poste…<input type="file" id="dmEmpFichier" hidden${e || ok ? "" : " disabled"}></label>
+        ${v && v.change ? `<button class="small primary" data-act="dmAppro" title="Le nouveau fichier est valable sans changement de version : nouvelle approbation">Approuver à nouveau…</button>` : ""}</div></div>`;
+  }
+  function historiqueHtml(D) {
+    const nv = ui.dmNv && ui.dmNv.cle === D.cle ? ui.dmNv : null;
+    return `<div class="card" data-dm-historique><h2>Historique (traçabilité)</h2>
+      <div class="row noprint" style="margin-bottom:8px"><button class="small" data-act="dmNouvelleVersion">📌 Nouvelle version…</button><span class="small muted">Une nouvelle version repasse le document en brouillon : il est à faire approuver.</span></div>
+      ${nv ? `<div class="infobox" data-dm-nv><div class="fiche"><div><label class="f">Nouvelle version (actuelle : ${esc(D.version())})</label><input id="dmNvVersion" value="${esc(nv.version)}"></div>
+        <div class="lg"><label class="f">Nature du changement</label><input id="dmNvComment" placeholder="Ex. mise à jour après la revue annuelle"></div></div>
+        <div class="row" style="margin-top:8px"><button class="primary small" data-act="dmValiderVersion">Enregistrer la nouvelle version</button><button class="small" data-act="dmAnnulerVersion">Annuler</button></div></div>` : ""}
+      <div class="tablewrap"><table class="t"><thead><tr><th>Date</th><th>Événement</th><th>Version</th><th>Par</th><th>Approbateur</th><th>Fichier</th><th>Commentaire</th><th>Empreinte</th></tr></thead><tbody>
+      ${D.doc.historique.slice().reverse().map(h => `<tr><td class="mono small">${esc(frDate(h.date))}</td><td>${esc(h.evenement)}</td><td class="mono">${h.precedente ? `${esc(h.precedente)} → ` : ""}${esc(h.version)}</td><td>${esc(h.par)}</td><td>${esc(h.approbateur)}</td>
+        <td class="small mono">${esc(h.fichier)}</td><td class="small"${h.controles ? ` title="${esc(h.controles.join(" ; "))}"` : ""}>${esc(h.commentaire)}${h.controles ? ` <span class="muted">(${h.controles.length} contrôles)</span>` : ""}</td><td class="mono small" title="${esc(h.empreinte || "")}">${esc(courteSha(h.empreinte))}</td></tr>`).join("")
+        || `<tr><td colspan="8" class="empty">Aucun événement.</td></tr>`}</tbody></table></div></div>`;
+  }
+  // Fiche « document » de la politique et d'une procédure : état d'approbation, contrôles, fichier, empreinte, historique
+  function ficheDocHtml(D, etat) {
+    const showAppro = !verrouLien(D) || (EMP_DM[D.cle] && EMP_DM[D.cle].change);
+    return `<div class="card" data-dm-etat><h2>📑 Document maîtrisé (ISO/IEC 27001 § 7.5)</h2><p class="small">${etat}</p>
+        ${showAppro ? `<div class="row noprint"><button class="primary" data-act="dmAppro">✔ Approuver…</button><span class="small muted">Exige l'approbateur, le fichier lié et les contrôles ; l'empreinte du fichier est relevée.</span></div>` : ""}</div>
+      ${pointsHtml(pointsDoc(D))}${approbationHtml(D)}${fichierHtml(D)}${empreinteHtml(D)}${historiqueHtml(D)}`;
+  }
+  /* ---------------- actions décidées et éléments d'entrée (1.18.0)
+     Chaque action du plan peut être rattachée à la revue qui l'a décidée (colonne Revue). La fiche d'une revue liste ses actions et
+     prépare ses éléments d'entrée (ISO/IEC 27001 § 9.3.2) à partir du plan d'actions et des publications de l'espace : un paragraphe
+     par élément, ajouté ou mis à jour dans « Éléments d'entrée » à la demande (rien n'est écrit sans action de l'utilisateur). */
+  const enCoursA = a => !["Terminée", "Abandonnée"].includes(a.statut);
+  const enRetardA = (a, j) => enCoursA(a) && a.echeance && a.echeance < j;
+  function bilanActions(l, j) {
+    const n = k => l.filter(a => a.statut === k).length, r = l.filter(a => enRetardA(a, j)).length;
+    return `${l.length} action(s) : ${n("Terminée")} terminée(s), ${n("En cours")} en cours, ${n("À lancer")} à lancer${n("Abandonnée") ? `, ${n("Abandonnée")} abandonnée(s)` : ""}${r ? `, dont ${r} en retard` : ""}`;
+  }
+  // Un élément par point du § 9.3.2 (et la formation, § 7.2-7.3) : { k, titre, texte (proposé, vide si à rédiger), source, aide }
+  function elementsEntree(r) {
+    const j = auj(), le = ` (au ${frDate(j)})`, d = r.date || j;
+    const prec = S.revues.filter(x => x.id !== r.id && (x.date || "") < d).map(x => x.id);
+    const aPrec = S.actions.filter(a => prec.includes(a.revue)), sansRevue = S.actions.filter(a => a.origine === "Revue de direction" && !a.revue).length;
+    const ouvertes = aPrec.filter(enCoursA);
+    const ea = aPrec.length ? `a) État des actions décidées lors des revues précédentes (${prec.join(", ")})${le} : ${bilanActions(aPrec, j)}.`
+      + (ouvertes.length ? ` Restent ouvertes : ${ouvertes.map(a => `${a.id} ${a.titre}${a.echeance ? ` (échéance ${frDate(a.echeance)})` : ""}`).join(" ; ")}.` : "")
+      + (sansRevue ? ` ${sansRevue} autre(s) action(s) issue(s) d'une revue sans revue indiquée.` : "") : "";
+    const parOrig = o => S.actions.filter(a => a.origine === o);
+    const nc = ["Audit interne", "Audit externe", "Incident", "Socle non appliqué"].map(o => [o, parOrig(o)]).filter(([, l]) => l.length);
+    const sites = espaceOk() ? sitesLisibles() : [];
+    const conf = sites.flatMap(x => objetsSite(x.code, "syntheseConformite").map(c => `${x.code} ${c.referentiel || ""} ${c.taux ?? "?"} %${c.ecartsMajeurs ? ` (${c.ecartsMajeurs} écart(s) majeur(s))` : ""}`.replace(/\s+/g, " ")));
+    const socle = sites.map(x => [x.code, S.mesures.filter(m => etatSocle(x.code, m.id)[1] === "b-ko").length]).filter(([, k]) => k);
+    const ed = nc.length || conf.length || socle.length ? `d) Performance de la sécurité de l'information${le} : `
+      + [nc.length ? `non-conformités et actions correctives — ${nc.map(([o, l]) => `${o.toLowerCase()} : ${bilanActions(l, j)}`).join(" ; ")}` : "",
+        conf.length ? `conformité publiée par les sites — ${conf.join(", ")}` : "",
+        socle.length ? `mesures du socle non appliquées — ${socle.map(([c, k]) => `${c} : ${k}`).join(", ")}` : ""].filter(Boolean).join(" ; ") + "." : "";
+    const rq = sites.map(x => [x.code, objetsSite(x.code, "syntheseRisques")]).filter(([, l]) => l.length);
+    const niv = x => x.niveauResiduel ?? x.niveauBrut;
+    const pTrait = parOrig("Analyse de risques");
+    const ef = rq.length || pTrait.length ? `f) Appréciation des risques et plan de traitement${le} : `
+      + [rq.length ? rq.map(([c, l]) => `${c} — ${l.length} risque(s), ${l.filter(x => niv(x) >= 3).length} résiduel(s) élevé(s) ou très élevé(s), ${l.filter(x => !x.traitement || x.traitement === "a-decider").length} sans traitement décidé`).join(" ; ") : "",
+        pTrait.length ? `actions issues des analyses de risques : ${bilanActions(pTrait, j)}` : ""].filter(Boolean).join(" ; ") + "." : "";
+    const fo = formationsGroupe();
+    const sp = espaceOk() ? "" : " Ouvrez l'espace WerbSMSI (Intégration WerbSMSI) pour reprendre les publications des sites.";
+    return avecNotes(r, [
+      { k: "a", titre: "a) État des actions des revues précédentes", texte: ea, source: "Plan d'actions (colonne Revue)", aide: prec.length ? "Aucune action rattachée aux revues précédentes : renseignez la colonne Revue du plan d'actions." : "Première revue : aucune revue précédente." },
+      { k: "b", titre: "b) Enjeux externes et internes", texte: "", source: "", aide: "À rédiger : évolutions du contexte (réglementation, marché, organisation, technologies) qui touchent le SMSI." },
+      { k: "c", titre: "c) Besoins et attentes des parties intéressées", texte: "", source: "", aide: "À rédiger : nouvelles exigences des clients, autorités, actionnaires, prestataires." },
+      { k: "d", titre: "d) Performance de la sécurité de l'information", texte: ed, source: "Plan d'actions, synthèses de conformité des sites (WerbIEC62443…)", aide: "Rien à reprendre : aucune action issue d'audit, d'incident ou d'écart, aucune synthèse publiée." + sp },
+      { k: "e", titre: "e) Retours des parties intéressées", texte: "", source: "", aide: "À rédiger : réclamations, retours de clients ou d'autorités, résultats d'enquêtes." },
+      { k: "f", titre: "f) Appréciation des risques et plan de traitement", texte: ef, source: "Synthèses des risques des sites (WerbEBIOS), plan d'actions", aide: "Aucune synthèse des risques publiée par les sites." + sp },
+      { k: "g", titre: "g) Opportunités d'amélioration continue", texte: "", source: "", aide: "À rédiger : pistes d'amélioration retenues par la direction." },
+      { k: "formation", titre: "Compétences et sensibilisation (§ 7.2, 7.3)", texte: fo ? texteFormation(fo) : "", source: "WerbAcademie (groupe:formations)", aide: "Aucun indicateur de formation publié." + sp },
+    ]);
+  }
+  // Note de préparation d'un élément : texte de l'élément à rédiger (b, c, e, g), complément d'un élément calculé (a, d, f, formation).
+  // Chaque élément reste une seule ligne des « Éléments d'entrée » (retours à la ligne de la note remplacés par des espaces).
+  const prepa = r => r.preparation || (r.preparation = { notes: "", elements: {} });
+  function avecNotes(r, els) {
+    return els.map(x => {
+      const n = String(prepa(r).elements[x.k] || "").replace(/\s*\n\s*/g, " ").trim(); if (!n) return x;
+      const tete = x.k === "formation" ? "Formation et sensibilisation (WerbAcademie non publié)" : x.titre;
+      return { ...x, note: n, texte: x.texte ? `${x.texte} Note : ${n}` : `${tete} : ${n}` };
+    });
+  }
+  function appliquerPrep(el) {
+    const r = RV(); if (!r || r.statut === "approuvee") return;
+    const P = prepa(r), k = el.dataset.rvp, v = el.value.trim();
+    const av = k === "notes" ? P.notes : P.elements[k.slice(3)] || "";
+    if (av === v) return;
+    if (k === "notes") P.notes = v; else if (v) P.elements[k.slice(3)] = v; else delete P.elements[k.slice(3)];
+    journaliser("Modification", "Revue de direction", r.id, k === "notes" ? "Notes de préparation" : `Note de préparation ${k.slice(3)}`, av, v);
+    marquer(); render();
+  }
+  // Ajoute ou met à jour les paragraphes choisis dans « Éléments d'entrée » : un élément = une ligne, reconnue par son début
+  function ajouterEntrees(cles) {
+    const r = RV(); if (!r || r.statut === "approuvee") return;
+    const els = elementsEntree(r).filter(x => x.texte && cles.includes(x.k)); if (!els.length) return;
+    const debut = x => x.k === "formation" ? "Formation et sensibilisation (WerbAcademie" : x.titre.slice(0, 3);
+    let lignes = String(r.entrees || "").split("\n").filter(l => l.trim() !== "" || false);
+    const av = r.entrees || "";
+    els.forEach(x => { const i = lignes.findIndex(l => l.startsWith(debut(x))); if (i >= 0) lignes[i] = x.texte; else lignes.push(x.texte); });
+    r.entrees = lignes.join("\n");
+    if (r.entrees === av) { toast("Éléments d'entrée déjà à jour.", "ok"); return; }
+    journaliser("Modification", "Revue de direction", r.id, "Éléments d'entrée", av, r.entrees);
+    historiser(r, { evenement: "Éléments d'entrée repris", commentaire: els.map(x => x.titre).join(" ; ") });
+    marquer(); render(); toast(`${els.length} élément(s) d'entrée ajouté(s) ou mis à jour dans ${r.id}.`, "ok");
+  }
+  function entreesRevueHtml(r) {
+    const els = elementsEntree(r), txt = String(r.entrees || "");
+    const etat = x => !x.texte ? "" : txt.split("\n").includes(x.texte) ? badge("à jour", "b-ok") : txt.split("\n").some(l => l.startsWith(x.k === "formation" ? "Formation et sensibilisation (WerbAcademie" : x.titre.slice(0, 3))) ? badge("à mettre à jour", "b-warn") : "";
+    return `<div class="card" data-rv-entrees><h2>🧭 Préparer les éléments d'entrée (ISO/IEC 27001 § 9.3.2)</h2>
+      <p class="small muted">Propositions calculées à partir du plan d'actions et des publications de l'espace, à vérifier avant la revue. Chaque élément ajouté devient une ligne des « Éléments d'entrée » ; un nouvel ajout la met à jour.</p>
+      <label class="f" for="rvPrepNotes">📝 Notes de préparation (internes : ni reprises dans les éléments d'entrée, ni dans le compte rendu)</label>
+      <textarea id="rvPrepNotes" data-rvp="notes" rows="3" placeholder="Points à vérifier avant la revue, personnes à solliciter, chiffres à demander…">${esc(prepa(r).notes)}</textarea>
+      <table class="t"><tbody>${els.map(x => `<tr data-el="${x.k}"><td style="width:260px"><b>${esc(x.titre)}</b>${x.source ? `<div class="small muted">${esc(x.source)}</div>` : ""}</td>
+        <td class="small">${x.texte ? esc(x.texte) : `<span class="muted">${esc(x.aide)}</span>`}
+          <textarea class="rv-note" data-rvp="el:${x.k}" rows="2" placeholder="${esc(["b", "c", "e", "g"].includes(x.k) ? "Note de préparation : elle devient le texte de l'élément" : "Note de préparation : elle complète la proposition")}">${esc(prepa(r).elements[x.k] || "")}</textarea></td>
+        <td style="width:170px">${x.texte ? `${etat(x)} <button class="small" data-act="rvEntree" data-k="${x.k}">📋 Ajouter</button>` : ""}</td></tr>`).join("")}</tbody></table>
+      <div class="row" style="margin-top:8px"><button data-act="rvEntreesTout"${els.some(x => x.texte) ? "" : " disabled"}>📋 Ajouter tous les éléments proposés</button></div></div>`;
+  }
+  function actionsRevueHtml(r) {
+    const l = S.actions.map((a, i) => [a, i]).filter(([a]) => a.revue === r.id), j = auj();
+    const ch = (a, i, f, t = "text") => t === "select" ? `<select data-t="actions" data-i="${i}" data-f="${f}">${opt(ACT_STATS, a[f], "—")}</select>`
+      : t === "area" ? `<textarea data-t="actions" data-i="${i}" data-f="${f}">${esc(a[f])}</textarea>` : `<input ${t === "date" ? 'type="date" ' : ""}data-t="actions" data-i="${i}" data-f="${f}" value="${esc(a[f])}">`;
+    return `<div class="card" data-rv-actions><h2>🎯 Actions décidées lors de cette revue (§ 9.3.3)</h2>
+      <p class="small muted">Actions du plan rattachées à ${esc(r.id)} (colonne Revue du plan d'actions). Leur état sera repris comme élément d'entrée a) de la revue suivante.</p>
+      ${l.length ? `<div class="tablewrap"><table class="t"><thead><tr><th style="width:70px">ID</th><th>Action</th><th>Responsable</th><th style="width:150px">Échéance</th><th style="width:130px">Statut</th></tr></thead><tbody>
+        ${l.map(([a, i]) => `<tr${enRetardA(a, j) ? ' class="rv-retard"' : ""}><td><b>${esc(a.id)}</b></td><td>${ch(a, i, "titre", "area")}</td><td>${ch(a, i, "responsable")}</td><td>${ch(a, i, "echeance", "date")}${enRetardA(a, j) ? ` ${badge("en retard", "b-ko")}` : ""}</td><td>${ch(a, i, "statut", "select")}</td></tr>`).join("")}</tbody></table></div>
+        <p class="small">${esc(bilanActions(l.map(([a]) => a), j))}.</p>` : `<p class="muted small">Aucune action rattachée à cette revue.</p>`}
+      <div class="row noprint"><button class="small" data-act="rvAction">+ Action décidée</button><button class="small" data-nav="actions">Plan d'actions →</button></div></div>`;
+  }
+
+  VUES.revue = () => {
+    const r = RV(); if (!r) { vue = "revues"; return VUES.revues(); }
+    const D = dRevue(r), i = S.revues.indexOf(r), ro = r.statut === "approuvee", dis = ro ? " disabled" : "", st = rvStatut(r), pts = pointsRevue(r);
+    return `<div class="row noprint" style="margin-bottom:8px"><button data-nav="revues">← Revues de direction</button></div>
+      <h1>Revue de direction ${esc(r.id)} <span class="small">version ${esc(r.version)}</span> ${badge(st[1], st[2])}</h1>
+      <p class="sub">ISO/IEC 27001 § 9.3. Le compte rendu (procès-verbal) est la preuve de la revue : liez-le, faites-le approuver par la direction ; son empreinte garantit en audit que le document montré est celui qui a été approuvé.</p>
+      ${pointsHtml(pts)}
+      <div class="card"><h2>Revue</h2><div class="fiche">
+        <div><label class="f">Date</label><input type="date" data-t="revues" data-i="${i}" data-f="date" value="${esc(r.date)}"${dis}></div>
+        <div><label class="f">Version du compte rendu</label><input data-rv="version" value="${esc(r.version)}"${dis}></div>
+        <div><label class="f">Statut</label><select data-rv="statut"${dis}>${optP(RV_STATUTS.filter(t => ro || t[0] !== "approuvee").map(t => [t[0], t[1]]), r.statut)}</select></div>
+        <div><label class="f">Approbateur (fonction de direction)</label><input data-rv="approbateur" value="${esc(r.approbateur)}" placeholder="Directeur général"${dis}></div>
+        <div><label class="f">Approuvée le</label><input value="${esc(frDate(r.approuveLe))}" disabled></div>
+        <div class="lg"><label class="f">Participants</label><textarea data-t="revues" data-i="${i}" data-f="participants"${dis}>${esc(r.participants)}</textarea></div>
+        <div class="lg"><label class="f">Éléments d'entrée</label><textarea data-t="revues" data-i="${i}" data-f="entrees"${dis}>${esc(r.entrees)}</textarea></div>
+        <div class="lg"><label class="f">Décisions</label><textarea data-t="revues" data-i="${i}" data-f="decisions"${dis}>${esc(r.decisions)}</textarea></div></div>
+        ${ro ? `<p class="small muted">Revue approuvée : la fiche est verrouillée. Pour la modifier, créez une 📌 nouvelle version (Historique).</p>` : `<div class="row noprint" style="margin-top:10px"><button class="primary" data-act="dmAppro">✔ Approuver…</button><span class="small muted">« Approuvée » exige l'approbateur, le compte rendu lié et les contrôles d'ISO/IEC 27001 § 9.3.</span></div>`}</div>
+      ${approbationHtml(D)}
+      ${actionsRevueHtml(r)}
+      ${ro ? "" : entreesRevueHtml(r)}
+      ${fichierHtml(D)}${empreinteHtml(D)}${historiqueHtml(D)}`;
+  };
+
   VUES.etapes = () => {
     if (!S.procedures.length) return `<h1>Fiches de procédure</h1><p class="sub">Créez d'abord une procédure dans le catalogue.</p>`;
     if (!S.procedures.some(p => p.id === ui.pid)) ui.pid = S.procedures[0].id;
@@ -39345,7 +39822,9 @@ window.WerbPssiDoc = WerbPssiDoc;
       <button data-act="redige">${ui.redige ? "🗂 Saisie" : "📄 Version rédigée"}</button>${ui.redige ? `<button data-act="imprimer">🖨 Imprimer / PDF</button>` : ""}</div>`;
     if (ui.redige) return h + redige(p, etapes);
     const i = S.procedures.indexOf(p);
-    h += `<div class="card"><h2>${esc(p.code)} – ${esc(p.titre)}</h2>${PROC_TEXTES.map(([f, l]) => `<label class="f">${esc(l)}</label>${f === "lien" ? `<input data-t="procedures" data-i="${i}" data-f="${f}" value="${esc(p[f])}">` : `<textarea data-t="procedures" data-i="${i}" data-f="${f}">${esc(p[f])}</textarea>`}`).join("")}</div>
+    const D = dProcedure(p);
+    h += `<div class="card"><h2>${esc(p.code)} – ${esc(p.titre)}</h2>${PROC_TEXTES.filter(([f]) => f !== "lien").map(([f, l]) => `<label class="f">${esc(l)}</label><textarea data-t="procedures" data-i="${i}" data-f="${f}">${esc(p[f])}</textarea>`).join("")}</div>
+      ${ficheDocHtml(D, `Version <b>${esc(p.version)}</b> · statut <b>${esc(p.statut || "—")}</b> · propriétaire ${esc(p.proprio || "—")} · approbateur <b>${esc(p.approb || "à renseigner dans le catalogue")}</b>${p.dateValid ? ` · validée le ${esc(frDate(p.dateValid))}` : ""}${p.revue ? ` · prochaine revue le ${esc(frDate(p.revue))}` : ""}. L'approbation passe la procédure en « Validée » ; une nouvelle version la repasse en « Brouillon ».`)}
       <div class="card"><div class="row" style="margin-bottom:8px"><h2 style="margin:0">Étapes</h2><span class="spacer"></span><button class="primary" data-act="ajoutEtape">+ Ajouter une étape</button></div>${tableHtml("etapes", etapes, { ordre: true })}</div>`;
     return h;
   };
@@ -39442,7 +39921,7 @@ window.WerbPssiDoc = WerbPssiDoc;
     const sig = `<footer class="sig"><b>${esc(WERB.produit)}</b><br>${esc(WERB.signature)}<br>v${esc(WERB.version)} · ${esc(window.BUILD_DATE)}</footer>`;
     if (!S) { menu.rendre({ vide: true, pied: sig }); return; }
     const cnt = { pssi: S.pssi ? `${PHASES.filter(([k]) => S.pssi[k].validation).length}/4` : undefined, roles: S.roles.length, mesures: S.mesures.length, prestataires: S.prestataires.length, procedures: S.procedures.length, revues: S.revues.length, actions: S.actions.filter(a => !["Terminée", "Abandonnée"].includes(a.statut)).length };
-    menu.rendre({ vide: false, actif: vue, compteurs: cnt, pied: sig });
+    menu.rendre({ vide: false, actif: vue === "revue" ? "revues" : vue, compteurs: cnt, pied: sig });
   }
   function render() {
     renderTopbar(); renderNav();
@@ -40145,6 +40624,26 @@ window.WerbPssiDoc = WerbPssiDoc;
   });
 
   const ACTIONS = {
+    ficheRevue(el) { ui.rid = el.dataset.id; ui.dmAppro = null; ui.dmNv = null; vue = "revue"; render(); $("#main").scrollTop = 0; },
+    dmChoisir: () => choisirDoc(),
+    dmPrendre(el) { const D = docCourant(); if (!D || verrouLien(D)) return; lierDoc(D, { type: "espace", valeur: `${D.dossier}/${el.dataset.nom}` }); VERIF_DM[D.cle] = true; render(); },
+    async dmCreerDossier() { const D = docCourant(); if (!D) return; try { await E.creerDossier(D.dossier); toast(`Dossier ${D.dossier}/ créé.`, "ok"); choisirDoc(); } catch (e) { toast("Création impossible : " + e.message, "err"); } },
+    async dmVerifier() { const n = await verifierDocs(); render(); toast(n ? `${n} document(s) introuvable(s) dans l'espace.` : "Documents de l'espace présents.", n ? "err" : "ok"); },
+    dmAppro() { const D = docCourant(); if (D) { ui.dmAppro = D.cle; render(); } },
+    dmAnnulerAppro() { ui.dmAppro = null; render(); },
+    dmApprouver: () => approuverDoc(),
+    dmVerifierEmp: () => verifierEmpreinteDoc(),
+    dmNouvelleVersion() { const D = docCourant(); if (D) { ui.dmNv = { cle: D.cle, version: versionSuivante(D.version()) }; render(); } },
+    dmAnnulerVersion() { ui.dmNv = null; render(); },
+    dmValiderVersion: () => nouvelleVersionDoc(),
+    rvAction() {
+      const r = RV(); if (!r) return;
+      const a = {}; TABLES.actions.cols.forEach(c => a[c.f] = c.t === "bool" ? false : c.t === "liste" ? [] : "");
+      Object.assign(a, { id: prochainId(S.actions, "A-"), titre: "Nouvelle action décidée", origine: "Revue de direction", revue: r.id, statut: ACT_STATS[0] });
+      S.actions.push(a); journaliser("Ajout", "Action", a.id, "Revue", "", r.id); marquer(); render(); toast(`${a.id} ajoutée au plan d'actions, rattachée à ${r.id}.`, "ok");
+    },
+    rvEntree(el) { ajouterEntrees([el.dataset.k]); },
+    rvEntreesTout() { ajouterEntrees(elementsEntree(RV()).filter(x => x.texte).map(x => x.k)); },
     // Outils des tables (charte §7.7)
     selArchiver() { selAppliquer("archiver"); },
     selDesarchiver() { selAppliquer("desarchiver"); },
@@ -40192,6 +40691,7 @@ window.WerbPssiDoc = WerbPssiDoc;
       const key = el.dataset.t, T = TABLES[key], r = {};
       T.cols.forEach(c => r[c.f] = c.t === "bool" ? false : c.t === "liste" ? [] : "");
       if (T.prefixe) r.id = prochainId(S[key], T.prefixe);
+      if (key === "revues") { normRevue(r, {}); r.date = auj(); historiser(r, { evenement: "Création" }); }
       if (key === "procedures") { r.id = uid(); r.code = "PRO-XXX-" + String(S.procedures.length + 1).padStart(3, "0"); r.titre = "Nouvelle procédure"; r.version = "1.0"; r.statut = "Brouillon"; r.frequence = "Annuelle"; PROC_TEXTES.forEach(([f]) => r[f] = ""); }
       if (key === "actions") { r.statut = "À lancer"; }
       if (key === "mesures") { r.obligatoire = true; }
@@ -40298,7 +40798,11 @@ window.WerbPssiDoc = WerbPssiDoc;
   });
   document.addEventListener("change", e => {
     const el = e.target;
-    if (el.id === "choixProc") { ui.pid = el.value; render(); return; }
+    if (el.id === "choixProc") { ui.pid = el.value; ui.dmAppro = null; ui.dmNv = null; render(); return; }
+    if (el.dataset.rvp) { appliquerPrep(el); return; }
+    if (el.dataset.rv) { appliquerRevue(el); return; }
+    if (el.dataset.dml) { appliquerLien(el); return; }
+    if (el.id === "dmEmpFichier") { const f = el.files[0]; el.value = ""; if (f) empreintePoste(f); return; }
     if (el.dataset.sel) { const k = el.dataset.sel, o = el.dataset.pos, r = (o[0] === "a" ? S[k] : S.archives[k] || [])[+o.slice(1)], s = ui.sel[k] = ui.sel[k] || new Set(); if (r) { if (el.checked) s.add(r); else s.delete(r); } render(); return; }
     if (el.dataset.selall) { const k = el.dataset.selall, s = ui.sel[k] = new Set(); if (el.checked) S[k].forEach(r => s.add(r)); render(); return; }
     if (el.dataset.voirarch) { ui.arch[el.dataset.voirarch] = el.checked; render(); return; }
