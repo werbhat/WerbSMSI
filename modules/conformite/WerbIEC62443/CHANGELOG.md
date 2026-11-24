@@ -6,6 +6,30 @@ Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/), num
 
 
 
+## [1.16.0] — 2026-11
+
+### Ajouts — catalogue des sources publiques du groupe
+Le portail WerbSMSI 1.19.0 publie le tableau principal des sources publiques du groupe (`groupe:sourcesPubliques`, ⚙️ Administration › Sources publiques). Espace ouvert :
+- **📚 Depuis le catalogue du groupe**, dans la bibliothèque **Sources publiques** et dans la fiche de chaque exigence : recherche, filtre par référentiel, sources retirées ou remplacées masquées par défaut, sources déjà présentes signalées ; la source reprise garde son identifiant de catalogue et, depuis une fiche, y est liée.
+- État de chaque source reprise : **à jour**, **modifiée au catalogue** (avec **⟳ Mettre à jour** : titre, éditeur, édition, adresse, type), **remplacée par …**, **retirée du catalogue**, **absente du catalogue**.
+- **🔗 Rattacher au catalogue** : les sources du projet dont l'adresse figure au catalogue reçoivent leur identifiant de catalogue.
+- **📤 Exporter pour le catalogue du groupe** : fichier JSON au format du portail, à importer dans ⚙️ Administration › Sources publiques.
+
+## [1.15.0] — 2026-11
+
+### Ajouts — données des autres modules du site
+Projet rattaché à un site et espace ouvert : WerbIEC62443 lit, en lecture seule, les publications du site de **WerbMap** (`site:actifs`, `site:si`, `site:vlans`, `site:flux`), **WerbCartoSI** (`site:cartographies`), **WerbExploitation** (`site:sauvegardes`, `site:plm`, `site:inventaires`, `site:fluxRealises`) et **WerbPresta** (`site:evaluationsPrestataires`). Rattachement aux zones du projet par l'identifiant de zone des actifs de WerbMap ; sauvegardes, obsolescence et inventaires par le TAG des actifs ; prestataires par leurs actifs, SI et zones.
+- Nouvelle vue **🧱 Périmètre › Données des modules** : sources (date de publication, volumes), **constats**, données par zone.
+- **Zones et conduits** : carte « Données des modules » par zone (actifs, VLAN, SI, flux, sauvegardes, produits suivis, inventaires, prestataires et leurs constats) ; **📋 Composants depuis WerbMap** remplit la description des composants de la zone.
+- **Exigences** : carte **🔗 Éléments de preuve proposés** pour SR 1.13 (accès distants des prestataires), SR 5.1 (VLAN, conduits, schémas de zones et de réseau), SR 5.2 (matrice de flux, filtrage, justifications, ouvertures réalisées, schéma des flux), SR 7.3 (sauvegardes), SR 7.4 (tests de restauration, plan de reprise), SR 7.8 (inventaire, postes inventoriés, obsolescence, cartographie) ; **📋 Reprendre** ajoute l'élément, daté et sourcé, à la référence libre des preuves de la ligne (sans doublon, aucun statut modifié).
+- **Prestataires** : évaluations WerbPresta (score, écarts ouverts et en retard, certifications, accès distant, zones, prochaine revue), rapprochées des prestataires du projet par leur raison sociale ; **+ Ajouter** crée le prestataire (rôle 62443-2-4 déduit du type).
+- **Contrôle qualité** du tableau de bord : flux entre zones sans conduit déclaré, flux autorisés sans justification, actifs dans une zone absente du projet, restauration non testée ou testée il y a plus d'un an, composants hors support ou en fin de support, prestataires avec écarts ou accès distant non évalué, schémas d'architecture à revoir ou absents.
+- Ouverture depuis le portail : l'espace est relu aussitôt, les données des modules sont disponibles sans ⟳.
+
+### Développement
+- Citations des catégories de schémas de WerbCartoSI (`EX-…`) déclarées dans la table des exigences de la charte (`charte/exigences/usages.json`).
+- Composant **guides.js 1.3.0** de la charte.
+
 ## [1.14.0] — 2026-11
 
 ### Modifications

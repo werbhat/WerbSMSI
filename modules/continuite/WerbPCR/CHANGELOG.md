@@ -6,6 +6,14 @@ Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/), num
 
 
 
+## [1.11.0] — 2026-11
+
+### Ajouts
+- **Publication du plan de reprise par SI** (`site:reprise`, *Intégration WerbSMSI › Publication*) : pour chaque SI du plan, RTO, RPO, mode dégradé, dépendances externes, déclenchement, étapes de reprise (action, responsable désigné par son rôle, durée, vérification) et retour à la normale, dans `sites/<CODE>/publications/werbpcr.json`. **WerbMap 1.34.0** s'en sert pour proposer la **note PCR** des étiquettes d'actifs lues par l'application Android WerbTagDroid. Ni impacts métier, ni risques, ni description des SI ; adresses IP remplacées par « [adresse] ». Publication possible une fois le plan enregistré ; tracée au journal.
+
+### Format de données
+- `module.json › echanges.publie` : `site:reprise` (charte §5.4, schéma `publication_site`). Base inchangée.
+
 ## [1.10.0] — 2026-11
 
 ### Modifications

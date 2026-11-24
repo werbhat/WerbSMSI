@@ -1,0 +1,759 @@
+{
+ "format": "WERBSMSI-SOURCES",
+ "schema": 1,
+ "sources": [
+  {
+   "id": "SRC-001",
+   "type": "Guide",
+   "titre": "Cybersécurité des systèmes industriels : mesures détaillées",
+   "editeur": "ANSSI",
+   "edition": "",
+   "datePublication": "",
+   "url": "https://messervices.cyber.gouv.fr/guides/la-cybersecurite-des-systemes-industriels-mesures-detaillees",
+   "consulteLe": "",
+   "resume": "",
+   "referentiels": [
+    "ANSSI"
+   ],
+   "statut": "en vigueur",
+   "remplacePar": "",
+   "origine": "WerbReferentiels (ANSSI)"
+  },
+  {
+   "id": "SRC-002",
+   "type": "Guide",
+   "titre": "Cybersécurité des systèmes industriels : méthode de classification et mesures principales",
+   "editeur": "ANSSI",
+   "edition": "",
+   "datePublication": "",
+   "url": "https://messervices.cyber.gouv.fr/guides/la-cybersecurite-des-systemes-industriels",
+   "consulteLe": "",
+   "resume": "",
+   "referentiels": [
+    "ANSSI"
+   ],
+   "statut": "en vigueur",
+   "remplacePar": "",
+   "origine": "WerbReferentiels (ANSSI)"
+  },
+  {
+   "id": "SRC-003",
+   "type": "Guide",
+   "titre": "Guide d'hygiène informatique (42 mesures)",
+   "editeur": "ANSSI",
+   "edition": "",
+   "datePublication": "",
+   "url": "https://messervices.cyber.gouv.fr/guides/guide-dhygiene-informatique",
+   "consulteLe": "",
+   "resume": "",
+   "referentiels": [
+    "ANSSI"
+   ],
+   "statut": "en vigueur",
+   "remplacePar": "",
+   "origine": "WerbReferentiels (ANSSI)"
+  },
+  {
+   "id": "SRC-004",
+   "type": "Guide",
+   "titre": "Méthode EBIOS Risk Manager",
+   "editeur": "ANSSI",
+   "edition": "",
+   "datePublication": "",
+   "url": "https://cyber.gouv.fr/la-methode-ebios-risk-manager",
+   "consulteLe": "",
+   "resume": "",
+   "referentiels": [
+    "ANSSI"
+   ],
+   "statut": "en vigueur",
+   "remplacePar": "",
+   "origine": "WerbReferentiels (ANSSI)"
+  },
+  {
+   "id": "SRC-005",
+   "type": "Réglementation",
+   "titre": "Directive NIS2 (présentation par l'ANSSI)",
+   "editeur": "ANSSI",
+   "edition": "",
+   "datePublication": "",
+   "url": "https://cyber.gouv.fr/directive-nis-2",
+   "consulteLe": "",
+   "resume": "",
+   "referentiels": [
+    "ANSSI",
+    "NIS2"
+   ],
+   "statut": "en vigueur",
+   "remplacePar": "",
+   "origine": "WerbReferentiels (ANSSI) ; WerbReferentiels (NIS2)"
+  },
+  {
+   "id": "SRC-006",
+   "type": "Site",
+   "titre": "CERT-FR : alertes, avis, menaces",
+   "editeur": "ANSSI (CERT-FR)",
+   "edition": "",
+   "datePublication": "",
+   "url": "https://www.cert.ssi.gouv.fr/",
+   "consulteLe": "",
+   "resume": "",
+   "referentiels": [
+    "ANSSI"
+   ],
+   "statut": "en vigueur",
+   "remplacePar": "",
+   "origine": "WerbReferentiels (ANSSI)"
+  },
+  {
+   "id": "SRC-007",
+   "type": "Site",
+   "titre": "MonEspaceNIS2 : s'informer, vérifier son assujettissement, se déclarer",
+   "editeur": "ANSSI",
+   "edition": "",
+   "datePublication": "",
+   "url": "https://monespacenis2.cyber.gouv.fr/",
+   "consulteLe": "",
+   "resume": "",
+   "referentiels": [
+    "ANSSI",
+    "NIS2"
+   ],
+   "statut": "en vigueur",
+   "remplacePar": "",
+   "origine": "WerbReferentiels (ANSSI) ; WerbReferentiels (NIS2)"
+  },
+  {
+   "id": "SRC-008",
+   "type": "Site",
+   "titre": "Produits et services qualifiés",
+   "editeur": "ANSSI",
+   "edition": "",
+   "datePublication": "",
+   "url": "https://cyber.gouv.fr/produits-services-qualifies",
+   "consulteLe": "",
+   "resume": "",
+   "referentiels": [
+    "ANSSI"
+   ],
+   "statut": "en vigueur",
+   "remplacePar": "",
+   "origine": "WerbReferentiels (ANSSI)"
+  },
+  {
+   "id": "SRC-009",
+   "type": "Site",
+   "titre": "Publications (guides et recommandations)",
+   "editeur": "ANSSI",
+   "edition": "",
+   "datePublication": "",
+   "url": "https://cyber.gouv.fr/publications",
+   "consulteLe": "",
+   "resume": "",
+   "referentiels": [
+    "ANSSI"
+   ],
+   "statut": "en vigueur",
+   "remplacePar": "",
+   "origine": "WerbReferentiels (ANSSI)"
+  },
+  {
+   "id": "SRC-010",
+   "type": "Site",
+   "titre": "Site de l'ANSSI",
+   "editeur": "ANSSI",
+   "edition": "",
+   "datePublication": "",
+   "url": "https://cyber.gouv.fr",
+   "consulteLe": "",
+   "resume": "",
+   "referentiels": [
+    "ANSSI",
+    "CRA"
+   ],
+   "statut": "en vigueur",
+   "remplacePar": "",
+   "origine": "WerbReferentiels (ANSSI) ; WerbReferentiels (CRA)"
+  },
+  {
+   "id": "SRC-011",
+   "type": "Réglementation",
+   "titre": "Directive (UE) 2022/2555 du 14 décembre 2022 (NIS2)",
+   "editeur": "Union européenne (EUR-Lex)",
+   "edition": "",
+   "datePublication": "",
+   "url": "https://eur-lex.europa.eu/eli/dir/2022/2555/oj",
+   "consulteLe": "",
+   "resume": "",
+   "referentiels": [
+    "NIS2"
+   ],
+   "statut": "en vigueur",
+   "remplacePar": "",
+   "origine": "WerbReferentiels (NIS2)"
+  },
+  {
+   "id": "SRC-012",
+   "type": "Réglementation",
+   "titre": "Règlement d'exécution (UE) 2024/2690 : exigences techniques et méthodologiques pour certaines entités numériques",
+   "editeur": "Union européenne (EUR-Lex)",
+   "edition": "",
+   "datePublication": "",
+   "url": "https://eur-lex.europa.eu/eli/reg_impl/2024/2690/oj",
+   "consulteLe": "",
+   "resume": "",
+   "referentiels": [
+    "NIS2"
+   ],
+   "statut": "en vigueur",
+   "remplacePar": "",
+   "origine": "WerbReferentiels (NIS2)"
+  },
+  {
+   "id": "SRC-013",
+   "type": "Site",
+   "titre": "ENISA, agence de l'Union européenne pour la cybersécurité",
+   "editeur": "ENISA",
+   "edition": "",
+   "datePublication": "",
+   "url": "https://www.enisa.europa.eu/",
+   "consulteLe": "",
+   "resume": "",
+   "referentiels": [
+    "NIS2",
+    "CRA"
+   ],
+   "statut": "en vigueur",
+   "remplacePar": "",
+   "origine": "WerbReferentiels (NIS2) ; WerbReferentiels (CRA)"
+  },
+  {
+   "id": "SRC-014",
+   "type": "Norme",
+   "titre": "ISO/IEC 27001:2022 — exigences du SMSI",
+   "editeur": "ISO",
+   "edition": "",
+   "datePublication": "",
+   "url": "https://www.iso.org/standard/27001",
+   "consulteLe": "",
+   "resume": "",
+   "referentiels": [
+    "ISO 27001"
+   ],
+   "statut": "en vigueur",
+   "remplacePar": "",
+   "origine": "WerbReferentiels (ISO 27001)"
+  },
+  {
+   "id": "SRC-015",
+   "type": "Norme",
+   "titre": "ISO/IEC 27002:2022 — mesures de sécurité de l'information",
+   "editeur": "ISO",
+   "edition": "",
+   "datePublication": "",
+   "url": "https://www.iso.org/standard/75652.html",
+   "consulteLe": "",
+   "resume": "",
+   "referentiels": [
+    "ISO 27001"
+   ],
+   "statut": "en vigueur",
+   "remplacePar": "",
+   "origine": "WerbReferentiels (ISO 27001)"
+  },
+  {
+   "id": "SRC-016",
+   "type": "Norme",
+   "titre": "ISO/IEC 27005:2022 — gestion des risques liés à la sécurité de l'information",
+   "editeur": "ISO",
+   "edition": "",
+   "datePublication": "",
+   "url": "https://www.iso.org/standard/80585.html",
+   "consulteLe": "",
+   "resume": "",
+   "referentiels": [
+    "ISO 27001"
+   ],
+   "statut": "en vigueur",
+   "remplacePar": "",
+   "origine": "WerbReferentiels (ISO 27001)"
+  },
+  {
+   "id": "SRC-017",
+   "type": "Guide",
+   "titre": "La cybersécurité des systèmes industriels – Mesures détaillées",
+   "editeur": "ANSSI",
+   "edition": "v2",
+   "datePublication": "",
+   "url": "https://messervices.cyber.gouv.fr/documents-guides/Guide_Systemes_industriels__Mesures_detaillees_v2.pdf",
+   "consulteLe": "2026-10-22",
+   "resume": "Mesures techniques et organisationnelles détaillées par classe de système industriel.",
+   "referentiels": [
+    "IEC 62443"
+   ],
+   "statut": "en vigueur",
+   "remplacePar": "",
+   "origine": "WerbIEC62443"
+  },
+  {
+   "id": "SRC-018",
+   "type": "Guide",
+   "titre": "La cybersécurité des systèmes industriels – Méthode de classification et mesures principales",
+   "editeur": "ANSSI",
+   "edition": "v2",
+   "datePublication": "",
+   "url": "https://cyber.gouv.fr/sites/default/files/document/anssi-guide-systemes_industriels-methode_de_classification_v2-0.pdf.pdf",
+   "consulteLe": "2026-10-22",
+   "resume": "Méthode de classification des systèmes industriels en trois classes et mesures principales associées.",
+   "referentiels": [
+    "IEC 62443"
+   ],
+   "statut": "en vigueur",
+   "remplacePar": "",
+   "origine": "WerbIEC62443"
+  },
+  {
+   "id": "SRC-019",
+   "type": "Norme",
+   "titre": "IEC 62443-3-3 – Exigences de sécurité système et niveaux de sécurité",
+   "editeur": "IEC",
+   "edition": "2013 + corrigendum 2014",
+   "datePublication": "",
+   "url": "https://webstore.iec.ch",
+   "consulteLe": "2026-10-22",
+   "resume": "Norme de référence des exigences SR/RE (texte payant, à acquérir).",
+   "referentiels": [
+    "IEC 62443"
+   ],
+   "statut": "en vigueur",
+   "remplacePar": "",
+   "origine": "WerbIEC62443"
+  },
+  {
+   "id": "SRC-020",
+   "type": "Référentiel",
+   "titre": "ISASecure SSA-311 – Functional security assessment for systems",
+   "editeur": "ISA Security Compliance Institute",
+   "edition": "v2.1 (2019)",
+   "datePublication": "",
+   "url": "https://www.isasecure.org",
+   "consulteLe": "2026-10-22",
+   "resume": "Critères d'évaluation FSA-S par exigence 62443-3-3, utilisés pour la certification SSA.",
+   "referentiels": [
+    "IEC 62443"
+   ],
+   "statut": "en vigueur",
+   "remplacePar": "",
+   "origine": "WerbIEC62443"
+  },
+  {
+   "id": "SRC-021",
+   "type": "Référentiel",
+   "titre": "Référentiel d'exigences pour les prestataires d'intégration et de maintenance de systèmes industriels",
+   "editeur": "ANSSI",
+   "edition": "v1.0",
+   "datePublication": "",
+   "url": "https://cyber.gouv.fr/sites/default/files/2016/03/Referentiel_exigences_prestataires_integration_maintenance_V1_0.1.pdf",
+   "consulteLe": "2026-10-22",
+   "resume": "Exigences applicables aux intégrateurs et mainteneurs ; utile pour les clauses contractuelles prestataires.",
+   "referentiels": [
+    "IEC 62443"
+   ],
+   "statut": "en vigueur",
+   "remplacePar": "",
+   "origine": "WerbIEC62443"
+  },
+  {
+   "id": "SRC-022",
+   "type": "Référentiel",
+   "titre": "SP 800-82 Rev. 3 — sécurité des technologies opérationnelles (OT)",
+   "editeur": "NIST",
+   "edition": "Rév. 3 (2023)",
+   "datePublication": "",
+   "url": "https://csrc.nist.gov/pubs/sp/800/82/r3/final",
+   "consulteLe": "2026-10-22",
+   "resume": "Guide de sécurité des technologies opérationnelles : architectures, menaces, contre-mesures.",
+   "referentiels": [
+    "IEC 62443",
+    "NIST"
+   ],
+   "statut": "en vigueur",
+   "remplacePar": "",
+   "origine": "WerbReferentiels (NIST) ; WerbIEC62443"
+  },
+  {
+   "id": "SRC-023",
+   "type": "Référentiel",
+   "titre": "CSF 2.0 (NIST CSWP 29, février 2024)",
+   "editeur": "NIST",
+   "edition": "",
+   "datePublication": "",
+   "url": "https://doi.org/10.6028/NIST.CSWP.29",
+   "consulteLe": "",
+   "resume": "",
+   "referentiels": [
+    "NIST"
+   ],
+   "statut": "en vigueur",
+   "remplacePar": "",
+   "origine": "WerbReferentiels (NIST)"
+  },
+  {
+   "id": "SRC-024",
+   "type": "Référentiel",
+   "titre": "SP 800-30 Rev. 1 — appréciation des risques",
+   "editeur": "NIST",
+   "edition": "",
+   "datePublication": "",
+   "url": "https://csrc.nist.gov/pubs/sp/800/30/r1/final",
+   "consulteLe": "",
+   "resume": "",
+   "referentiels": [
+    "NIST"
+   ],
+   "statut": "en vigueur",
+   "remplacePar": "",
+   "origine": "WerbReferentiels (NIST)"
+  },
+  {
+   "id": "SRC-025",
+   "type": "Référentiel",
+   "titre": "SP 800-37 Rev. 2 — Risk Management Framework",
+   "editeur": "NIST",
+   "edition": "",
+   "datePublication": "",
+   "url": "https://csrc.nist.gov/pubs/sp/800/37/r2/final",
+   "consulteLe": "",
+   "resume": "",
+   "referentiels": [
+    "NIST"
+   ],
+   "statut": "en vigueur",
+   "remplacePar": "",
+   "origine": "WerbReferentiels (NIST)"
+  },
+  {
+   "id": "SRC-026",
+   "type": "Référentiel",
+   "titre": "SP 800-53 Rev. 5 — contrôles de sécurité et de vie privée",
+   "editeur": "NIST",
+   "edition": "",
+   "datePublication": "",
+   "url": "https://csrc.nist.gov/pubs/sp/800/53/r5/upd1/final",
+   "consulteLe": "",
+   "resume": "",
+   "referentiels": [
+    "NIST"
+   ],
+   "statut": "en vigueur",
+   "remplacePar": "",
+   "origine": "WerbReferentiels (NIST)"
+  },
+  {
+   "id": "SRC-027",
+   "type": "Référentiel",
+   "titre": "SP 800-61 Rev. 3 — gestion des incidents",
+   "editeur": "NIST",
+   "edition": "",
+   "datePublication": "",
+   "url": "https://csrc.nist.gov/pubs/sp/800/61/r3/final",
+   "consulteLe": "",
+   "resume": "",
+   "referentiels": [
+    "NIST"
+   ],
+   "statut": "en vigueur",
+   "remplacePar": "",
+   "origine": "WerbReferentiels (NIST)"
+  },
+  {
+   "id": "SRC-028",
+   "type": "Site",
+   "titre": "Cybersecurity Framework (portail)",
+   "editeur": "NIST",
+   "edition": "",
+   "datePublication": "",
+   "url": "https://www.nist.gov/cyberframework",
+   "consulteLe": "",
+   "resume": "",
+   "referentiels": [
+    "NIST"
+   ],
+   "statut": "en vigueur",
+   "remplacePar": "",
+   "origine": "WerbReferentiels (NIST)"
+  },
+  {
+   "id": "SRC-029",
+   "type": "Norme",
+   "titre": "IEC 62443-4-1",
+   "editeur": "IEC",
+   "edition": "",
+   "datePublication": "",
+   "url": "",
+   "consulteLe": "",
+   "resume": "Exigences du cycle de développement sécurisé des produits",
+   "referentiels": [
+    "CRA"
+   ],
+   "statut": "en vigueur",
+   "remplacePar": "",
+   "origine": "WerbReferentiels (CRA)"
+  },
+  {
+   "id": "SRC-030",
+   "type": "Norme",
+   "titre": "IEC 62443-4-2",
+   "editeur": "IEC",
+   "edition": "",
+   "datePublication": "",
+   "url": "",
+   "consulteLe": "",
+   "resume": "Exigences de sécurité techniques des composants des systèmes d'automatisation et de commande",
+   "referentiels": [
+    "CRA"
+   ],
+   "statut": "en vigueur",
+   "remplacePar": "",
+   "origine": "WerbReferentiels (CRA)"
+  },
+  {
+   "id": "SRC-031",
+   "type": "Norme",
+   "titre": "Normes harmonisées du CRA (CEN, CENELEC, ETSI)",
+   "editeur": "CEN, CENELEC, ETSI",
+   "edition": "",
+   "datePublication": "",
+   "url": "",
+   "consulteLe": "",
+   "resume": "En cours d'élaboration : leur publication au Journal officiel donnera une présomption de conformité",
+   "referentiels": [
+    "CRA"
+   ],
+   "statut": "en vigueur",
+   "remplacePar": "",
+   "origine": "WerbReferentiels (CRA)"
+  },
+  {
+   "id": "SRC-032",
+   "type": "Réglementation",
+   "titre": "Règlement (UE) 2023/1230 sur les machines",
+   "editeur": "Union européenne (EUR-Lex)",
+   "edition": "",
+   "datePublication": "",
+   "url": "https://eur-lex.europa.eu/eli/reg/2023/1230/oj",
+   "consulteLe": "",
+   "resume": "",
+   "referentiels": [
+    "CRA"
+   ],
+   "statut": "en vigueur",
+   "remplacePar": "",
+   "origine": "WerbReferentiels (CRA)"
+  },
+  {
+   "id": "SRC-033",
+   "type": "Réglementation",
+   "titre": "Règlement (UE) 2024/2847 du 23 octobre 2024 concernant des exigences horizontales en matière de cybersécurité pour les produits comportant des éléments numériques (Cyber Resilience Act)",
+   "editeur": "Union européenne (EUR-Lex)",
+   "edition": "",
+   "datePublication": "",
+   "url": "https://eur-lex.europa.eu/eli/reg/2024/2847/oj",
+   "consulteLe": "",
+   "resume": "",
+   "referentiels": [
+    "CRA"
+   ],
+   "statut": "en vigueur",
+   "remplacePar": "",
+   "origine": "WerbReferentiels (CRA)"
+  },
+  {
+   "id": "SRC-034",
+   "type": "Site",
+   "titre": "ANSSI — Cadre règlementaire du CRA",
+   "editeur": "ANSSI",
+   "edition": "",
+   "datePublication": "",
+   "url": "https://cyber.gouv.fr/reglementation/cybersecurite-des-produits/cyber-resilience-act/cadre-reglementaire-du-cra/",
+   "consulteLe": "",
+   "resume": "",
+   "referentiels": [
+    "CRA"
+   ],
+   "statut": "en vigueur",
+   "remplacePar": "",
+   "origine": "WerbReferentiels (CRA)"
+  },
+  {
+   "id": "SRC-035",
+   "type": "Site",
+   "titre": "Commission européenne — page de présentation du CRA (questions-réponses, actes d'exécution, guides)",
+   "editeur": "Commission européenne",
+   "edition": "",
+   "datePublication": "",
+   "url": "https://digital-strategy.ec.europa.eu/fr/policies/cyber-resilience-act",
+   "consulteLe": "",
+   "resume": "",
+   "referentiels": [
+    "CRA"
+   ],
+   "statut": "en vigueur",
+   "remplacePar": "",
+   "origine": "WerbReferentiels (CRA)"
+  },
+  {
+   "id": "SRC-036",
+   "type": "Norme",
+   "titre": "ISO/IEC 27001:2022, mesure A.5.34",
+   "editeur": "ISO / IEC",
+   "edition": "",
+   "datePublication": "",
+   "url": "",
+   "consulteLe": "",
+   "resume": "Vie privée et protection des données à caractère personnel",
+   "referentiels": [
+    "RGPD"
+   ],
+   "statut": "en vigueur",
+   "remplacePar": "",
+   "origine": "WerbReferentiels (RGPD)"
+  },
+  {
+   "id": "SRC-037",
+   "type": "Norme",
+   "titre": "ISO/IEC 27701",
+   "editeur": "ISO / IEC",
+   "edition": "",
+   "datePublication": "",
+   "url": "",
+   "consulteLe": "",
+   "resume": "Extension d'ISO 27001 et 27002 pour le management de la protection de la vie privée",
+   "referentiels": [
+    "RGPD"
+   ],
+   "statut": "en vigueur",
+   "remplacePar": "",
+   "origine": "WerbReferentiels (RGPD)"
+  },
+  {
+   "id": "SRC-038",
+   "type": "Norme",
+   "titre": "ISO/IEC 29100",
+   "editeur": "ISO / IEC",
+   "edition": "",
+   "datePublication": "",
+   "url": "",
+   "consulteLe": "",
+   "resume": "Cadre de référence de la protection de la vie privée",
+   "referentiels": [
+    "RGPD"
+   ],
+   "statut": "en vigueur",
+   "remplacePar": "",
+   "origine": "WerbReferentiels (RGPD)"
+  },
+  {
+   "id": "SRC-039",
+   "type": "Réglementation",
+   "titre": "Loi n° 78-17 du 6 janvier 1978 relative à l'informatique, aux fichiers et aux libertés (version en vigueur)",
+   "editeur": "République française (Légifrance)",
+   "edition": "",
+   "datePublication": "",
+   "url": "https://www.legifrance.gouv.fr/loda/id/JORFTEXT000000886460",
+   "consulteLe": "",
+   "resume": "",
+   "referentiels": [
+    "RGPD"
+   ],
+   "statut": "en vigueur",
+   "remplacePar": "",
+   "origine": "WerbReferentiels (RGPD)"
+  },
+  {
+   "id": "SRC-040",
+   "type": "Réglementation",
+   "titre": "Règlement (UE) 2016/679 du 27 avril 2016 relatif à la protection des personnes physiques à l'égard du traitement des données à caractère personnel (RGPD)",
+   "editeur": "Union européenne (EUR-Lex)",
+   "edition": "",
+   "datePublication": "",
+   "url": "https://eur-lex.europa.eu/eli/reg/2016/679/oj",
+   "consulteLe": "",
+   "resume": "",
+   "referentiels": [
+    "RGPD"
+   ],
+   "statut": "en vigueur",
+   "remplacePar": "",
+   "origine": "WerbReferentiels (RGPD)"
+  },
+  {
+   "id": "SRC-041",
+   "type": "Site",
+   "titre": "CNIL — autorité de contrôle française : guides, référentiels sectoriels, modèle de registre, outil PIA, téléservice de notification des violations",
+   "editeur": "CNIL",
+   "edition": "",
+   "datePublication": "",
+   "url": "https://www.cnil.fr",
+   "consulteLe": "",
+   "resume": "",
+   "referentiels": [
+    "RGPD"
+   ],
+   "statut": "en vigueur",
+   "remplacePar": "",
+   "origine": "WerbReferentiels (RGPD)"
+  },
+  {
+   "id": "SRC-042",
+   "type": "Site",
+   "titre": "CNIL — le RGPD en pratique (présentation du règlement)",
+   "editeur": "CNIL",
+   "edition": "",
+   "datePublication": "",
+   "url": "https://www.cnil.fr/fr/reglement-europeen-protection-donnees",
+   "consulteLe": "",
+   "resume": "",
+   "referentiels": [
+    "RGPD"
+   ],
+   "statut": "en vigueur",
+   "remplacePar": "",
+   "origine": "WerbReferentiels (RGPD)"
+  },
+  {
+   "id": "SRC-043",
+   "type": "Site",
+   "titre": "Comité européen de la protection des données (CEPD) — lignes directrices (notification des violations, AIPD, notions de responsable et de sous-traitant, intérêt légitime)",
+   "editeur": "CEPD",
+   "edition": "",
+   "datePublication": "",
+   "url": "https://www.edpb.europa.eu",
+   "consulteLe": "",
+   "resume": "",
+   "referentiels": [
+    "RGPD"
+   ],
+   "statut": "en vigueur",
+   "remplacePar": "",
+   "origine": "WerbReferentiels (RGPD)"
+  },
+  {
+   "id": "SRC-044",
+   "type": "Site",
+   "titre": "Commission européenne — décisions d'adéquation et clauses contractuelles types",
+   "editeur": "Commission européenne",
+   "edition": "",
+   "datePublication": "",
+   "url": "https://commission.europa.eu/law/law-topic/data-protection_fr",
+   "consulteLe": "",
+   "resume": "",
+   "referentiels": [
+    "RGPD"
+   ],
+   "statut": "en vigueur",
+   "remplacePar": "",
+   "origine": "WerbReferentiels (RGPD)"
+  }
+ ]
+}

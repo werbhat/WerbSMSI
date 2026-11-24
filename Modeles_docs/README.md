@@ -22,8 +22,10 @@ Modeles_docs/
 │   ├── Modele_acces_distants_A3.vstx
 │   ├── Modele_administration_A3.vstx
 │   └── Modele_sauvegarde_reprise_A3.vstx
-└── Excel/
-    └── Modele_Etat_Lieux_Tests_Reseau.xlsx
+├── Excel/
+│   └── Modele_Etat_Lieux_Tests_Reseau.xlsx
+└── JSON/
+    └── Sources_publiques_WerbSMSI.json
 ```
 
 ## Word — en-tête et pied de page de l'entreprise (charte §7.2)
@@ -82,6 +84,12 @@ Pour la mise en place, on les dépose dans `SMSI_<SIGLE>/modeles/schemas/` (mod�
 - **Tous les modules** : « Export Excel » produit un export de la base. Ce n'est pas un modèle.
 
 **Exemples de données, qui ne sont pas des modèles** : `WerbMap/exemples/Exemple_Base_Inventaires_actifs_DEMO.xlsm` (classeur d'inventaire rempli avec les données de démonstration, à importer dans une base vide) et `WerbMap/exemples/Export_simple_DEMO.xlsx` (exemple d'export). Ils restent dans le module.
+
+## JSON — sources publiques du groupe
+
+| Fichier | À quoi il sert | Copies |
+|---|---|---|
+| `JSON/Sources_publiques_WerbSMSI.json` | **Catalogue de départ des sources publiques** du groupe (44 sources : normes, guides, référentiels, textes réglementaires, sites ; ANSSI, NIS2, ISO 27001, IEC 62443, NIST, CRA, RGPD), au format d'import du portail (`WERBSMSI-SOURCES`). **Publié d'office** à la création d'un espace (assistant « Mise en place » du portail, `werb_charte.py groupe`) : les modules y ont accès sans rien faire. **Espace existant** : portail › ⚙️ Administration › Sources publiques › *Importer un fichier CSV ou JSON…*, vérifier l'aperçu, puis *Publier*. Produit par `charte/outils/sources_publiques.py` (pages « Sources officielles » de WerbReferentiels, bibliothèque de WerbIEC62443). | `portail/src/sources_defaut.json` (intégré au portail) |
 
 ## Dans le portail
 

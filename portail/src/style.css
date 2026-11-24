@@ -122,3 +122,6 @@ h2.tc .pc-num { width: 22px; height: 22px; font-size: 12px; margin-right: 2px; }
 .card.infographie { text-align: center; } .card.infographie img { max-width: 100%; width: 900px; height: auto; border-radius: 6px; }
 /* Sauvegarde : chiffrement facultatif de l'archive (portail 1.14.0) */
 .sv-chiffre { margin: 10px 0; padding: 10px 12px; border: 1px solid var(--line); border-left: 3px solid var(--ok); border-radius: 6px; }
+/* Sources publiques du groupe : bouton d'import (label qui porte un champ fichier masqué) */
+.bt-fichier { display: inline-flex; align-items: center; gap: 4px; padding: 5px 12px; border: 1px solid var(--line); border-radius: 5px; background: var(--card); color: var(--ink); cursor: pointer; }
+.bt-fichier:hover { border-color: var(--navy-2, var(--navy)); }

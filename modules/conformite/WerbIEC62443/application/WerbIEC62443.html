@@ -1,5 +1,5 @@
 <!doctype html>
-<!-- WerbIEC62443 v1.14.0 – Développé par @WerbHat – build novembre 2026 -->
+<!-- WerbIEC62443 v1.16.0 – Développé par @WerbHat – build novembre 2026 -->
 <html lang="fr">
 <head>
 <meta charset="utf-8">
@@ -9,7 +9,7 @@
 <title>WerbIEC62443</title>
 <meta name="application-name" content="WerbIEC62443">
 <meta name="author" content="@WerbHat">
-<meta name="generator" content="WerbIEC62443 v1.14.0 – Développé par @WerbHat">
+<meta name="generator" content="WerbIEC62443 v1.16.0 – Développé par @WerbHat">
 <meta name="description" content="Gestion des exigences de cybersécurité IEC 62443">
 <style>/*! WerbIEC62443 – Développé par @WerbHat */
 :root{
@@ -127,6 +127,9 @@ tr.archivee td.c{opacity:1}
 .outils-t{margin:8px 0;gap:8px;flex-wrap:wrap}
 label.chk-in{display:inline-flex;gap:6px;align-items:center;font-size:13px}
 label.chk-in input{width:auto}
+/* Données des modules du site (1.15.0) */
+.mod-preuve { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px; padding: 3px 0; border-bottom: 1px dashed var(--line); }
+.mod-preuve:last-child { border-bottom: 0; }
 </style>
 </head>
 <body>
@@ -36402,7 +36405,7 @@ const WERB = Object.freeze((() => {
   const bytes = [68, 195, 169, 118, 101, 108, 111, 112, 112, 195, 169, 32, 112, 97, 114, 32, 64, 87, 101, 114, 98, 72, 97, 116];
   const signature = new TextDecoder("utf-8").decode(new Uint8Array(bytes));
   const produit = "WerbIEC62443";
-  const version = "1.14.0";
+  const version = "1.16.0";
   return {
     id: "werbiec62443",
     produit, version, auteur: "@WerbHat", signature,
@@ -37634,7 +37637,7 @@ body.wt-glisse{cursor:col-resize!important;user-select:none!important}
 })());
 window.WerbSocle = WerbSocle;
 
-/*! WerbSMSI guides 1.2.0 – Développé par @WerbHat */
+/*! WerbSMSI guides 1.3.0 – Développé par @WerbHat */
 /* Guides d'accompagnement des modules WerbSMSI (charte §7.4) : documents Markdown rangés dans le dossier guides/ du module,
    intégrés au livrable par le build (window.WERB_GUIDES = [{ fichier, texte }]) et affichés en mode lecture dans le menu ❓ Aide.
    Un fichier peut être rangé dans un sous-dossier (« 1-ANSSI/0-carte.md ») : les guides sont alors regroupés par dossier
@@ -37646,9 +37649,14 @@ window.WerbSocle = WerbSocle;
    interne, ancre ignorée). Tout le HTML du texte est échappé, sauf les commentaires
    <!-- … --> placés entre deux blocs, qui ne sont pas affichés ; le premier porte la signature du guide (charte §7.4).
    Thème clair / sombre (charte §7.5, 1.2.0) : fonds sur les variables communes (--card, --info-bg…, repli clair), valeurs sombres
-   propres au lecteur à l'écran seulement ; titres sous texte blanc sur --navy-fond ; impression en clair. */
+   propres au lecteur à l'écran seulement ; titres sous texte blanc sur --navy-fond ; impression en clair.
+   Images (1.3.0) : une ligne seule « ![légende](images/schema.svg) » affiche une figure légendée, agrandie au clic. L'image est
+   rangée dans le dossier des guides (images/ par exemple) et intégrée au livrable par le build en data: URI
+   (window.WERB_GUIDES_IMAGES = { "images/schema.svg": "data:image/svg+xml;base64,…" }) : rien n'est chargé hors de la page
+   (CSP img-src data:). Seuls les formats SVG, PNG, JPEG et WebP sont acceptés ; une image absente est signalée à sa place.
+   L'image porte son propre fond (opaque) : le lecteur n'en ajoute pas, et l'atténue légèrement en thème sombre. */
 const WerbGuides = Object.freeze((() => {
-  const VERSION = "1.1.0";
+  const VERSION = "1.3.0";
   const esc = s => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
   const sansAccent = s => s.normalize("NFD").replace(/[̀-ͯ]/g, "");
 
@@ -37663,6 +37671,18 @@ const WerbGuides = Object.freeze((() => {
       if (p === "..") parts.pop(); else if (p && p !== ".") parts.push(p);
     }
     return parts.join("/");
+  }
+  // Image d'un guide, intégrée par le build : data: URI d'une image (SVG, PNG, JPEG, WebP), sinon null
+  const RE_IMAGE = /^data:image\/(?:svg\+xml|png|jpeg|webp);base64,[A-Za-z0-9+/]+=*$/;
+  function image(url) {
+    const imgs = globalThis.WERB_GUIDES_IMAGES && typeof globalThis.WERB_GUIDES_IMAGES === "object" ? globalThis.WERB_GUIDES_IMAGES : {};
+    const v = Object.prototype.hasOwnProperty.call(imgs, cheminRelatif(url)) ? imgs[cheminRelatif(url)] : null;
+    return typeof v === "string" && RE_IMAGE.test(v) ? v : null;
+  }
+  function figure(lib, url) {
+    const src = image(url);
+    if (!src) return `<p class="wg-absent-img" title="Image absente : ${esc(cheminRelatif(url))}">🖼 ${esc(lib || cheminRelatif(url))} (image absente)</p>`;
+    return `<figure class="wg-fig"><img src="${src}" alt="${esc(lib)}" data-werb-zoom title="Cliquer pour agrandir">${lib ? `<figcaption>${enLigne(lib)}</figcaption>` : ""}</figure>`;
   }
   function enLigne(s, liens = true) {
     const gardes = [];
@@ -37728,6 +37748,7 @@ const WerbGuides = Object.freeze((() => {
         continue;
       }
       if (/^\s*([-*_])(\s*\1){2,}\s*$/.test(l)) { html.push("<hr>"); i++; continue; } // filet
+      if ((m = l.match(/^\s*!\[([^\]]*)\]\(([^)\s]+)\)\s*$/))) { html.push(figure(m[1], m[2])); i++; continue; } // image seule sur sa ligne
       if (l.includes("|") && i + 1 < lignes.length && estSeparateur(lignes[i + 1])) { // tableau
         const tete = cellules(l), alig = cellules(lignes[i + 1]).map(c => c.endsWith(":") ? (c.startsWith(":") ? "center" : "right") : "");
         const st = k => alig[k] ? ` style="text-align:${alig[k]}"` : "";
@@ -37904,6 +37925,13 @@ const WerbGuides = Object.freeze((() => {
 .wg-som .wg-s1{font-weight:600;margin-top:3px}
 .wg-som .wg-s2{padding-left:16px;color:var(--wg-m);font-size:12.5px}
 .wg-pied{display:flex;justify-content:space-between;gap:10px;margin-top:28px;padding-top:14px;border-top:1px solid var(--wg-l)}
+.wg-fig{margin:16px 0 18px;text-align:center}
+.wg-fig img{max-width:100%;height:auto;border:1px solid var(--wg-l);border-radius:8px;cursor:zoom-in}
+@media screen{:root[data-theme=sombre] .wg-fig img{filter:brightness(.88)}}
+.wg-fig figcaption{font-size:13px;color:var(--wg-m);margin-top:6px;font-style:italic}
+.wg-absent-img{color:var(--wg-m);border:1px dashed var(--wg-l);border-radius:6px;padding:8px 10px}
+.wg-zoom{position:fixed;inset:0;z-index:10000;background:rgba(10,14,20,.86);display:flex;align-items:center;justify-content:center;padding:2vh 2vw;cursor:zoom-out}
+.wg-zoom img{max-width:100%;max-height:100%;background:#fff;border-radius:6px;box-shadow:0 8px 40px rgba(0,0,0,.5)}
 .wg-cartes{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px;margin:8px 0}
 .wg-carte{display:flex;gap:10px;align-items:center;text-align:left;border:1px solid var(--line,#dfe3ea);border-left:5px solid var(--navy-2,#2e5090);background:var(--card,#fff);border-radius:8px;padding:10px 12px;cursor:pointer;font:inherit;color:inherit;white-space:normal}
 .wg-carte:hover{background:var(--wg-f,#f6f8fc)}
@@ -37912,7 +37940,7 @@ const WerbGuides = Object.freeze((() => {
 .wg-ct small{color:var(--muted,#5d6676)}
 .wmenu .wm-it[data-wnav^="guide:"],.wmenu .wm-it[data-wnav^="guide:"] span{white-space:normal;line-height:1.3}
 @media (max-width:1100px){.wg-corps{grid-template-columns:minmax(0,1fr)}.wg-som{position:static;max-height:none;order:-1}}
-@media print{.wg-tete,.wg-som,.wg-pied{display:none}.wg-doc{border:0;padding:0;max-width:none}}`;
+@media print{.wg-tete,.wg-som,.wg-pied,.wg-zoom{display:none}.wg-doc{border:0;padding:0;max-width:none}.wg-fig{break-inside:avoid}.wg-fig img{border:0}}`;
 
   if (typeof document !== "undefined" && document.head && !document.getElementById("werb-guides-style")) {
     const st = document.createElement("style");
@@ -37921,12 +37949,27 @@ const WerbGuides = Object.freeze((() => {
     document.head.appendChild(st);
     // Sommaire : défilement vers la section sans toucher à l'adresse de la page
     document.addEventListener("click", e => {
+      // Image agrandie : un clic l'ouvre en plein écran, un second clic (ou Échap) la referme
+      const z = document.querySelector(".wg-zoom");
+      if (z && (e.target === z || z.contains(e.target))) { z.remove(); return; }
+      const im = e.target.closest && e.target.closest("img[data-werb-zoom]");
+      if (im) {
+        const fond = document.createElement("div");
+        fond.className = "wg-zoom";
+        fond.setAttribute("role", "dialog");
+        const grand = document.createElement("img");
+        grand.src = im.src; grand.alt = im.alt;
+        fond.appendChild(grand);
+        document.body.appendChild(fond);
+        return;
+      }
       const a = e.target.closest && e.target.closest("[data-werb-ancre]");
       if (!a) return;
       e.preventDefault();
       const cible = document.getElementById(a.dataset.werbAncre);
       if (cible) cible.scrollIntoView({ behavior: "smooth", block: "start" });
     });
+    document.addEventListener("keydown", e => { if (e.key === "Escape") { const z = document.querySelector(".wg-zoom"); if (z) z.remove(); } });
   }
 
   return { VERSION, rendre, guides: liste_guides, trouver, entrees, dossiers, cartes, vue };
@@ -39113,7 +39156,7 @@ const MENU = [
   { g: "pilot", i: "📊", l: "Pilotage", c: "bleu", t: [["dashboard", "Tableau de bord"]] },
   { g: "cadre", i: "🎯", l: "Cadrage", c: "violet", t: [["cadrage", "Note de cadrage"]] },
   { g: "exig", i: "✅", l: "Exigences", c: "vert", t: [["referentiel", "Exigences"], ["matrice", "Matrice d'allocation"], ["plan", "Plan de traitement"]] },
-  { g: "perim", i: "🧱", l: "Périmètre", c: "orange", t: [["zones", "Zones et conduits"], ["prestataires", "Prestataires"]] },
+  { g: "perim", i: "🧱", l: "Périmètre", c: "orange", t: [["zones", "Zones et conduits"], ["prestataires", "Prestataires"], ["modules", "Données des modules"]] },
   { g: "biblio", i: "📚", l: "Bibliothèque", c: "cyan", t: [["sources", "Sources publiques"], ["documents", "Documents projet"]] },
   { g: "projet", i: "⚙️", l: "Projet", c: "ardoise", t: [["projet", "Informations et versions"], ["exports", "Imports / exports"], ["werbsmsi", "Intégration WerbSMSI"], ["journal", "Journal des modifications"], ["apropos", "À propos"]] },
   { g: "aide", i: "❓", l: "Aide", c: "olive", t: [["aide", "Guide du module"], ...WerbGuides.entrees()] },
@@ -39212,10 +39255,18 @@ function qualite() {
     ["docSansHash", "Documents sans empreinte SHA-256", S.documents.filter(d => !d.sha256).length],
     ["preuveDocManquant", "Preuves pointant vers un document supprimé", req.filter(r => (r.preuves || []).some(id => !docs.has(id))).length],
     ["actRetard", "Actions du plan de traitement en retard", S.actions.filter(a => actionRetard(a, t)).length],
+    ...(smsi.pubSite ? (() => { const c = constatsModules(), n = k => c.filter(x => x.cle === k).length; return [
+      ["modFluxSansConduit", "Flux entre zones sans conduit déclaré (WerbMap)", n("modFluxSansConduit")],
+      ["modFluxJustif", "Flux autorisés sans justification (WerbMap)", n("modFluxJustif")],
+      ["modActifHorsZone", "Actifs dans une zone absente du projet (WerbMap)", n("modActifHorsZone")],
+      ["modSauvegarde", "Sauvegardes à restauration non testée ou ancienne (WerbExploitation)", n("modSauvegarde")],
+      ["modHorsSupport", "Composants hors support ou en fin de support (WerbExploitation)", n("modHorsSupport")],
+      ["modPresta", "Prestataires avec écarts ou accès distant non évalué (WerbPresta)", n("modPresta")],
+      ["modCarto", "Schémas d'architecture à revoir ou absents (WerbCartoSI)", n("modCarto")]]; })() : []),
   ];
 }
 // Contrôles qualité affichés dans une autre vue que la matrice : [vue, filtre du plan]
-const QUALITE_VUE = { docSansHash: ["documents"], actRetard: ["plan", "retard"] };
+const QUALITE_VUE = { docSansHash: ["documents"], actRetard: ["plan", "retard"], modFluxSansConduit: ["modules"], modFluxJustif: ["modules"], modActifHorsZone: ["modules"], modSauvegarde: ["modules"], modHorsSupport: ["modules"], modPresta: ["modules"], modCarto: ["modules"] };
 const VIEWS = {};
 // Guides d'accompagnement (dossier guides/ du module, charte §7.4) : une vue de lecture par document
 const lienGuide = id => `data-nav="${id}"`;
@@ -39231,6 +39282,9 @@ VIEWS.aide = () => `<h1>❓ Guide de WerbIEC62443</h1><p class="sub">${esc(WERB.
   ${blocAide("🚀", "Démarrer", `<ul><li><b>Nouveau projet</b>, <b>Ouvrir un projet</b> ou <b>Projet d'exemple</b> depuis l'accueil.</li><li>Depuis le portail WerbSMSI : cliquer la puce 📍 du site (ou 🏢 Groupe) sous WerbIEC62443, puis <b>📂 Ouvrir ce projet</b>.</li></ul>`)}
   ${blocAide("🏢", "Projet de site ou projet du groupe", `<ul><li><b>Site</b> : rangé dans <code>SMSI_&lt;SIGLE&gt;\\sites\\&lt;CODE&gt;\\conformite\\</code> ; reprend les zones publiées par WerbMap et publie la synthèse de conformité au groupe.</li><li><b>Groupe</b> : rangé dans <code>SMSI_&lt;SIGLE&gt;\\groupe\\conformite\\</code> ; référentiel d'exigences commun, état du socle de mesures, aucune publication.</li><li>Nom de fichier terminé par <code>.werbiec62443.json</code> : le portail affiche alors la puce.</li></ul>`)}
   ${blocAide("🔗", "Intégration WerbSMSI", `<ol><li><b>Intégration WerbSMSI › Choisir l'espace…</b>, choisir <b>🏢 Groupe</b> ou un site, <b>Rattacher</b>, puis enregistrer.</li><li>Site : <b>Importer dans le projet</b> reprend les zones et conduits publiés par WerbMap (une zone sans SL-T est ignorée).</li><li>Site : <b>Publier</b> écrit la synthèse de conformité et les prestataires du projet ; le groupe ne voit que des chiffres.</li></ol>`)}
+  ${blocAide("🔗", "Données des autres modules du site", `<p>Projet rattaché à un site, espace ouvert : <b>🧱 Périmètre › Données des modules</b> reprend en lecture seule les publications de <b>WerbMap</b> (actifs, SI, VLAN, matrice de flux), <b>WerbCartoSI</b> (état des schémas), <b>WerbExploitation</b> (sauvegardes et tests de restauration, obsolescence, inventaires de postes, ouvertures de flux) et <b>WerbPresta</b> (évaluations des prestataires).</p>
+    <ul><li>Les données sont rattachées aux zones du projet par l'identifiant de zone de WerbMap : importez d'abord ses zones (Intégration WerbSMSI).</li><li><b>Zones et conduits</b> : données reçues par zone, 📋 Composants depuis WerbMap.</li><li><b>Exigences</b> (SR 1.13, 5.1, 5.2, 7.3, 7.4, 7.8) : éléments de preuve proposés, 📋 Reprendre les ajoute à la référence libre des preuves (aucun statut n'est modifié).</li><li><b>Prestataires</b> : évaluations WerbPresta, + Ajouter un prestataire évalué.</li><li><b>Tableau de bord</b> : contrôles qualité (flux sans conduit ou sans justification, restauration non testée, composants hors support, prestataires, schémas à revoir).</li></ul>`)}
+  ${blocAide("📚", "Sources publiques du groupe", `<p>Le portail WerbSMSI tient le <b>tableau principal des sources publiques</b> du groupe (⚙️ Administration › Sources publiques) et le publie. Espace ouvert : <b>📚 Depuis le catalogue du groupe</b> (bibliothèque <b>Sources publiques</b>, ou fiche d'une exigence) reprend des sources dans le projet en gardant leur identifiant de catalogue ; une source modifiée, remplacée ou retirée au catalogue est signalée (<b>⟳ Mettre à jour</b>). <b>🔗 Rattacher au catalogue</b> relie les sources du projet reconnues par leur adresse. <b>📤 Exporter pour le catalogue du groupe</b> produit un fichier que le portail importe.</p>`)}
   ${blocAide("📄", "Exports", `<p><b>Imports / exports</b> : classeur Excel du projet, cahier d'exigences Word par prestataire et note de cadrage (avec un modèle d'en-tête d'entreprise), versions imprimables PDF. La note se génère aussi depuis <b>🎯 Cadrage</b>.</p>`)}
   ${blocAide("🔐", "Bon à savoir", `<p>Rien n'est conservé dans le navigateur ; <b>Purger</b> efface les éventuelles données du module laissées sur le poste. Un projet ouvert par un collègue s'ouvre en lecture seule (verrou).</p>`)}`;
 
@@ -39311,7 +39365,7 @@ function exigDetail(id) {
   </div>
   <div class="card"><div class="row"><h2 style="margin:0">Sources publiques</h2><span class="spacer"></span>
       <select id="add-src" style="width:260px" class="edit">${opt(S.sources.filter(s => !(f.sources || []).some(x => x.id === s.id)).map(s => [s.id, `${s.id} – ${short(s.titre, 60)}`]), "", "Ajouter une source existante…")}</select>
-      <button class="small edit" data-act="linksrc" data-v="${esc(id)}">Lier</button><button class="small edit" data-act="newsrc" data-v="${esc(id)}">+ Nouvelle source</button></div>
+      <button class="small edit" data-act="linksrc" data-v="${esc(id)}">Lier</button>${boutonCatalogue(id)}<button class="small edit" data-act="newsrc" data-v="${esc(id)}">+ Nouvelle source</button></div>
     ${(f.sources || []).length ? `<table class="t" style="margin-top:10px"><thead><tr><th>ID</th><th>Source</th><th style="width:34%">Précision (chapitre, page, mesure)</th><th></th></tr></thead><tbody>${f.sources.map((s, k) => {
       const src = srcMap.get(s.id);
       return `<tr><td>${esc(s.id)}</td><td>${src ? `${esc(src.titre)}<div class="small muted">${esc(src.editeur)} ${esc(src.edition)}${src.url ? ` · <a href="${esc(src.url)}" target="_blank" rel="noopener noreferrer">ouvrir</a>` : ""}</div>` : `<span class="badge b-ko">source supprimée</span>`}</td>
@@ -39337,6 +39391,7 @@ function exigDetail(id) {
         <td><button class="small" data-act="mxproof" data-v="${i}">${(r.preuves || []).length + (r.preuveTexte ? 1 : 0)} preuve(s)</button></td></tr>`;
     }).join("")}</tbody></table>` : `<p class="muted small">Aucune zone déclarée.</p>`}
   </div>
+  ${preuvesModulesHtml(id, rows)}
   <div class="card"><div class="row"><h2 style="margin:0">Plan de traitement</h2><span class="spacer"></span><button class="small edit" data-act="addaction" data-v="${esc(id)}">+ Action pour cette exigence</button></div>
     ${actionsTable(S.actions.map((a, i) => [a, i]).filter(([a]) => a.exig === id), true)}
   </div>`;
@@ -39602,7 +39657,8 @@ VIEWS.zones = () => {
     <td><input data-b="cond|${i}|proto" value="${esc(c.proto)}"></td><td><input data-b="cond|${i}|equip" value="${esc(c.equip)}"></td>
     <td><select data-b="cond|${i}|slt" style="width:60px">${opt([1, 2, 3, 4], c.slt, "—")}</select></td><td><input data-b="cond|${i}|comm" value="${esc(c.comm)}"></td>
     <td><button class="small danger edit" data-act="delcond" data-v="${i}">Supprimer</button></td></tr>`).join("") || `<tr><td colspan="8" class="empty">Aucun conduit.</td></tr>`}
-  </tbody></table></div></div>`;
+  </tbody></table></div></div>
+  ${smsi.pubSite && donneesRecues() ? `<h2>🔗 Données des modules du site, par zone</h2><div class="grid g2">${S.zones.map((z, i) => donneesZoneHtml(z, i)).join("")}</div>` : ""}`;
 };
 
 VIEWS.prestataires = () => { const liste = lignesT("prestataires"); return `<h1>Prestataires</h1><p class="sub">Intégrateurs, fournisseurs de composants, mainteneurs. L'ID sert de clé dans la matrice.</p>
@@ -39612,14 +39668,73 @@ VIEWS.prestataires = () => { const liste = lignesT("prestataires"); return `<h1>
     <td><select data-b="prest|${i}|role">${opt(ROLES, p.role, "—")}</select></td><td><input data-b="prest|${i}|contact" value="${esc(p.contact)}"></td>
     <td><input data-b="prest|${i}|contrat" value="${esc(p.contrat)}"></td><td><input data-b="prest|${i}|certif" value="${esc(p.certif)}"></td>
     <td><button class="small danger edit" data-act="delprest" data-v="${i}">Supprimer</button></td></tr>`; }).join("") || `<tr><td colspan="8" class="empty">Aucun prestataire.</td></tr>`}
-  </tbody></table></div></div>`; };
+  </tbody></table></div></div>${evaluationsHtml()}`; };
+
+/* ===================================================== catalogue des sources publiques du groupe (1.16.0)
+   Le portail WerbSMSI publie le tableau principal des sources (groupe:sourcesPubliques) : une source s'y reprend dans le projet
+   (bibliothèque, fiche d'une exigence) en gardant son identifiant de catalogue (« ref »), ce qui permet de signaler une source
+   modifiée, remplacée ou retirée depuis. L'export « pour le catalogue » produit un fichier que le portail sait importer. */
+const catalogueGroupe = () => { const l = smsi.pubGroupe && smsi.pubGroupe.objets.sourcesPubliques; return Array.isArray(l) ? l : null; };
+const typeProjet = t => SRC_TYPES.includes(t) ? t : "Autre";
+const differeCatalogue = (s, c) => ["titre", "editeur", "edition", "url"].some(k => String(s[k] || "") !== String(c[k] || "")) || typeProjet(c.type) !== s.type;
+function etatCatalogue(s, i) {
+  if (!s.ref) return "";
+  const cat = catalogueGroupe(), c = cat && cat.find(x => x.id === s.ref);
+  if (!cat) return `<span class="badge b-todo" title="Ouvrez l'espace WerbSMSI pour comparer au catalogue">catalogue ${esc(s.ref)}</span>`;
+  if (!c) return `<span class="badge b-ko">${esc(s.ref)} absente du catalogue</span>`;
+  if (c.statut === "retirée") return `<span class="badge b-ko">${esc(s.ref)} retirée du catalogue</span>`;
+  const remplacee = c.statut === "remplacée" ? `<span class="badge b-warn">${esc(s.ref)} remplacée par ${esc(c.remplacePar)}</span>` : "";
+  if (differeCatalogue(s, c)) return `${remplacee}<span class="badge b-warn">modifiée au catalogue</span> <button class="small edit" data-act="srcmaj" data-v="${i}" title="Reprendre titre, éditeur, édition, adresse et type du catalogue">⟳ Mettre à jour</button>`;
+  return remplacee || `<span class="badge b-ok">${esc(s.ref)} · à jour</span>`;
+}
+// Sources du projet sans identifiant de catalogue dont l'adresse figure au catalogue : rattachables
+const rattachables = () => { const cat = catalogueGroupe() || [], cle = u => String(u || "").toLowerCase().replace(/^http:/, "https:").replace(/\/+$/, "");
+  return S.sources.filter(x => !x.ref && x.url).map(x => [x, cat.find(c => c.url && cle(c.url) === cle(x.url))]).filter(([, c]) => c); };
+const boutonCatalogue = exig => `<button class="small edit" data-act="catsrc"${exig ? ` data-v="${esc(exig)}"` : ""}${catalogueGroupe() ? "" : ' disabled title="Ouvrez l\'espace WerbSMSI : le catalogue des sources est publié par le portail (⚙️ Administration › Sources publiques)"'}>📚 Depuis le catalogue du groupe</button>`;
+function catalogueModal(exig) {
+  const cat = catalogueGroupe() || [];
+  const dans = c => S.sources.find(x => x.ref === c.id || (c.url && x.url === c.url));
+  const refs = [...new Set(cat.flatMap(c => c.referentiels || []))];
+  modal(`<h2>📚 Sources publiques du groupe${exig ? ` — ${esc(exig)}` : ""}</h2>
+    <p class="small muted">Catalogue publié par le portail WerbSMSI (${cat.length} source(s)). Cochez les sources à reprendre dans le projet${exig ? ` et à lier à ${esc(exig)}` : ""}.</p>
+    <div class="row" style="gap:8px"><input id="cat-q" placeholder="🔍 Rechercher (titre, éditeur…)" style="max-width:300px"><select id="cat-ref" style="width:auto"><option value="">Tous les référentiels</option>${refs.map(r => `<option>${esc(r)}</option>`).join("")}</select>
+      <label class="small"><input type="checkbox" id="cat-tout" style="width:auto"> Afficher aussi les sources retirées ou remplacées</label></div>
+    <div id="cat-liste" style="max-height:360px;overflow:auto;border:1px solid var(--line);border-radius:6px;padding:6px 10px;margin-top:8px"></div>
+    <div class="actions"><button data-x="cancel">Annuler</button><button class="primary" data-x="ok">Reprendre la sélection</button></div>`, { wide: true,
+    onMount: (m, close) => {
+      const liste = () => {
+        const q = $("#cat-q", m).value.toLowerCase(), r = $("#cat-ref", m).value, tout = $("#cat-tout", m).checked;
+        const choisis = new Set($$("input[data-cat]:checked", m).map(c => c.dataset.cat));
+        $("#cat-liste", m).innerHTML = cat.filter(c => (tout || !c.statut || c.statut === "en vigueur") && (!r || (c.referentiels || []).includes(r)) && (!q || `${c.id} ${c.titre} ${c.editeur} ${c.url}`.toLowerCase().includes(q)))
+          .map(c => { const d = dans(c); return `<label class="row small" style="padding:4px 0;align-items:flex-start"><input type="checkbox" data-cat="${esc(c.id)}" style="width:auto"${d ? " disabled" : choisis.has(c.id) ? " checked" : ""}>
+            <span><strong>${esc(c.id)}</strong> ${esc(c.titre)} <span class="muted">· ${esc(c.type)} · ${esc(c.editeur || "")}${c.edition ? ` · ${esc(c.edition)}` : ""}</span>${c.statut && c.statut !== "en vigueur" ? ` <span class="badge b-warn">${esc(c.statut)}</span>` : ""}${d ? ` <span class="badge b-ok">déjà dans le projet (${esc(d.id)})</span>` : ""}
+            <div class="muted">${esc((c.referentiels || []).join(", "))}</div></span></label>`; }).join("") || `<p class="muted small">Aucune source.</p>`;
+      };
+      liste();
+      m.addEventListener("input", e => { if (e.target.id === "cat-q") liste(); });
+      m.addEventListener("change", e => { if (["cat-ref", "cat-tout"].includes(e.target.id)) liste(); });
+      m.addEventListener("click", e => {
+        const x = e.target.dataset.x; if (!x) return;
+        if (x === "cancel") return close();
+        if (guardRO()) return close();
+        const ids = $$("input[data-cat]:checked", m).map(c => c.dataset.cat); if (!ids.length) { toast("Cochez au moins une source.", "err"); return; }
+        ids.forEach(id => {
+          const c = cat.find(y => y.id === id); if (!c || dans(c)) return;
+          const src = { id: nextId(S.sources, "S", 3), type: typeProjet(c.type), titre: c.titre, editeur: c.editeur || "", edition: c.edition || "", url: c.url || "", consulteLe: c.consulteLe || today(), resume: c.resume || "", ref: c.id };
+          S.sources.push(src); log("Ajout", "Sources", `${src.id} – ${src.titre} (catalogue du groupe ${c.id})`);
+          if (exig) { fiche(exig).sources.push({ id: src.id, precision: "" }); log("Ajout", `Fiche ${exig}`, `source ${src.id}`); }
+        });
+        markDirty(); close(); render(); toast(`${ids.length} source(s) reprise(s) du catalogue du groupe.`, "ok");
+      });
+    } });
+}
 
 VIEWS.sources = () => {
   const usage = id => Object.values(S.fiches).filter(f => (f.sources || []).some(s => s.id === id)).length;
   return `<h1>Sources publiques</h1><p class="sub">Guides, normes et référentiels cités dans les fiches. Seuls la référence et votre résumé sont enregistrés.</p>
-  <div class="card"><div class="row"><span class="spacer"></span><button class="small primary edit" data-act="newsrc">+ Nouvelle source</button></div>
+  <div class="card"><div class="row"><button class="small" data-act="exportcatalogue"${S.sources.length ? "" : " disabled"} title="Fichier JSON à importer dans le portail WerbSMSI (⚙️ Administration › Sources publiques)">📤 Exporter pour le catalogue du groupe</button><span class="spacer"></span>${rattachables().length ? `<button class="small edit" data-act="rattachercat" title="Sources du projet dont l'adresse figure au catalogue du groupe : leur identifiant de catalogue est noté, pour suivre ses évolutions">🔗 Rattacher ${rattachables().length} source(s) au catalogue</button>` : ""}${boutonCatalogue("")}<button class="small primary edit" data-act="newsrc">+ Nouvelle source</button></div>
   <div class="tablewrap" style="margin-top:10px"><table class="t" data-table="sources"><thead><tr><th>ID</th><th>Type</th><th>Titre</th><th>Éditeur</th><th>Édition</th><th>Consultée le</th><th>Utilisée</th><th></th></tr></thead><tbody>
-  ${S.sources.map((s, i) => `<tr><td><strong>${esc(s.id)}</strong></td><td>${esc(s.type)}</td><td>${esc(s.titre)}${s.url ? `<div class="small"><a href="${esc(s.url)}" target="_blank" rel="noopener noreferrer">${esc(short(s.url, 70))}</a></div>` : ""}<div class="small muted">${esc(short(s.resume, 160))}</div></td>
+  ${S.sources.map((s, i) => `<tr><td><strong>${esc(s.id)}</strong></td><td>${esc(s.type)}</td><td>${esc(s.titre)}${s.url ? `<div class="small"><a href="${esc(s.url)}" target="_blank" rel="noopener noreferrer">${esc(short(s.url, 70))}</a></div>` : ""}<div class="small muted">${esc(short(s.resume, 160))}</div>${s.ref ? `<div style="margin-top:3px">${etatCatalogue(s, i)}</div>` : ""}</td>
     <td>${esc(s.editeur)}</td><td>${esc(s.edition)}</td><td>${esc(frDate(s.consulteLe))}</td><td>${usage(s.id)} fiche(s)</td>
     <td><button class="small edit" data-act="editsrc" data-v="${i}">Modifier</button> <button class="small danger edit" data-act="delsrc" data-v="${i}">Supprimer</button></td></tr>`).join("") || `<tr><td colspan="8" class="empty">Aucune source.</td></tr>`}
   </tbody></table></div></div>`;
@@ -39755,6 +39870,170 @@ function syntheseConformite() {
   };
 }
 const sltPublie = z => [1, 2, 3, 4].includes(Number(z.slt));
+
+/* ===================================================== données des autres modules du site (1.15.0)
+   Projet rattaché à un site, espace ouvert : WerbIEC62443 lit les publications du site (charte §5.4) de WerbMap (actifs, SI, VLAN,
+   matrice de flux), WerbCartoSI (état des schémas par catégorie), WerbExploitation (sauvegardes, obsolescence, inventaires, ouvertures
+   de flux réalisées) et WerbPresta (évaluations des prestataires). Rattachement aux zones par l'identifiant de zone des actifs de
+   WerbMap ; les autres données citent les actifs (TAG). Lecture seule : rien n'est appliqué au projet sans action de l'analyste. */
+const bdg = (t, c = "") => `<span class="badge ${c}">${esc(t)}</span>`;
+const RECU = k => { const v = smsi.pubSite && smsi.pubSite.objets[k]; return Array.isArray(v) ? v : []; };
+const MODULES_SOURCES = [
+  ["werbmap", "WerbMap", [["actifs", "actifs"], ["si", "SI"], ["vlans", "VLAN"], ["flux", "flux (matrice)"]]],
+  ["werbcartosi", "WerbCartoSI", [["cartographies", "catégories de schémas"]]],
+  ["werbexploitation", "WerbExploitation", [["sauvegardes", "sauvegardes"], ["plm", "produits suivis (obsolescence)"], ["inventaires", "inventaires de postes"], ["fluxRealises", "ouvertures de flux réalisées"]]],
+  ["werbpresta", "WerbPresta", [["evaluationsPrestataires", "évaluations de prestataires"]]],
+];
+const publieDe = mod => ((smsi.pubSite || {}).fichiers || []).find(f => f.module === mod);
+const donneesRecues = () => !!smsi.pubSite && MODULES_SOURCES.some(([, , l]) => l.some(([k]) => RECU(k).length));
+const actifsParId = () => new Map(RECU("actifs").map(a => [a.id, a]));
+const autorise = f => !/refus|bloqu|interdi|deny/i.test(f.action || "");
+const conduitEntre = (a, b) => S.conduits.some(c => (c.src === a && c.dst === b) || (c.src === b && c.dst === a));
+const CARTO_LIB = { arevoir: ["à revoir", "b-warn"], encours: ["en cours", "b-warn"], non: ["aucun schéma", "b-ko"], couverte: ["couverte", "b-ok"], na: ["non applicable", "b-na"] };
+const carto = id => RECU("cartographies").find(c => c.id === id);
+// Zones d'un prestataire évalué : zones déclarées, zones de ses actifs, zones des actifs de ses SI
+function zonesPresta(p, am = actifsParId()) {
+  const z = new Set(p.zones || []), ajoute = id => { const a = am.get(id); if (a && a.zone) z.add(a.zone); };
+  (p.actifs || []).forEach(ajoute);
+  (p.sis || []).forEach(sid => { const si = RECU("si").find(x => x.id === sid); ((si && si.actifs) || []).forEach(ajoute); });
+  return [...z];
+}
+const testAncien = (b, j) => !b.dernierTest || b.dernierTest < new Date(new Date(j).setFullYear(new Date(j).getFullYear() - 1)).toISOString().slice(0, 10);
+const testKo = (b, j) => (b.statutTest && b.statutTest !== "a-jour") || testAncien(b, j);
+const horsSupport = (x, j) => !!(x.finSupport && x.finSupport < j && !(x.finSupportEtendu && x.finSupportEtendu >= j));
+const finProche = (x, j) => !horsSupport(x, j) && /proche/i.test(x.statut || "");
+// Données reçues rattachées à une zone du projet
+function donneesZone(zid) {
+  const am = actifsParId(), actifs = RECU("actifs").filter(a => a.zone === zid), ids = new Set(actifs.map(a => a.id));
+  return {
+    actifs, vlans: RECU("vlans").filter(v => v.zone === zid), si: RECU("si").filter(x => (x.actifs || []).some(id => ids.has(id))),
+    flux: RECU("flux").filter(f => f.zoneSrc === zid || f.zoneDst === zid),
+    sauvegardes: RECU("sauvegardes").filter(b => ids.has(b.actifSource)), plm: RECU("plm").filter(x => (x.tags || []).some(t => ids.has(t))),
+    inventaires: RECU("inventaires").filter(x => ids.has(x.tag)), fluxRealises: RECU("fluxRealises").filter(f => ids.has(f.src) || ids.has(f.dst)),
+    prestataires: RECU("evaluationsPrestataires").filter(x => zonesPresta(x, am).includes(zid)),
+  };
+}
+// Constats tirés des données reçues : { cle, cl, zone, sr, texte, source }
+function constatsModules() {
+  if (!S || !smsi.pubSite) return [];
+  const j = today(), zs = new Set(S.zones.map(z => z.id)), am = actifsParId(), a = [];
+  RECU("flux").filter(autorise).forEach(f => {
+    if (f.zoneSrc && f.zoneDst && f.zoneSrc !== f.zoneDst && zs.has(f.zoneSrc) && zs.has(f.zoneDst) && !conduitEntre(f.zoneSrc, f.zoneDst))
+      a.push({ cle: "modFluxSansConduit", cl: "b-ko", zone: f.zoneSrc, sr: "SR 5.2", source: "WerbMap", texte: `Flux ${f.id} autorisé de ${f.zoneSrc} vers ${f.zoneDst} (${f.proto || ""}/${f.port || ""}) sans conduit déclaré entre ces zones` });
+    if (!String(f.justification || "").trim()) a.push({ cle: "modFluxJustif", cl: "b-warn", zone: f.zoneSrc || f.zoneDst, sr: "SR 5.2", source: "WerbMap", texte: `Flux ${f.id} autorisé sans justification` });
+  });
+  RECU("actifs").filter(x => x.zone && !zs.has(x.zone)).forEach(x => a.push({ cle: "modActifHorsZone", cl: "b-warn", zone: x.zone, sr: "SR 7.8", source: "WerbMap", texte: `Actif ${x.id} rattaché à la zone ${x.zone}, absente du projet` }));
+  RECU("sauvegardes").filter(b => testKo(b, j)).forEach(b => a.push({ cle: "modSauvegarde", cl: "b-warn", zone: (am.get(b.actifSource) || {}).zone || "", sr: "SR 7.4", source: "WerbExploitation",
+    texte: `Sauvegarde ${b.id} (${b.actifSource}) : ${!b.dernierTest ? "restauration jamais testée" : testAncien(b, j) ? `dernier test de restauration le ${frDate(b.dernierTest)}, plus d'un an` : `test de restauration « ${b.statutTest} »`}` }));
+  RECU("plm").forEach(x => {
+    const zones = [...new Set((x.tags || []).map(t => (am.get(t) || {}).zone).filter(Boolean))];
+    if (horsSupport(x, j)) a.push({ cle: "modHorsSupport", cl: "b-ko", zone: zones.join(", "), sr: "SR 7.8", source: "WerbExploitation", texte: `${x.libelle || x.produit} (${x.fabricant || ""} ${x.produit || ""}) hors support depuis le ${frDate(x.finSupport)} : ${(x.tags || []).join(", ")}` });
+    else if (finProche(x, j)) a.push({ cle: "modHorsSupport", cl: "b-warn", zone: zones.join(", "), sr: "SR 7.8", source: "WerbExploitation", texte: `${x.libelle || x.produit} : fin de support le ${frDate(x.finSupport)} (${(x.tags || []).join(", ")})` });
+  });
+  RECU("evaluationsPrestataires").forEach(x => {
+    const zones = zonesPresta(x, am).join(", ");
+    if (+x.ecartsEnRetard) a.push({ cle: "modPresta", cl: "b-ko", zone: zones, sr: "", source: "WerbPresta", texte: `${x.nom} : ${x.ecartsEnRetard} écart(s) en retard sur ${x.ecartsOuverts} ouvert(s)` });
+    else if (+x.ecartsOuverts) a.push({ cle: "modPresta", cl: "b-warn", zone: zones, sr: "", source: "WerbPresta", texte: `${x.nom} : ${x.ecartsOuverts} écart(s) ouvert(s)` });
+    if (x.distant && x.distant !== "aucun" && x.score == null) a.push({ cle: "modPresta", cl: "b-warn", zone: zones, sr: "SR 1.13", source: "WerbPresta", texte: `${x.nom} : accès distant ${x.distant}${x.moyen ? ` (${x.moyen})` : ""} sans évaluation` });
+  });
+  ["EX-ZONES", "EX-RESEAU", "EX-FLUX", "EX-CARTO", "EX-REPRISE", "EX-ACCES"].forEach(id => { const c = carto(id); if (c && ["arevoir", "non", "encours"].includes(c.etat))
+    a.push({ cle: "modCarto", cl: c.etat === "non" ? "b-ko" : "b-warn", zone: "", sr: CARTO_SR[id], source: "WerbCartoSI", texte: `${c.libelle} (${id}) : ${CARTO_LIB[c.etat][0]}` }); });
+  return a;
+}
+const CARTO_SR = { "EX-ZONES": "SR 5.1", "EX-RESEAU": "SR 5.1", "EX-FLUX": "SR 5.2", "EX-CARTO": "SR 7.8", "EX-REPRISE": "SR 7.4", "EX-ACCES": "SR 1.13" };
+const cartoTexte = ids => ids.map(carto).filter(Boolean).map(c => `${c.libelle} : ${CARTO_LIB[c.etat] ? CARTO_LIB[c.etat][0] : c.etat}${(c.schemas || []).filter(x => x.statut === "approuve").length ? ` (${c.schemas.filter(x => x.statut === "approuve").map(x => `${x.id} v${x.version}`).join(", ")})` : ""}`).join(" ; ");
+// Éléments de preuve proposés pour une exigence et une zone : [{ source, texte }]
+function preuvesProposees(sr, zid) {
+  if (!smsi.pubSite) return [];
+  const d = donneesZone(zid), j = today(), l = [], ajout = (source, texte) => { if (texte) l.push({ source, texte }); };
+  const liste = (x, n = 6) => x.slice(0, n).join(", ") + (x.length > n ? `… (+${x.length - n})` : "");
+  if (sr === "SR 7.8") {
+    if (d.actifs.length) ajout("WerbMap", `${d.actifs.length} composant(s) inventorié(s) dans la zone ${zid} : ${liste(d.actifs.map(a => a.id))}`);
+    if (d.inventaires.length) ajout("WerbExploitation", `${d.inventaires.length} poste(s) avec inventaire logiciel collecté (${liste(d.inventaires.map(x => `${x.tag} ${x.osNom || ""}`.trim()), 3)})`);
+    if (d.plm.length) { const hs = d.plm.filter(x => horsSupport(x, j)).length; ajout("WerbExploitation", `obsolescence suivie pour ${d.plm.length} produit(s)${hs ? `, dont ${hs} hors support` : ", aucun hors support"}`); }
+    ajout("WerbCartoSI", cartoTexte(["EX-CARTO"]));
+  }
+  if (sr === "SR 5.1") {
+    if (d.vlans.length) ajout("WerbMap", `${d.vlans.length} VLAN rattaché(s) à la zone : ${liste(d.vlans.map(v => `${v.vlan} ${v.nom || ""}`.trim()))}`);
+    const cz = S.conduits.filter(c => c.src === zid || c.dst === zid);
+    if (cz.length) ajout("Projet", `${cz.length} conduit(s) déclaré(s) : ${cz.map(c => c.id).join(", ")}`);
+    ajout("WerbCartoSI", cartoTexte(["EX-ZONES", "EX-RESEAU"]));
+  }
+  if (sr === "SR 5.2") {
+    const fx = d.flux.filter(f => f.zoneSrc !== f.zoneDst), aut = fx.filter(autorise), sj = aut.filter(f => !String(f.justification || "").trim()).length;
+    if (fx.length) ajout("WerbMap", `matrice de flux : ${fx.length} flux franchissant la frontière de la zone, ${aut.length} autorisé(s)${sj ? `, dont ${sj} sans justification` : ", tous justifiés"}${[...new Set(aut.map(f => f.fw).filter(Boolean))].length ? ` ; filtrage par ${[...new Set(aut.map(f => f.fw).filter(Boolean))].join(", ")}` : ""}`);
+    if (d.fluxRealises.length) ajout("WerbExploitation", `${d.fluxRealises.length} ouverture(s) de flux réalisée(s) et tracée(s) (${liste(d.fluxRealises.map(f => f.ticket || f.ref), 3)})`);
+    ajout("WerbCartoSI", cartoTexte(["EX-FLUX"]));
+  }
+  if (sr === "SR 7.3" && d.sauvegardes.length) ajout("WerbExploitation", `${d.sauvegardes.length} sauvegarde(s) des composants de la zone : ${liste(d.sauvegardes.map(b => `${b.actifSource} (${(b.periodicite || "").toLowerCase()}, ${(b.mode || "").toLowerCase()})`), 4)}`);
+  if (sr === "SR 7.4") {
+    if (d.sauvegardes.length) { const ko = d.sauvegardes.filter(b => testKo(b, j)).length, der = d.sauvegardes.map(b => b.dernierTest).filter(Boolean).sort().pop();
+      ajout("WerbExploitation", `tests de restauration : ${d.sauvegardes.length - ko}/${d.sauvegardes.length} à jour${der ? `, dernier le ${frDate(der)}` : ""}`); }
+    ajout("WerbCartoSI", cartoTexte(["EX-REPRISE"]));
+  }
+  if (sr === "SR 1.13") {
+    const dist = d.prestataires.filter(x => x.distant && x.distant !== "aucun");
+    if (dist.length) ajout("WerbPresta", `${dist.length} prestataire(s) avec accès distant à la zone : ${dist.map(x => `${x.nom} (${x.distant}${x.moyen ? `, ${x.moyen}` : ""}${x.score != null ? `, évalué ${x.score} %` : ", non évalué"})`).join(" ; ")}`);
+    ajout("WerbCartoSI", cartoTexte(["EX-ACCES"]));
+  }
+  return l;
+}
+const SR_PROPOSEES = ["SR 1.13", "SR 5.1", "SR 5.2", "SR 7.3", "SR 7.4", "SR 7.8"];
+// Ligne de preuve reprise dans la « référence libre » de la matrice : « [Source, date] texte »
+const lignePreuve = x => `[${x.source}, ${frDate(today())}] ${x.texte}`;
+const dejaRepris = (r, x) => String(r.preuveTexte || "").includes(`] ${x.texte}`);
+function preuvesModulesHtml(id, rows) {
+  if (!SR_PROPOSEES.includes(id) || !smsi.pubSite) return "";
+  const blocs = rows.map(([r, i]) => { const l = preuvesProposees(id, r.zone); return l.length ? `<tr><td style="width:110px"><strong>${esc(r.zone)}</strong></td><td>${l.map((x, k) => `<div class="mod-preuve">${bdg(x.source, "b-info")} ${esc(x.texte)}
+      ${dejaRepris(r, x) ? bdg("repris", "b-ok") : `<button class="small edit" data-act="reprendrepreuve" data-v="${i}" data-k="${k}">📋 Reprendre</button>`}</div>`).join("")}</td></tr>` : ""; }).join("");
+  return blocs ? `<div class="card" data-preuves-modules><h2 style="margin-top:0">🔗 Éléments de preuve proposés par les modules du site</h2>
+    <p class="small muted">D'après les publications de WerbMap, WerbCartoSI, WerbExploitation et WerbPresta. « Reprendre » ajoute l'élément à la référence libre des preuves de la ligne : c'est à vous d'en juger la valeur ; aucun statut n'est modifié.</p>
+    <table class="t"><tbody>${blocs}</tbody></table></div>` : "";
+}
+// Carte d'une zone : données reçues et constats
+function donneesZoneHtml(z, i) {
+  const d = donneesZone(z.id), j = today(), cst = constatsModules().filter(c => String(c.zone).split(", ").includes(z.id));
+  const ligne = (lib, n, det = "") => `<tr><td>${esc(lib)}</td><td style="width:60px"><strong>${n}</strong></td><td class="small">${det}</td></tr>`;
+  return `<div class="card" data-zone-modules="${esc(z.id)}"><div class="row"><h3 style="margin:0">${esc(z.id)} – ${esc(z.nom)}</h3><span class="spacer"></span>
+      ${d.actifs.length ? `<button class="small edit" data-act="zonecomposants" data-v="${i}" title="Remplit « Composants » avec les actifs publiés par WerbMap">📋 Composants depuis WerbMap</button>` : ""}</div>
+    <table class="t" style="margin-top:6px"><tbody>
+      ${ligne("Actifs (WerbMap)", d.actifs.length, esc(d.actifs.map(a => a.id).join(", ")))}
+      ${ligne("VLAN (WerbMap)", d.vlans.length, esc(d.vlans.map(v => v.vlan + (v.nom ? " " + v.nom : "")).join(", ")))}
+      ${ligne("SI (WerbMap)", d.si.length, esc(d.si.map(x => x.nom).join(", ")))}
+      ${ligne("Flux de la matrice (WerbMap)", d.flux.length, esc(d.flux.map(f => `${f.id} ${f.zoneSrc}→${f.zoneDst}`).join(", ")))}
+      ${ligne("Sauvegardes (WerbExploitation)", d.sauvegardes.length, d.sauvegardes.length ? `${d.sauvegardes.filter(b => !testKo(b, j)).length} test(s) de restauration à jour` : "")}
+      ${ligne("Produits suivis (WerbExploitation)", d.plm.length, d.plm.length ? `${d.plm.filter(x => horsSupport(x, j)).length} hors support, ${d.plm.filter(x => finProche(x, j)).length} fin de support proche` : "")}
+      ${ligne("Inventaires de postes (WerbExploitation)", d.inventaires.length, esc(d.inventaires.map(x => x.tag).join(", ")))}
+      ${ligne("Prestataires (WerbPresta)", d.prestataires.length, esc(d.prestataires.map(x => `${x.nom}${x.distant && x.distant !== "aucun" ? ` (accès distant ${x.distant})` : ""}`).join(", ")))}</tbody></table>
+    ${cst.length ? `<ul class="small" style="margin:6px 0 0">${cst.map(c => `<li>${bdg(c.cl === "b-ko" ? "à traiter" : "à vérifier", c.cl)} ${esc(c.texte)}${c.sr ? ` <span class="muted">(${esc(c.sr)})</span>` : ""}</li>`).join("")}</ul>` : ""}</div>`;
+}
+const normNomP = t => String(t || "").normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
+const presta62443 = x => S.prestataires.find(p => !p.archive && normNomP(p.nom) === normNomP(x.nom));
+const ROLE_PRESTA = { "Intégrateur": "Intégrateur (62443-2-4)", "Mainteneur": "Mainteneur (62443-2-4)", "Constructeur ou éditeur": "Fournisseur de composants (62443-4-1 / 4-2)" };
+function evaluationsHtml() {
+  const ev = RECU("evaluationsPrestataires"); if (!smsi.pubSite) return "";
+  const am = actifsParId(), pub = publieDe("werbpresta");
+  return `<div class="card" data-evaluations><h2 style="margin-top:0">🔗 Évaluations publiées par WerbPresta</h2>
+    <p class="small muted">${pub ? `Publiées le ${esc(frDate(pub.publieLe))}. ` : ""}Rapprochées des prestataires du projet par leur raison sociale. Zones : déclarées, ou déduites des actifs et SI accessibles au prestataire.</p>
+    ${ev.length ? `<div class="tablewrap"><table class="t"><thead><tr><th>Évaluation</th><th>Prestataire</th><th>Projet</th><th>Criticité</th><th>Score</th><th>Écarts ouverts / en retard</th><th>Certifications</th><th>Accès distant</th><th>Zones</th><th>Prochaine revue</th></tr></thead><tbody>
+      ${ev.map(x => { const p = presta62443(x); return `<tr><td>${esc(x.id)}</td><td><strong>${esc(x.nom)}</strong><div class="small muted">${esc(x.type || "")}</div></td>
+        <td>${p ? bdg(p.id, "b-ok") : `<button class="small edit" data-act="ajoutprestaeval" data-v="${esc(x.id)}" title="Créer le prestataire dans le projet">+ Ajouter</button>`}</td><td>${esc(x.criticite || "")}</td>
+        <td>${x.score == null ? bdg("non évalué", "b-warn") : bdg(x.score + " %", x.score >= 70 ? "b-ok" : x.score >= 50 ? "b-warn" : "b-ko")}</td>
+        <td>${+x.ecartsEnRetard ? bdg(`${x.ecartsOuverts} / ${x.ecartsEnRetard}`, "b-ko") : +x.ecartsOuverts ? bdg(`${x.ecartsOuverts} / 0`, "b-warn") : "0"}</td>
+        <td class="small">${esc((x.certifications || []).join(", "))}</td><td class="small">${esc(x.distant || "")}${x.moyen ? `<div class="muted">${esc(x.moyen)}</div>` : ""}</td>
+        <td>${esc(zonesPresta(x, am).join(", "))}</td><td>${esc(frDate(x.prochaineRevue))}</td></tr>`; }).join("")}</tbody></table></div>` : `<p class="muted small">Aucune évaluation publiée par WerbPresta pour ce site.</p>`}</div>`;
+}
+VIEWS.modules = () => {
+  if (!smsi.pubSite) return `<h1>Données des modules</h1><p class="sub">Ce que les autres modules publient pour le site du projet.</p>
+    <div class="infobox">Ouvrez l'espace WerbSMSI et rattachez le projet à un site (<a href="#" data-nav="werbsmsi">Intégration WerbSMSI</a>) : WerbIEC62443 lira alors les publications de WerbMap, WerbCartoSI, WerbExploitation et WerbPresta.</div>`;
+  const cst = constatsModules();
+  return `<h1>Données des modules</h1><p class="sub">Publications du site ${esc(S.meta.site)} reprises en lecture seule : zones, éléments de preuve des exigences, prestataires et contrôles. <button class="small" data-act="smsirefresh">⟳ Relire l'espace</button></p>
+    <div class="card"><h2 style="margin-top:0">Sources</h2><table class="t"><thead><tr><th>Module</th><th>Publié le</th><th>Données reçues</th></tr></thead><tbody>
+      ${MODULES_SOURCES.map(([m, lib, l]) => { const f = publieDe(m); return `<tr><td><strong>${esc(lib)}</strong></td><td>${f ? esc(frDate(f.publieLe)) : bdg("aucune publication", "b-warn")}</td><td class="small">${l.map(([k, kl]) => `${RECU(k).length} ${esc(kl)}`).join(" · ")}</td></tr>`; }).join("")}</tbody></table></div>
+    <div class="card" data-constats><h2 style="margin-top:0">Constats</h2>${cst.length ? `<table class="t"><thead><tr><th></th><th>Source</th><th>Zone</th><th>Exigence</th><th>Constat</th></tr></thead><tbody>
+      ${cst.map(c => `<tr><td style="width:100px">${bdg(c.cl === "b-ko" ? "à traiter" : "à vérifier", c.cl)}</td><td>${esc(c.source)}</td><td>${esc(c.zone)}</td><td>${c.sr ? `<a href="#" data-act="voirexig" data-v="${esc(c.sr)}">${esc(c.sr)}</a>` : ""}</td><td>${esc(c.texte)}</td></tr>`).join("")}</tbody></table>` : `<p class="muted">Aucun constat.</p>`}</div>
+    <h2>Par zone</h2><div class="grid g2">${S.zones.map((z, i) => donneesZoneHtml(z, i)).join("") || `<div class="card empty">Aucune zone dans le projet.</div>`}</div>`;
+};
 const ETAT_SOCLE = { "appliquée": "b-ok", "partielle": "b-warn", "non appliquée": "b-ko" };
 // État du socle de mesures du groupe pour ce projet (site ou groupe)
 function socleHtml() {
@@ -40061,6 +40340,49 @@ function printDocument(res) {
 
 /* ===================================================== actions (data-act) */
 const ACTIONS = {
+  catsrc(el) { if (guardRO()) return; if (!catalogueGroupe()) { toast("Ouvrez l'espace WerbSMSI : le catalogue des sources est publié par le portail.", "err"); return; } catalogueModal(el.dataset.v || ""); },
+  rattachercat() {
+    if (guardRO()) return;
+    const l = rattachables(); l.forEach(([x, c]) => { x.ref = c.id; log("Modification", "Sources", `${x.id} rattachée au catalogue du groupe (${c.id})`); });
+    if (l.length) { markDirty(); render(); toast(`${l.length} source(s) rattachée(s) au catalogue du groupe.`, "ok"); }
+  },
+  srcmaj(el) {
+    if (guardRO()) return;
+    const s = S.sources[+el.dataset.v], c = s && (catalogueGroupe() || []).find(x => x.id === s.ref); if (!c) return;
+    const av = `${s.titre} | ${s.editeur} | ${s.edition} | ${s.url}`;
+    Object.assign(s, { type: typeProjet(c.type), titre: c.titre, editeur: c.editeur || "", edition: c.edition || "", url: c.url || "" });
+    log("Modification", "Sources", `${s.id} mise à jour depuis le catalogue ${c.id} : « ${short(av, 80)} »`); markDirty(); render(); toast(`${s.id} mise à jour depuis le catalogue du groupe.`, "ok");
+  },
+  exportcatalogue() {
+    const j = { format: "WERBSMSI-SOURCES", schema: 1, exporteLe: new Date().toISOString(),
+      sources: S.sources.map(s => ({ id: s.ref || "", type: s.type, titre: s.titre, editeur: s.editeur, edition: s.edition, url: s.url, consulteLe: s.consulteLe, resume: s.resume,
+        referentiels: ["IEC 62443"], statut: "en vigueur", origine: `WerbIEC62443 (${S.projet.reference || S.projet.nom || "projet"})` })) };
+    const nom = `Sources_${(S.projet.reference || "projet").replace(/[^\w-]+/g, "_")}_pour_catalogue.json`;
+    download(new Blob([JSON.stringify(j, null, 1)], { type: "application/json" }), WerbSocle.nommage && WerbSocle.nommage.fichier ? WerbSocle.nommage.fichier(nom) : nom);
+    toast("Fichier à importer dans le portail WerbSMSI (⚙️ Administration › Sources publiques).", "ok");
+  },
+  reprendrepreuve(el) {
+    if (guardRO()) return;
+    const r = S.matrice[+el.dataset.v]; if (!r) return;
+    const x = preuvesProposees(r.exig, r.zone)[+el.dataset.k]; if (!x || dejaRepris(r, x)) return;
+    const av = r.preuveTexte || ""; r.preuveTexte = [av, lignePreuve(x)].filter(Boolean).join(" ; ");
+    log("Modification", `Matrice ${r.exig} / ${r.zone}`, `preuve reprise de ${x.source} : « ${short(x.texte, 80)} »`); markDirty(); render(); toast(`Élément de ${x.source} repris dans les preuves de ${r.exig} / ${r.zone}.`, "ok");
+  },
+  zonecomposants(el) {
+    if (guardRO()) return;
+    const z = S.zones[+el.dataset.v]; if (!z) return;
+    const d = donneesZone(z.id), av = z.composants || "";
+    z.composants = d.actifs.map(a => `${a.id}${a.type ? ` (${a.type}${a.modele ? ` ${a.modele}` : ""}${a.firmware ? `, ${a.firmware}` : ""})` : ""}`).join("\n");
+    if (av === z.composants) { toast("Composants déjà à jour.", "ok"); return; }
+    log("Modification", `Zone ${z.id}`, `composants repris de WerbMap (${d.actifs.length} actif(s))`); markDirty(); render(); toast(`${d.actifs.length} composant(s) repris de WerbMap dans ${z.id}.`, "ok");
+  },
+  ajoutprestaeval(el) {
+    if (guardRO()) return;
+    const x = RECU("evaluationsPrestataires").find(y => y.id === el.dataset.v); if (!x || presta62443(x)) return;
+    let k = S.prestataires.length + 1, id; do { id = "P" + String(k++).padStart(2, "0"); } while (S.prestataires.some(p => p.id === id));
+    S.prestataires.push({ id, nom: x.nom, role: ROLE_PRESTA[x.type] || "Autre", contact: "", contrat: "", certif: (x.certifications || []).join(", ") });
+    log("Ajout", "Prestataire", `${id} – ${x.nom} (évaluation WerbPresta ${x.id})`); markDirty(); renderAll(); toast(`${id} ${x.nom} ajouté au projet.`, "ok");
+  },
   // Bandeau commun (charte §7.6)
   ouvrir: () => openProject(), enregistrer: () => saveProject(false), enregistrerSous: () => saveProject(true), fermer: () => closeProject(), purger: () => purgeAll(),
   exportExcel: () => ACTIONS.xlsxout(), importExcel: () => ACTIONS.xlsxin(),
@@ -40075,12 +40397,13 @@ const ACTIONS = {
   async openLink() {
     const d = WerbSocle.lien.lire();
     if (!d) return;
-    try { const f = await WerbSocle.lien.ouvrir(d, { verrou: false }); lastMod = f.modifie; await loadText(f.texte, f.poignee, f.nom); WerbSocle.lien.effacer(); }
+    try { const f = await WerbSocle.lien.ouvrir(d, { verrou: false }); lastMod = f.modifie; await loadText(f.texte, f.poignee, f.nom); WerbSocle.lien.effacer(); if (S && espaceDuProjet()) { await smsiCharger(); render(); } }
     catch (e) { if (e.name !== "AbortError") toast("Ouverture impossible : " + e.message, "err"); }
   },
   example() { S = normalize(clone(window.SEED.exemple)); fh = null; fileName = ""; readOnly = false; ensureMatrice(); log("Ouverture", "Projet", "Projet d'exemple"); dirty = true; view = "dashboard"; renderAll(); },
   open: openProject,
   selexig(el) { ui.exig = el.dataset.v; ui.refEdit = false; render(); },
+  voirexig(el, e) { if (e) e.preventDefault(); ui.exig = el.dataset.v; ui.refEdit = false; view = "referentiel"; renderAll(); },
   openexig(el, ev) { ev.preventDefault(); ui.exig = el.dataset.v; ui.refEdit = false; view = "referentiel"; render(); },
   refedit() { if (guardRO()) return; ui.refEdit = !ui.refEdit; render(); },
   mxfilter(el) { ui.mx = { zone: "", prest: "", statut: "", fr: "", q: "", req: true }; ui.mx[el.dataset.k] = el.dataset.v; view = "matrice"; render(); },

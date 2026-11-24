@@ -4,6 +4,11 @@ Toutes les évolutions notables de WerbReferentiels sont consignées ici.
 Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/), numérotation [SemVer](https://semver.org/lang/fr/).
 
 
+## [1.6.3] — 2026-11
+
+### Changements
+- **Réf. croisée WerbSMSI** régénérée : WerbIEC62443 1.15.0 cite désormais les catégories de schémas de WerbCartoSI (EX-CARTO, EX-RESEAU, EX-ZONES, EX-FLUX, EX-ACCES, EX-REPRISE) pour proposer des éléments de preuve aux exigences IEC 62443-3-3.
+
 ## [1.6.2] — 2026-11
 
 ### Changements

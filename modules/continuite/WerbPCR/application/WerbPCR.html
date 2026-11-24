@@ -1,5 +1,5 @@
 <!doctype html>
-<!-- WerbPCR v1.10.0 – Développé par @WerbHat – build novembre 2026 -->
+<!-- WerbPCR v1.11.0 – Développé par @WerbHat – build novembre 2026 -->
 <html lang="fr">
 <head>
 <meta charset="utf-8">
@@ -9,7 +9,7 @@
 <title>WerbPCR</title>
 <meta name="application-name" content="WerbPCR">
 <meta name="author" content="@WerbHat">
-<meta name="generator" content="WerbPCR v1.10.0 – Développé par @WerbHat">
+<meta name="generator" content="WerbPCR v1.11.0 – Développé par @WerbHat">
 <meta name="description" content="Plan de cybersécurité et de reprise d'un site : PCI (périmètre métier EBIOS, approche systémique, SI, fiches par SI, plan d'actions), puis PRI">
 <style>/*! WerbPCR – Développé par @WerbHat */
 :root {
@@ -36411,7 +36411,7 @@ const WERB = Object.freeze((() => {
   const bytes = [68, 195, 169, 118, 101, 108, 111, 112, 112, 195, 169, 32, 112, 97, 114, 32, 64, 87, 101, 114, 98, 72, 97, 116];
   const signature = new TextDecoder("utf-8").decode(new Uint8Array(bytes));
   const produit = "WerbPCR";
-  const version = "1.10.0";
+  const version = "1.11.0";
   return {
     id: "werbpcr",
     produit, version, auteur: "@WerbHat", signature,
@@ -39214,6 +39214,23 @@ Les fiches qui suivent appliquent cette structure à chaque système d'informati
           ${m ? `<button class="danger" data-act="modeleRetirer">Retirer</button>` : ""}</div></div>`;
   };
 
+  /* Publication du plan de reprise par SI (site:reprise, 1.11.0) : lue par WerbMap pour proposer la note PCR des étiquettes WerbTagDroid.
+     Seulement la reprise : RTO, RPO, mode dégradé, dépendances, déclenchement, étapes, retour ; ni impacts, ni risques, ni description du SI.
+     Adresses IP remplacées par « [adresse] » ; les responsables sont des rôles (groupe:roles). */
+  const sansIP = t => String(t == null ? "" : t).replace(/\b\d{1,3}(\.\d{1,3}){3}(\/\d{1,2})?\b/g, "[adresse]").trim();
+  function reprisePubliee() {
+    return Object.keys(S.pri.sis).filter(id => sis().some(s => s.id === id)).map(id => {
+      const q = priLu(id), s = sis().find(x => x.id === id) || {}, o = { id, si: id, nom: sansIP(s.nom || id) };
+      if (+q.rto > 0) o.rto = +q.rto; if (+q.rpo > 0) o.rpo = +q.rpo;
+      [["degrade", q.degrade], ["declenchement", q.declenchement], ["retour", q.retour]].forEach(([k, v]) => { if (sansIP(v)) o[k] = sansIP(v); });
+      const dep = (q.externes || []).filter(x => x && (x.nom || x.type)).map(x => ({ type: sansIP(x.type), nom: sansIP(x.nom), commentaire: sansIP(x.commentaire) }));
+      if (dep.length) o.dependances = dep;
+      const et = (q.etapes || []).filter(x => x && sansIP(x.action)).map(x => ({ action: sansIP(x.action), responsable: sansIP(x.responsable), duree: sansIP(x.duree), verification: sansIP(x.verification) }));
+      if (et.length) o.etapes = et;
+      return o;
+    }).filter(o => o.rto || o.etapes || o.degrade);
+  }
+
   VUES.werbsmsi = () => {
     const g = E.groupe, ok = E.ouvert && LIAISON.portee && LIAISON.groupeId === (g || {}).groupeId;
     const ligne = (obj, k, quoi) => `<tr><td style="width:240px"><code>${obj}</code></td><td>${recus(k) ? `${(recus(k).items || []).length} ${quoi}, reçu(s) le ${esc(frDate(recus(k).majLe))}` : "non reçu"}</td></tr>`;
@@ -39232,7 +39249,11 @@ Les fiches qui suivent appliquent cette structure à chaque système d'informati
       ${ligne("site:evaluationsPrestataires", "prestataires", "prestataire(s) — WerbPresta (PRI, dépendances externes proposées)")}
       <tr><td><code>groupe:formations</code></td><td>${recus("formations") ? `${recus("formations").site ? `formation du site : ${esc(recus("formations").site.taux ?? "—")} % à jour (${recus("formations").site.personnes} personne(s))` : "aucune personne du site"} — WerbAcademie (objectif R#1), reçus le ${esc(frDate(recus("formations").majLe))}` : "non reçus"}</td></tr>
       <tr><td><code>groupe:echelles</code></td><td>${recus("echelles") ? `gravité et besoin de sécurité, reçues le ${esc(frDate(recus("echelles").majLe))}` : "non reçues (échelles par défaut)"}</td></tr></tbody></table></div>
-      <div class="card"><h2>Publication</h2><p class="muted">Cette version ne publie rien. La publication des RTO, RPO et de l'état de préparation par SI (<code>site:continuite</code>, lue par la fiche SI de WerbMap) est prévue (PCR-10).</p></div>`;
+      <div class="card" data-pub-reprise><h2>Publication</h2>${(() => { const r = reprisePubliee();
+        return `<p>Publie le <b>plan de reprise</b> de ${r.length} SI (<code>site:reprise</code>) : RTO, RPO, mode dégradé, dépendances, déclenchement, étapes de reprise (responsable désigné par son rôle) et retour à la normale. <b>WerbMap</b> s'en sert pour proposer la <b>note PCR</b> des étiquettes d'actifs lues par WerbTagDroid. Ni impacts métier, ni risques, ni description des SI ; les adresses IP sont remplacées par « [adresse] ».</p>
+        ${dirty ? `<div class="warnbox">Des modifications ne sont pas enregistrées : enregistrez le plan avant de publier.</div>` : ""}
+        <div class="row"><button class="primary" data-act="publierReprise"${ok && r.length && !dirty ? "" : " disabled"}>📤 Publier dans sites/${esc(LIAISON.site || "…")}/publications/werbpcr.json</button></div>
+        <p class="small muted">La publication des indicateurs de préparation par SI (PCR-10) reste prévue.</p>`; })()}</div>`;
   };
 
   VUES.journal = () => {
@@ -39488,6 +39509,14 @@ Les fiches qui suivent appliquent cette structure à chaque système d'informati
       const id = el.dataset.id;
       if (!(await confirmer(`Supprimer la description saisie pour <b>${esc(id)}</b> ?`, "Supprimer"))) return;
       journaliser("Suppression", "Description", id, "description", S.perimetre.descriptions[id], ""); delete S.perimetre.descriptions[id]; marquer(); render();
+    },
+    async publierReprise() {
+      const r = reprisePubliee(); if (!r.length || !E.ouvert || !LIAISON.site) return;
+      if (!(await confirmer(`Publier le plan de reprise de ${r.length} SI vers le site <b>${esc(LIAISON.site)}</b> ? Les modules du site (WerbMap) pourront le lire.`, "Publier"))) return;
+      try { const chemin = await E.publier({ niveau: "site", site: LIAISON.site, objets: { reprise: r }, utilisateur: user });
+        journaliser("Publication", "WerbSMSI", "site:reprise", "", "", `${r.length} SI — ${chemin}`); toast(`Plan de reprise publié (${r.length} SI) : enregistrez le plan pour garder la trace au journal.`, "ok"); marquer(); }
+      catch (e) { toast("Publication impossible : " + e.message, "err"); }
+      render();
     },
     async smsiOpen() { SMSI.err = ""; try { await E.choisir(); toast(`Espace « ${E.groupe.organisation} » ouvert.`, "ok"); await apresEspace(); } catch (e) { if (e.name !== "AbortError") SMSI.err = e.message; } render(); },
     async recevoir() { const ch = await recevoir(); render(); toast(ch ? "Données reçues mises à jour : enregistrez le plan." : SMSI.err ? "Lecture impossible : " + SMSI.err : "Données reçues déjà à jour.", ch ? "ok" : SMSI.err ? "err" : ""); },

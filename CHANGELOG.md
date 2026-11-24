@@ -4,9 +4,36 @@ Toutes les évolutions notables de l'environnement WerbSMSI (charte, portail, ou
 Les modules ont chacun leur propre CHANGELOG.
 Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/), numérotation [SemVer](https://semver.org/lang/fr/).
 
+## [0.44.0] — 2026-11
+
+### Ajouts — étiquettes d'actifs WerbTagDroid
+- **WerbMap 1.34.0 publié** : *Inventaires › Étiquettes* — étiquettes d'actifs chiffrées et signées (format WTAG1) lues par l'application Android **WerbTagDroid** (projet distinct, dépôt voisin) : TAG, libellé et classification en clair ; zone, emplacement, coffret et **note PCR** chiffrés (AES-256-GCM) et signés (ECDSA P-256) dans le QR ; classification dérivée de la zone et de l'indicateur « critique », dérogation tracée ; fichier de clés de l'émetteur chiffré par mot de passe, gardé au coffre-fort, clés en mémoire seulement ; planche d'impression ; suivi des étiquettes à réimprimer.
+- **WerbMap 1.35.0 publié** : support d'impression des étiquettes au choix — planche A4 libre, planches A4 en grille (Avery L7165, L7163, 70 × 42,3 mm, personnalisée ; départ à l'étiquette n° pour une planche entamée), rouleaux d'imprimante d'étiquettes (62 × 100, 89 × 36, 100 × 50 mm, personnalisé) ; étiquette trop petite pour son QR refusée avant l'émission.
+- **WerbPCR 1.11.0 publié** : publication du plan de reprise par SI (`site:reprise`), dont WerbMap propose la note PCR des étiquettes.
+- **WerbMap 1.36.0 publié** : téléphones WerbTagDroid enrôlés (fichier de clé publique) et **badges de clés** (QR chiffré pour un téléphone, signé, valable un mois par défaut ; code à usage unique affiché une fois, jamais enregistré ; mot de passe du fichier de clés redemandé).
+- **WerbMap 1.37.0 publié** : badge de clés affiché à l'écran pour être flashé par le téléphone (jamais en même temps que le code, masqué après 2 minutes).
+- **WerbMap 1.36.1 publié** : étiquettes avec le QR sur toute la hauteur et le bandeau de classification jusqu'au QR.
+- **`APK/WerbTagDroid/`** : application Android WerbTagDroid 0.5.0 (lecture des étiquettes, badge de clés), signée par sa clé dédiée (certificat `436A 090C … 1DD5`), compilée pour l'émetteur des étiquettes DEMO (`5CB9 654B … 1DB0`) ; README avec les empreintes. Sous-dossier distinct du README de WerbVeille Droid.
+- **Charte** : objet `site:reprise` ajouté au tableau des objets publiés, au schéma `publication_site.schema.json`, au schéma `module.schema.json` et aux objets connus de l'audit.
+
+## [0.43.0] — 2026-11
+
+### Ajouts — sources publiques du groupe
+- **Portail 1.19.0 : ⚙️ Administration › Sources publiques** — tableau principal des sources publiques du groupe (normes, guides, référentiels, textes réglementaires, articles, sites) : identifiant `SRC-nnn`, type, titre, éditeur, édition, date de publication, adresse, date de consultation, résumé, référentiels (ANSSI, NIS2, ISO 27001, IEC 62443, NIST, CRA, RGPD), statut (en vigueur, remplacée par…, retirée), origine. Recherche et filtres, fiche d'édition, contrôles (titre, adresse, doublon d'adresse, remplaçante). Une source publiée n'est jamais supprimée : elle passe « retirée ».
+- **Import et export** : CSV pour Excel (séparateur « ; » ou « , », en-têtes en français ou noms de champs) et JSON (export du portail, liste de sources, export « pour le catalogue » d'un module) ; aperçu avant import (ajouts, mises à jour rapprochées par identifiant puis adresse ou titre, identiques, lignes ignorées).
+- **Publication** de l'objet **`groupe:sourcesPubliques`** dans `publications/werbsmsi.json` (les autres objets du portail, comme les listes de choix, sont conservés).
+- **Catalogue de départ** : 44 sources réunies sans doublon depuis les pages « Sources officielles » de WerbReferentiels et la bibliothèque de WerbIEC62443, produites par le nouvel outil `charte/outils/sources_publiques.py` (`portail/src/sources_defaut.json`, `--verifier` pour le contrôler) et intégrées au portail par `werb_charte.py portail` ; proposées tant que rien n'est publié, ou à la demande (➕ Reprendre le catalogue de départ).
+- **Charte** : objet `groupe:sourcesPubliques` ajouté au tableau des objets publiés, au schéma `publication_groupe.schema.json`, au schéma `module.schema.json` et aux objets connus de l'audit.
+- **WerbIEC62443 1.16.0 publié** : sources reprises du catalogue du groupe (bibliothèque et fiche d'une exigence), suivi des sources modifiées, remplacées ou retirées au catalogue (⟳ Mettre à jour), rattachement par adresse, export pour le catalogue.
+- Tests : `portail/tests/test_sources.py` ; `WerbIEC62443/tests/test_catalogue.py`.
+- **Sources disponibles dès la création d'un espace** : l'assistant « Mise en place » du portail et `werb_charte.py groupe` publient d'emblée le catalogue de départ (`publications/werbsmsi.json`, `groupe:sourcesPubliques`) ; les modules y ont accès sans ouvrir la démonstration ni passer par l'Administration.
+- **Fichier mis à disposition** : `Modeles_docs/JSON/Sources_publiques_WerbSMSI.json` (format d'import du portail), inscrit à l'inventaire des modèles (portail › Outils › Modèles de documents, groupe « Fichiers de données (JSON) ») ; pour un espace existant : ⚙️ Administration › Sources publiques › Importer, puis Publier. `charte/outils/sources_publiques.py` produit ce fichier et sa copie intégrée au portail (`portail/src/sources_defaut.json`), contrôlées par `--verifier` et par `Modeles_docs/synchroniser.py`.
+
 ## [0.42.0] — 2026-11
 
 ### Changements
+- **WerbIEC62443 1.15.0 publié** : lecture des publications du site de WerbMap (actifs, SI, VLAN, matrice de flux), WerbCartoSI (état des schémas), WerbExploitation (sauvegardes, obsolescence, inventaires, ouvertures de flux) et WerbPresta (évaluations des prestataires) — vue « Données des modules », données par zone, éléments de preuve proposés pour SR 1.13, 5.1, 5.2, 7.3, 7.4 et 7.8, évaluations des prestataires, contrôles qualité ; composant guides 1.3.0.
+- **Table des exigences** (charte §5.10) : citations des catégories `EX-…` de WerbCartoSI par WerbIEC62443 déclarées dans `charte/exigences/usages.json` ; **WerbReferentiels 1.6.3 publié** (réf. croisée régénérée).
 - **WerbGouvernance 1.20.0 publié** : notes de préparation de la revue de direction — notes internes et une note par élément d'entrée (texte des éléments à rédiger, complément des éléments calculés).
 - **WerbGouvernance 1.19.0 publié** : politique de sécurité et procédures en documents maîtrisés (ISO/IEC 27001 § 7.5) — fichier lié (espace `groupe/gouvernance/politique/` et `…/procedures/`, https ou chemin réseau), approbation après les contrôles du § 5.2 (politique) et du § 7.5 (procédures), empreinte SHA-256, fichier modifié signalé, historique ; mécanisme commun aux revues de direction.
 - **WerbGouvernance 1.18.0 publié** : plan d'actions relié aux revues de direction (colonne Revue), actions décidées dans la fiche de la revue, préparation des éléments d'entrée du § 9.3.2 depuis le plan d'actions et les publications des sites (risques WerbEBIOS, conformité, formation) ; composant guides 1.3.0.

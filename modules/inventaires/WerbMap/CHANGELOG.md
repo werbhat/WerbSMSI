@@ -5,6 +5,57 @@ Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/), num
 
 
 
+## [1.37.0] — 2026-11
+
+### Ajouts
+- **Badge de clés flashé à l'écran** : après l'émission, **📱 Afficher le badge pour le téléphone** montre le QR du badge en grand dans WerbMap ; le téléphone le scanne directement, sans impression. Le **code et le QR ne sont jamais affichés en même temps** (une photo de l'écran ne réunit pas les deux facteurs) ; l'affichage se masque seul au bout de 2 minutes. Une fois le code remis et masqué, le badge reste affichable ou imprimable jusqu'à **Fermer**.
+
+## [1.36.1] — 2026-11
+
+### Modifications
+- **Mise en page des étiquettes** : le QR occupe **toute la hauteur** de l'étiquette, collé à droite ; à sa gauche, le bandeau de classification s'étend jusqu'au QR, puis le TAG et le libellé, en caractères proportionnés à la hauteur. Étiquette en hauteur (rouleau 62 × 100 mm) : bandeau, TAG et libellé en haut, QR sur toute la largeur en dessous. Planche A4 libre : hauteur de l'étiquette = côté du QR. Le QR plus grand accepte des notes PCR plus longues sur un même support.
+
+## [1.36.0] — 2026-11
+
+### Ajouts
+- **Téléphones et badges de clés WerbTagDroid** (*Inventaires › Étiquettes › 📱 Téléphones et badges de clés*, phase 4) :
+  - **enrôlement** d'un téléphone par son fichier `WerbTagDroid_<identifiant>.pem` (clé publique RSA enregistrée par l'application) : identifiant à comparer à celui affiché par le téléphone ; doublon et fichier invalide refusés ; retrait d'un téléphone perdu ou remplacé ;
+  - **badge de clés** (format WTKB1) pour un téléphone : QR chiffré pour ce seul téléphone et signé, valable un mois par défaut, qui apporte les clés du site, les clés révoquées et les numéros des étiquettes réimprimées (verdict « remplacée » sur l'ancienne étiquette ; les plus anciennes sont écartées si la place manque) ;
+  - **code à usage unique** de 10 signes (sans 0, O, 1, I, L) tiré au hasard, affiché **une seule fois** pour être remis à part, jamais enregistré ni journalisé ; badge imprimable sans le code ;
+  - mot de passe du fichier de clés **redemandé** pour chaque badge : les clés du site ne sont en clair que le temps de le fabriquer. Administrateur seulement ; émission tracée au journal.
+
+### Format de données
+- `appareils` : `[{ id, nom, spki, bits, le, par, retire?, dernierBadge? }]` (clés publiques seulement). Schéma inchangé.
+
+### Développement
+- `wtag.js` : `lireClePubliqueAppareil`, `codeAleatoire`, `emettreBadge`, `ouvrirBadge`, `clesBrutes`. Tests : `test_wtag_crypto.py` (11 vecteurs de badge de WerbTagDroid, badge émis par WerbMap ouvert par la référence Python), `test_badges.py`.
+
+## [1.35.0] — 2026-11
+
+### Ajouts
+- **Support d'impression des étiquettes** (*Inventaires › Étiquettes › 🖨️ Support d'impression*) : planche A4 libre (taille selon le QR, module réglable), **planches A4 en grille** (Avery L7165 99,1 × 67,7 mm 2 × 4, Avery L7163 99,1 × 38,1 mm 2 × 7, 70 × 42,3 mm 3 × 7), **rouleaux d'imprimante d'étiquettes** (62 × 100 mm, 89 × 36 mm, 100 × 50 mm : une étiquette par page, taille de page réglée en conséquence) et **support personnalisé** (largeur, hauteur, colonnes, lignes, marges, espacements ; grille ou rouleau). Planche entamée : *Commencer à l'étiquette n°* (remis à 1 après l'impression). Aperçu de l'étiquette au format choisi ; QR le plus grand possible sur l'étiquette, avec un **module minimal** réglable (0,25 mm par défaut) : une étiquette dont le QR ne tient pas est **refusée avant l'émission** (numéro inchangé), avec la taille nécessaire. Réglage enregistré dans la base et tracé au journal.
+
+### Format de données
+- `meta.etqSupport` : `{ id, module, moduleMin, depart }` et, pour un support personnalisé, `{ mode, l, h, col, lig, mh, mg, eh, ev }`. Schéma inchangé.
+
+## [1.34.0] — 2026-11
+
+### Ajouts
+- **Étiquettes d'actifs chiffrées et signées** (*Inventaires › Étiquettes*, format WTAG1 de l'application Android **WerbTagDroid**) : étiquette avec, en clair, le TAG, le libellé et la classification (bandeau de couleur avec le mot) et un QR qui contient, chiffrés (AES-256-GCM) et signés (ECDSA P-256), la zone, l'emplacement, le coffret, la note PCR, la date et le numéro d'émission. Actifs réseau, machines physiques et virtuelles, coffrets.
+- **Classification dérivée** de la criticité de la zone (process, métier-critique, sûreté → Confidentiel ; métier ou sans zone → Interne) et de l'indicateur *Critique* (+1 niveau) ; **dérogation** par un administrateur, avec motif, tracée au journal.
+- **Note PCR** (nouvelle colonne des inventaires, et saisie dans la vue Étiquettes avec le compteur de place restante dans le QR) : redondance, alimentation, procédure simple de rétablissement. Adresse IP ou MAC, VLAN et mot de passe refusés sur une étiquette.
+- **Clés de l'émetteur** : fichier `<SITE>_emetteur.wtkey.json` chiffré par mot de passe (PBKDF2-SHA256 600 000 itérations, AES-256-GCM), créé par un administrateur, à garder au coffre-fort ; ouvert, trousseau non extractible en mémoire seulement, effacé au verrouillage, à la fermeture et sur *Oublier les clés* ; clé publique PEM pour compiler WerbTagDroid.
+- **Suivi des émissions** : numéro et empreinte de la dernière étiquette de chaque TAG ; état *Jamais émise*, *À jour*, *À réimprimer* (aussi dans les contrôles de cohérence) — une étiquette n'est réimprimée que si une donnée qu'elle porte change.
+- **Planche d'impression** A4 portrait, QR à la taille du contenu (correction d'erreur Q).
+- **Note PCR proposée depuis WerbPCR** (`site:reprise`, WerbPCR 1.11.0) : le plan de reprise publié pour chaque SI est reçu avec les autres publications du site ; dans la fiche d'étiquette d'un actif qui appartient à un SI publié, **📋 Proposer depuis WerbPCR** compose la note (RTO, RPO, mode dégradé, dépendances, déclenchement, étapes avec responsable et durée, retour à la normale), raccourcie si elle dépasse la place du QR, puis modifiable ; remplacement d'une note existante confirmé, tracé au journal.
+
+### Format de données
+- `recus.reprise` (plan de reprise reçu de WerbPCR) ; `module.json › echanges.consomme` : `site:reprise`.
+- `etiquettes` : par TAG, `{ n, le, par, kid, k, empreinte, derog? }` ; colonne `pcr` des coffrets, actifs réseau, machines physiques et virtuelles (jamais publiée). Schéma inchangé.
+
+### Développement
+- `sources/src/qr.js` (encodeur QR, versions 1 à 40, sans dépendance) et `sources/src/wtag.js` (cryptographie WebCrypto, isolée) insérés par le build ; tests `test_qr.py`, `test_wtag_crypto.py` (vecteurs partagés `tests/donnees/wtag/`, copie de WerbTagDroid), `test_etiquettes.py`.
+
 ## [1.33.0] — 2026-11
 
 ### Modifications

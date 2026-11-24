@@ -544,7 +544,13 @@ ${sites.map(s => `    ├── ${s.code || "?"}/  (werbsmsi.site.json, ${DOSSIE
       sites: sites.map(s => ({ code: s.code, nom: s.nom.trim(), dossier: `sites/${s.code}`, entite: s.entite.trim(), actif: true })), bases: [] }));
     await ecrire("DROITS.md", DROITS_MD);
     await E.adopter(racine);
-    return { nom: `${parent.name}/${nomDossier}`, sites: sites.length };
+    // Sources publiques du groupe : catalogue de départ publié d'emblée (groupe:sourcesPubliques), à compléter dans ⚙️ Administration
+    let sources = 0;
+    try {
+      const l = (window.WERB_SOURCES_DEFAUT || []).map(spNorm);
+      if (l.length) { await E.publier({ niveau: "groupe", objets: { sourcesPubliques: l }, utilisateur: f.responsable.trim() || "Portail WerbSMSI" }); sources = l.length; }
+    } catch (e) { /* espace créé : les sources se publient ensuite depuis ⚙️ Administration › Sources publiques */ }
+    return { nom: `${parent.name}/${nomDossier}`, sites: sites.length, sources };
   }
 
   async function creerSite() {
@@ -588,7 +594,7 @@ ${sites.map(s => `    ├── ${s.code || "?"}/  (werbsmsi.site.json, ${DOSSIE
       <div class="infobox small">Référence des modèles : dossier <code>WerbSMSI/Modeles_docs/</code> de l'environnement (inventaire <code>README.md</code>). Dans l'espace du groupe, déposez le modèle Word dans <code>modeles/</code> et les modèles Visio dans <code>modeles/schemas/</code> : lecture pour tous, écriture pour l'équipe SMSI du groupe. Les modules copient le modèle Word dans leur base (« Modèle commun de l'espace ») ; WerbCartoSI lit les modèles Visio sans les copier.</div>
       ${E.ouvert && m ? (absents.length ? `<div class="warnbox small">${absents.length} modèle(s) à déposer dans l'espace « ${esc((P.groupe || {}).organisation || "")} » : ${absents.map(x => `<code>${esc(x.espace)}</code>`).join(", ")}.</div>` : `<div class="infobox small">Tous les modèles à déposer sont présents dans l'espace « ${esc((P.groupe || {}).organisation || "")} ».</div>`)
         : `<p class="small muted">Ouvrez l'espace (🏢 Groupe) pour vérifier la présence des modèles dans <code>modeles/</code>.</p>`}
-      ${types.map(ty => `<div class="card" data-modeles-type="${esc(ty)}">${titre({ Word: "📝", Visio: "🗺️", Excel: "📊" }[ty] || "📄", `Modèles ${ty}`, { Word: "bleu", Visio: "cyan", Excel: "vert" }[ty] || "ardoise")}
+      ${types.map(ty => `<div class="card" data-modeles-type="${esc(ty)}">${titre({ Word: "📝", Visio: "🗺️", Excel: "📊", JSON: "📚" }[ty] || "📄", ty === "JSON" ? "Fichiers de données (JSON)" : `Modèles ${ty}`, { Word: "bleu", Visio: "cyan", Excel: "vert", JSON: "olive" }[ty] || "ardoise")}
         <div class="tablewrap"><table class="t"><thead><tr><th style="width:24%">Modèle</th><th>À quoi il sert</th><th style="width:18%">Modules</th><th style="width:20%">Emplacement dans l'espace</th><th style="width:12%">Espace ouvert</th></tr></thead><tbody>
         ${MODELES.filter(x => x.type === ty).map(x => `<tr data-modele="${esc(x.fichier)}"><td><b>${esc(x.titre)}</b><div class="small mono muted">Modeles_docs/${esc(x.fichier)}</div></td>
           <td>${esc(x.role)}${x.balises && x.balises.length ? `<div class="small muted">Balises : ${x.balises.map(b => `{{${esc(b)}}}`).join(" ")}</div>` : ""}</td>
@@ -711,7 +717,7 @@ ${sites.map(s => `    ├── ${s.code || "?"}/  (werbsmsi.site.json, ${DOSSIE
       ...(P.groupe ? [{ g: "groupe", i: "🏢", l: "Groupe", c: "violet", t: [["groupe", P.groupe.sigle || "Vue groupe"]] },
         { g: "sites", i: "📍", l: "Sites", c: "vert", t: sites.map(s => ["site:" + s.code, s.code]) }] : []),
       { g: "outils", i: "🛠️", l: "Outils", c: "orange", t: [["assistant", "Mise en place"], ["verif", "Vérifier les modules"], ["modeles", "Modèles de documents"]] },
-      { g: "admin", i: "⚙️", l: "Administration", c: "ardoise", t: [["sauvegarde", "Sauvegarde et restauration"], ["listes", "Listes de choix du groupe"], ["parametres", "Paramètres"]] },
+      { g: "admin", i: "⚙️", l: "Administration", c: "ardoise", t: [["sauvegarde", "Sauvegarde et restauration"], ["listes", "Listes de choix du groupe"], ["sources", "Sources publiques"], ["parametres", "Paramètres"]] },
       { g: "aide", i: "❓", l: "Aide", c: "olive", t: [["recueil", "📚 Recueil de tous les guides ↗"], ...WerbGuides.entrees(), ...((window.WERB_MEDIAS || {}).infographie_demarrer ? [["infographie", "Infographie : démarrer"]] : []), ["aide", "Créer la base d'un site"], ["apropos", "À propos"]] });
     const cnt = Object.fromEntries(sites.filter(s => !(P.sites[s.code] || {}).accessible).map(s => ["site:" + s.code, "🔒"]));
     menu.rendre({ actif: P.vue === "site" ? "site:" + P.site : P.vue, compteurs: cnt,
@@ -1196,7 +1202,7 @@ ${sites.map(s => `    ├── ${s.code || "?"}/  (werbsmsi.site.json, ${DOSSIE
         const r = await creerEspace();
         await chargerEspace(); await majRaccourci(); P.vue = "groupe";
         F.espace = { organisation: "", sigle: "", classification: CLASSIFICATIONS[0], responsable: "", sites: [{ code: "", nom: "", entite: "", correspondant: "" }] };
-        toast(`Espace créé : ${r.nom} (${r.sites} site(s)). Appliquez les droits décrits dans DROITS.md.`, "ok");
+        toast(`Espace créé : ${r.nom} (${r.sites} site(s)${r.sources ? `, ${r.sources} sources publiques` : ""}). Appliquez les droits décrits dans DROITS.md.`, "ok");
       } catch (e) { P.chargement = false; if (e.name !== "AbortError") toast("Création impossible : " + e.message, "err"); }
       render();
     },
@@ -1389,6 +1395,234 @@ ${sites.map(s => `    ├── ${s.code || "?"}/  (werbsmsi.site.json, ${DOSSIE
     },
   };
   Object.assign(ACTIONS, ACTIONS_LISTES);
+
+  /* ===================================================== sources publiques du groupe (⚙️ Administration, charte §5.4)
+     Tableau principal des sources publiques (normes, guides, référentiels, réglementation, sites) commun à tous les modules.
+     Le brouillon reste en mémoire jusqu'à « Publier », qui écrit l'objet groupe:sourcesPubliques dans publications/werbsmsi.json ;
+     les modules (WerbIEC62443…) y reprennent des sources. Tant que rien n'est publié, le catalogue de départ intégré au portail
+     (charte/outils/sources_publiques.py : WerbReferentiels et WerbIEC62443) est proposé. Import et export : CSV (Excel, « ; »)
+     et JSON. Une source publiée n'est pas supprimée : elle passe au statut « retirée » (ou « remplacée » par une autre), pour que les
+     modules qui l'ont reprise le voient. */
+  const SP_TYPES = ["Norme", "Guide", "Référentiel", "Réglementation", "Article", "Site", "Autre"];
+  const SP_STATUTS = ["en vigueur", "remplacée", "retirée"];
+  const SP_REFS = ["ANSSI", "NIS2", "ISO 27001", "IEC 62443", "NIST", "CRA", "RGPD", "Autre"];
+  const SP_CHAMPS = [["id", "Identifiant"], ["type", "Type"], ["titre", "Titre"], ["editeur", "Éditeur"], ["edition", "Édition / version"], ["datePublication", "Publiée le"],
+    ["url", "Adresse"], ["consulteLe", "Consultée le"], ["referentiels", "Référentiels"], ["statut", "Statut"], ["remplacePar", "Remplacée par"], ["resume", "Résumé"], ["origine", "Origine"]];
+  const SP = { brouillon: null, auteur: "", q: "", type: "", ref: "", statut: "", edit: "", imp: null, derniere: 0 };
+  const spTxt = (v, n = 2000) => String(v ?? "").replace(/[\u0000-\u001f]/g, " ").trim().slice(0, n);
+  const spDate = v => /^\d{4}-\d{2}-\d{2}$/.test(String(v || "").trim()) ? String(v).trim() : /^(\d{2})\/(\d{2})\/(\d{4})$/.test(String(v || "").trim()) ? String(v).trim().replace(/^(\d{2})\/(\d{2})\/(\d{4})$/, "$3-$2-$1") : "";
+  // Source normalisée (import, publication, brouillon)
+  function spNorm(x) {
+    x = x && typeof x === "object" ? x : {};
+    const refs = (Array.isArray(x.referentiels) ? x.referentiels : String(x.referentiels || "").split(/[,;|]/)).map(r => spTxt(r, 40)).filter(Boolean);
+    return { id: spTxt(x.id, 40), type: SP_TYPES.includes(spTxt(x.type)) ? spTxt(x.type) : "Autre", titre: spTxt(x.titre, 500), editeur: spTxt(x.editeur, 200), edition: spTxt(x.edition, 100),
+      datePublication: spDate(x.datePublication), url: spTxt(x.url, 1000), consulteLe: spDate(x.consulteLe), resume: spTxt(x.resume, 2000), referentiels: [...new Set(refs)],
+      statut: SP_STATUTS.includes(spTxt(x.statut)) ? spTxt(x.statut) : "en vigueur", remplacePar: spTxt(x.remplacePar, 40), origine: spTxt(x.origine, 300) };
+  }
+  const spPubliees = () => { const l = P.pubGroupe && P.pubGroupe.objets.sourcesPubliques; return Array.isArray(l) ? l.map(spNorm) : null; };
+  const spCle = s => s.url ? s.url.toLowerCase().replace(/^http:/, "https:").replace(/\/+$/, "") : "titre:" + s.titre.toLowerCase();
+  const spComparable = s => JSON.stringify(SP_CHAMPS.map(([k]) => k === "referentiels" ? s[k].join(",") : s[k]));
+  function initSources(force = false) {
+    if (SP.brouillon && !force) return;
+    const pub = spPubliees();
+    SP.brouillon = (pub || (window.WERB_SOURCES_DEFAUT || []).map(spNorm)).map(s => ({ ...s, referentiels: s.referentiels.slice() }));
+  }
+  const spIdSuivant = () => { let n = 0; SP.brouillon.forEach(s => { const m = /^SRC-(\d+)$/.exec(s.id); if (m) n = Math.max(n, +m[1]); }); return `SRC-${String(n + 1).padStart(3, "0")}`; };
+  // Contrôles du brouillon : [identifiant, message]
+  function spErreurs() {
+    const e = [], ids = new Map(), cles = new Map(), connus = new Set(SP.brouillon.map(s => s.id));
+    SP.brouillon.forEach((s, i) => {
+      const lib = s.id || `ligne ${i + 1}`;
+      if (!s.id) e.push([lib, "identifiant vide"]); else if (ids.has(s.id)) e.push([lib, "identifiant en double"]); ids.set(s.id, 1);
+      if (!s.titre) e.push([lib, "titre vide"]);
+      if (s.url && !/^https?:\/\/\S+$/i.test(s.url)) e.push([lib, "adresse invalide (http:// ou https:// attendu)"]);
+      const k = spCle(s); if (s.titre && cles.has(k)) e.push([lib, `même ${s.url ? "adresse" : "titre"} que ${cles.get(k)}`]); else cles.set(k, lib);
+      if (s.statut === "remplacée" && !connus.has(s.remplacePar)) e.push([lib, "« remplacée » : indiquez la source qui la remplace (identifiant)"]);
+    });
+    return e;
+  }
+  function spEcarts() {
+    const pub = spPubliees();
+    if (!pub) return { pub: null, ajoutees: SP.brouillon.length, modifiees: 0, retirees: 0, supprimees: [], change: SP.brouillon.length > 0 };
+    const pm = new Map(pub.map(s => [s.id, s])), bm = new Set(SP.brouillon.map(s => s.id));
+    const ajoutees = SP.brouillon.filter(s => !pm.has(s.id)).length, modifiees = SP.brouillon.filter(s => pm.has(s.id) && spComparable(pm.get(s.id)) !== spComparable(s)).length;
+    const supprimees = pub.filter(s => !bm.has(s.id)).map(s => s.id), retirees = SP.brouillon.filter(s => s.statut === "retirée" && pm.has(s.id) && pm.get(s.id).statut !== "retirée").length;
+    return { pub, ajoutees, modifiees, retirees, supprimees, change: !!(ajoutees || modifiees || supprimees.length) };
+  }
+  const spFiltrees = () => SP.brouillon.filter(s => (!SP.type || s.type === SP.type) && (!SP.ref || s.referentiels.includes(SP.ref)) && (!SP.statut || s.statut === SP.statut)
+    && (!SP.q || `${s.id} ${s.titre} ${s.editeur} ${s.edition} ${s.url} ${s.resume}`.toLowerCase().includes(SP.q.toLowerCase())));
+  const spBadgeStatut = s => badge(s.statut === "remplacée" ? `remplacée par ${s.remplacePar}` : s.statut, s.statut === "en vigueur" ? "b-ok" : s.statut === "remplacée" ? "b-warn" : "b-ko");
+  const spOpt = (vals, cur, vide) => (vide !== undefined ? `<option value="">${esc(vide)}</option>` : "") + vals.map(v => `<option value="${esc(v)}"${v === cur ? " selected" : ""}>${esc(v)}</option>`).join("");
+
+  VUES.sources = () => {
+    let h = `<h1>📚 Sources publiques du groupe</h1><p class="sub">Tableau principal des normes, guides, référentiels, textes réglementaires et sites de référence : les modules (WerbIEC62443…) y reprennent leurs sources. Gérez-le ici, importez et exportez-le (CSV pour Excel, JSON), puis publiez-le pour tout le groupe.</p>`;
+    if (!E.ouvert) return h + `<div class="card"><p class="small muted">Ouvrez d'abord l'espace du groupe (accueil, <b>Ouvrir l'espace…</b>) : ${(window.WERB_SOURCES_DEFAUT || []).length} source(s) sont proposées pour commencer.</p></div>`;
+    initSources();
+    const e = spEcarts(), err = spErreurs(), f = ((P.pubGroupe && P.pubGroupe.fichiers) || []).find(x => x.module === WERB.id), l = spFiltrees();
+    const parRef = SP_REFS.map(r => [r, SP.brouillon.filter(s => s.referentiels.includes(r)).length]).filter(([, n]) => n);
+    h += `<div class="card">${titre("📤", "Publication", "ardoise")}
+      <p class="small">${e.pub ? `Dernière publication le <b>${esc(frDate(f && f.publieLe))}</b> par <b>${esc((f && f.publiePar) || "")}</b> : ${e.pub.length} source(s), dans <code>publications/${esc(WERB.id)}.json</code>.` : `Aucune source publiée : le catalogue de départ (WerbReferentiels, WerbIEC62443) est proposé.`}</p>
+      <div class="grid g2"><label class="f">Publiée par<input id="spAuteur" value="${esc(SP.auteur)}" placeholder="Prénom NOM"></label></div>
+      <p class="small">${e.change ? badge(e.pub ? `${e.ajoutees} ajoutée(s), ${e.modifiees} modifiée(s)${e.supprimees.length ? `, ${e.supprimees.length} supprimée(s)` : ""} à publier` : `${SP.brouillon.length} source(s) à publier`, "b-warn") : badge("Tout est publié", "b-ok")} ${err.length ? badge(`${err.length} point(s) à corriger`, "b-ko") : ""}</p>
+      <div class="row"><button class="primary" data-act="spPublier"${e.change && !err.length ? "" : " disabled"}>📤 Publier les sources…</button><button data-act="spAnnuler"${e.change ? "" : " disabled"}>↺ Annuler toutes les modifications</button>
+        <button data-act="spDepart" title="Ajoute les sources du catalogue de départ absentes du tableau">➕ Reprendre le catalogue de départ</button></div>
+      ${err.length ? `<div class="warnbox small" data-sp-erreurs>${err.map(([i, m]) => `<b>${esc(i)}</b> : ${esc(m)}`).join("<br>")}</div>` : ""}</div>
+    <div class="card">${titre("🔁", "Import et export", "ardoise")}
+      <div class="row"><label class="bt-fichier">📥 Importer un fichier CSV ou JSON…<input type="file" id="spImport" accept=".csv,.json,text/csv,application/json" hidden></label>
+        <button data-act="spExportCsv">⬇ Exporter en CSV (Excel)</button><button data-act="spExportJson">⬇ Exporter en JSON</button></div>
+      <p class="small muted">CSV : séparateur « ; » ou « , », une ligne d'en-tête (identifiant, type, titre, éditeur, édition, publiée le, adresse, consultée le, référentiels, statut, remplacée par, résumé). Une ligne est rapprochée d'une source existante par son identifiant, sinon par son adresse (ou son titre si elle n'a pas d'adresse) ; un aperçu précède toute modification. Le JSON accepte un export du portail, une liste de sources, ou l'export « pour le catalogue » d'un module.</p>
+      ${SP.imp ? spApercuHtml() : ""}</div>`;
+    const ed = SP.brouillon.find(s => s.id === SP.edit);
+    if (ed) h += spEditionHtml(ed);
+    h += `<div class="card">${titre("🗂️", `Tableau des sources (${l.length} / ${SP.brouillon.length})`, "ardoise")}
+      <div class="row" style="flex-wrap:wrap;gap:8px"><input id="spQ" value="${esc(SP.q)}" placeholder="🔍 Rechercher (titre, éditeur, adresse…)" style="max-width:320px">
+        <select id="spType" style="width:auto">${spOpt(SP_TYPES, SP.type, "Tous les types")}</select><select id="spRef" style="width:auto">${spOpt(SP_REFS, SP.ref, "Tous les référentiels")}</select>
+        <select id="spStatut" style="width:auto">${spOpt(SP_STATUTS, SP.statut, "Tous les statuts")}</select><span class="spacer"></span><button class="primary" data-act="spNouvelle">➕ Nouvelle source</button></div>
+      <p class="small muted">${parRef.map(([r, n]) => `${esc(r)} ${n}`).join(" · ")}</p>
+      <div class="tablewrap"><table class="t" data-sp-table><thead><tr><th>ID</th><th>Type</th><th>Titre</th><th>Éditeur</th><th>Édition</th><th>Référentiels</th><th>Statut</th><th></th></tr></thead><tbody>
+      ${l.map(s => `<tr data-sp="${esc(s.id)}"><td class="mono">${esc(s.id)}</td><td>${esc(s.type)}</td><td>${s.url ? `<a href="${esc(s.url)}" target="_blank" rel="noopener noreferrer">${esc(s.titre)}</a>` : esc(s.titre)}${s.resume ? `<div class="small muted">${esc(s.resume.slice(0, 140))}${s.resume.length > 140 ? "…" : ""}</div>` : ""}</td>
+        <td>${esc(s.editeur)}</td><td>${esc(s.edition)}</td><td class="small">${esc(s.referentiels.join(", "))}</td><td>${spBadgeStatut(s)}</td>
+        <td style="white-space:nowrap"><button class="small" data-act="spEditer" data-id="${esc(s.id)}" title="Modifier">✎</button><button class="small" data-act="spRetirer" data-id="${esc(s.id)}" title="${spPubliees() && spPubliees().some(x => x.id === s.id) ? "Retirer (la source publiée reste visible des modules, statut « retirée »)" : "Supprimer (jamais publiée)"}">✕</button></td></tr>`).join("")
+        || `<tr><td colspan="8" class="empty">Aucune source.</td></tr>`}</tbody></table></div></div>`;
+    return h + `<span hidden id="spEtat" data-pub="${SP.derniere}"></span>`;
+  };
+  function spEditionHtml(s) {
+    const ch = (k, l, t = "text") => `<label class="f">${esc(l)}${t === "area" ? `<textarea data-spf="${k}" rows="3" style="width:100%;display:block">${esc(s[k])}</textarea>` : `<input ${t === "date" ? 'type="date" ' : ""}data-spf="${k}" value="${esc(s[k])}">`}</label>`;
+    return `<div class="card" data-sp-edition>${titre("✎", `Source ${esc(s.id)}`, "ardoise")}
+      <div class="grid g3">${ch("id", "Identifiant")}<label class="f">Type<select data-spf="type">${spOpt(SP_TYPES, s.type)}</select></label><label class="f">Statut<select data-spf="statut">${spOpt(SP_STATUTS, s.statut)}</select></label></div>
+      ${ch("titre", "Titre")}<div class="grid g3">${ch("editeur", "Éditeur")}${ch("edition", "Édition / version")}${ch("datePublication", "Publiée le", "date")}</div>
+      <div class="grid g2">${ch("url", "Adresse (https://…)")}${ch("consulteLe", "Consultée le", "date")}</div>
+      <label class="f">Référentiels</label><div class="row" style="flex-wrap:wrap;gap:10px">${SP_REFS.map(r => `<label class="small"><input type="checkbox" data-spref="${esc(r)}"${s.referentiels.includes(r) ? " checked" : ""}> ${esc(r)}</label>`).join("")}</div>
+      ${s.statut === "remplacée" ? `<label class="f">Remplacée par<select data-spf="remplacePar">${spOpt(SP.brouillon.filter(x => x.id !== s.id).map(x => x.id), s.remplacePar, "—")}</select></label>` : ""}
+      ${ch("resume", "Résumé", "area")}<p class="small muted">Origine : ${esc(s.origine || "saisie")}</p>
+      <div class="row"><button data-act="spFermer">Fermer</button></div></div>`;
+  }
+  // ---------- import
+  function spCsv(texte) {
+    texte = texte.replace(/^﻿/, "");
+    const sep = (texte.split(/\r?\n/)[0].match(/;/g) || []).length >= (texte.split(/\r?\n/)[0].match(/,/g) || []).length ? ";" : ",";
+    const lignes = []; let l = [], c = "", q = false;
+    for (let i = 0; i < texte.length; i++) {
+      const ch = texte[i];
+      if (q) { if (ch === '"') { if (texte[i + 1] === '"') { c += '"'; i++; } else q = false; } else c += ch; continue; }
+      if (ch === '"') q = true; else if (ch === sep) { l.push(c); c = ""; } else if (ch === "\n" || ch === "\r") { if (ch === "\r" && texte[i + 1] === "\n") i++; l.push(c); lignes.push(l); l = []; c = ""; } else c += ch;
+    }
+    if (c || l.length) { l.push(c); lignes.push(l); }
+    const sansAccent = t => t.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().replace(/[^a-z]/g, "");
+    const noms = Object.fromEntries(SP_CHAMPS.flatMap(([k, lib]) => [[sansAccent(k), k], [sansAccent(lib), k]]));
+    const tete = (lignes.shift() || []).map(h => noms[sansAccent(h)] || "");
+    if (!tete.includes("titre")) throw new Error("colonne « Titre » introuvable dans la ligne d'en-tête");
+    return lignes.filter(r => r.some(x => x.trim())).map(r => Object.fromEntries(tete.map((k, i) => [k, r[i] ?? ""]).filter(([k]) => k)));
+  }
+  function spLireImport(nom, texte) {
+    if (/\.json$/i.test(nom) || /^\s*[[{]/.test(texte)) {
+      const j = JSON.parse(texte);
+      const l = Array.isArray(j) ? j : Array.isArray(j.sources) ? j.sources : j.data && Array.isArray(j.data.sourcesPubliques) ? j.data.sourcesPubliques : null;
+      if (!l) throw new Error("aucune liste de sources dans ce fichier JSON");
+      return l;
+    }
+    return spCsv(texte);
+  }
+  // Aperçu : chaque ligne importée est un ajout, une mise à jour, une source identique, ou ignorée (sans titre)
+  function spPreparer(nom, brutes) {
+    const parId = new Map(SP.brouillon.map(s => [s.id, s])), parCle = new Map(SP.brouillon.map(s => [spCle(s), s]));
+    const lignes = brutes.map(b => {
+      const n = spNorm(b);
+      if (!n.titre) return { action: "ignorée", n, raison: "sans titre" };
+      const cible = (n.id && parId.get(n.id)) || parCle.get(spCle(n));
+      if (!cible) return { action: "ajout", n };
+      const fusion = spNorm({ ...cible, ...Object.fromEntries(Object.entries(n).filter(([k, v]) => k !== "id" && (Array.isArray(v) ? v.length : v !== "" && !(k === "type" && v === "Autre" && !b.type) && !(k === "statut" && !b.statut)))) });
+      fusion.id = cible.id;
+      return spComparable(fusion) === spComparable(cible) ? { action: "identique", n: fusion, cible: cible.id } : { action: "mise à jour", n: fusion, cible: cible.id };
+    });
+    SP.imp = { nom, lignes };
+  }
+  function spApercuHtml() {
+    const L = SP.imp.lignes, nb = a => L.filter(x => x.action === a).length;
+    return `<div class="infobox" data-sp-apercu><b>Aperçu de l'import « ${esc(SP.imp.nom)} »</b> : ${badge(`${nb("ajout")} ajout(s)`, "b-ok")} ${badge(`${nb("mise à jour")} mise(s) à jour`, "b-warn")} ${badge(`${nb("identique")} identique(s)`, "")} ${nb("ignorée") ? badge(`${nb("ignorée")} ignorée(s)`, "b-ko") : ""}
+      <div class="tablewrap" style="max-height:260px;overflow:auto;margin-top:6px"><table class="t"><tbody>${L.filter(x => x.action !== "identique").map(x => `<tr><td style="width:110px">${esc(x.action)}</td><td class="mono">${esc(x.cible || x.n.id || "nouvel id")}</td><td>${esc(x.n.titre || "—")}</td><td class="small muted">${esc(x.raison || x.n.url)}</td></tr>`).join("") || `<tr><td class="muted">Rien à changer.</td></tr>`}</tbody></table></div>
+      <div class="row" style="margin-top:8px"><button class="primary" data-act="spImportOk"${nb("ajout") + nb("mise à jour") ? "" : " disabled"}>Appliquer l'import</button><button data-act="spImportNon">Annuler</button><span class="small muted">Le tableau est modifié en brouillon : publiez ensuite.</span></div></div>`;
+  }
+  // ---------- export
+  const spCsvCellule = v => { const t = Array.isArray(v) ? v.join(", ") : String(v ?? ""); return /[";\n\r]/.test(t) ? `"${t.replace(/"/g, '""')}"` : t; };
+  const spNomFichier = ext => { const n = `Sources_publiques_${new Date().toISOString().slice(0, 10)}.${ext}`; return WerbSocle.nommage && WerbSocle.nommage.fichier ? WerbSocle.nommage.fichier(n) : n; };
+  const ACTIONS_SOURCES = {
+    spNouvelle() { initSources(); const s = spNorm({ id: spIdSuivant(), titre: "", origine: "saisie" }); SP.brouillon.unshift(s); SP.edit = s.id; SP.q = SP.type = SP.ref = SP.statut = ""; render(); },
+    spEditer(el) { SP.edit = el.dataset.id; render(); window.scrollTo(0, 0); $("#main").scrollTop = 0; },
+    spFermer() { SP.edit = ""; render(); },
+    spRetirer(el) {
+      const i = SP.brouillon.findIndex(s => s.id === el.dataset.id); if (i < 0) return;
+      const pub = spPubliees();
+      if (pub && pub.some(s => s.id === el.dataset.id)) SP.brouillon[i].statut = "retirée"; else SP.brouillon.splice(i, 1);
+      if (SP.edit === el.dataset.id) SP.edit = ""; render();
+    },
+    spAnnuler() { initSources(true); SP.edit = ""; SP.imp = null; render(); },
+    spDepart() {
+      initSources(); const cles = new Set(SP.brouillon.map(spCle)); let n = 0;
+      (window.WERB_SOURCES_DEFAUT || []).map(spNorm).filter(s => !cles.has(spCle(s))).forEach(s => { s.id = SP.brouillon.some(x => x.id === s.id) ? spIdSuivant() : s.id; SP.brouillon.push(s); n++; });
+      toast(n ? `${n} source(s) du catalogue de départ ajoutée(s).` : "Toutes les sources du catalogue de départ sont déjà dans le tableau.", "ok"); render();
+    },
+    spImportOk() {
+      if (!SP.imp) return; let a = 0, m = 0;
+      SP.imp.lignes.forEach(x => {
+        if (x.action === "ajout") { const s = { ...x.n }; if (!s.id || SP.brouillon.some(y => y.id === s.id)) s.id = spIdSuivant(); if (!s.origine) s.origine = `import ${SP.imp.nom}`; SP.brouillon.push(s); a++; }
+        if (x.action === "mise à jour") { const i = SP.brouillon.findIndex(y => y.id === x.cible); if (i >= 0) { SP.brouillon[i] = x.n; m++; } }
+      });
+      toast(`Import appliqué : ${a} ajout(s), ${m} mise(s) à jour. Publiez pour le diffuser.`, "ok"); SP.imp = null; render();
+    },
+    spImportNon() { SP.imp = null; render(); },
+    spExportCsv() {
+      initSources();
+      const txt = "﻿" + [SP_CHAMPS.map(([, l]) => l).join(";"), ...SP.brouillon.map(s => SP_CHAMPS.map(([k]) => spCsvCellule(s[k])).join(";"))].join("\r\n");
+      WerbSocle.telecharger(new Blob([txt], { type: "text/csv;charset=utf-8" }), spNomFichier("csv")); toast("Export CSV des sources téléchargé.", "ok");
+    },
+    spExportJson() {
+      initSources();
+      const j = { format: "WERBSMSI-SOURCES", schema: 1, exporteLe: new Date().toISOString(), sources: SP.brouillon };
+      WerbSocle.telecharger(new Blob([JSON.stringify(j, null, 1)], { type: "application/json" }), spNomFichier("json")); toast("Export JSON des sources téléchargé.", "ok");
+    },
+    async spPublier() {
+      SP.auteur = ($("#spAuteur") || {}).value ? $("#spAuteur").value.trim() : SP.auteur;
+      if (!SP.auteur) { toast("Indiquez qui publie les sources (Publiée par).", "err"); $("#spAuteur").focus(); return; }
+      const err = spErreurs(); if (err.length) { toast("Corrigez les points signalés avant de publier.", "err"); return; }
+      const e = spEcarts();
+      if (e.supprimees.length && !confirm(`${e.supprimees.length} source(s) publiée(s) ne sont plus dans le tableau (${e.supprimees.join(", ")}). Les modules qui les ont reprises les verront « absentes du catalogue ». Continuer ?`)) return;
+      if (!confirm(`Publier ${SP.brouillon.length} source(s) pour tout le groupe ?${e.pub ? `\n\n${e.ajoutees} ajoutée(s), ${e.modifiees} modifiée(s).` : ""}`)) return;
+      try {
+        await E.publier({ niveau: "groupe", objets: { sourcesPubliques: SP.brouillon.map(spNorm) }, utilisateur: SP.auteur });
+        P.pubGroupe = await E.publications("groupe");
+        initSources(true); SP.derniere = Date.now();
+        toast(`${SP.brouillon.length} source(s) publiée(s).`, "ok");
+      } catch (x) {
+        toast(["NotAllowedError", "SecurityError"].includes(x.name) ? "Publication refusée : vos droits ne permettent pas d'écrire dans publications/ du groupe." : "Publication impossible : " + x.message, "err");
+      }
+      render();
+    },
+  };
+  Object.assign(ACTIONS, ACTIONS_SOURCES);
+  // Saisie : filtres à la frappe (focus rendu au champ), champs de la fiche à la sortie
+  document.addEventListener("input", e => {
+    const t = e.target;
+    if (t.id === "spAuteur") { SP.auteur = t.value.trim(); return; }
+    if (t.id === "spQ") { SP.q = t.value; const pos = t.selectionStart; render(); const f = $("#spQ"); if (f) { f.focus(); f.setSelectionRange(pos, pos); } }
+  });
+  document.addEventListener("change", async e => {
+    const t = e.target;
+    if (["spType", "spRef", "spStatut"].includes(t.id)) { SP[{ spType: "type", spRef: "ref", spStatut: "statut" }[t.id]] = t.value; render(); return; }
+    if (t.id === "spImport") {
+      const f = t.files[0]; t.value = ""; if (!f) return;
+      try { initSources(); spPreparer(f.name, spLireImport(f.name, await f.text())); } catch (x) { toast(`Import impossible : ${x.message}`, "err"); SP.imp = null; }
+      render(); return;
+    }
+    const s = SP.brouillon && SP.brouillon.find(x => x.id === SP.edit); if (!s) return;
+    if (t.dataset.spref) { const r = t.dataset.spref; s.referentiels = t.checked ? [...new Set([...s.referentiels, r])] : s.referentiels.filter(x => x !== r); render(); return; }
+    if (t.dataset.spf) {
+      const k = t.dataset.spf, v = k === "id" ? t.value.trim().slice(0, 40) : t.value.trim();
+      if (k === "id" && v !== s.id) { SP.brouillon.forEach(x => { if (x.remplacePar === s.id) x.remplacePar = v; }); SP.edit = v; }
+      s[k] = v; if (k === "statut" && v !== "remplacée") s.remplacePar = "";
+      render();
+    }
+  });
   // Saisie dans une liste : le brouillon suit chaque frappe ; à la sortie du champ, rendu (contrôles, écarts) en gardant le champ
   // actif, sauf si l'utilisateur clique un bouton (son action relance le rendu : le bouton n'est pas remplacé sous le clic).
   document.addEventListener("input", e => {

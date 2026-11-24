@@ -1,7 +1,7 @@
 # WerbReferentiels
 
 > Référentiels cyber à lire et à relier : ANSSI, NIST, NIS2, ISO 27001, CRA, RGPD — cartes, synthèses, sources officielles, tableau de correspondances
-> Version **1.6.2** — Développé par **@WerbHat**
+> Version **1.6.3** — Développé par **@WerbHat**
 
 ---
 
@@ -146,7 +146,7 @@ python <WerbSMSI>\charte\outils\werb_charte.py publier .
 
 ## Historique des versions
 
-Version courante : **1.6.2** de novembre 2026 — réf. croisée : référentiel affiché « NIS2 », sans version. Précédente : **1.6.1** de novembre 2026 — réf. croisée : référentiel nommé **NIS2**. Précédente : **1.6.0** de novembre 2026 — bouton **🔀 Réf. croisée WerbSMSI** : table visuelle exigences × modules (NIS2, ISO/IEC 27001, IEC 62443, hygiène ANSSI, catégories EX-…), produite par la table des exigences de la charte. Versions précédentes : **1.5.1** de novembre 2026 — résumé des articles du CRA : un sous-titre par article. Versions précédentes : **1.5.0** de novembre 2026 — CRA : guide « Résumé des articles » (8 chapitres, 71 articles, 8 annexes, articles clés pour un site industriel). Versions précédentes : **1.4.0** de novembre 2026 — nouveau référentiel **RGPD** : carte, sept guides (comprendre le RGPD, principes et bases légales, droits des personnes, obligations du responsable, sécurité et cybersécurité, cas industriels, modèles et check-lists), sources. Versions précédentes : **1.3.0** de novembre 2026 — référentiel **CRA** (Cyber Resilience Act) : carte, cinq guides pour le comprendre et le mettre en œuvre (fabricant, acheteur et exploitant), modèles et check-lists, sources ; socle 1.9.0. Versions précédentes : **1.2.0** d'octobre 2026 — bandeau commun (socle 1.8.0, TRV-7). Versions précédentes : **1.1.0** d'octobre 2026 — thème clair / sombre (socle 1.7.1) ; **1.0.0** d'octobre 2026. Détail dans [CHANGELOG.md](CHANGELOG.md).
+Version courante : **1.6.3** de novembre 2026 — réf. croisée : citations des catégories de schémas de WerbCartoSI par WerbIEC62443. Précédente : **1.6.2** de novembre 2026 — réf. croisée : référentiel affiché « NIS2 », sans version. Précédente : **1.6.1** de novembre 2026 — réf. croisée : référentiel nommé **NIS2**. Précédente : **1.6.0** de novembre 2026 — bouton **🔀 Réf. croisée WerbSMSI** : table visuelle exigences × modules (NIS2, ISO/IEC 27001, IEC 62443, hygiène ANSSI, catégories EX-…), produite par la table des exigences de la charte. Versions précédentes : **1.5.1** de novembre 2026 — résumé des articles du CRA : un sous-titre par article. Versions précédentes : **1.5.0** de novembre 2026 — CRA : guide « Résumé des articles » (8 chapitres, 71 articles, 8 annexes, articles clés pour un site industriel). Versions précédentes : **1.4.0** de novembre 2026 — nouveau référentiel **RGPD** : carte, sept guides (comprendre le RGPD, principes et bases légales, droits des personnes, obligations du responsable, sécurité et cybersécurité, cas industriels, modèles et check-lists), sources. Versions précédentes : **1.3.0** de novembre 2026 — référentiel **CRA** (Cyber Resilience Act) : carte, cinq guides pour le comprendre et le mettre en œuvre (fabricant, acheteur et exploitant), modèles et check-lists, sources ; socle 1.9.0. Versions précédentes : **1.2.0** d'octobre 2026 — bandeau commun (socle 1.8.0, TRV-7). Versions précédentes : **1.1.0** d'octobre 2026 — thème clair / sombre (socle 1.7.1) ; **1.0.0** d'octobre 2026. Détail dans [CHANGELOG.md](CHANGELOG.md).
 
 ---
 

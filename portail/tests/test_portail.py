@@ -363,6 +363,10 @@ def main() -> int:
         check(g["format"] == "WERBSMSI-GROUPE" and g["data"]["sigle"] == "TST" and g["data"]["sites"][0]["code"] == "USINE1" and s["data"]["groupeId"] == g["data"]["groupeId"],
               "espace créé : werbsmsi.groupe.json et site USINE1 reliés par le groupeId")
         check("Droits d'accès" in page.evaluate(LIRE, "SMSI/SMSI_TST/DROITS.md"), "DROITS.md écrit")
+        pubs = json.loads(page.evaluate(LIRE, "SMSI/SMSI_TST/publications/werbsmsi.json"))
+        defaut = json.loads((RACINE / "portail" / "src" / "sources_defaut.json").read_text(encoding="utf-8"))["sources"]
+        check(pubs["meta"]["module"] == "werbsmsi" and pubs["meta"]["groupeId"] == g["data"]["groupeId"] and len(pubs["data"]["sourcesPubliques"]) == len(defaut),
+              f"sources publiques du groupe publiées à la création ({len(defaut)}, groupe:sourcesPubliques)")
         check("continuite" in DOSSIERS["groupe"] and "continuite" in DOSSIERS["site"]
               and all(page.evaluate(DOSSIER, [f"SMSI/SMSI_TST/groupe/{d}", "existe"]) for d in DOSSIERS["groupe"])
               and all(page.evaluate(DOSSIER, [f"SMSI/SMSI_TST/sites/USINE1/{d}", "existe"]) for d in DOSSIERS["site"] + ["publications"]),

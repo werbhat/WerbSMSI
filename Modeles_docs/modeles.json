@@ -82,6 +82,16 @@
    "modules": ["WerbExploitation"],
    "balises": [],
    "copies": []
+  },
+  {
+   "fichier": "JSON/Sources_publiques_WerbSMSI.json",
+   "type": "JSON",
+   "titre": "Sources publiques du groupe (catalogue de départ)",
+   "role": "Normes, guides, référentiels, textes réglementaires et sites de référence (ANSSI, NIS2, ISO 27001, IEC 62443, NIST, CRA, RGPD). Publié d'office à la création d'un espace ; pour un espace existant, à importer dans le portail (⚙️ Administration › Sources publiques › Importer), puis à publier. Produit par charte/outils/sources_publiques.py.",
+   "espace": "",
+   "modules": ["Portail WerbSMSI", "WerbIEC62443"],
+   "balises": [],
+   "copies": ["WerbSMSI/portail/src/sources_defaut.json"]
   }
  ]
 }

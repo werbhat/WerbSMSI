@@ -4,7 +4,7 @@
 
     python portail/tests/test_modeles.py [--visible]
 
-Contrôles : inventaire Modeles_docs/modeles.json intégré au portail (une ligne par modèle, groupés Word, Visio, Excel ; rôle,
+Contrôles : inventaire Modeles_docs/modeles.json intégré au portail (une ligne par modèle, groupés Word, Visio, Excel, JSON ; rôle,
 modules, balises, emplacement dans l'espace) ; menu Outils › Modèles de documents ; sans espace : « espace non ouvert » ; espace de
 démonstration ouvert : modèles présents dans modeles/ et modeles/schemas/ ; modèle retiré de l'espace : absent signalé ; fichier
 hors inventaire listé (le logo ne l'est pas) ; l'espace n'est jamais modifié ; aucune erreur JavaScript.
@@ -76,8 +76,10 @@ def main() -> int:
         ok(pg.locator("#sidebar [data-wnav=modeles]").count() == 1, "menu Outils › Modèles de documents")
         pg.click("#sidebar [data-wnav=modeles]"); pg.wait_for_timeout(200)
         lignes = pg.locator("tr[data-modele]")
-        ok(lignes.count() == len(INVENTAIRE) and sorted(pg.locator("[data-modeles-type]").evaluate_all("l => l.map(x => x.dataset.modelesType)")) == ["Excel", "Visio", "Word"],
-           f"inventaire intégré : {len(INVENTAIRE)} modèles, groupés Word, Visio, Excel")
+        ok(lignes.count() == len(INVENTAIRE) and sorted(pg.locator("[data-modeles-type]").evaluate_all("l => l.map(x => x.dataset.modelesType)")) == ["Excel", "JSON", "Visio", "Word"],
+           f"inventaire intégré : {len(INVENTAIRE)} modèles, groupés Word, Visio, Excel, JSON")
+        ok("Fichiers de données (JSON)" in pg.inner_text('[data-modeles-type="JSON"]') and "Sources publiques du groupe" in pg.inner_text('[data-modeles-type="JSON"]'),
+           "fichier JSON des sources publiques présenté (pas à déposer dans l'espace)")
         w = pg.inner_text("tr[data-modele='Word/Modele_entete.docx']")
         ok("WerbGouvernance" in w and "modeles/Modele_entete.docx" in w and "{{REFERENCE}}" in w and "espace non ouvert" in w, "ligne du modèle Word : rôle, modules, balises, emplacement ; espace non ouvert")
         ok("pas à déposer" in pg.inner_text("tr[data-modele='Excel/Modele_Etat_Lieux_Tests_Reseau.xlsx']"), "modèle sans emplacement : pas à déposer")

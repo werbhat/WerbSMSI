@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- WerbMap v1.33.0 – Développé par @WerbHat – build novembre 2026 -->
+<!-- WerbMap v1.37.0 – Développé par @WerbHat – build novembre 2026 -->
 <!--
   WerbMap – Cartographie VLAN / Adressage IP / Actifs / Flux
   Module « Inventaires ICS » de WerbSMSI (niveau site). Version : sources/src/signature.js.
@@ -21,7 +21,7 @@
 <title>WerbMap</title>
 <meta name="application-name" content="WerbMap">
 <meta name="author" content="@WerbHat">
-<meta name="generator" content="WerbMap v1.33.0 – Développé par @WerbHat">
+<meta name="generator" content="WerbMap v1.37.0 – Développé par @WerbHat">
 <meta name="description" content="Cartographie VLAN, adressage IP, actifs et flux d'un site">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22%3E%3Crect width=%2232%22 height=%2232%22 rx=%226%22 fill=%22%230d2238%22/%3E%3Cpath d=%22M6 9h20M6 16h20M6 23h20M11 6v20M21 6v20%22 stroke=%22%23ffd27a%22 stroke-width=%222%22/%3E%3Ccircle cx=%2221%22 cy=%2216%22 r=%223.5%22 fill=%22%238fd16a%22/%3E%3C/svg%3E">
 <style>
@@ -175,12 +175,42 @@ select.niv.Faible{background:var(--niv1);color:#fff}select.niv.Moyen{background:
 select.prio.P1,.niv-b.prio-P1,.dot.prio-P1{background:var(--niv4);color:#fff}select.prio.P2,.dot.prio-P2{background:var(--niv3);color:#fff}
 select.prio.P3,.dot.prio-P3{background:var(--niv2);color:#fff}select.prio.Conforme,.dot.prio-Conforme{background:var(--niv1);color:#fff}
 @media (max-width:900px){.si-2,.si-ech{grid-template-columns:1fr}.si-fleche{display:none}}
+/* Étiquettes WerbTagDroid (1.34.0) : bandeau de classification (couleur + mot), TAG, libellé, QR ; planche A4 portrait */
+.kbadge{display:inline-block;padding:1px 7px;border-radius:9px;color:#fff;font-size:11px;font-weight:600;white-space:nowrap}
+.k-P{background:#2e7d32}.k-I{background:#1565c0}.k-C{background:#e65100}.k-S{background:#c62828}
+label.blk{display:block;margin-top:8px}
+.etq-apercu{margin:6px 0 10px}
+.etq{box-sizing:border-box;display:inline-flex;border:.3mm solid var(--ink);border-radius:2mm;overflow:hidden;background:var(--card);color:var(--ink);font-family:Arial,Helvetica,sans-serif;break-inside:avoid;page-break-inside:avoid;vertical-align:top}
+.etq-h{flex-direction:row;align-items:stretch}.etq-v{flex-direction:column}
+.etq-g{flex:1 1 auto;min-width:0;min-height:0;display:flex;flex-direction:column;overflow:hidden}
+.etq-b{color:#fff;font-weight:700;text-align:center;padding:0 1.5mm;letter-spacing:.3mm;white-space:nowrap;overflow:hidden;flex:0 0 auto}
+.etq-t{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;justify-content:center;padding:1mm 2mm;overflow:hidden}
+.etq-v .etq-t{align-items:center;text-align:center}
+.etq-tag{font-weight:700;font-family:Consolas,'Courier New',monospace;overflow-wrap:anywhere;line-height:1.1}
+.etq-l{line-height:1.15;overflow-wrap:anywhere}
+.etq-q{flex:0 0 auto}.etq-v .etq-q{align-self:center}
+.etq-q svg{width:100%;height:100%;display:block}
+.etq-qv{border:1px dashed #999;display:flex;align-items:center;justify-content:center;color:#999;box-sizing:border-box}
+.etq-planche{display:flex;flex-wrap:wrap;gap:4mm;align-items:flex-start}
+.etq-page{position:relative;width:210mm;height:297mm;overflow:hidden;break-after:page;page-break-after:always}
+.etq-page:last-child{break-after:auto;page-break-after:auto}
+.etq-case{position:absolute}.etq-case .etq{border-color:#bbb}
+.etq-rouleau{break-after:page;page-break-after:always;width:fit-content}.etq-rouleau:last-child{break-after:auto;page-break-after:auto}
+.etq-rouleau .etq,.etq-case .etq{border-radius:0}
+@page etiq{size:A4 portrait;margin:10mm}
+.badge-code{border:2px solid var(--warn)}.badge-code-val{font-family:Consolas,'Courier New',monospace;font-size:28px;font-weight:700;letter-spacing:3px;margin:6px 0}
+.badge-ecran-qr{width:min(72vh,600px);max-width:100%;aspect-ratio:1/1;margin:8px auto}.badge-ecran-qr svg{width:100%;height:100%;display:block}
+.badge-carte{border:.4mm solid #000;border-radius:3mm;padding:6mm;width:120mm;font-family:Arial,Helvetica,sans-serif;color:#000;background:#fff}
+.badge-titre{font-size:16pt;font-weight:700;margin-bottom:3mm}.badge-carte svg{width:100%;height:100%;display:block}.badge-avert{font-size:8.5pt;margin-top:3mm}
 #printArea{display:none}
 @media print{
   @page{size:A4 landscape;margin:12mm 8mm 15mm}
   body{background:#fff}
   body>*:not(#printArea){display:none!important}
   #printArea{display:block;font-size:9px}
+  #printArea.etiq{page:etiq;font-size:inherit}
+  #printArea .etq{background:#fff;color:#000;border-color:#000}
+  #printArea.etiq-grille .etq,#printArea.etiq-rouleau .etq{border:none}
   #printArea *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
   #printArea .ph{display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid var(--head);padding-bottom:6px;margin-bottom:10px}
   #printArea .pt{font-size:15px;font-weight:700;text-align:center}
@@ -36666,7 +36696,7 @@ const WERB = Object.freeze((() => {
   const bytes = [68, 195, 169, 118, 101, 108, 111, 112, 112, 195, 169, 32, 112, 97, 114, 32, 64, 87, 101, 114, 98, 72, 97, 116];
   const signature = new TextDecoder("utf-8").decode(new Uint8Array(bytes));
   const produit = "WerbMap";
-  const version = "1.33.0";
+  const version = "1.37.0";
   return {
     id: "werbmap",
     produit, version, auteur: "@WerbHat", signature,
@@ -38234,6 +38264,456 @@ const WerbGuides = Object.freeze((() => {
 
   return { VERSION, rendre, guides: liste_guides, trouver, entrees, dossiers, cartes, vue };
 })());
+
+/* WerbMap – Développé par @WerbHat
+   WerbQR : encodeur de QR code (ISO/IEC 18004), mode octet, versions 1 à 40, correction L, M, Q, H, choix du masque par pénalité.
+   Écrit pour WerbMap (étiquettes WerbTagDroid) : aucune dépendance, aucun réseau. Contrôlé par tests/test_qr.py, qui décode les QR
+   produits (toutes versions) avec zxing-cpp, de la même famille que le lecteur ZXing de WerbTagDroid.
+   WerbQR.encoder(octets, 'Q') → { version, taille, modules: [[bool]] } ; WerbQR.svg(qr, { marge }) → chaîne SVG. */
+window.WerbQR = (() => {
+  "use strict";
+  const NIVEAUX = { L: [0, 1], M: [1, 0], Q: [2, 3], H: [3, 2] };   // [indice des tables, bits de format]
+  const ECC_BLOC = [
+    [-1, 7, 10, 15, 20, 26, 18, 20, 24, 30, 18, 20, 24, 26, 30, 22, 24, 28, 30, 28, 28, 28, 28, 30, 30, 26, 28, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30],
+    [-1, 10, 16, 26, 18, 24, 16, 18, 22, 22, 26, 30, 22, 22, 24, 24, 28, 28, 26, 26, 26, 26, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28],
+    [-1, 13, 22, 18, 26, 18, 24, 18, 22, 20, 24, 28, 26, 24, 20, 30, 24, 28, 28, 26, 30, 28, 30, 30, 30, 30, 28, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30],
+    [-1, 17, 28, 22, 16, 22, 28, 26, 26, 24, 28, 24, 28, 22, 24, 24, 30, 28, 28, 26, 28, 30, 24, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30]];
+  const NB_BLOCS = [
+    [-1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 4, 4, 4, 4, 4, 6, 6, 6, 6, 7, 8, 8, 9, 9, 10, 12, 12, 12, 13, 14, 15, 16, 17, 18, 19, 19, 20, 21, 22, 24, 25],
+    [-1, 1, 1, 1, 2, 2, 4, 4, 4, 5, 5, 5, 8, 9, 9, 10, 10, 11, 13, 14, 16, 17, 17, 18, 20, 21, 23, 25, 26, 28, 29, 31, 33, 35, 37, 38, 40, 43, 45, 47, 49],
+    [-1, 1, 1, 2, 2, 4, 4, 6, 6, 8, 8, 8, 10, 12, 16, 12, 17, 16, 18, 21, 20, 23, 23, 25, 27, 29, 34, 34, 35, 38, 40, 43, 45, 48, 51, 53, 56, 59, 62, 65, 68],
+    [-1, 1, 1, 2, 4, 4, 4, 5, 6, 8, 8, 11, 11, 16, 16, 18, 16, 19, 21, 25, 25, 25, 34, 30, 32, 35, 37, 40, 42, 45, 48, 51, 54, 57, 60, 63, 66, 70, 74, 77, 81]];
+
+  const modulesBruts = v => {
+    let r = (16 * v + 128) * v + 64;
+    if (v >= 2) { const n = Math.floor(v / 7) + 2; r -= (25 * n - 10) * n - 55; if (v >= 7) r -= 36; }
+    return r;
+  };
+  const motsDonnees = (v, e) => Math.floor(modulesBruts(v) / 8) - ECC_BLOC[e][v] * NB_BLOCS[e][v];
+  const bitsCompte = v => (v < 10 ? 8 : 16);          // mode octet
+  const capacite = (v, e) => Math.floor((motsDonnees(v, e) * 8 - 4 - bitsCompte(v)) / 8);   // octets utiles
+
+  // Corps de Galois GF(256), polynôme 0x11D
+  const mul = (x, y) => { let z = 0; for (let i = 7; i >= 0; i--) { z = (z << 1) ^ ((z >>> 7) * 0x11d); z ^= ((y >>> i) & 1) * x; } return z & 0xff; };
+  const diviseur = deg => {
+    const r = new Array(deg).fill(0); r[deg - 1] = 1; let racine = 1;
+    for (let i = 0; i < deg; i++) {
+      for (let j = 0; j < r.length; j++) { r[j] = mul(r[j], racine); if (j + 1 < r.length) r[j] ^= r[j + 1]; }
+      racine = mul(racine, 0x02);
+    }
+    return r;
+  };
+  const reste = (donnees, div) => {
+    const r = new Array(div.length).fill(0);
+    for (const b of donnees) { const f = b ^ r.shift(); r.push(0); div.forEach((c, i) => { r[i] ^= mul(c, f); }); }
+    return r;
+  };
+
+  function encoder(octets, niveau = "Q") {
+    if (!(octets instanceof Uint8Array)) octets = new TextEncoder().encode(String(octets));
+    const [e, bitsFormat] = NIVEAUX[niveau] || NIVEAUX.Q;
+    let v = 1;
+    while (v <= 40 && capacite(v, e) < octets.length) v++;
+    if (v > 40) throw new RangeError(`contenu trop long pour un QR (${octets.length} octets, ${capacite(40, e)} au plus en correction ${niveau})`);
+    // Flux de bits : mode octet 0100, longueur, données, terminaison, remplissage
+    const bits = [];
+    const ajouter = (val, n) => { for (let i = n - 1; i >= 0; i--) bits.push((val >>> i) & 1); };
+    ajouter(4, 4); ajouter(octets.length, bitsCompte(v)); octets.forEach(b => ajouter(b, 8));
+    const cap = motsDonnees(v, e) * 8;
+    ajouter(0, Math.min(4, cap - bits.length));
+    ajouter(0, (8 - bits.length % 8) % 8);
+    for (let p = 0xec; bits.length < cap; p ^= 0xec ^ 0x11) ajouter(p, 8);
+    const donnees = [];
+    for (let i = 0; i < bits.length; i += 8) donnees.push(bits.slice(i, i + 8).reduce((a, b) => (a << 1) | b, 0));
+    // Blocs, correction Reed-Solomon, entrelacement
+    const nb = NB_BLOCS[e][v], lecc = ECC_BLOC[e][v], brut = Math.floor(modulesBruts(v) / 8);
+    const courts = nb - brut % nb, lcourt = Math.floor(brut / nb), div = diviseur(lecc), blocs = [];
+    for (let i = 0, k = 0; i < nb; i++) {
+      const d = donnees.slice(k, k + lcourt - lecc + (i < courts ? 0 : 1)); k += d.length;
+      const c = reste(d, div); if (i < courts) d.push(0); blocs.push(d.concat(c));
+    }
+    const mots = [];
+    for (let i = 0; i < blocs[0].length; i++) blocs.forEach((b, j) => { if (i !== lcourt - lecc || j >= courts) mots.push(b[i]); });
+
+    // Matrice : motifs fixes
+    const taille = v * 4 + 17;
+    const M = Array.from({ length: taille }, () => new Array(taille).fill(false));
+    const F = Array.from({ length: taille }, () => new Array(taille).fill(false));
+    const fixe = (x, y, noir) => { M[y][x] = noir; F[y][x] = true; };
+    for (let i = 0; i < taille; i++) { fixe(6, i, i % 2 === 0); fixe(i, 6, i % 2 === 0); }
+    const reperage = (cx, cy) => {
+      for (let dy = -4; dy <= 4; dy++) for (let dx = -4; dx <= 4; dx++) {
+        const d = Math.max(Math.abs(dx), Math.abs(dy)), x = cx + dx, y = cy + dy;
+        if (x >= 0 && x < taille && y >= 0 && y < taille) fixe(x, y, d !== 2 && d !== 4);
+      }
+    };
+    reperage(3, 3); reperage(taille - 4, 3); reperage(3, taille - 4);
+    const pos = [];
+    if (v > 1) {
+      const n = Math.floor(v / 7) + 2, pas = Math.floor((v * 8 + n * 3 + 5) / (n * 4 - 4)) * 2;
+      pos.push(6); for (let p = taille - 7; pos.length < n; p -= pas) pos.splice(1, 0, p);
+    }
+    pos.forEach((x, i) => pos.forEach((y, j) => {
+      if ((i === 0 && j === 0) || (i === 0 && j === pos.length - 1) || (i === pos.length - 1 && j === 0)) return;
+      for (let dy = -2; dy <= 2; dy++) for (let dx = -2; dx <= 2; dx++) fixe(x + dx, y + dy, Math.max(Math.abs(dx), Math.abs(dy)) !== 1);
+    }));
+    const format = masque => {
+      const d = (bitsFormat << 3) | masque; let r = d;
+      for (let i = 0; i < 10; i++) r = (r << 1) ^ ((r >>> 9) * 0x537);
+      const b = ((d << 10) | r) ^ 0x5412, bit = i => ((b >>> i) & 1) === 1;
+      for (let i = 0; i <= 5; i++) fixe(8, i, bit(i));
+      fixe(8, 7, bit(6)); fixe(8, 8, bit(7)); fixe(7, 8, bit(8));
+      for (let i = 9; i < 15; i++) fixe(14 - i, 8, bit(i));
+      for (let i = 0; i < 8; i++) fixe(taille - 1 - i, 8, bit(i));
+      for (let i = 8; i < 15; i++) fixe(8, taille - 15 + i, bit(i));
+      fixe(8, taille - 8, true);
+    };
+    format(0);   // réserve les zones de format (valeurs réécrites après le choix du masque)
+    if (v >= 7) {
+      let r = v; for (let i = 0; i < 12; i++) r = (r << 1) ^ ((r >>> 11) * 0x1f25);
+      const b = (v << 12) | r;
+      for (let i = 0; i < 18; i++) { const noir = ((b >>> i) & 1) === 1, a = taille - 11 + i % 3, c = Math.floor(i / 3); fixe(a, c, noir); fixe(c, a, noir); }
+    }
+    // Données en zigzag
+    let i = 0;
+    for (let droite = taille - 1; droite >= 1; droite -= 2) {
+      if (droite === 6) droite = 5;
+      for (let vert = 0; vert < taille; vert++) for (let j = 0; j < 2; j++) {
+        const x = droite - j, monte = ((droite + 1) & 2) === 0, y = monte ? taille - 1 - vert : vert;
+        if (!F[y][x] && i < mots.length * 8) { M[y][x] = ((mots[i >>> 3] >>> (7 - (i & 7))) & 1) === 1; i++; }
+      }
+    }
+    // Masque : celui de plus faible pénalité
+    const inverse = (m, x, y) => [(x + y) % 2 === 0, y % 2 === 0, x % 3 === 0, (x + y) % 3 === 0, (Math.floor(x / 3) + Math.floor(y / 2)) % 2 === 0,
+      (x * y) % 2 + (x * y) % 3 === 0, ((x * y) % 2 + (x * y) % 3) % 2 === 0, ((x + y) % 2 + (x * y) % 3) % 2 === 0][m];
+    const masquer = m => { for (let y = 0; y < taille; y++) for (let x = 0; x < taille; x++) if (!F[y][x] && inverse(m, x, y)) M[y][x] = !M[y][x]; };
+    let meilleur = 0, min = Infinity;
+    for (let m = 0; m < 8; m++) {
+      masquer(m); format(m);
+      const p = penalite(M);
+      if (p < min) { min = p; meilleur = m; }
+      masquer(m);
+    }
+    masquer(meilleur); format(meilleur);
+    return { version: v, niveau, masque: meilleur, taille, modules: M };
+  }
+
+  function penalite(M) {
+    const n = M.length; let p = 0, noirs = 0;
+    const motif = [true, false, true, true, true, false, true];
+    const ligne = get => {
+      let suite = 1;
+      for (let i = 1; i <= n; i++) {
+        if (i < n && get(i) === get(i - 1)) suite++;
+        else { if (suite >= 5) p += 3 + suite - 5; suite = 1; }
+      }
+      for (let i = 0; i + 7 <= n; i++) {
+        if (!motif.every((c, k) => get(i + k) === c)) continue;
+        const clair = (a, b) => { for (let k = a; k < b; k++) if (k >= 0 && k < n && get(k)) return false; return true; };
+        if (clair(i - 4, i) || clair(i + 7, i + 11)) p += 40;
+      }
+    };
+    for (let y = 0; y < n; y++) ligne(x => M[y][x]);
+    for (let x = 0; x < n; x++) ligne(y => M[y][x]);
+    for (let y = 0; y < n - 1; y++) for (let x = 0; x < n - 1; x++) {
+      const c = M[y][x]; if (c === M[y][x + 1] && c === M[y + 1][x] && c === M[y + 1][x + 1]) p += 3;
+    }
+    M.forEach(r => r.forEach(c => { if (c) noirs++; }));
+    p += Math.max(0, Math.ceil(Math.abs(noirs * 20 - n * n * 10) / (n * n)) - 1) * 10;
+    return p;
+  }
+
+  /* SVG : un chemin par module noir, marge (zone de silence) de 4 modules par défaut, mise à l'échelle par la feuille de style */
+  function svg(qr, o = {}) {
+    const m = o.marge == null ? 4 : o.marge, t = qr.taille + 2 * m;
+    let d = "";
+    qr.modules.forEach((r, y) => r.forEach((c, x) => { if (c) d += `M${x + m} ${y + m}h1v1h-1z`; }));
+    return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${t} ${t}" shape-rendering="crispEdges"${o.classe ? ` class="${o.classe}"` : ""}>`
+      + `<rect width="${t}" height="${t}" fill="#fff"/><path d="${d}" fill="#000"/></svg>`;
+  }
+
+  return { encoder, svg, capacite: (v, n = "Q") => capacite(v, (NIVEAUX[n] || NIVEAUX.Q)[0]) };
+})();
+
+/* WerbMap – Développé par @WerbHat
+   WerbTag : étiquettes d'actifs chiffrées et signées, format WTAG1 (WerbTagDroid, docs/FORMAT_ETIQUETTE.md, qui fait foi).
+   Module isolé : WebCrypto seulement (AES-256-GCM, ECDSA P-256 / SHA-256, PBKDF2), CompressionStream « deflate-raw ».
+   Contrôlé par tests/test_etiquettes.py contre les vecteurs partagés de WerbTagDroid (tests/donnees/wtag/) et contre
+   l'implémentation de référence Python.
+
+     QR = WTAG1:<kid>:<TAG>:<charge>:<signature>
+     charge    = base64url( IV 12 ‖ AES-256-GCM( deflate brut du JSON compact, AAD « WTAG1|<kid>|<TAG> » ) ‖ étiquette 16 )
+     signature = base64url( ECDSA P-256 / SHA-256 de « WTAG1:<kid>:<TAG>:<charge> », r ‖ s sur 64 octets )
+
+   Clés : un fichier d'émetteur (« <SITE>_emetteur.wtkey.json ») chiffré par mot de passe (PBKDF2-SHA256 600 000 itérations,
+   AES-256-GCM) contient la clé privée de signature et la clé AES du site. Ouvert, il donne un trousseau de clés NON EXTRACTIBLES,
+   gardé en mémoire seulement : jamais dans la base, une publication ou le stockage du navigateur. */
+window.WerbTag = (() => {
+  "use strict";
+  const PREFIXE = "WTAG1";
+  const RE_TAG = /^[A-Z0-9][A-Z0-9_.-]{0,47}$/, RE_KID = /^[A-Za-z0-9-]{1,16}$/, RE_B64U = /^[A-Za-z0-9_-]+$/, RE_DATE = /^\d{4}-\d{2}-\d{2}$/;
+  const CHAMPS = ["v", "t", "l", "z", "e", "c", "k", "em", "n", "p"], OBLIGATOIRES = ["v", "t", "l", "k", "em"], TEXTES = ["t", "l", "z", "e", "c", "p"];
+  const MAX_TEXTE = { t: 48, l: 120, z: 60, e: 120, c: 60, p: 3000 };
+  const MAX_QR = 1663, MAX_CLAIR = 4096;
+  const CLASSIFICATIONS = { P: "Public", I: "Interne", C: "Confidentiel", S: "Secret" };
+  const INTERDITS = [
+    [/(^|[^\d.])(\d{1,3}\.){3}\d{1,3}(?![\d.])/, "adresse IPv4"],
+    [/\b([0-9A-Fa-f]{2}[:-]){5}[0-9A-Fa-f]{2}\b/, "adresse MAC"],
+    [/(^|[^\p{L}\d])(mot\s+de\s+passe|mdp|password|passwd|pwd|passphrase|vlan)(?![\p{L}\d])/iu, "mot de passe ou VLAN"]];
+  const FICHIER = "WERBTAG-CLES-EMETTEUR", ITERATIONS = 600000;
+  const enc = new TextEncoder(), dec = new TextDecoder("utf-8", { fatal: true });
+
+  class ErreurEtiquette extends Error { constructor(code, detail) { super(code + (detail ? " : " + detail : "")); this.code = code; } }
+
+  const b64 = u => { let s = ""; u.forEach(b => { s += String.fromCharCode(b); }); return btoa(s); };
+  const ub64 = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));
+  const b64u = u => b64(u).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+  const ub64u = s => { if (!RE_B64U.test(s || "")) throw new ErreurEtiquette("format", "base64url attendu"); return ub64(s.replace(/-/g, "+").replace(/_/g, "/") + "=".repeat((4 - s.length % 4) % 4)); };
+  const hex = u => [...u].map(b => b.toString(16).padStart(2, "0")).join("");
+  const unhex = h => Uint8Array.from(h.match(/../g) || [], x => parseInt(x, 16));
+  const aad = (kid, tag) => enc.encode(`${PREFIXE}|${kid}|${tag}`);
+  const effacer = (...l) => l.forEach(u => { if (u && u.fill) u.fill(0); });
+  const concat = (...l) => { const r = new Uint8Array(l.reduce((n, u) => n + u.length, 0)); let i = 0; l.forEach(u => { r.set(u, i); i += u.length; }); return r; };
+
+  /* JSON compact, champs dans l'ordre canonique (identique à outils/wtag.py) */
+  function serialiser(c) {
+    const inconnus = Object.keys(c).filter(k => !CHAMPS.includes(k));
+    if (inconnus.length) throw new Error("champs non prévus par le format : " + inconnus.join(", "));
+    const o = {}; CHAMPS.forEach(k => { if (c[k] !== undefined && c[k] !== "") o[k] = c[k]; });
+    return JSON.stringify(o);
+  }
+
+  /* Contrôles de lecture (spécification §4, contrôle 6 et 7) */
+  function valider(c, tag) {
+    if (!c || typeof c !== "object" || Array.isArray(c) || OBLIGATOIRES.some(k => !(k in c)) || Object.keys(c).some(k => !CHAMPS.includes(k)))
+      throw new ErreurEtiquette("contenu", "champ obligatoire absent ou champ inconnu");
+    if (c.v !== 1) throw new ErreurEtiquette("contenu", "version de contenu inconnue");
+    if (TEXTES.some(k => k in c && (typeof c[k] !== "string" || c[k].length > MAX_TEXTE[k]))) throw new ErreurEtiquette("contenu", "texte invalide ou trop long");
+    if (!(c.k in CLASSIFICATIONS)) throw new ErreurEtiquette("contenu", "classification inconnue");
+    if (!RE_DATE.test(String(c.em))) throw new ErreurEtiquette("contenu", "date d'émission invalide");
+    if ("n" in c && !(Number.isInteger(c.n) && c.n >= 1)) throw new ErreurEtiquette("contenu", "numéro d'émission invalide");
+    if (c.t !== tag) throw new ErreurEtiquette("tag-incoherent", "le TAG chiffré diffère du TAG lisible");
+  }
+
+  /* Contrôles avant émission : format, longueurs, et jamais d'adresse ni de secret (spécification §3). Renvoie la liste des problèmes. */
+  function controler(c) {
+    const pb = [];
+    if (!RE_TAG.test(c.t || "")) pb.push("TAG hors format (lettres majuscules, chiffres, « _ », « . », « - », 48 au plus)");
+    if (!String(c.l || "").trim()) pb.push("libellé vide");
+    TEXTES.forEach(k => { if (c[k] && String(c[k]).length > MAX_TEXTE[k]) pb.push(`« ${NOMS[k]} » trop long (${String(c[k]).length} caractères, ${MAX_TEXTE[k]} au plus)`); });
+    TEXTES.forEach(k => INTERDITS.forEach(([re, quoi]) => { if (c[k] && re.test(String(c[k]))) pb.push(`${quoi} dans « ${NOMS[k]} » : interdit sur une étiquette`); }));
+    if (!(c.k in CLASSIFICATIONS)) pb.push("classification inconnue");
+    return pb;
+  }
+  const NOMS = { t: "TAG", l: "libellé", z: "zone", e: "emplacement", c: "coffret", p: "note PCR" };
+
+  async function flux(octets, transforme) {
+    const r = new Blob([octets]).stream().pipeThrough(transforme).getReader(), morceaux = [];
+    let n = 0;
+    for (;;) {
+      const { done, value } = await r.read();
+      if (done) break;
+      n += value.length; morceaux.push(value);
+      if (n > MAX_CLAIR) { r.cancel().catch(() => {}); throw new ErreurEtiquette("contenu", "contenu trop long"); }
+    }
+    return concat(...morceaux);
+  }
+  const compresser = async octets => { const s = new CompressionStream("deflate-raw"); const w = s.writable.getWriter(); w.write(octets); w.close(); return new Uint8Array(await new Response(s.readable).arrayBuffer()); };
+  const decompresser = async octets => { try { return await flux(octets, new DecompressionStream("deflate-raw")); } catch (e) { throw e instanceof ErreurEtiquette ? e : new ErreurEtiquette("contenu", "compression illisible"); } };
+
+  /* Longueur exacte du texte du QR, sans clé (le chiffrement ne change pas la longueur) : pour le compteur de place restante */
+  async function longueurQr(contenu, kid) {
+    const comp = await compresser(enc.encode(serialiser(contenu)));
+    const lc = Math.ceil((12 + comp.length + 16) * 4 / 3);
+    return `${PREFIXE}:${kid}:${contenu.t}:`.length + lc + 1 + 86;
+  }
+
+  async function emettre(contenu, kid, cleAes, clePrivee, iv) {
+    const tag = contenu.t;
+    if (!RE_TAG.test(tag || "") || !RE_KID.test(kid || "")) throw new Error("TAG ou identifiant de clé hors format");
+    const pb = controler(contenu); if (pb.length) throw new Error(pb.join(" ; "));
+    const clair = enc.encode(serialiser(contenu));
+    valider(JSON.parse(dec.decode(clair)), tag);
+    if (clair.length > MAX_CLAIR) throw new Error(`contenu trop long (${clair.length} octets, ${MAX_CLAIR} au plus)`);
+    iv = iv || crypto.getRandomValues(new Uint8Array(12));
+    const chiffre = new Uint8Array(await crypto.subtle.encrypt({ name: "AES-GCM", iv, additionalData: aad(kid, tag) }, cleAes, await compresser(clair)));
+    const message = `${PREFIXE}:${kid}:${tag}:${b64u(concat(iv, chiffre))}`;
+    const sig = new Uint8Array(await crypto.subtle.sign({ name: "ECDSA", hash: "SHA-256" }, clePrivee, enc.encode(message)));   // r ‖ s (IEEE P1363)
+    const qr = `${message}:${b64u(sig)}`;
+    if (qr.length > MAX_QR) throw new Error(`QR trop long (${qr.length} caractères, ${MAX_QR} au plus) : raccourcir la note PCR`);
+    return qr;
+  }
+
+  /* Lecture (comme le téléphone) : format, signature avant tout déchiffrement, clé non révoquée et connue, déchiffrement, contenu */
+  async function lire(qr, clePublique, cles, revoquees = []) {
+    if (typeof qr !== "string" || qr.length > MAX_QR) throw new ErreurEtiquette("format", "texte absent ou trop long");
+    const p = qr.split(":");
+    if (p.length !== 5 || p[0] !== PREFIXE) throw new ErreurEtiquette("format", "5 parties attendues, préfixe WTAG1");
+    const [, kid, tag, charge, sig] = p;
+    if (!RE_KID.test(kid) || !RE_TAG.test(tag)) throw new ErreurEtiquette("format", "identifiant de clé ou TAG hors format");
+    const brute = ub64u(sig), octets = ub64u(charge);
+    if (brute.length !== 64 || octets.length < 12 + 16 + 1) throw new ErreurEtiquette("format", "longueur de signature ou de charge");
+    const ok = await crypto.subtle.verify({ name: "ECDSA", hash: "SHA-256" }, clePublique, brute, enc.encode(qr.slice(0, qr.lastIndexOf(":"))));
+    if (!ok) throw new ErreurEtiquette("signature", "étiquette non émise par l'émetteur attendu ou modifiée");
+    if (revoquees.includes(kid)) throw new ErreurEtiquette("cle-revoquee");
+    if (!cles[kid]) throw new ErreurEtiquette("cle-inconnue");
+    let comp;
+    try { comp = new Uint8Array(await crypto.subtle.decrypt({ name: "AES-GCM", iv: octets.slice(0, 12), additionalData: aad(kid, tag) }, cles[kid], octets.slice(12))); }
+    catch (e) { throw new ErreurEtiquette("dechiffrement"); }
+    let c;
+    try { c = JSON.parse(dec.decode(await decompresser(comp))); } catch (e) { throw e instanceof ErreurEtiquette ? e : new ErreurEtiquette("contenu", "JSON illisible"); }
+    valider(c, tag);
+    return { kid, tag, contenu: c };
+  }
+
+  /* Classification dérivée de WerbMap (spécification §5, D6) : criticité de la zone, +1 niveau si l'actif est critique */
+  function classification(critZone, critique) {
+    const base = ["process", "metier-critique", "surete"].includes(critZone) ? "C" : "I";
+    return critique ? (base === "C" ? "S" : "C") : base;
+  }
+
+  /* ---------- Fichier de clés de l'émetteur ---------- */
+  async function cleMotDePasse(mdp, sel, usage) {
+    const base = await crypto.subtle.importKey("raw", enc.encode(mdp), "PBKDF2", false, ["deriveKey"]);
+    return crypto.subtle.deriveKey({ name: "PBKDF2", hash: "SHA-256", salt: sel, iterations: ITERATIONS }, base, { name: "AES-GCM", length: 256 }, false, usage);
+  }
+  const empreinteSpki = async spki => hex(new Uint8Array(await crypto.subtle.digest("SHA-256", spki)));
+  const groupes = h => h.toUpperCase().match(/.{1,4}/g).join(" ");
+
+  /* Crée un émetteur (paire ECDSA) et la clé du site (« <SITE>-1 ») ; renvoie le fichier chiffré à enregistrer au coffre-fort */
+  async function creerFichier(site, mdp, auteur) {
+    if (String(mdp || "").length < 12) throw new Error("mot de passe de 12 caractères au moins");
+    const code = String(site || "").toUpperCase().replace(/[^A-Z0-9-]/g, "").slice(0, 13) || "SITE";
+    const paire = await crypto.subtle.generateKey({ name: "ECDSA", namedCurve: "P-256" }, true, ["sign", "verify"]);
+    const pkcs8 = new Uint8Array(await crypto.subtle.exportKey("pkcs8", paire.privateKey));
+    const spki = new Uint8Array(await crypto.subtle.exportKey("spki", paire.publicKey));
+    const aes = crypto.getRandomValues(new Uint8Array(32)), kid = code + "-1", le = new Date().toISOString().slice(0, 10);
+    const clair = enc.encode(JSON.stringify({ emetteur: { pkcs8_b64: b64(pkcs8), spki_b64: b64(spki) }, cles: [{ kid, aes_b64: b64(aes), creeLe: le }], revoquees: [] }));
+    effacer(pkcs8, aes);
+    const sel = crypto.getRandomValues(new Uint8Array(16)), iv = crypto.getRandomValues(new Uint8Array(12));
+    const chiffre = new Uint8Array(await crypto.subtle.encrypt({ name: "AES-GCM", iv, additionalData: enc.encode(FICHIER + "|" + code) }, await cleMotDePasse(mdp, sel, ["encrypt"]), clair));
+    effacer(clair);
+    const empreinte = await empreinteSpki(spki);
+    return {
+      fichier: { format: FICHIER, version: 1, site: code, kidCourant: kid, creeLe: le, creePar: auteur || "", empreinteEmetteur: groupes(empreinte),
+        clePublique: b64(spki), kdf: { algo: "PBKDF2-SHA256", iterations: ITERATIONS, sel: b64(sel) }, iv: b64(iv), chiffre: b64(chiffre),
+        avertissement: "Clés de l'émetteur WerbTagDroid : à garder au coffre-fort. Jamais dans l'espace WerbSMSI, un dépôt, un partage ou un courriel." },
+      empreinte: groupes(empreinte) };
+  }
+
+  /* Ouvre le fichier : trousseau de clés non extractibles, en mémoire seulement */
+  async function ouvrirFichier(f, mdp) {
+    if (!f || f.format !== FICHIER || f.version !== 1) throw new Error("ce fichier n'est pas un fichier de clés d'émetteur WerbTagDroid");
+    let clair;
+    try { clair = new Uint8Array(await crypto.subtle.decrypt({ name: "AES-GCM", iv: ub64(f.iv), additionalData: enc.encode(FICHIER + "|" + f.site) }, await cleMotDePasse(mdp, ub64(f.kdf.sel), ["decrypt"]), ub64(f.chiffre))); }
+    catch (e) { throw new Error("mot de passe incorrect ou fichier altéré"); }
+    const d = JSON.parse(dec.decode(clair)); effacer(clair);
+    const t = await trousseau({ pkcs8_b64: d.emetteur.pkcs8_b64, spki_b64: d.emetteur.spki_b64, cles_aes_b64: Object.fromEntries(d.cles.map(c => [c.kid, c.aes_b64])), revoquees: d.revoquees || [] });
+    if (t.empreinte !== f.empreinteEmetteur) throw new Error("empreinte de l'émetteur incohérente : fichier altéré");
+    t.site = f.site; t.kid = f.kidCourant; t.fichier = f;   // fichier CHIFFRÉ gardé : le mot de passe est redemandé pour un badge
+    return t;
+  }
+
+  /* Clés de site en clair, le temps de fabriquer un badge (mot de passe redemandé) : l'appelant efface les octets aussitôt après */
+  async function clesBrutes(f, mdp) {
+    let clair;
+    try { clair = new Uint8Array(await crypto.subtle.decrypt({ name: "AES-GCM", iv: ub64(f.iv), additionalData: enc.encode(FICHIER + "|" + f.site) }, await cleMotDePasse(mdp, ub64(f.kdf.sel), ["decrypt"]), ub64(f.chiffre))); }
+    catch (e) { throw new Error("mot de passe incorrect ou fichier altéré"); }
+    const d = JSON.parse(dec.decode(clair)); effacer(clair);
+    return { site: f.site, revoquees: (d.revoquees || []).slice(), cles: Object.fromEntries(d.cles.map(c => [c.kid, ub64(c.aes_b64)])) };
+  }
+
+  /* ---------- Badge de clés WTKB1 (spécification §7 ; référence outils/wtkb.py de WerbTagDroid) ----------
+     QR = WTKB1:<appareil>:<debut>:<fin>:<sel>:<enveloppe>:<charge>:<signature> ; trois facteurs : clé RSA du téléphone, code à usage
+     unique remis à part, signature de l'émetteur avec période de validité. */
+  const BADGE = "WTKB1", ALPHABET = "ABCDEFGHJKMNPQRSTUVWXYZ23456789", ITER_BADGE = 100000;
+  const RE_APPAREIL = /^[0-9A-F]{16}$/;
+  const idAppareil = async spki => hex(new Uint8Array(await crypto.subtle.digest("SHA-256", spki))).slice(0, 16).toUpperCase();
+  const normaliserCode = s => String(s || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
+  function codeAleatoire() {
+    const r = [], o = new Uint8Array(1);
+    while (r.length < 10) { crypto.getRandomValues(o); if (o[0] < 248) r.push(ALPHABET[o[0] % 31]); }   // tirage sans biais (248 = 8 × 31)
+    return r.join("");
+  }
+  /* Clé publique d'un téléphone (fichier d'enrôlement PEM) : RSA, 2 048 bits au moins */
+  async function lireClePubliqueAppareil(texte) {
+    const m = /-----BEGIN PUBLIC KEY-----([\s\S]+?)-----END PUBLIC KEY-----/.exec(String(texte || ""));
+    if (!m) throw new Error("fichier sans « BEGIN PUBLIC KEY » : ce n'est pas le fichier d'enrôlement d'un téléphone WerbTagDroid");
+    const spki = ub64(m[1].replace(/\s+/g, ""));
+    let k;
+    try { k = await crypto.subtle.importKey("spki", spki, { name: "RSA-OAEP", hash: "SHA-1" }, true, ["encrypt"]); }
+    catch (e) { throw new Error("clé publique illisible ou non RSA"); }
+    if (k.algorithm.modulusLength < 2048) throw new Error("clé RSA trop courte (2 048 bits au moins)");
+    return { spki, spkiB64: b64(spki), id: await idAppareil(spki), bits: k.algorithm.modulusLength };
+  }
+  async function cleBadge(k1, code, sel, entete, usage) {
+    const base = await crypto.subtle.importKey("raw", enc.encode(normaliserCode(code)), "PBKDF2", false, ["deriveBits"]);
+    const sale = new Uint8Array(await crypto.subtle.deriveBits({ name: "PBKDF2", hash: "SHA-256", salt: sel, iterations: ITER_BADGE }, base, 256));
+    const ikm = await crypto.subtle.importKey("raw", k1, "HKDF", false, ["deriveKey"]);
+    const k = await crypto.subtle.deriveKey({ name: "HKDF", hash: "SHA-256", salt: sale, info: enc.encode(entete) }, ikm, { name: "AES-GCM", length: 256 }, false, usage);
+    effacer(sale); return k;
+  }
+  /* contenu = { v:1, s:"LYON", k:{ kid: Uint8Array(32) }, r:[kid], e:{ TAG: n } } ; dates AAAA-MM-JJ ; code de 10 signes */
+  async function emettreBadge({ contenu, spkiAppareil, debut, fin, code, clePrivee, k1, sel, iv }) {
+    if (!RE_DATE.test(debut) || !RE_DATE.test(fin) || debut > fin) throw new Error("période de validité invalide");
+    const c = normaliserCode(code);
+    if (c.length !== 10 || [...c].some(x => !ALPHABET.includes(x))) throw new Error("code hors format");
+    const json = { v: 1, s: contenu.s, k: Object.fromEntries(Object.entries(contenu.k).map(([kid, u]) => [kid, b64u(u)])), r: contenu.r || [], e: contenu.e || {} };
+    if (!Object.keys(json.k).length) throw new Error("badge sans clé de site");
+    k1 = k1 || crypto.getRandomValues(new Uint8Array(32)); sel = sel || crypto.getRandomValues(new Uint8Array(16)); iv = iv || crypto.getRandomValues(new Uint8Array(12));
+    const pub = await crypto.subtle.importKey("spki", spkiAppareil, { name: "RSA-OAEP", hash: "SHA-1" }, false, ["encrypt"]);
+    const env = new Uint8Array(await crypto.subtle.encrypt({ name: "RSA-OAEP" }, pub, k1));
+    const entete = `${BADGE}:${await idAppareil(spkiAppareil)}:${debut}:${fin}:${b64u(sel)}:${b64u(env)}`;
+    const clair = enc.encode(JSON.stringify(json));
+    const cle = await cleBadge(k1, c, sel, entete, ["encrypt"]);
+    effacer(k1);
+    const chiffre = new Uint8Array(await crypto.subtle.encrypt({ name: "AES-GCM", iv, additionalData: enc.encode(entete) }, cle, await compresser(clair)));
+    effacer(clair);
+    const message = `${entete}:${b64u(concat(iv, chiffre))}`;
+    const sig = new Uint8Array(await crypto.subtle.sign({ name: "ECDSA", hash: "SHA-256" }, clePrivee, enc.encode(message)));
+    const qr = `${message}:${b64u(sig)}`;
+    if (qr.length > MAX_QR) throw new RangeError(`badge trop long (${qr.length} caractères, ${MAX_QR} au plus)`);
+    return qr;
+  }
+  /* Lecture (comme le téléphone ; sert aux tests) : dechiffrer(enveloppe) → K1, fourni par l'appelant */
+  async function ouvrirBadge(qr, clePublique, appareil, aujourdhui, dechiffrer, code) {
+    const E = c => { const e = new Error(c); e.code = c; return e; };
+    if (typeof qr !== "string" || qr.length > MAX_QR) throw E("format");
+    const p = qr.split(":");
+    if (p.length !== 8 || p[0] !== BADGE || !RE_APPAREIL.test(p[1]) || !RE_DATE.test(p[2]) || !RE_DATE.test(p[3])) throw E("format");
+    let sel, env, charge, sig;
+    try { [sel, env, charge, sig] = [p[4], p[5], p[6], p[7]].map(ub64u); } catch (e) { throw E("format"); }
+    if (sel.length !== 16 || sig.length !== 64 || charge.length < 29 || ![256, 384, 512].includes(env.length)) throw E("format");
+    if (!await crypto.subtle.verify({ name: "ECDSA", hash: "SHA-256" }, clePublique, sig, enc.encode(qr.slice(0, qr.lastIndexOf(":"))))) throw E("signature");
+    if (p[1] !== appareil) throw E("autre-appareil");
+    if (aujourdhui < p[2]) throw E("pas-encore-valable");
+    if (aujourdhui > p[3]) throw E("expire");
+    const entete = p.slice(0, 6).join(":"), cle = await cleBadge(await dechiffrer(env), code, sel, entete, ["decrypt"]);
+    let comp;
+    try { comp = new Uint8Array(await crypto.subtle.decrypt({ name: "AES-GCM", iv: charge.slice(0, 12), additionalData: enc.encode(entete) }, cle, charge.slice(12))); }
+    catch (e) { throw E("code-incorrect"); }
+    try { return JSON.parse(dec.decode(await decompresser(comp))); } catch (e) { throw E("contenu"); }
+  }
+
+  /* Trousseau depuis des clés brutes (fichier ouvert, ou clés FICTIVES des tests) : les octets sont effacés après import */
+  async function trousseau(o) {
+    const pk = ub64(o.pkcs8_b64), spki = ub64(o.spki_b64), cles = {};
+    const prive = await crypto.subtle.importKey("pkcs8", pk, { name: "ECDSA", namedCurve: "P-256" }, false, ["sign"]);
+    const publique = await crypto.subtle.importKey("spki", spki, { name: "ECDSA", namedCurve: "P-256" }, false, ["verify"]);
+    effacer(pk);
+    const brutes = o.cles_aes_b64 || Object.fromEntries(Object.entries(o.cles_aes_hex || {}).map(([k, h]) => [k, b64(unhex(h))]));
+    for (const [kid, v] of Object.entries(brutes)) { const u = ub64(v); cles[kid] = await crypto.subtle.importKey("raw", u, "AES-GCM", false, ["encrypt", "decrypt"]); effacer(u); }
+    const kids = Object.keys(cles);
+    return { prive, publique, cles, revoquees: (o.revoquees || []).slice(), kid: kids.find(k => !(o.revoquees || []).includes(k)) || kids[0],
+      clePublique: o.spki_b64, empreinte: groupes(await empreinteSpki(spki)) };
+  }
+
+  const pem = spkiB64 => "-----BEGIN PUBLIC KEY-----\n" + spkiB64.match(/.{1,64}/g).join("\n") + "\n-----END PUBLIC KEY-----\n";
+
+  return { PREFIXE, CHAMPS, MAX_QR, MAX_TEXTE, CLASSIFICATIONS, ErreurEtiquette, serialiser, controler, compresser, longueurQr, emettre, lire,
+    classification, creerFichier, ouvrirFichier, trousseau, pem, b64u, unhex,
+    clesBrutes, idAppareil, codeAleatoire, normaliserCode, lireClePubliqueAppareil, emettreBadge, ouvrirBadge, effacer, groupes };
+})();
 </script>
 <script>window.BUILD_DATE="novembre 2026";</script>
 <script>
@@ -38382,6 +38862,8 @@ function merge(d){const b=blank();if(!d||typeof d!=='object')return b;Object.ass
   b.vlans=(d.vlans&&typeof d.vlans==='object')?d.vlans:{};
   b.si=Array.isArray(d.si)?d.si.map(siNorm):[];if(d.echelleDIC&&Array.isArray(d.echelleDIC.valeurs))b.echelleDIC=d.echelleDIC;if(d.modeles&&typeof d.modeles==='object')b.modeles=d.modeles;   // schéma 5 (MAP-7)
   if(d.recus&&typeof d.recus==='object')b.recus=d.recus;   // publications reçues des autres modules (MAP-7.4)
+  if(d.etiquettes&&typeof d.etiquettes==='object')b.etiquettes=d.etiquettes;
+  if(Array.isArray(d.appareils))b.appareils=d.appareils.filter(a=>a&&typeof a==='object'&&/^[0-9A-F]{16}$/.test(a.id)&&a.spki);   // téléphones WerbTagDroid enrôlés (1.36.0)   // étiquettes émises et dérogations de classification (1.34.0)
   if(Array.isArray(d.releves))b.releves=d.releves.filter(r=>r&&typeof r==='object'&&r.tag);   // relevés de machines (1.29.0, MAP-17)
   if(d.archives&&typeof d.archives==='object')ARCH_TABLES.forEach(k=>{if(Array.isArray(d.archives[k])&&d.archives[k].length)b.archives[k]=d.archives[k].filter(r=>r&&typeof r==='object'&&r.id).map(r=>Object.assign({},r));});   // lignes archivées (TRV-4)
   if(d.largeurs&&typeof d.largeurs==='object')Object.keys(TBL).forEach(k=>{const l=d.largeurs[k];if(l&&typeof l==='object'){const o=Object.fromEntries(Object.entries(l).filter(([,w])=>+w>=40&&+w<=2000).map(([c,w])=>[c,Math.round(+w)]));if(Object.keys(o).length)b.largeurs[k]=o;}});   // largeurs des colonnes (TRV-6)
@@ -38503,6 +38985,7 @@ function renommerTag(key,id){
   if(!confirm(`Renommer le TAG « ${old} » en « ${nv} » ?\n\n${refs.length?`Références mises à jour dans la base (${refs.length}) :\n${det}`:'Aucune autre référence dans la base.'}\n\n`
     +`Les autres modules (WerbAssets, WerbRecette, WerbPentest, WerbExploitation) citent encore « ${old} » : après enregistrement, publiez l'inventaire puis reprenez le nouveau TAG dans chacun d'eux.`))return;
   log(T.obj,r.id,T.label(r),'TAG (renommage)',old,nv);r.tag=nv;
+  const E=S.etiquettes||{};if(E[upT(old)]){E[upT(nv)]=Object.assign({},E[upT(old)],{empreinte:''});delete E[upT(old)];}   // étiquette : à réimprimer sous le nouveau TAG
   refs.forEach(({k,f,x})=>{const c=TBL[k].cols.find(y=>y.f===f);log(TBL[k].obj,x.id,TBL[k].label(x),c?c.l:f,x[f],nv);x[f]=nv;});
   render();setStatus(`TAG « ${old} » renommé en « ${nv} » : ${refs.length} référence(s) mise(s) à jour. Publiez l'inventaire après l'enregistrement.`);}
 const MT2A={Server:'Serveur',Workstation:'Station de travail',Hypervisor:'Hyperviseur',Laptop:'Ordinateur portable'};
@@ -38539,13 +39022,13 @@ const TBL={
    {f:'about',l:'Actif aboutissant',x:'Actif Aboutissant',t:L,dl:'dlTags'},{f:'portAb',l:'Port aboutissant',x:'Port Aboutissant',cls:'sm'},
    {f:'comment',l:'Commentaires',x:'commentaires',cls:'lg'},{f:'migre',l:'Migré',x:'Migré',t:B},{f:'nat',l:'NAT',x:'NAT',cls:'mono'}]},
  coffrets:{title:'Coffrets et baies informatiques',sheet:'Lst_Coffret',hk:'TAG',obj:'Coffret',label:r=>r.tag||r.libelle||'(nouveau)',
-  cols:[{f:'crit',l:'Critique',x:'Coffret Critique',t:B},{f:'tag',l:'TAG',x:'TAG',cls:'b'},{f:'libelle',l:'Libellé',x:'Libellé',cls:'lg'},{f:'niveau',l:'Niveau',x:'Niveau'},{f:'comment',l:'Commentaire',x:'Commentaire',cls:'lg'}]},
+  cols:[{f:'crit',l:'Critique',x:'Coffret Critique',t:B},{f:'tag',l:'TAG',x:'TAG',cls:'b'},{f:'libelle',l:'Libellé',x:'Libellé',cls:'lg'},{f:'niveau',l:'Niveau',x:'Niveau'},{f:'pcr',l:'Note PCR',x:'Note PCR',t:TA},{f:'comment',l:'Commentaire',x:'Commentaire',cls:'lg'}]},
  rsx:{title:'Actifs informatiques (hors PC et serveurs)',sheet:'Lst_Actifs_RSX',hk:'TAG equipement',obj:'Actif réseau',label:r=>r.tag||r.libelle||'(nouveau)',
   cols:[{f:'crit',l:'Critique',x:'Actif Critique',t:B},{f:'tag',l:'TAG équipement',x:'TAG equipement',cls:'b'},{f:'libelle',l:'Libellé',x:'Libellé',cls:'lg'},{f:'_ips',l:'IP (ID VLAN)',t:C,fn:r=>ipsOfTag(r.tag)},
    {f:'zone',l:'Zone',x:'Zone',t:SEL,opts:()=>S.refs.zones},{f:'_zv',l:'Zone (VLAN)',t:C,fn:r=>{const zs=zonesVlanTag(r.tag);return zs.join(', ')+(zoneConflit(r)?' ⚠ conflit':'');}},
    {f:'emplacement',l:'Emplacement',x:'Emplacement'},
    {f:'coffret',l:'Coffret',x:'Coffret',t:L,dl:'dlCof'},{f:'type',l:'Type actif',x:'Type Actif',t:SEL,opts:()=>S.refs.typesActif},{f:'marque',l:'Marque',x:'Marque'},{f:'reference',l:'Modèle',x:'Modèle',xa:['Référence']},
-   {f:'serie',l:'N° série',x:'N°Série',cls:'mono'},{f:'fw',l:'Version firmware',x:'Version firmware'},{f:'lienFw',l:'Lien site MAJ FW',x:'Lien Site MAJ FW',t:U},{f:'lienSuivi',l:'Lien fichier suivi gestion',x:'Lien Fichier Suivi gestion',t:U},{f:'comment',l:'Commentaire',x:'commentaire',cls:'lg'}]},
+   {f:'serie',l:'N° série',x:'N°Série',cls:'mono'},{f:'fw',l:'Version firmware',x:'Version firmware'},{f:'lienFw',l:'Lien site MAJ FW',x:'Lien Site MAJ FW',t:U},{f:'lienSuivi',l:'Lien fichier suivi gestion',x:'Lien Fichier Suivi gestion',t:U},{f:'pcr',l:'Note PCR',x:'Note PCR',t:TA},{f:'comment',l:'Commentaire',x:'commentaire',cls:'lg'}]},
  machines:{title:'Machines physiques',sheet:'Lst_MachinePhysique',hk:'TAG equipement',obj:'Machine physique',label:r=>r.tag||r.libelle||'(nouvelle)',
   cols:[{f:'crit',l:'Critique',x:'Machine\nCritique',t:B},{f:'tag',l:'TAG équipement',x:'TAG equipement',cls:'b'},{f:'libelle',l:'Libellé',x:'Libellé',cls:'lg'},{f:'_ips',l:'IP (ID VLAN)',t:C,fn:r=>ipsOfTag(r.tag)},{f:'_rn',l:'Routes / NAT',t:C,fn:r=>linksOf(r.tag)},{f:'_inv',l:'Inventaire',t:C,fn:r=>invCol(r.tag)},{f:'emplacement',l:'Emplacement',x:'Emplacement'},
    {f:'coffret',l:'Coffret',x:'Coffret',t:L,dl:'dlCof'},{f:'fonction',l:'Fonction du poste',x:'Fonction du Poste'},{f:'type',l:'Type machine',x:'Type Machine',t:SEL,opts:()=>S.refs.typesMachine},
@@ -38553,12 +39036,12 @@ const TBL={
    {f:'marque',l:'Marque',x:'Marque'},{f:'modele',l:'Modèle',x:'Modèle'},{f:'serie',l:'N° série',x:'N°Série',cls:'mono'},{f:'mes',l:'Date mise en service',x:'Date Mise en service',t:D},
    {f:'contrat',l:'Contrat / support',x:'Contrat ou support associé'},{f:'cpuInfo',l:'Info processeur',x:'Info processeur'},{f:'cpu',l:'CPU+threads',x:'CPU+threads',cls:'sm'},{f:'ram',l:'RAM',x:'RAM',cls:'sm'},
    {f:'disques',l:'Disques durs',x:'Disques durs'},{f:'raid',l:'Description RAID',x:'Description RAID'},{f:'infoVm',l:'Information VM',x:'Information VM'},{f:'alim',l:"Type d'alimentation",x:"Type d'alimentation"},
-   {f:'specs',l:'Spécificités matériels',x:'Spécificités Materiels'},{f:'comment',l:'Commentaires',x:'Commentaires',cls:'lg'}]},
+   {f:'specs',l:'Spécificités matériels',x:'Spécificités Materiels'},{f:'pcr',l:'Note PCR',x:'Note PCR',t:TA},{f:'comment',l:'Commentaires',x:'Commentaires',cls:'lg'}]},
  vms:{title:'Machines virtuelles',sheet:'Lst_MachineVirtuelle',hk:'TAG equipement',obj:'Machine virtuelle',label:r=>r.tag||r.libelle||'(nouvelle)',
   cols:[{f:'crit',l:'Critique',x:'Actif Critique',t:B},{f:'tag',l:'TAG équipement',x:'TAG equipement',cls:'b'},{f:'libelle',l:'Libellé',x:'Libellé',cls:'lg'},{f:'_ips',l:'IP (ID VLAN)',t:C,fn:r=>ipsOfTag(r.tag)},{f:'_rn',l:'Routes / NAT',t:C,fn:r=>linksOf(r.tag)},{f:'_inv',l:'Inventaire',t:C,fn:r=>invCol(r.tag)},{f:'hyperv',l:'Hyperviseur',x:'Hyperviseur',t:L,dl:'dlHyp'},
    {f:'fonction',l:'Fonction du poste',x:'Fonction du Poste'},{f:'type',l:'Type machine',x:'Type Machine',t:SEL,opts:()=>S.refs.typesMachine},{f:'os',l:'Système OS',x:'Système OS'},{f:'licences',l:'Licences',x:'Licences'},
    {f:'vos',l:'Version OS',x:'Version OS'},{f:'cpu',l:'CPU+threads',x:'CPU+threads',cls:'sm'},{f:'ram',l:'RAM (Go)',x:'RAM \nen Go',cls:'sm'},{f:'dd1',l:'Volume DD 1 (Go)',x:'Volume DD 1 en Go',cls:'sm'},{f:'dd2',l:'Volume DD 2 (Go)',x:'Volume DD 2 en Go',cls:'sm'},
-   {f:'eth',l:'Config interface Eth',x:'Config Interface Eth'},{f:'specs',l:'Spécificités matériels',x:'Spécificités Materiels'},{f:'arret',l:'Précaution arrêt',x:'Précaution Arrêt'},{f:'lienDoc',l:'Lien framework ou doc',x:'Lien Framework ou doc',t:U},{f:'comment',l:'Commentaires',x:'Commentaires',cls:'lg'}]},
+   {f:'eth',l:'Config interface Eth',x:'Config Interface Eth'},{f:'specs',l:'Spécificités matériels',x:'Spécificités Materiels'},{f:'arret',l:'Précaution arrêt',x:'Précaution Arrêt'},{f:'lienDoc',l:'Lien framework ou doc',x:'Lien Framework ou doc',t:U},{f:'pcr',l:'Note PCR',x:'Note PCR',t:TA},{f:'comment',l:'Commentaires',x:'Commentaires',cls:'lg'}]},
  flux:{title:'Matrice de flux',sheet:'MatriceFlux',hk:'#comment',obj:'Flux',label:r=>r.comment||((r.src||'?')+' → '+(r.dst||'?')),
   cols:[{f:'comment',l:'#comment',x:'#comment',cls:'lg'},{f:'state',l:'#state',x:'#state',t:L,dl:'dlState',cls:'sm'},{f:'action',l:'#action',x:'#action',t:L,dl:'dlAction',cls:'sm'},{f:'log',l:'#log_level',x:'#log_level',t:L,dl:'dlLog',cls:'sm'},
    {f:'utype',l:'#from_user_type',x:'#from_user_type'},{f:'ether',l:'#ether_proto',x:'#ether_proto',t:L,dl:'dlEther',cls:'sm'},{f:'src',l:'#from_src',x:'#from_src',t:L,dl:'dlNet'},{f:'dst',l:'#to_dest',x:'#to_dest',t:L,dl:'dlNet'},
@@ -38654,6 +39137,7 @@ function checks(){const A=[];const add=(s,o,m)=>A.push({s,o,m});const vl=vlanLis
     if(act&&p.revue&&p.revue<today)add('warn',o,'Revue échue depuis le '+fmtDay(p.revue));else if(act&&!p.revue)add('info',o,'Date de prochaine revue non définie');
     const nr=st.filter(s=>!(s.role||'').trim()).length;if(act&&nr)add('info',o,nr+' étape(s) sans responsable');});
   const pids=new Set(S.procs.map(p=>p.id)),po=S.proc.filter(s=>!pids.has(s.pid)).length;if(po)add('err','Procédures',po+' étape(s) rattachée(s) à aucune procédure');
+  etqActifs().forEach(a=>{if(etqEtat(a)==='reimprimer')add('warn','Étiquette '+a.tag,'Données modifiées depuis l\'émission n°'+a.e.n+' : étiquette à réimprimer (Inventaires › Étiquettes)');});   // 1.34.0
   const ord={err:0,warn:1,info:2};return A.sort((a,b)=>ord[a.s]-ord[b.s]);}
 
 /* ---------- Jeux de données (Excel, impression) ---------- */
@@ -38676,7 +39160,7 @@ const DATA={
    Licences, certificats, MCO et mises à jour : module WerbExploitation (rubrique Exploitation), qui reprend les actifs publiés. */
 const MENU=[{g:'pilot',i:'📊',l:'Pilotage',c:'bleu',t:[['dash','Tableau de bord']]},
  {g:'net',i:'🌐',l:'Réseau & adressage',c:'cyan',t:[['matrix','Matrice VLAN'],['vlans','Table IP VLAN'],['ips','Plan IP']]},
- {g:'inv',i:'🗄️',l:'Inventaires',c:'vert',t:[['coffrets','Coffrets'],['rsx','Actifs réseau'],['machines','Machines physiques'],['vms','Machines virtuelles'],['si','Liste des SI'],['mdp','Mots de passe']]},
+ {g:'inv',i:'🗄️',l:'Inventaires',c:'vert',t:[['coffrets','Coffrets'],['rsx','Actifs réseau'],['machines','Machines physiques'],['vms','Machines virtuelles'],['etiq','Étiquettes'],['si','Liste des SI'],['mdp','Mots de passe']]},
  {g:'rt',i:'🔀',l:'Routage & filtrage',c:'orange',t:[['routes','Routes'],['nat','NAT'],['flux','Matrice de flux']]},
  {g:'doc',i:'📘',l:'Procédures SMSI',c:'violet',t:[['procs','Catalogue des procédures'],['proc','Fiches de procédure']]},
  {g:'adm',i:'⚙️',l:'Administration',c:'ardoise',t:[['refs','Référentiels'],['hist','Historique'],['users','Utilisateurs'],['smsi','Intégration WerbSMSI']]},
@@ -38702,7 +39186,7 @@ const MENU_LAT=WerbSocle.menu($('#tabs'),MENU,{surNav:k=>{cur=k;render();}});
    ${k==='procs'?`<select id="pmod">${Object.entries(PROC_MODELS).map(([m,M])=>`<option value="${m}">${esc(M.titre)}</option>`).join('')}</select><button data-pmodel="1">➕ Depuis un modèle</button><span class="hint">📄 = ouvrir la fiche rédigée</span>`:''}
    ${k==='proc'?'<select id="fp-proc" class="tq"></select><span class="seg"><button data-pview="phase">🗂 Par phase</button><button data-pview="doc">📄 Rédigée (SMSI)</button></span><button id="bPword">⬇ Word (.doc)</button>':''}
    ${['rsx','machines'].includes(k)?'<span class="hint">Préfixes TAG : voir Référentiels</span>':''}<span class="tools-t" id="to-${k}"></span></div><div id="sb-${k}"></div><div class="wrap" id="w-${k}"></div></section>`;});
-  h+=`<section id="s-aide"></section><section id="s-guide"></section><section id="s-mdp"></section><section id="s-si"></section><section id="s-refs"></section>
+  h+=`<section id="s-aide"></section><section id="s-guide"></section><section id="s-mdp"></section><section id="s-si"></section><section id="s-etiq"></section><section id="s-refs"></section>
   <section id="s-hist"><div class="panel"><h3 id="hTitle">Versions enregistrées</h3><div class="wrap" style="max-height:240px" id="hver"></div></div>
    <div class="panel"><h3>Journal des modifications</h3><div class="bar"><select id="jv"></select><input id="jq" placeholder="🔍 Filtrer (utilisateur, objet, valeur…)" size="34"></div>
    <div class="wrap" style="max-height:calc(100vh - 470px);min-height:200px" id="hjour"></div></div></section>
@@ -39084,6 +39568,7 @@ function renderAide(){const P=(e,t,c)=>`<div class="panel"><h3>${e} ${t}</h3>${c
   ${P('💾','Enregistrer','<ul><li><b>💾 Enregistrer</b> crée une nouvelle <b>version</b> (commentaire obligatoire), tracée dans l\'historique avec une chaîne d\'intégrité.</li><li><b>📑 Enregistrer sous…</b> écrit la version dans un autre fichier (copie, autre emplacement) : la base ouverte devient ce fichier, l\'ancien n\'est pas modifié.</li><li>Dans WerbSMSI, ranger la base dans <code>SMSI_&lt;SIGLE&gt;\\sites\\&lt;CODE&gt;\\inventaires\\</code> avec un nom qui finit par <code>.werbmap.json</code> : le portail affiche alors sa puce.</li><li>Si un collègue a enregistré entre-temps, tes modifications sont téléchargées en brouillon et la dernière version est rechargée.</li></ul>')}
   ${P('🔗','Publier vers WerbSMSI (IEC 62443, WerbExploitation)','<ol><li><b>Administration › Intégration WerbSMSI</b> : <b>Choisir l\'espace…</b> (dossier <code>SMSI_&lt;SIGLE&gt;</code>), choisir le site, <b>Rattacher</b>, puis enregistrer une version.</li><li>Renseigner le <b>SL-T</b> de chaque zone (sans SL-T, la zone est ignorée par IEC 62443).</li><li><b>Publier</b> : écrit <code>sites/&lt;CODE&gt;/publications/werbmap.json</code> (zones, conduits, actifs avec famille, emplacement, OS). WerbExploitation le lit avec <b>⟳ Actualiser depuis l\'espace</b>, IEC 62443 avec <b>Importer dans le projet</b>.</li><li>Sans espace : <b>⬇ Exporter la publication</b> produit le même fichier, à importer dans WerbExploitation (<b>Parc & cycle de vie › Actifs du site (WerbMap) › Importer une publication WerbMap…</b>).</li></ol><p class="hint">Ni adresse IP, ni VLAN, ni numéro de série, ni matrice de flux ne sont publiés.</p>')}
   ${P('👥','Comptes et rôles','<p><b>Lecteur</b> : consulte et exporte. <b>Éditeur</b> : modifie et enregistre. <b>Administrateur</b> : gère aussi les comptes et les référentiels. L\'authentification trace qui fait quoi ; la protection réelle est celle du dossier.</p>')}
+  ${P('🏷️','Étiquettes (WerbTagDroid)','<p><b>Inventaires › Étiquettes</b> imprime les étiquettes des équipements, coffrets et baies : en clair le TAG, le libellé et la classification ; dans le QR, chiffrés et signés, la zone, l’emplacement, le coffret et la <b>note PCR</b>, lus sur le terrain par l’application Android WerbTagDroid. La classification découle de la zone et de l’indicateur <i>Critique</i>. Ouvrir d’abord le fichier de clés de l’émetteur (gardé au coffre-fort) ; une étiquette n’est à réimprimer que si une donnée qu’elle porte change.</p>')}
   ${P('📥','Excel','<p><b>📥 Import Excel</b> reprend un classeur Base_Inventaires_actifs (.xlsx / .xlsm). <b>📊 Export Excel</b> remplit le modèle (couleurs, listes, macros conservées) ou produit un classeur simple avec anomalies, versions et journal.</p>')}
   ${P('🧾','Saisie en masse','<p>Sur le <b>Plan IP</b>, les <b>coffrets</b>, les <b>actifs réseau</b> et les <b>machines physiques et virtuelles</b> : <b>⇩ Modèle de saisie</b> télécharge un classeur aux bonnes colonnes, avec des listes déroulantes des valeurs de la base (vierge, ou avec les lignes existantes pour les corriger). Remplis-le, puis <b>⇧ Importer des lignes</b> (classeur ou .csv aux mêmes titres).</p><ul><li>Modes : ajouter et mettre à jour (par TAG ; par adresse IP pour le Plan IP), ajouter seulement, remplacer la table.</li><li>Un rapport liste les ajouts, les mises à jour et les lignes rejetées avec leur motif : rien n\'est modifié avant « Appliquer ».</li><li>En mise à jour, une cellule vide ne modifie pas la valeur existante. Enregistre ensuite une version.</li></ul>')}
   ${P('🔐','Bon à savoir','<p>Rien n\'est conservé dans le navigateur : la base est redemandée à chaque session. Le plan d\'adressage et la matrice de flux sont sensibles : limite les droits du dossier.</p>')}`;}
@@ -39153,6 +39638,15 @@ async function recevoir(){const L=liaison(),E=WerbSocle.espace;if(!E.ouvert||!L.
   if(JSON.stringify(avantC)!==JSON.stringify(car)){
     S.recus=Object.assign({},S.recus,{cartographies:{items:car,majLe:maj,source:'site:cartographies'}});ch=true;
     log('Fiche SI','recus','Données reçues','Schémas d\'architecture WerbCartoSI (site:cartographies)',avantC.length+' schéma(s)',car.length+' schéma(s), reçus le '+fmtD(maj));}
+  /* Plan de reprise par SI publié par WerbPCR (site:reprise, 1.34.0) : proposé comme note PCR des étiquettes */
+  const txt=v=>String(v??'').trim(),rep=(Array.isArray(ps.reprise)?ps.reprise:[]).filter(x=>x&&x.si).map(x=>{const o={si:txt(x.si),nom:txt(x.nom)||txt(x.si)};
+    if(+x.rto>0)o.rto=+x.rto;if(+x.rpo>0)o.rpo=+x.rpo;['degrade','declenchement','retour'].forEach(k=>{if(txt(x[k]))o[k]=txt(x[k]);});
+    o.dependances=(Array.isArray(x.dependances)?x.dependances:[]).filter(d=>d&&typeof d==='object').map(d=>({type:txt(d.type),nom:txt(d.nom),commentaire:txt(d.commentaire)}));
+    o.etapes=(Array.isArray(x.etapes)?x.etapes:[]).filter(e=>e&&txt(e.action)).map(e=>({action:txt(e.action),responsable:txt(e.responsable),duree:txt(e.duree)}));return o;});
+  const avantRep=((recus('reprise')||{}).items)||[];
+  if(JSON.stringify(avantRep)!==JSON.stringify(rep)){
+    S.recus=Object.assign({},S.recus,{reprise:{items:rep,majLe:maj,source:'site:reprise'}});ch=true;
+    log('Étiquettes','recus','Données reçues','Plan de reprise WerbPCR (site:reprise)',avantRep.length+' SI',rep.length+' SI, reçus le '+fmtD(maj));}
   if(reporterFlux(ps.fluxRealises,maj))ch=true;
   return ch;}
 /* Flux des demandes réalisées (site:fluxRealises, WerbExploitation 1.10.0, MAP-13) : reportés automatiquement dans la matrice de flux.
@@ -39574,7 +40068,307 @@ function renderMdp(){const A=mdpArbre(),g=WerbGuides.guides().find(x=>/^3-/.test
    <li>Sinon, un <b>lien éphémère</b> d'un service de confiance, par exemple <b>Password Pusher</b> (pwpush) hébergé ou validé par l'organisation : le lien expire après une consultation ou quelques jours, puis le secret est détruit.</li>
    <li><b>Canaux séparés</b> (lien par courriel, identifiant par téléphone), identité du destinataire vérifiée, mot de passe changé après l'intervention.</li></ul></div>`;}
 function renderGuide(){$('#s-guide').innerHTML=WerbGuides.vue(cur,{lien:lienGuide});}
-const R={mdp:renderMdp,si:renderSI,dash:renderDash,matrix:renderMatrix,vlans:renderVlans,refs:renderRefs,hist:renderHist,users:renderUsers,proc:renderProc,smsi:renderSmsi,aide:renderAide};
+/* ---------- Étiquettes d'actifs chiffrées et signées (1.34.0, WerbTagDroid) ----------
+   Spécification WTAG1 (WerbTagDroid, docs/FORMAT_ETIQUETTE.md) ; cryptographie isolée dans wtag.js, encodeur QR dans qr.js.
+   En clair sur l'étiquette : TAG, libellé, classification. Dans le QR, chiffré et signé : zone, emplacement, coffret, note PCR, date et
+   numéro d'émission. Classification dérivée (D6) : criticité de la zone, +1 niveau pour un actif critique ; dérogation tracée.
+   Une étiquette n'est réimprimée que si une donnée qu'elle porte change (D2) : WerbMap garde, par TAG, le numéro de la dernière
+   émission et une empreinte de son contenu (S.etiquettes), et signale l'étiquette « à réimprimer » dès qu'elle diffère.
+   Clés de l'émetteur : fichier chiffré par mot de passe, ouvert le temps du travail ; trousseau NON EXTRACTIBLE en mémoire seulement
+   (TR), effacé au verrouillage, à la fermeture et sur « Oublier les clés » : jamais dans la base, une publication ou le navigateur. */
+const ETQ_TABLES=[['rsx','Actif réseau'],['machines','Machine physique'],['vms','Machine virtuelle'],['coffrets','Coffret']];
+const K_LIB=WerbTag.CLASSIFICATIONS,K_ORD=['P','I','C','S'];
+const ETQ_ETATS={jamais:'Jamais émise',ajour:'À jour',reimprimer:'À réimprimer'};
+let TR=null;
+let ETQ={sel:new Set(),q:'',etat:'',zone:'',edit:'',creer:false,lg:{},badge:''};
+const etqs=()=>S.etiquettes||(S.etiquettes={});
+const oublierCles=()=>{TR=null;};
+const hashTxt=s=>{let h1=0xdeadbeef,h2=0x41c6ce57;for(let i=0;i<s.length;i++){const c=s.charCodeAt(i);h1=Math.imul(h1^c,2654435761);h2=Math.imul(h2^c,1597334677);}
+  h1=Math.imul(h1^(h1>>>16),2246822507)^Math.imul(h2^(h2>>>13),3266489909);h2=Math.imul(h2^(h2>>>16),2246822507)^Math.imul(h1^(h1>>>13),3266489909);
+  return (h2>>>0).toString(16).padStart(8,'0')+(h1>>>0).toString(16).padStart(8,'0');};
+const etqSite=()=>upT(liaison().site||S.meta.site||'SITE').replace(/[^A-Z0-9-]/g,'').slice(0,13)||'SITE';
+function etqActifs(){const zd=smsiZoneDe(),zc=new Map(smsiZones().map(z=>[z.id,z.criticite])),E=etqs(),out=[],vus=new Set();
+  ETQ_TABLES.forEach(([k,src])=>S[k].forEach(r=>{const g=upT(r.tag);if(!g||vus.has(g))return;vus.add(g);
+    const zone=k==='coffrets'?'':(zd.get(g)||''),critZ=zone?(zc.get(zone)||'autre'):'',calc=WerbTag.classification(critZ,!!r.crit),e=E[g]||null,der=e&&e.derog||null;
+    out.push({key:k,src,r,tag:g,zone,critZ,calc,k:der?der.k:calc,derog:der,e});}));return out;}
+function etqContenu(a,n){const r=a.r,c={v:1,t:a.tag,l:String(r.libelle||'').trim()||a.tag};if(a.zone)c.z=a.zone;
+  const e=String(r.emplacement||(a.key==='coffrets'?r.niveau:'')||'').trim();if(e)c.e=e;
+  const cf=a.key==='coffrets'?'':String(r.coffret||'').trim();if(cf)c.c=cf;
+  c.k=a.k;c.em=stamp();if(n)c.n=n;const p=String(r.pcr||'').trim();if(p)c.p=p;return c;}
+const etqEmpreinte=a=>{const c=etqContenu(a,0);delete c.em;return hashTxt(JSON.stringify(c));};
+const etqEtat=a=>!a.e||!a.e.n?'jamais':a.e.empreinte===etqEmpreinte(a)?'ajour':'reimprimer';
+const qrVersion=l=>{for(let v=1;v<=40;v++)if(WerbQR.capacite(v,'Q')>=l)return v;return 0;};
+const qrMm=v=>((v*4+17+8)*0.33).toFixed(0);   // module de 0,33 mm, marge de 4 modules
+const kBadge=(k,der)=>`<span class="kbadge k-${k}" title="${der?'Dérogation : '+esc(der.motif)+' ('+esc(der.par)+', '+esc(der.le)+')':'Classification calculée'}">${esc(K_LIB[k]||k)}${der?' ✎':''}</span>`;
+function etqLongueurs(){const kid=TR?TR.kid:etqSite()+'-1';
+  etqActifs().forEach(a=>{const el=document.querySelector(`#s-etiq [data-etqlen="${CSS.escape(a.tag)}"]`);if(!el)return;const cle=etqEmpreinte(a);
+    const montrer=l=>{const v=qrVersion(l);el.innerHTML=v?`${l} car. · v${v} · ${qrMm(v)} mm`:`<span class="sev-err">${l} car. : trop long</span>`;};
+    if(ETQ.lg[a.tag]&&ETQ.lg[a.tag].cle===cle){montrer(ETQ.lg[a.tag].l);return;}
+    WerbTag.longueurQr(etqContenu(a,99),kid).then(l=>{ETQ.lg[a.tag]={cle,l};montrer(l);}).catch(()=>{el.textContent='—';});});}
+function renderEtiq(){const ed=can('edit'),adm=can('admin'),A=etqActifs(),zones=[...new Set(A.map(a=>a.zone).filter(Boolean))].sort();
+  const n=e=>A.filter(a=>etqEtat(a)===e).length,q=norm(ETQ.q);
+  const rows=A.filter(a=>(!q||norm([a.tag,a.r.libelle,a.zone,a.src].join(' ')).includes(q))&&(!ETQ.etat||etqEtat(a)===ETQ.etat)&&(!ETQ.zone||a.zone===ETQ.zone));
+  const nsel=A.filter(a=>ETQ.sel.has(a.tag)).length,cible=A.find(a=>a.tag===ETQ.edit);
+  let h=`<div class="bar"><h2>🏷️ Étiquettes d'actifs</h2><span class="hint">Étiquettes chiffrées et signées lues par l'application <b>WerbTagDroid</b> : en clair le TAG, le libellé et la classification ; dans le QR, chiffrés, la zone, l'emplacement, le coffret et la <b>note PCR</b>.</span></div>
+  <div class="panel" data-etq-cles><h3>🔑 Clés de l'émetteur</h3>
+  <div class="note-recus"><p>Les étiquettes sont <b>signées</b> par la clé de l'émetteur et <b>chiffrées</b> par la clé du site. Ces clés sont dans un fichier protégé par mot de passe (<code>${esc(etqSite())}_emetteur.wtkey.json</code>), à garder <b>au coffre-fort</b> : jamais dans l'espace WerbSMSI, un partage, un dépôt ou un courriel. Ouvert ici, il reste <b>en mémoire</b> le temps du travail, sans pouvoir en être extrait, et s'efface au verrouillage de la session, à la fermeture de la base ou sur « Oublier les clés ».</p>
+  <p>Une étiquette n'expire pas : elle n'est <b>réimprimée</b> que si une donnée qu'elle porte change (libellé, zone, emplacement, coffret, classification, note PCR), si elle est abîmée, ou si la clé du site est compromise — dans ce cas, toutes les étiquettes du site sont à refaire.</p></div>
+  ${TR?`<p data-etq-charge>✅ Clés chargées : site <b>${esc(TR.site||'')}</b>, clé du site <b class="mono">${esc(TR.kid)}</b>, empreinte de l'émetteur <span class="mono">${esc(TR.empreinte)}</span></p>
+   <p><button id="etqPem">⬇ Clé publique de l'émetteur (pour compiler WerbTagDroid)</button> <button id="etqOublier">🔒 Oublier les clés</button></p>`
+  :`<form id="etqOuvrir" class="form"><label>Fichier de clés<input type="file" id="etqFic" accept=".json,application/json"></label><label>Mot de passe<input type="password" id="etqMdp" autocomplete="off"></label><label><button class="pri">🔓 Ouvrir</button></label></form>
+   ${adm?`<details id="etqCreerD"${ETQ.creer?' open':''}><summary>Créer le fichier de clés de l'émetteur (une seule fois par site)</summary>
+   <p class="hint">Crée la clé de signature de l'émetteur et la clé du site <b class="mono">${esc(etqSite())}-1</b>, puis télécharge le fichier chiffré. Mot de passe de 12 caractères au moins, à conserver avec le fichier. Noter l'empreinte affichée : elle identifie l'émetteur pour WerbTagDroid.</p>
+   <form id="etqCreer" class="form"><label>Mot de passe (12 car. min.)<input type="password" id="etqM1" minlength="12" autocomplete="new-password"></label><label>Confirmation<input type="password" id="etqM2" autocomplete="new-password"></label><label><button>🆕 Créer et télécharger</button></label></form></details>`:''}`}</div>`;
+  if(cible){const r=cible.r,c=etqContenu(cible,((cible.e&&cible.e.n)||0)+1),pb=WerbTag.controler(c),de=cible.derog;
+    h+=`<div class="panel" data-etq-edit="${esc(cible.tag)}"><div class="bar"><h3>✎ ${esc(cible.tag)} — ${esc(r.libelle||'')}</h3><button id="etqFermer">Fermer</button></div>
+    <div class="etq-apercu">${etqHtml(c,null,etqSupport())}</div>
+    <label class="blk">Note PCR <span class="hint">— redondance, alimentation, procédure simple de rétablissement, consignes. Jamais d'adresse IP ou MAC, de VLAN ni de mot de passe ; contacts par leur rôle.</span>
+    <textarea data-t="row" data-tb="${cible.key}" data-id="${esc(r.id)}" data-f="pcr" data-k="etqpcr" rows="8" style="width:100%"${ed?'':' disabled'}>${esc(r.pcr||'')}</textarea></label>
+    <p><span id="etqCpt" class="hint"></span>${ed&&etqSisReprise(cible).length?` <button id="etqPropPcr" title="Plan de reprise publié par WerbPCR (site:reprise) pour le ou les SI de cet actif">📋 Proposer depuis WerbPCR (${esc(etqSisReprise(cible).map(s=>s.nom).join(', '))})</button>`:''}</p>
+    ${pb.length?`<p class="sev-err" data-etq-pb>${pb.map(esc).join('<br>')}</p>`:''}
+    <h3>Classification</h3><p>Calculée : ${kBadge(cible.calc,null)} <span class="hint">zone ${esc(cible.zone||'aucune')}${cible.critZ?' ('+esc(cible.critZ)+')':''}${r.crit?', actif critique (+1 niveau)':''}</span>${de?` · Dérogation en vigueur : ${kBadge(de.k,de)} — ${esc(de.motif)}`:''}</p>
+    ${adm?`<form id="etqDerog" class="form"><label>Dérogation<select id="etqDk">${K_ORD.filter(k=>k!==cible.calc&&(!cible.zone||k!=='P')).map(k=>`<option value="${k}"${de&&de.k===k?' selected':''}>${K_LIB[k]}</option>`).join('')}</select></label>
+     <label>Motif<input id="etqDm" size="40" value="${esc(de?de.motif:'')}"></label><label><button>Appliquer la dérogation</button></label>${de?'<label><button type="button" id="etqDsup">Retirer la dérogation</button></label>':''}</form>
+     <p class="hint">Public n'est possible que pour un actif hors zone ; jamais en dessous d'Interne pour un actif d'une zone.</p>`:'<p class="hint">Dérogation : administrateur seulement.</p>'}</div>`;}
+  h+=etqAppareilsHtml();
+  h+=etqSupportHtml();
+  h+=`<div class="panel"><div class="bar"><h3>Actifs à étiqueter</h3><input id="etq-q" placeholder="🔍 Filtrer" size="24" value="${esc(ETQ.q)}">
+   <select id="etq-etat"><option value="">Tous les états</option>${Object.entries(ETQ_ETATS).map(([k,l])=>`<option value="${k}"${ETQ.etat===k?' selected':''}>${l} (${n(k)})</option>`).join('')}</select>
+   <select id="etq-zone"><option value="">Toutes les zones</option>${zones.map(z=>`<option${ETQ.zone===z?' selected':''}>${esc(z)}</option>`).join('')}</select>
+   <button id="etqAfaire" title="Cocher les étiquettes jamais émises et à réimprimer">☑ À faire (${n('jamais')+n('reimprimer')})</button><button id="etqAucun">☐ Aucune</button>
+   <button class="pri" id="etqGen"${TR&&ed&&nsel?'':' disabled'} title="${TR?'':'Ouvrir d\'abord le fichier de clés'}">🏷️ Générer et imprimer (${nsel})</button></div>
+   ${!TR?'<p class="hint">Ouvre le fichier de clés de l\'émetteur pour générer des étiquettes.</p>':''}
+   <div class="wrap" style="max-height:calc(100vh - 360px)"><table class="grid" data-etq-table><thead><tr><th></th><th>TAG</th><th>Libellé</th><th>Famille</th><th>Zone</th><th>Classification</th><th>Note PCR</th><th>QR</th><th>Étiquette</th><th></th></tr></thead><tbody>
+   ${rows.map(a=>{const e=etqEtat(a),p=String(a.r.pcr||'').trim();return `<tr data-etq="${esc(a.tag)}"><td class="selc"><input type="checkbox" data-etqsel="${esc(a.tag)}"${ETQ.sel.has(a.tag)?' checked':''}></td>
+     <td class="b">${esc(a.tag)}</td><td>${esc(a.r.libelle||'')}</td><td>${esc(a.src)}</td><td>${esc(a.zone)}${a.critZ?` <span class="hint">${esc(a.critZ)}</span>`:''}</td>
+     <td>${kBadge(a.k,a.derog)}${a.r.crit?' <span class="hint">critique</span>':''}</td><td>${p?`${p.length} car.`:'<span class="hint">—</span>'}</td><td class="mono" data-etqlen="${esc(a.tag)}">…</td>
+     <td><span class="${e==='ajour'?'sev-info':e==='reimprimer'?'sev-warn':'hint'}">${ETQ_ETATS[e]}</span>${a.e&&a.e.n?` <span class="hint">n°${a.e.n} du ${esc(fmtDay(a.e.le))}</span>`:''}</td>
+     <td><button class="icon" data-etqedit="${esc(a.tag)}" title="Note PCR, classification, aperçu">✎</button></td></tr>`;}).join('')||'<tr><td colspan="10" class="hint">Aucun actif avec un TAG.</td></tr>'}</tbody></table></div></div>`;
+  $('#s-etiq').innerHTML=h;etqLongueurs();etqSupportEvents();etqAppareilsEvents();
+  const ta=document.querySelector('#s-etiq [data-k="etqpcr"]');
+  if(ta&&cible){const maj=()=>{const c=etqContenu(cible,((cible.e&&cible.e.n)||0)+1);c.p=ta.value.trim();if(!c.p)delete c.p;
+      WerbTag.longueurQr(c,TR?TR.kid:etqSite()+'-1').then(l=>{const v=qrVersion(l),cpt=$('#etqCpt');if(cpt)cpt.innerHTML=v?`QR de ${l} caractères sur ${WerbTag.MAX_QR} — version ${v}, environ ${qrMm(v)} × ${qrMm(v)} mm · reste ${WerbTag.MAX_QR-l} caractères`:`<span class="sev-err">QR de ${l} caractères : au-delà de ${WerbTag.MAX_QR}, raccourcir la note</span>`;});};
+    ta.oninput=maj;maj();}
+  const filtre=(id,f)=>{const el=$(id);if(el)el.oninput=()=>{ETQ[f]=el.value;const pos=el.selectionStart;renderEtiq();const x=$(id);if(x){x.focus();if(x.setSelectionRange&&pos!=null)x.setSelectionRange(pos,pos);}};};
+  filtre('#etq-q','q');filtre('#etq-etat','etat');filtre('#etq-zone','zone');
+  document.querySelectorAll('#s-etiq [data-etqsel]').forEach(b=>b.onchange=()=>{const t=b.dataset.etqsel;b.checked?ETQ.sel.add(t):ETQ.sel.delete(t);renderEtiq();});
+  document.querySelectorAll('#s-etiq [data-etqedit]').forEach(b=>b.onclick=()=>{ETQ.edit=b.dataset.etqedit;renderEtiq();$('#s-etiq').scrollIntoView();});
+  if($('#etqPropPcr'))$('#etqPropPcr').onclick=async()=>{const pr=await etqPropositionPcr(cible);if(!pr||!can('edit'))return;const r=cible.r;
+    if(String(r.pcr||'').trim()&&!confirm('Remplacer la note PCR actuelle par celle proposée depuis le plan de reprise de WerbPCR ?'))return;
+    log(TBL[cible.key].obj,r.id,TBL[cible.key].label(r),'Note PCR',r.pcr||'',pr.texte);r.pcr=pr.texte;
+    setStatus(`Note PCR proposée depuis WerbPCR (${pr.sis.join(', ')})${pr.tronque?' — raccourcie pour tenir dans le QR':''} : relis-la avant d'imprimer.`);render();};
+  if($('#etqFermer'))$('#etqFermer').onclick=()=>{ETQ.edit='';renderEtiq();};
+  $('#etqAfaire').onclick=()=>{A.forEach(a=>{if(etqEtat(a)!=='ajour')ETQ.sel.add(a.tag);});renderEtiq();};
+  $('#etqAucun').onclick=()=>{ETQ.sel.clear();renderEtiq();};
+  $('#etqGen').onclick=()=>etqGenerer();
+  if($('#etqOuvrir'))$('#etqOuvrir').onsubmit=async e=>{e.preventDefault();const f=$('#etqFic').files[0],m=$('#etqMdp').value;$('#etqMdp').value='';
+    if(!f||!m){alert('Choisis le fichier de clés et saisis son mot de passe.');return;}
+    try{TR=await WerbTag.ouvrirFichier(JSON.parse(await f.text()),m);setStatus(`Clés de l'émetteur chargées en mémoire (clé du site ${TR.kid}).`);
+      if(TR.site!==etqSite())alert(`Attention : ce fichier de clés est celui du site ${TR.site}, la base est celle du site ${etqSite()}.`);}
+    catch(x){alert('Ouverture impossible : '+x.message);}renderEtiq();};
+  if($('#etqCreerD'))$('#etqCreerD').ontoggle=()=>{ETQ.creer=$('#etqCreerD').open;};
+  if($('#etqCreer'))$('#etqCreer').onsubmit=async e=>{e.preventDefault();const m1=$('#etqM1').value,m2=$('#etqM2').value;$('#etqM1').value=$('#etqM2').value='';
+    if(m1!==m2){alert('Les deux mots de passe diffèrent.');return;}
+    if(!confirm(`Créer un nouvel émetteur et la clé du site ${etqSite()}-1 ?\n\nLes étiquettes déjà posées avec un autre fichier de clés ne seront plus lisibles par les téléphones configurés pour ce nouvel émetteur.`))return;
+    try{const r=await WerbTag.creerFichier(etqSite(),m1,USER.login);dl(`${r.fichier.site}_emetteur.wtkey.json`,JSON.stringify(r.fichier,null,1),'application/json');
+      TR=await WerbTag.ouvrirFichier(r.fichier,m1);log('Étiquettes','emetteur','Clés de l\'émetteur','Création',''," empreinte "+r.empreinte+', clé '+r.fichier.kidCourant);ETQ.creer=false;
+      alert(`Fichier de clés créé et chargé.\n\nEmpreinte de l'émetteur (à noter, elle identifie l'émetteur pour WerbTagDroid) :\n${r.empreinte}\n\nRange le fichier téléchargé au coffre-fort avec son mot de passe, et supprime-le du dossier Téléchargements.`);}
+    catch(x){alert('Création impossible : '+x.message);}render();};
+  if($('#etqPem'))$('#etqPem').onclick=()=>dl(`${TR.site||etqSite()}_emetteur_public.pem`,WerbTag.pem(TR.clePublique),'application/x-pem-file');
+  if($('#etqOublier'))$('#etqOublier').onclick=()=>{oublierCles();BADGE_AFF=null;setStatus('Clés de l\'émetteur effacées de la mémoire.');renderEtiq();};
+  if($('#etqDerog'))$('#etqDerog').onsubmit=e=>{e.preventDefault();if(!can('admin'))return;const k=$('#etqDk').value,m=$('#etqDm').value.trim();
+    if(!m){alert('Le motif de la dérogation est obligatoire.');return;}
+    if(cible.zone&&k==='P'){alert('Public est impossible pour un actif d\'une zone.');return;}
+    const E=etqs(),o=E[cible.tag]=E[cible.tag]||{},av=o.derog?K_LIB[o.derog.k]+' ('+o.derog.motif+')':'';o.derog={k,motif:m,par:USER.login,le:stamp()};
+    log('Étiquette',cible.tag,cible.tag,'Classification (dérogation)',av,K_LIB[k]+' ('+m+')');render();};
+  if($('#etqDsup'))$('#etqDsup').onclick=()=>{const o=etqs()[cible.tag];if(!o||!o.derog||!can('admin'))return;log('Étiquette',cible.tag,cible.tag,'Classification (dérogation)',K_LIB[o.derog.k]+' ('+o.derog.motif+')','');delete o.derog;render();};}
+/* Note PCR proposée depuis le plan de reprise de WerbPCR (site:reprise) : SI qui contiennent l'actif ; raccourcie (étapes de la fin
+   retirées) si elle dépasse la place du QR. Reste modifiable ; WerbMap refuse toujours adresses et secrets à l'émission. */
+const etqHeures=x=>!x?'':(+x>=24&&+x%24===0?(+x/24)+' j':x+' h');
+function etqTextePcr(it){const n=it.nom||it.si,L=[(/^SI\b/i.test(n)?n:'SI '+n)+(it.rto||it.rpo?` — RTO ${etqHeures(it.rto)||'?'}, RPO ${etqHeures(it.rpo)||'?'}`:'')];
+  if(it.degrade)L.push('Mode dégradé : '+it.degrade);
+  if((it.dependances||[]).length)L.push('Dépendances : '+it.dependances.map(d=>[d.type,d.nom].filter(Boolean).join(' — ')+(d.commentaire?' ('+d.commentaire+')':'')).join(' ; '));
+  if(it.declenchement)L.push('Déclenchement : '+it.declenchement);
+  (it.etapes||[]).forEach((e,i)=>{const p=[e.responsable,e.duree].filter(Boolean).join(', ');L.push(`${i+1}. ${e.action}${p?' ('+p+')':''}`);});
+  if(it.retour)L.push('Retour à la normale : '+it.retour);return L;}
+const etqSisReprise=a=>{const R=((recus('reprise')||{}).items)||[];return S.si.filter(s=>R.some(x=>x.si===s.id)&&siCalc(s).actifs.some(x=>upT(x.tag)===a.tag));};
+async function etqPropositionPcr(a){const R=((recus('reprise')||{}).items)||[],sis=etqSisReprise(a);if(!sis.length)return null;
+  const L=sis.flatMap(s=>etqTextePcr(R.find(x=>x.si===s.id))),kid=TR?TR.kid:etqSite()+'-1';let tronque=false;
+  for(;;){const c=etqContenu(a,99);c.p=L.join('\n')+(tronque?'\n(suite : plan de reprise WerbPCR)':'');
+    if(c.p.length<=WerbTag.MAX_TEXTE.p&&await WerbTag.longueurQr(c,kid)<=WerbTag.MAX_QR)return {texte:c.p,sis:sis.map(s=>s.nom),tronque};
+    if(L.length<=1)return {texte:L[0].slice(0,300),sis:sis.map(s=>s.nom),tronque:true};L.pop();tronque=true;}}
+/* Support d'impression (1.34.0) : planche A4 libre (taille selon le QR), planche A4 en grille (gabarits du commerce ou personnalisé,
+   départ à l'étiquette n pour une planche entamée) ou rouleau d'imprimante d'étiquettes (une étiquette par page). Réglage enregistré
+   dans la base (S.meta.etqSupport), tracé au journal. Un QR qui ne tient pas sur l'étiquette avec des modules d'au moins la taille
+   minimale (0,25 mm par défaut) est refusé AVANT l'émission : le numéro d'émission n'avance pas. */
+const ETQ_SUPPORTS={
+  'a4-libre':{nom:'Planche A4 libre — taille selon le QR',mode:'libre'},
+  'avery-l7165':{nom:'Planche A4 Avery L7165 — 99,1 × 67,7 mm, 2 × 4',mode:'grille',l:99.1,h:67.7,col:2,lig:4,mh:13.1,mg:4.65,eh:2.5,ev:0},
+  'avery-l7163':{nom:'Planche A4 Avery L7163 — 99,1 × 38,1 mm, 2 × 7',mode:'grille',l:99.1,h:38.1,col:2,lig:7,mh:15.15,mg:4.65,eh:2.5,ev:0},
+  'a4-70x42':{nom:'Planche A4 70 × 42,3 mm, 3 × 7',mode:'grille',l:70,h:42.3,col:3,lig:7,mh:0.45,mg:0,eh:0,ev:0},
+  'rouleau-62x100':{nom:'Rouleau 62 × 100 mm (type Brother DK)',mode:'rouleau',l:62,h:100},
+  'rouleau-89x36':{nom:'Rouleau 89 × 36 mm (type Dymo 99012)',mode:'rouleau',l:89,h:36},
+  'rouleau-100x50':{nom:'Rouleau 100 × 50 mm (imprimante thermique)',mode:'rouleau',l:100,h:50},
+  'perso':{nom:'Personnalisé',mode:'grille',l:90,h:60,col:2,lig:4,mh:10,mg:10,eh:5,ev:5}};
+const ETQ_CHAMPS_SUP=[['l','Largeur (mm)',10,300],['h','Hauteur (mm)',10,300],['col','Colonnes',1,10],['lig','Lignes',1,20],['mh','Marge haute (mm)',0,50],['mg','Marge gauche (mm)',0,50],['eh','Espace horizontal (mm)',0,30],['ev','Espace vertical (mm)',0,30]];
+function etqSupport(){const s=Object.assign({id:'a4-libre',module:0.33,moduleMin:0.25,depart:1},S.meta.etqSupport||{}),b=ETQ_SUPPORTS[s.id];
+  if(!b)return Object.assign({},ETQ_SUPPORTS['a4-libre'],{id:'a4-libre',module:s.module,moduleMin:s.moduleMin,depart:1});
+  if(s.id==='perso')return Object.assign({},b,s,{mode:s.mode==='rouleau'?'rouleau':'grille',nom:b.nom});
+  return Object.assign({},b,{id:s.id,module:s.module,moduleMin:s.moduleMin,depart:s.depart});}
+const etqParPage=s=>s.mode==='grille'?s.col*s.lig:1;
+/* Place disponible pour le QR sur une étiquette de taille fixe : bandeau en haut, TAG et libellé à gauche (paysage) ou au-dessus (portrait) */
+/* Mise en page (1.36.0) : étiquette en largeur → le QR occupe TOUTE la hauteur, collé à droite ; à sa gauche, le bandeau de
+   classification (dont la largeur va jusqu'au QR), puis le TAG et le libellé. Étiquette en hauteur (rouleau 62 × 100…) → bandeau,
+   TAG et libellé en haut, QR sur toute la largeur en dessous. TEXTE_MIN : largeur gardée pour le texte à gauche du QR. */
+const TEXTE_MIN=26,BORD=0.6;
+function etqGeometrie(s){const pay=s.l>s.h,qmax=pay?Math.min(s.h-BORD,s.l-BORD-TEXTE_MIN):Math.min(s.l-BORD,s.h-BORD-Math.max(14,Math.min(22,s.h*0.25)));
+  const ht=pay?s.h:s.h-Math.max(0,qmax);   // hauteur de la colonne de texte (paysage) ou du bloc de texte (portrait)
+  return {pay,qmax:Math.max(0,Math.floor(qmax*10)/10),bh:Math.min(9,Math.max(4.5,ht*(pay?0.2:0.32))),tag:Math.min(16,Math.max(8,ht/(pay?3:2.2))),lib:Math.min(11,Math.max(6.5,ht/(pay?4.8:3.6)))};}
+function etqTientSur(qr,s){const n=qr.taille+8;if(s.mode==='libre')return {ok:true,mm:n*s.module};const g=etqGeometrie(s);
+  return {ok:g.qmax>=n*s.moduleMin,mm:g.qmax,min:n*s.moduleMin,qmax:g.qmax};}
+function etqHtml(c,qr,s){s=s||{mode:'libre',module:0.33};const mot=esc((K_LIB[c.k]||'').toUpperCase());
+  const qrHtml=mm=>qr?`<div class="etq-q" style="width:${mm}mm;height:${mm}mm">${WerbQR.svg(qr)}</div>`:`<div class="etq-q etq-qv" style="width:${mm}mm;height:${mm}mm">QR</div>`;
+  const texte=(g)=>`<div class="etq-g"><div class="etq-b k-${c.k}" style="height:${g.bh.toFixed(1)}mm;line-height:${g.bh.toFixed(1)}mm;font-size:${Math.min(12,g.bh*1.45).toFixed(1)}pt">${mot}</div>
+    <div class="etq-t"><div class="etq-tag" style="font-size:${g.tag.toFixed(1)}pt">${esc(c.t)}</div><div class="etq-l" style="font-size:${g.lib.toFixed(1)}pt">${esc(c.l)}</div></div></div>`;
+  if(s.mode==='libre'){const mm=Math.round((qr?(qr.taille+8)*s.module:20)*10)/10,g=etqGeometrie({l:mm+48,h:mm});   // libre : hauteur = côté du QR, 48 mm pour le texte
+    return `<div class="etq etq-h" style="height:${(mm+BORD+0.1).toFixed(1)}mm;width:${(mm+48+BORD).toFixed(1)}mm">${texte(g)}${qrHtml(mm.toFixed(1))}</div>`;}
+  const g=etqGeometrie(s),mm=(qr?etqTientSur(qr,s).mm:g.qmax).toFixed(1);
+  return `<div class="etq etq-fixe ${g.pay?'etq-h':'etq-v'}" style="width:${s.l}mm;height:${s.h}mm">${texte(g)}${qrHtml(mm)}</div>`;}
+/* Pages à imprimer et règle @page correspondant au support */
+function etqPlanche(etqs,s){
+  if(s.mode==='libre')return {page:'@page etiq{size:A4 portrait;margin:10mm}',html:`<div class="etq-planche">${etqs.join('')}</div>`};
+  if(s.mode==='rouleau')return {page:`@page etiq{size:${s.l}mm ${s.h}mm;margin:0}`,html:etqs.map(e=>`<div class="etq-rouleau">${e}</div>`).join('')};
+  const n=etqParPage(s),cases=Array(Math.max(0,Math.min(n,s.depart||1)-1)).fill('').concat(etqs),pages=[];
+  for(let i=0;i<cases.length;i+=n)pages.push(cases.slice(i,i+n));
+  return {page:'@page etiq{size:A4 portrait;margin:0}',html:pages.map(p=>`<div class="etq-page">${p.map((e,k)=>{if(!e)return '';const c=k%s.col,r=Math.floor(k/s.col);
+    return `<div class="etq-case" style="left:${(s.mg+c*(s.l+s.eh)).toFixed(2)}mm;top:${(s.mh+r*(s.h+s.ev)).toFixed(2)}mm">${e}</div>`;}).join('')}</div>`).join('')};}
+function etqSupportHtml(){const s=etqSupport(),adm=can('edit'),dis=adm?'':' disabled',perso=s.id==='perso',n=etqParPage(s);
+  const g=s.mode==='libre'?null:etqGeometrie(s),qmin=v=>((v*4+17+8)*s.moduleMin);
+  const vmax=g?(()=>{let v=0;for(let x=1;x<=40;x++)if(qmin(x)<=g.qmax)v=x;return v;})():40;
+  return `<div class="panel" data-etq-support><h3>🖨️ Support d'impression</h3>
+  <form id="etqSup" class="form"><label>Support<select id="etqSupId"${dis}>${Object.entries(ETQ_SUPPORTS).map(([k,v])=>`<option value="${k}"${k===s.id?' selected':''}>${esc(v.nom)}</option>`).join('')}</select></label>
+  ${perso?`<label>Type<select data-sup="mode"${dis}><option value="grille"${s.mode==='grille'?' selected':''}>Planche A4 en grille</option><option value="rouleau"${s.mode==='rouleau'?' selected':''}>Rouleau (une étiquette par page)</option></select></label>`:''}
+  ${s.mode!=='libre'?ETQ_CHAMPS_SUP.filter(([k])=>s.mode==='grille'||['l','h'].includes(k)).map(([k,l,mi,ma])=>`<label>${l}<input type="number" data-sup="${k}" value="${s[k]}" min="${mi}" max="${ma}" step="${['col','lig'].includes(k)?1:0.05}" style="width:90px"${perso?dis:' disabled'}></label>`).join(''):''}
+  ${s.mode==='grille'?`<label>Commencer à l'étiquette n°<input type="number" data-sup="depart" value="${s.depart||1}" min="1" max="${n}" step="1" style="width:70px"${dis}></label>`:''}
+  ${s.mode==='libre'?`<label>Taille d'un module du QR (mm)<input type="number" data-sup="module" value="${s.module}" min="0.25" max="1" step="0.01" style="width:80px"${dis}></label>`
+    :`<label>Module minimal du QR (mm)<input type="number" data-sup="moduleMin" value="${s.moduleMin}" min="0.2" max="1" step="0.01" style="width:80px"${dis}></label>`}</form>
+  <p class="hint" data-etq-support-info>${s.mode==='libre'?`Étiquettes à la taille de leur QR sur une feuille A4 (module de ${s.module} mm : QR de 20 à 65 mm).`
+    :s.mode==='rouleau'?`Une étiquette de ${s.l} × ${s.h} mm par page : régler la même taille de papier dans le pilote de l'imprimante d'étiquettes, échelle 100 %.`
+    :`${n} étiquettes de ${s.l} × ${s.h} mm par feuille A4${(s.depart||1)>1?`, en commençant à la n°${s.depart} (planche entamée)`:''} : imprimer à l'échelle 100 %, sans « ajuster à la page ».`}
+    ${g?` QR jusqu'à ${g.qmax.toFixed(0)} mm : ${vmax?`version ${vmax} au plus (≈ ${Math.max(0,WerbQR.capacite(vmax,'Q')-150)} caractères de note PCR)`:'<span class="sev-err">trop petit pour un QR</span>'} ; une étiquette dont le QR ne tient pas est refusée avant l'émission.`:''}</p>
+  <div class="etq-apercu" data-etq-apercu>${etqHtml({t:'TAG_EXEMPLE',l:'Libellé de l\'actif',k:'C'},null,s)}</div></div>`;}
+function etqSupportEvents(){const sauver=(o,champ,av,ap)=>{if(!can('edit'))return;S.meta.etqSupport=o;log('Étiquettes','support','Support d\'impression',champ,av,ap);render();};
+  const sel=$('#etqSupId');if(sel)sel.onchange=()=>{const av=etqSupport(),b=ETQ_SUPPORTS[sel.value];const o={id:sel.value,module:av.module,moduleMin:av.moduleMin,depart:1};
+    if(sel.value==='perso')Object.assign(o,{mode:av.mode==='libre'?'grille':av.mode},...ETQ_CHAMPS_SUP.map(([k])=>({[k]:av[k]!=null?av[k]:b[k]})));
+    sauver(o,'Support',ETQ_SUPPORTS[av.id]?ETQ_SUPPORTS[av.id].nom:av.id,b.nom);};
+  document.querySelectorAll('#s-etiq [data-sup]').forEach(el=>el.onchange=()=>{const k=el.dataset.sup,av=etqSupport(),o=Object.assign({},S.meta.etqSupport||{id:av.id});
+    let v=el.tagName==='SELECT'?el.value:+String(el.value).replace(',','.');
+    if(el.tagName!=='SELECT'){const mi=+el.min,ma=+el.max;if(!isFinite(v)||v<mi||v>ma){alert(`Valeur hors limites (${mi} à ${ma}).`);render();return;}if(['col','lig','depart'].includes(k))v=Math.round(v);}
+    if(o.id==='perso'&&k!=='mode')ETQ_CHAMPS_SUP.forEach(([c])=>{if(o[c]==null)o[c]=av[c];});
+    o[k]=v;sauver(o,el.closest('label').firstChild.textContent.trim(),av[k],v);});}
+async function etqGenerer(){if(!TR||!can('edit'))return;const L=etqActifs().filter(a=>ETQ.sel.has(a.tag));if(!L.length)return;
+  const deja=L.filter(a=>etqEtat(a)==='ajour').length;
+  if(!confirm(`Générer ${L.length} étiquette(s) avec la clé du site ${TR.kid} ?${deja?`\n\n${deja} sont déjà à jour : leur nouvelle émission remplace l'étiquette posée, à retirer et détruire.`:''}`))return;
+  const out=[],refus=[],sup=etqSupport();
+  for(const a of L){const n=((a.e&&a.e.n)||0)+1,c=etqContenu(a,n),pb=WerbTag.controler(c);if(pb.length){refus.push(a.tag+' : '+pb.join(' ; '));continue;}
+    try{const texte=await WerbTag.emettre(c,TR.kid,TR.cles[TR.kid],TR.prive),qr=WerbQR.encoder(texte,'Q'),f=etqTientSur(qr,sup);
+      if(!f.ok){refus.push(`${a.tag} : QR de ${f.min.toFixed(0)} mm au moins, ${f.qmax.toFixed(0)} mm disponibles sur l'étiquette ${sup.l} × ${sup.h} mm — raccourcir la note PCR ou choisir un support plus grand`);continue;}
+      out.push({a,c,qr});}catch(x){refus.push(a.tag+' : '+x.message);}}
+  out.forEach(({a,c})=>{const E=etqs(),av=E[a.tag]&&E[a.tag].n?'n°'+E[a.tag].n:'';E[a.tag]=Object.assign({},E[a.tag]||{},{n:c.n,le:c.em,par:USER.login,kid:TR.kid,k:c.k,empreinte:etqEmpreinte(a)});
+    log('Étiquette',a.tag,a.tag,'Émission',av,`n°${c.n} — ${K_LIB[c.k]}, clé ${TR.kid}`);ETQ.sel.delete(a.tag);});
+  render();
+  if(refus.length)alert(`${refus.length} étiquette(s) non générée(s) :\n\n${refus.join('\n')}`);
+  if(!out.length)return;
+  const P=$('#printArea'),pl=etqPlanche(out.map(({c,qr})=>etqHtml(c,qr,sup)),sup);P.className='etiq etiq-'+sup.mode;
+  let st=$('#etqPageStyle');if(!st){st=document.createElement('style');st.id='etqPageStyle';document.head.appendChild(st);}st.textContent=pl.page;
+  P.innerHTML=pl.html;
+  if(sup.mode==='grille'&&(sup.depart||1)>1){S.meta.etqSupport=Object.assign({},S.meta.etqSupport,{depart:1});log('Étiquettes','support','Support d\'impression','Commencer à l\'étiquette n°',sup.depart,1);}   // planche entamée : une seule fois
+  setStatus(`${out.length} étiquette(s) émise(s) : enregistre une version pour conserver les numéros d'émission.`);
+  window.print();}
+window.addEventListener('afterprint',()=>{const P=$('#printArea');if(P.classList.contains('etiq')){P.className='';P.innerHTML='';}});
+/* Téléphones et badges de clés (1.36.0, WerbTagDroid phase 4, spécification §7). Un téléphone est ENRÔLÉ une fois : sa clé publique
+   RSA (fichier « WerbTagDroid_<identifiant>.pem » enregistré par l'application) est importée ici (S.appareils : identifiant, nom, clé
+   publique — rien de secret). Un BADGE est émis pour un téléphone : QR chiffré pour lui seul, avec un code à usage unique tiré au hasard,
+   affiché UNE fois à l'écran pour être remis à part, jamais enregistré ni journalisé ; les clés de site ne sont mises en clair que le
+   temps de fabriquer le badge (mot de passe du fichier de clés redemandé) puis effacées. Administrateur seulement. */
+const apps=()=>S.appareils||(S.appareils=[]);
+let BADGE_AFF=null;   // { app, code, debut, fin, qr, retirees } : en mémoire, le temps de remettre le code
+const ub64s=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
+const plusUnMois=d=>{const x=new Date(d+'T12:00:00');x.setMonth(x.getMonth()+1);return x.toISOString().slice(0,10);};
+const codeAffiche=c=>c.slice(0,5)+'-'+c.slice(5);
+function etqAppareilsHtml(){const adm=can('admin'),L=apps(),dis=adm?'':' disabled';
+  let h=`<div class="panel" data-etq-appareils><h3>📱 Téléphones et badges de clés</h3>
+  <div class="note-recus"><p>Chaque téléphone WerbTagDroid est <b>enrôlé une fois</b> : dans l'application, <i>Enrôler ce téléphone</i> enregistre sa clé publique (fichier <code>WerbTagDroid_&lt;identifiant&gt;.pem</code>), à importer ici. On émet ensuite pour ce téléphone un <b>badge de clés</b> : un QR à scanner à l'ouverture de l'application, et un <b>code à usage unique à remettre à part</b> (de vive voix ou par un autre canal, jamais avec le badge). Valable un mois par défaut, le badge apporte les clés du site, les clés révoquées et les numéros des étiquettes réimprimées (verdict « remplacée » sur une ancienne étiquette).</p></div>`;
+  if(adm)h+=`<form id="etqAppImp" class="form"><label>Téléphone ou agent<input id="etqAppNom" size="26" placeholder="ex. Téléphone astreinte OT"></label><label>Fichier d'enrôlement (.pem)<input type="file" id="etqAppFic" accept=".pem,application/x-pem-file,text/plain"></label><label><button>📥 Enrôler</button></label></form>`;
+  h+=`<table class="grid" data-etq-app-table><thead><tr><th>Téléphone</th><th>Identifiant</th><th>Enrôlé</th><th>Dernier badge</th><th></th></tr></thead><tbody>
+  ${L.map(a=>`<tr data-app="${esc(a.id)}"${a.retire?' class="archivee"':''}><td class="b">${esc(a.nom)}</td><td class="mono">${esc(a.id)}</td><td>${esc(fmtDay(a.le))} <span class="hint">${esc(a.par||'')}</span></td>
+    <td>${a.retire?'<span class="sev-warn">retiré</span>':a.dernierBadge?`du ${esc(fmtDay(a.dernierBadge.debut))} au ${esc(fmtDay(a.dernierBadge.fin))} <span class="hint">émis le ${esc(fmtDay(a.dernierBadge.le))}</span>`:'<span class="hint">aucun</span>'}</td>
+    <td>${a.retire?'':`<button data-appbadge="${esc(a.id)}"${dis}${TR?'':' disabled title="Ouvrir d\'abord le fichier de clés de l\'émetteur"'}>🔑 Badge</button> <button class="icon" data-appretirer="${esc(a.id)}" title="Retirer ce téléphone (perdu, remplacé)"${dis}>🗑</button>`}</td></tr>`).join('')||'<tr><td colspan="5" class="hint">Aucun téléphone enrôlé.</td></tr>'}</tbody></table>`;
+  const cible=L.find(a=>a.id===ETQ.badge&&!a.retire);
+  if(cible&&adm&&TR){const d=stamp();h+=`<form id="etqBadge" class="form" data-etq-badge-form="${esc(cible.id)}"><b>Badge pour ${esc(cible.nom)}</b>
+    <label>Valable du<input type="date" id="etqBdDeb" value="${d}"></label><label>au<input type="date" id="etqBdFin" value="${plusUnMois(d)}"></label>
+    <label>Mot de passe du fichier de clés<input type="password" id="etqBdMdp" autocomplete="off"></label><label><button class="pri">🔑 Émettre le badge</button></label><label><button type="button" id="etqBdAnnuler">Annuler</button></label></form>
+    <p class="hint">Le mot de passe est redemandé : les clés du site ne sont mises en clair que le temps de fabriquer le badge.</p>`;}
+  /* Le badge peut être flashé directement à l'écran par le téléphone : le QR et le code ne sont JAMAIS affichés en même temps
+     (une photo de l'écran ne doit pas réunir les deux facteurs) ; l'affichage du QR se masque seul au bout de 2 minutes. */
+  if(BADGE_AFF){const B=BADGE_AFF,val=`valable du ${esc(fmtDay(B.debut))} au ${esc(fmtDay(B.fin))}`,ret=B.retirees?` — <span class="sev-warn">${B.retirees} émission(s) remplacée(s) les plus anciennes non incluses (place du QR)</span>`:'';
+    if(B.ecran){const qr=WerbQR.encoder(B.qr,'Q');
+      h+=`<div class="panel badge-ecran" data-badge-ecran><h3>📱 Badge de clés — ${esc(B.app.nom)} <span class="mono hint">${esc(B.app.id)}</span></h3>
+      <p>Sur le téléphone, ouvrir WerbTagDroid et viser ce QR (« Scannez votre badge de clés »), puis saisir le code remis à part. <b>Le code n'est pas affiché pendant ce temps.</b> Badge ${val}. Masquage automatique dans 2 minutes.</p>
+      <div class="badge-ecran-qr">${WerbQR.svg(qr)}</div>
+      <p><button class="pri" id="etqBdEcranFin">Masquer le badge</button></p></div>`;}
+    else h+=`<div class="panel badge-code" data-badge-code><h3>${B.code?'Code à usage unique':'Badge de clés'} — ${esc(B.app.nom)}</h3>
+      ${B.code?`<p class="badge-code-val">${esc(codeAffiche(B.code))}</p>
+      <p>À remettre à l'agent <b>séparément du badge</b> (de vive voix, autre canal). Il n'est enregistré nulle part : une fois masqué, il ne peut plus être affiché ; un nouveau badge serait à émettre. Badge ${val}${ret}.</p>`
+      :`<p>Code remis et masqué. Badge ${val}${ret}.</p>`}
+      <p><button id="etqBdEcran" title="${B.code?'Le code sera masqué pendant l\'affichage du badge':''}">📱 Afficher le badge pour le téléphone</button> <button id="etqBdImprimer">🖨️ Imprimer le badge (sans le code)</button>
+      ${B.code?'<button id="etqBdMasquer">✔ Code remis : masquer</button>':'<button id="etqBdFermer">Fermer</button>'}</p></div>`;}
+  return h+'</div>';}
+function etqBadgeImprimer(){if(!BADGE_AFF)return;const B=BADGE_AFF,qr=WerbQR.encoder(B.qr,'Q'),mm=((qr.taille+8)*0.4).toFixed(1);
+  const P=$('#printArea');P.className='etiq etiq-libre';let st=$('#etqPageStyle');if(!st){st=document.createElement('style');st.id='etqPageStyle';document.head.appendChild(st);}st.textContent='@page etiq{size:A4 portrait;margin:15mm}';
+  P.innerHTML=`<div class="badge-carte"><div class="badge-titre">🔑 Badge de clés WerbTagDroid</div>
+    <p>Téléphone : <b>${esc(B.app.nom)}</b> <span class="mono">(${esc(B.app.id)})</span><br>Site : <b>${esc(TR.site||'')}</b> — valable du <b>${esc(fmtDay(B.debut))}</b> au <b>${esc(fmtDay(B.fin))}</b></p>
+    <div style="width:${mm}mm;height:${mm}mm">${WerbQR.svg(qr)}</div>
+    <p class="badge-avert">À l'ouverture de WerbTagDroid : scanner ce QR, puis saisir le code à usage unique remis <b>à part</b> (il n'est pas sur ce badge). Ce badge ne sert que sur le téléphone indiqué. Perdu ou volé : prévenir le RSSI ; il expire le ${esc(fmtDay(B.fin))}. Ne pas photocopier, ne pas photographier.</p></div>`;
+  window.print();}
+async function etqEmettreBadge(app,debut,fin,mdp){const brut=await WerbTag.clesBrutes(TR.fichier,mdp);
+  try{const k=Object.fromEntries(Object.entries(brut.cles).filter(([kid])=>!brut.revoquees.includes(kid)));
+    let e=Object.entries(etqs()).filter(([,o])=>o&&o.n>1).sort((a,b)=>String(b[1].le||'').localeCompare(String(a[1].le||''))).map(([t,o])=>[t,o.n]);
+    const code=WerbTag.codeAleatoire();let retirees=0;
+    for(;;){try{const qr=await WerbTag.emettreBadge({contenu:{s:brut.site,k,r:brut.revoquees,e:Object.fromEntries(e)},spkiAppareil:ub64s(app.spki),debut,fin,code,clePrivee:TR.prive});return {qr,code,retirees};}
+      catch(x){if(x instanceof RangeError&&e.length){const n=Math.max(1,Math.ceil(e.length/4));e=e.slice(0,e.length-n);retirees+=n;continue;}throw x;}}}
+  finally{Object.values(brut.cles).forEach(u=>WerbTag.effacer(u));}}
+function etqAppareilsEvents(){
+  if($('#etqAppImp'))$('#etqAppImp').onsubmit=async ev=>{ev.preventDefault();if(!can('admin'))return;const f=$('#etqAppFic').files[0],nom=$('#etqAppNom').value.trim();
+    if(!f||!nom){alert('Indique le nom du téléphone (ou de l\'agent) et choisis son fichier d\'enrôlement (.pem).');return;}
+    try{const c=await WerbTag.lireClePubliqueAppareil(await f.text());const ex=apps().find(a=>a.id===c.id);
+      if(ex&&!ex.retire){alert(`Ce téléphone est déjà enrôlé : « ${ex.nom} » (${c.id}).`);return;}
+      if(ex&&ex.retire&&!confirm(`Ce téléphone (${c.id}) avait été retiré. L'enrôler de nouveau ?`))return;
+      const o={id:c.id,nom,spki:c.spkiB64,bits:c.bits,le:stamp(),par:USER.login};if(ex)Object.assign(ex,o,{retire:false});else apps().push(o);
+      log('Étiquettes',c.id,nom,'Téléphone enrôlé','',`${c.id} (RSA ${c.bits} bits)`);setStatus(`Téléphone « ${nom} » enrôlé : identifiant ${c.id} (à comparer à celui affiché par l'application).`);render();}
+    catch(x){alert('Enrôlement impossible : '+x.message);}};
+  document.querySelectorAll('#s-etiq [data-appbadge]').forEach(b=>b.onclick=()=>{ETQ.badge=b.dataset.appbadge;renderEtiq();});
+  if($('#etqBdAnnuler'))$('#etqBdAnnuler').onclick=()=>{ETQ.badge='';renderEtiq();};
+  document.querySelectorAll('#s-etiq [data-appretirer]').forEach(b=>b.onclick=()=>{const a=apps().find(x=>x.id===b.dataset.appretirer);if(!a||!can('admin'))return;
+    if(!confirm(`Retirer le téléphone « ${a.nom} » (${a.id}) ? Plus aucun badge ne pourra être émis pour lui. Ses badges en cours restent valables jusqu'à leur date de fin : en cas de perte, émettre au plus tôt de nouveaux badges aux autres téléphones ; si la clé du site est compromise, voir la procédure de compromission.`))return;
+    a.retire=true;log('Étiquettes',a.id,a.nom,'Téléphone retiré','enrôlé','retiré');render();});
+  if($('#etqBadge'))$('#etqBadge').onsubmit=async ev=>{ev.preventDefault();if(!can('admin')||!TR)return;const a=apps().find(x=>x.id===ETQ.badge);if(!a)return;
+    const debut=$('#etqBdDeb').value,fin=$('#etqBdFin').value,mdp=$('#etqBdMdp').value;$('#etqBdMdp').value='';
+    if(!debut||!fin||fin<debut){alert('Période de validité invalide.');return;}
+    if(!mdp){alert('Le mot de passe du fichier de clés est nécessaire pour fabriquer le badge.');return;}
+    try{const r=await etqEmettreBadge(a,debut,fin,mdp);BADGE_AFF={app:a,code:r.code,debut,fin,qr:r.qr,retirees:r.retirees};
+      a.dernierBadge={debut,fin,le:stamp(),par:USER.login};ETQ.badge='';
+      log('Étiquettes',a.id,a.nom,'Badge de clés',``,`valable du ${debut} au ${fin}, clés ${Object.keys(TR.cles).filter(k=>!TR.revoquees.includes(k)).join(', ')}${r.retirees?`, ${r.retirees} émission(s) remplacée(s) non incluses`:''}`);
+      render();}
+    catch(x){alert('Badge non émis : '+x.message);}};
+  if($('#etqBdImprimer'))$('#etqBdImprimer').onclick=etqBadgeImprimer;
+  if($('#etqBdMasquer'))$('#etqBdMasquer').onclick=()=>{if(!confirm('Le code a-t-il bien été remis ? Une fois masqué, il ne peut plus être affiché.'))return;BADGE_AFF.code=null;renderEtiq();};
+  if($('#etqBdFermer'))$('#etqBdFermer').onclick=()=>{BADGE_AFF=null;renderEtiq();};
+  if($('#etqBdEcran'))$('#etqBdEcran').onclick=()=>{const B=BADGE_AFF;if(!B)return;B.ecran=true;clearTimeout(B.minuterie);
+    B.minuterie=setTimeout(()=>{if(BADGE_AFF===B&&B.ecran){B.ecran=false;if(cur==='etiq')renderEtiq();}},120000);renderEtiq();
+    const z=$('#s-etiq [data-badge-ecran]');if(z)z.scrollIntoView({block:'center'});};
+  if($('#etqBdEcranFin'))$('#etqBdEcranFin').onclick=()=>{if(BADGE_AFF){BADGE_AFF.ecran=false;clearTimeout(BADGE_AFF.minuterie);}renderEtiq();};}
+const R={etiq:renderEtiq,mdp:renderMdp,si:renderSI,dash:renderDash,matrix:renderMatrix,vlans:renderVlans,refs:renderRefs,hist:renderHist,users:renderUsers,proc:renderProc,smsi:renderSmsi,aide:renderAide};
 function applyRO(){if(can('edit'))return;document.querySelectorAll('main [data-t]:not([data-t=ref]),main [data-del],main [data-next],main [data-add],main [data-addiso],main [data-isodel],main [data-mv],main [data-pmodel],main [data-mimp],main [data-siact]').forEach(e=>e.disabled=true);}
 function render(){if(!DB||!USER)return;if(cur==='users'&&!can('admin'))cur='dash';
   CTX.vm=vlanMap();CTX.ipc={};CTX.tagIps={};S.ips.forEach(a=>{const i=ip2i(a.ip||'');if(i!==null&&!vlanUn(a.vlan))CTX.ipc[i]=(CTX.ipc[i]||0)+1;const g=(a.tag||'').trim().toUpperCase();if(g&&a.ip)(CTX.tagIps[g]=CTX.tagIps[g]||[]).push({ip:a.ip,id:vidOf(a.vlan)});});
@@ -39843,8 +40637,8 @@ function enter(resume){ungate();render();poke();watch();LISTES={};LISTES_MSG='';
   setStatus(`Connecté : ${USER.nom} (${USER.role})`+(MODE==='dl'?' — mode téléchargement':'')+(LECTURE?' — lecture seule : un collègue a la main sur la base':''));}
 function closeBase(){if(pending.length){if(!confirm(`${pending.length} modification(s) non enregistrée(s) seront perdues : rien n'est conservé dans le navigateur. Fermer la base ?`))return;
     if(confirm('Télécharger un brouillon de ces modifications (pour ressaisie) avant de fermer ?'))dlDraft();}
-  clearTimeout(idleT);WerbSocle.verrou.liberer();LECTURE=false;WerbSocle.espace.fermer();DB=null;S=null;USER=null;HANDLE=null;pending=[];NEUFS=new Set();banner('');bar();gateBase();}
-function lockS(msg){if(!USER)return;const l=USER.login;USER=null;clearTimeout(idleT);gateLogin(msg||'Session verrouillée après 15 minutes d\'inactivité.',l);}
+  clearTimeout(idleT);WerbSocle.verrou.liberer();LECTURE=false;WerbSocle.espace.fermer();DB=null;S=null;USER=null;HANDLE=null;pending=[];NEUFS=new Set();TR=null;BADGE_AFF=null;ETQ.sel.clear();ETQ.edit='';ETQ.badge='';banner('');bar();gateBase();}
+function lockS(msg){if(!USER)return;const l=USER.login;USER=null;TR=null;BADGE_AFF=null;clearTimeout(idleT);gateLogin(msg||'Session verrouillée après 15 minutes d\'inactivité.',l);}
 function poke(){clearTimeout(idleT);if(USER)idleT=setTimeout(()=>lockS(),IDLE);}
 ['mousemove','keydown','click'].forEach(ev=>document.addEventListener(ev,poke,{passive:true}));
 
@@ -40320,7 +41114,7 @@ $('#bPrint').onclick=()=>{if(!USER)return;if(cur==='users'||cur==='refs'||cur===
   else if(cur==='matrix')body=matrixPrint();else if(cur==='vlans'){const d=DATA.vlans();d.h=d.h.slice(0,15);d.r=d.r.map(r=>r.slice(0,15));body=tbl(d);}
   else if(cur==='hist')body=`<h4>Versions</h4>${tbl(DATA.hist())}<h4>Journal</h4>${tbl(DATA.journal())}`;else body=tbl(DATA.tbl(cur));
   const m=S.meta;
-  $('#printArea').innerHTML=`<div class="ph"><div><b>${esc(m.org)}</b><br>Site : ${esc(m.site||'—')}</div><div class="pt">${esc(title)}</div><div class="pr">Réf. : ${esc(m.ref||'—')} · Base v${BASEV}${pending.length?' (+'+pending.length+' modif. non enregistrées)':''}<br>Rédacteur : ${esc(m.auteur||'—')}<br>Édité le ${new Date().toLocaleDateString('fr-FR')} par ${esc(USER.nom)}</div></div>${body}<div class="pf">${esc(m.org)} ${m.ref?'– '+esc(m.ref)+' ':''}– ${esc(title)} – version ${BASEV} – ${SIGN}</div>`;
+  $('#printArea').className='';$('#printArea').innerHTML=`<div class="ph"><div><b>${esc(m.org)}</b><br>Site : ${esc(m.site||'—')}</div><div class="pt">${esc(title)}</div><div class="pr">Réf. : ${esc(m.ref||'—')} · Base v${BASEV}${pending.length?' (+'+pending.length+' modif. non enregistrées)':''}<br>Rédacteur : ${esc(m.auteur||'—')}<br>Édité le ${new Date().toLocaleDateString('fr-FR')} par ${esc(USER.nom)}</div></div>${body}<div class="pf">${esc(m.org)} ${m.ref?'– '+esc(m.ref)+' ':''}– ${esc(title)} – version ${BASEV} – ${SIGN}</div>`;
   window.print();};
 
 /* ---------- Démarrage ---------- */
