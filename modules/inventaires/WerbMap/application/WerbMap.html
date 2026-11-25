@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- WerbMap v1.37.0 – Développé par @WerbHat – build novembre 2026 -->
+<!-- WerbMap v1.40.0 – Développé par @WerbHat – build novembre 2026 -->
 <!--
   WerbMap – Cartographie VLAN / Adressage IP / Actifs / Flux
   Module « Inventaires ICS » de WerbSMSI (niveau site). Version : sources/src/signature.js.
@@ -21,7 +21,7 @@
 <title>WerbMap</title>
 <meta name="application-name" content="WerbMap">
 <meta name="author" content="@WerbHat">
-<meta name="generator" content="WerbMap v1.37.0 – Développé par @WerbHat">
+<meta name="generator" content="WerbMap v1.40.0 – Développé par @WerbHat">
 <meta name="description" content="Cartographie VLAN, adressage IP, actifs et flux d'un site">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22%3E%3Crect width=%2232%22 height=%2232%22 rx=%226%22 fill=%22%230d2238%22/%3E%3Cpath d=%22M6 9h20M6 16h20M6 23h20M11 6v20M21 6v20%22 stroke=%22%23ffd27a%22 stroke-width=%222%22/%3E%3Ccircle cx=%2221%22 cy=%2216%22 r=%223.5%22 fill=%22%238fd16a%22/%3E%3C/svg%3E">
 <style>
@@ -199,6 +199,10 @@ label.blk{display:block;margin-top:8px}
 .etq-rouleau .etq,.etq-case .etq{border-radius:0}
 @page etiq{size:A4 portrait;margin:10mm}
 .badge-code{border:2px solid var(--warn)}.badge-code-val{font-family:Consolas,'Courier New',monospace;font-size:28px;font-weight:700;letter-spacing:3px;margin:6px 0}
+.etq-aide{margin:8px 0;border:1px solid var(--line);border-radius:8px;padding:6px 12px;background:var(--card)}.etq-aide summary{cursor:pointer;font-weight:600;color:var(--pri)}
+.etq-aide ol{padding-left:22px}.etq-aide li{margin:6px 0}
+.etq-aide-schema{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:10px 0}.etq-aide-schema span{text-align:center}
+.etq-aide-schema span:nth-child(odd){border:1px solid var(--line);border-radius:6px;padding:6px 8px;background:var(--bg)}
 .badge-ecran-qr{width:min(72vh,600px);max-width:100%;aspect-ratio:1/1;margin:8px auto}.badge-ecran-qr svg{width:100%;height:100%;display:block}
 .badge-carte{border:.4mm solid #000;border-radius:3mm;padding:6mm;width:120mm;font-family:Arial,Helvetica,sans-serif;color:#000;background:#fff}
 .badge-titre{font-size:16pt;font-weight:700;margin-bottom:3mm}.badge-carte svg{width:100%;height:100%;display:block}.badge-avert{font-size:8.5pt;margin-top:3mm}
@@ -36696,7 +36700,7 @@ const WERB = Object.freeze((() => {
   const bytes = [68, 195, 169, 118, 101, 108, 111, 112, 112, 195, 169, 32, 112, 97, 114, 32, 64, 87, 101, 114, 98, 72, 97, 116];
   const signature = new TextDecoder("utf-8").decode(new Uint8Array(bytes));
   const produit = "WerbMap";
-  const version = "1.37.0";
+  const version = "1.40.0";
   return {
     id: "werbmap",
     produit, version, auteur: "@WerbHat", signature,
@@ -38595,7 +38599,7 @@ window.WerbTag = (() => {
     effacer(clair);
     const empreinte = await empreinteSpki(spki);
     return {
-      fichier: { format: FICHIER, version: 1, site: code, kidCourant: kid, creeLe: le, creePar: auteur || "", empreinteEmetteur: groupes(empreinte),
+      fichier: { format: FICHIER, version: 1, site: code, sites: [code], kidCourant: kid, creeLe: le, creePar: auteur || "", empreinteEmetteur: groupes(empreinte),
         clePublique: b64(spki), kdf: { algo: "PBKDF2-SHA256", iterations: ITERATIONS, sel: b64(sel) }, iv: b64(iv), chiffre: b64(chiffre),
         avertissement: "Clés de l'émetteur WerbTagDroid : à garder au coffre-fort. Jamais dans l'espace WerbSMSI, un dépôt, un partage ou un courriel." },
       empreinte: groupes(empreinte) };
@@ -38611,7 +38615,35 @@ window.WerbTag = (() => {
     const t = await trousseau({ pkcs8_b64: d.emetteur.pkcs8_b64, spki_b64: d.emetteur.spki_b64, cles_aes_b64: Object.fromEntries(d.cles.map(c => [c.kid, c.aes_b64])), revoquees: d.revoquees || [] });
     if (t.empreinte !== f.empreinteEmetteur) throw new Error("empreinte de l'émetteur incohérente : fichier altéré");
     t.site = f.site; t.kid = f.kidCourant; t.fichier = f;   // fichier CHIFFRÉ gardé : le mot de passe est redemandé pour un badge
+    t.sites = [...new Set(Object.keys(t.cles).filter(k => !t.revoquees.includes(k)).map(siteDuKid))];
     return t;
+  }
+
+  /* Émetteur de GROUPE (1.39.0) : un seul fichier de clés pour tous les sites — une clé de signature, une clé AES par site (« <SITE>-<n> »).
+     Le fichier créé dans un site garde ce site comme origine (« site », utilisé dans les données associées du chiffrement) ; « sites »
+     liste les sites dont il porte une clé. Ajouter un site re-chiffre le fichier (nouveau sel, nouvel IV) avec le même mot de passe. */
+  const siteDuKid = kid => String(kid).replace(/-\d+$/, "");
+  function kidDuSite(t, site) {
+    const k = Object.keys(t.cles).filter(x => siteDuKid(x) === site && !(t.revoquees || []).includes(x));
+    return k.sort((a, b) => (+b.split("-").pop()) - (+a.split("-").pop()))[0] || null;
+  }
+  async function ajouterSite(f, mdp, site) {
+    const code = String(site || "").toUpperCase().replace(/[^A-Z0-9-]/g, "").slice(0, 13);
+    if (!code) throw new Error("code de site invalide");
+    let clair;
+    try { clair = new Uint8Array(await crypto.subtle.decrypt({ name: "AES-GCM", iv: ub64(f.iv), additionalData: enc.encode(FICHIER + "|" + f.site) }, await cleMotDePasse(mdp, ub64(f.kdf.sel), ["decrypt"]), ub64(f.chiffre))); }
+    catch (e) { throw new Error("mot de passe incorrect ou fichier altéré"); }
+    const d = JSON.parse(dec.decode(clair)); effacer(clair);
+    if (d.cles.some(c => siteDuKid(c.kid) === code && !(d.revoquees || []).includes(c.kid))) throw new Error(`le fichier porte déjà une clé du site ${code}`);
+    const n = 1 + Math.max(0, ...d.cles.filter(c => siteDuKid(c.kid) === code).map(c => +c.kid.split("-").pop() || 0));
+    const aes = crypto.getRandomValues(new Uint8Array(32)), kid = `${code}-${n}`;
+    d.cles.push({ kid, aes_b64: b64(aes), creeLe: new Date().toISOString().slice(0, 10) }); effacer(aes);
+    const nouveau = enc.encode(JSON.stringify(d));
+    const sel = crypto.getRandomValues(new Uint8Array(16)), iv = crypto.getRandomValues(new Uint8Array(12));
+    const chiffre = new Uint8Array(await crypto.subtle.encrypt({ name: "AES-GCM", iv, additionalData: enc.encode(FICHIER + "|" + f.site) }, await cleMotDePasse(mdp, sel, ["encrypt"]), nouveau));
+    effacer(nouveau);
+    const sites = [...new Set(d.cles.filter(c => !(d.revoquees || []).includes(c.kid)).map(c => siteDuKid(c.kid)))];
+    return { fichier: Object.assign({}, f, { sites, kdf: { algo: "PBKDF2-SHA256", iterations: ITERATIONS, sel: b64(sel) }, iv: b64(iv), chiffre: b64(chiffre), modifieLe: new Date().toISOString().slice(0, 10) }), kid };
   }
 
   /* Clés de site en clair, le temps de fabriquer un badge (mot de passe redemandé) : l'appelant efface les octets aussitôt après */
@@ -38712,7 +38744,7 @@ window.WerbTag = (() => {
 
   return { PREFIXE, CHAMPS, MAX_QR, MAX_TEXTE, CLASSIFICATIONS, ErreurEtiquette, serialiser, controler, compresser, longueurQr, emettre, lire,
     classification, creerFichier, ouvrirFichier, trousseau, pem, b64u, unhex,
-    clesBrutes, idAppareil, codeAleatoire, normaliserCode, lireClePubliqueAppareil, emettreBadge, ouvrirBadge, effacer, groupes };
+    clesBrutes, ajouterSite, kidDuSite, siteDuKid, idAppareil, codeAleatoire, normaliserCode, lireClePubliqueAppareil, emettreBadge, ouvrirBadge, effacer, groupes };
 })();
 </script>
 <script>window.BUILD_DATE="novembre 2026";</script>
@@ -40113,11 +40145,26 @@ function renderEtiq(){const ed=can('edit'),adm=can('admin'),A=etqActifs(),zones=
   <div class="panel" data-etq-cles><h3>🔑 Clés de l'émetteur</h3>
   <div class="note-recus"><p>Les étiquettes sont <b>signées</b> par la clé de l'émetteur et <b>chiffrées</b> par la clé du site. Ces clés sont dans un fichier protégé par mot de passe (<code>${esc(etqSite())}_emetteur.wtkey.json</code>), à garder <b>au coffre-fort</b> : jamais dans l'espace WerbSMSI, un partage, un dépôt ou un courriel. Ouvert ici, il reste <b>en mémoire</b> le temps du travail, sans pouvoir en être extrait, et s'efface au verrouillage de la session, à la fermeture de la base ou sur « Oublier les clés ».</p>
   <p>Une étiquette n'expire pas : elle n'est <b>réimprimée</b> que si une donnée qu'elle porte change (libellé, zone, emplacement, coffret, classification, note PCR), si elle est abîmée, ou si la clé du site est compromise — dans ce cas, toutes les étiquettes du site sont à refaire.</p></div>
-  ${TR?`<p data-etq-charge>✅ Clés chargées : site <b>${esc(TR.site||'')}</b>, clé du site <b class="mono">${esc(TR.kid)}</b>, empreinte de l'émetteur <span class="mono">${esc(TR.empreinte)}</span></p>
+  <details class="etq-aide" data-etq-aide${ETQ.aide?' open':''}><summary>❓ Comment créer les clés et les échanger avec le téléphone</summary>
+  <div class="etq-aide-schema"><span>🗝️ Fichier de clés<br><small>du groupe, au coffre-fort</small></span><span>→</span><span>📦 APK WerbTagDroid<br><small>clé publique compilée</small></span><span>→</span><span>📱 Téléphone enrôlé<br><small>fichier .pem importé</small></span><span>→</span><span>🔑 Badge + code<br><small>scannés une fois</small></span><span>→</span><span>🏷️ Étiquettes lues</span></div>
+  <ol>
+   <li><b>Créer le fichier de clés du groupe — une seule fois.</b> Dans la base d'un premier site : <i>Créer le fichier de clés de l'émetteur du groupe</i>, mot de passe de 12 caractères au moins. Il contient la <b>clé de signature</b> (commune à tout le groupe) et la <b>clé du site</b>. Ranger le fichier et son mot de passe au coffre-fort ; noter l'empreinte de l'émetteur.</li>
+   <li><b>Ajouter la clé de chaque autre site.</b> Dans la base de ce site : ouvrir le même fichier (<i>🔓 Ouvrir</i>), puis <i>➕ Ajouter la clé du site</i>. Le fichier mis à jour est téléchargé : il <b>remplace l'ancien</b> au coffre-fort (même mot de passe, même émetteur). Toujours garder la dernière version.</li>
+   <li><b>Compiler l'application — une fois pour le groupe.</b> <i>⬇ Clé publique de l'émetteur</i> donne le fichier <code>.pem</code> à remettre pour compiler et signer l'APK WerbTagDroid (une seule APK lit tous les sites du fichier). Elle est mise à disposition dans <code>WerbSMSI/APK/WerbTagDroid/</code>.</li>
+   <li><b>Enrôler chaque téléphone — une fois par téléphone.</b> Sur le téléphone : installer l'APK, ouvrir l'application (empreinte ou code du téléphone), <i>📤 Enrôler ce téléphone</i> : il enregistre sa clé publique <code>WerbTagDroid_&lt;identifiant&gt;.pem</code>. La remettre au poste (câble USB, clé), puis ici <i>📱 Téléphones et badges › 📥 Enrôler</i>. Vérifier que l'identifiant affiché est le même des deux côtés.</li>
+   <li><b>Émettre le badge du téléphone.</b> <i>🔑 Badge</i> à côté du téléphone : période (un an par défaut), <b>cocher les sites</b> que l'agent doit lire, mot de passe du fichier de clés. Un <b>code à usage unique</b> s'affiche une seule fois : le remettre à l'agent <b>à part</b> (de vive voix). Imprimer le badge ou l'afficher à l'écran (<i>📱 Afficher le badge pour le téléphone</i>) — jamais en même temps que le code.</li>
+   <li><b>Sur le téléphone — une fois par badge.</b> Scanner le badge, saisir le code. Le téléphone garde le badge chiffré jusqu'à sa date de fin ; ensuite, à chaque ouverture : empreinte ou code du téléphone, puis lecture des étiquettes.</li>
+  </ol>
+  <p><b>En cas de problème</b> — badge échu : en émettre un nouveau (étape 5) ; téléphone perdu ou remplacé : <i>🗑 Retirer</i> le téléphone, et sur le nouveau reprendre les étapes 4 à 6 ; agent qui change de téléphone : <i>🗑 Oublier le badge</i> sur l'ancien ; clé d'un site compromise : nouvelle clé du site et réimpression de ses étiquettes ; clé de signature compromise : nouveau fichier de groupe, nouvelle APK et réimpression de tout le groupe.</p>
+  <p class="hint">Ce qui ne quitte jamais le coffre-fort ni la mémoire de WerbMap : la clé de signature et les clés de site. Ce qui circule : la clé <b>publique</b> de l'émetteur (vers l'APK), la clé <b>publique</b> du téléphone (vers WerbMap), le badge (chiffré pour ce seul téléphone) et, à part, son code.</p></details>
+  ${TR?`<p data-etq-charge>✅ Clés chargées : émetteur de groupe (créé dans ${esc(TR.site||'')}), sites du fichier <b>${esc((TR.sites||[]).join(', '))}</b>, empreinte de l'émetteur <span class="mono">${esc(TR.empreinte)}</span>${TR.kid?` — clé de ce site <b class="mono">${esc(TR.kid)}</b>`:''}</p>
+   ${TR.kid?'':`<div class="warn" data-etq-sans-site><p>Ce fichier ne porte pas encore de clé pour le site <b>${esc(etqSite())}</b> : les étiquettes de ce site ne peuvent pas être émises.</p>
+   ${adm?`<form id="etqAjSite" class="form"><label>Mot de passe du fichier<input type="password" id="etqAjMdp" autocomplete="off"></label><label><button class="pri">➕ Ajouter la clé du site ${esc(etqSite())} au fichier</button></label></form>
+   <p class="hint">Le fichier mis à jour est téléchargé : il <b>remplace</b> l'ancien au coffre-fort (même mot de passe, même émetteur — les téléphones et les étiquettes déjà posées restent valables).</p>`:'<p class="hint">Ajout de la clé : administrateur seulement.</p>'}</div>`}
    <p><button id="etqPem">⬇ Clé publique de l'émetteur (pour compiler WerbTagDroid)</button> <button id="etqOublier">🔒 Oublier les clés</button></p>`
   :`<form id="etqOuvrir" class="form"><label>Fichier de clés<input type="file" id="etqFic" accept=".json,application/json"></label><label>Mot de passe<input type="password" id="etqMdp" autocomplete="off"></label><label><button class="pri">🔓 Ouvrir</button></label></form>
-   ${adm?`<details id="etqCreerD"${ETQ.creer?' open':''}><summary>Créer le fichier de clés de l'émetteur (une seule fois par site)</summary>
-   <p class="hint">Crée la clé de signature de l'émetteur et la clé du site <b class="mono">${esc(etqSite())}-1</b>, puis télécharge le fichier chiffré. Mot de passe de 12 caractères au moins, à conserver avec le fichier. Noter l'empreinte affichée : elle identifie l'émetteur pour WerbTagDroid.</p>
+   ${adm?`<details id="etqCreerD"${ETQ.creer?' open':''}><summary>Créer le fichier de clés de l'émetteur du groupe (une seule fois pour tout le groupe)</summary>
+   <p class="hint">Crée la clé de signature de l'émetteur — <b>une seule pour tout le groupe</b> — et la clé du site <b class="mono">${esc(etqSite())}-1</b>, puis télécharge le fichier chiffré. Dans les autres sites : ouvrir ce même fichier, puis <i>Ajouter la clé du site</i>. Une seule APK WerbTagDroid lit alors les étiquettes de tous les sites du groupe. Mot de passe de 12 caractères au moins, à conserver avec le fichier. Noter l'empreinte affichée : elle identifie l'émetteur pour WerbTagDroid.</p>
    <form id="etqCreer" class="form"><label>Mot de passe (12 car. min.)<input type="password" id="etqM1" minlength="12" autocomplete="new-password"></label><label>Confirmation<input type="password" id="etqM2" autocomplete="new-password"></label><label><button>🆕 Créer et télécharger</button></label></form></details>`:''}`}</div>`;
   if(cible){const r=cible.r,c=etqContenu(cible,((cible.e&&cible.e.n)||0)+1),pb=WerbTag.controler(c),de=cible.derog;
     h+=`<div class="panel" data-etq-edit="${esc(cible.tag)}"><div class="bar"><h3>✎ ${esc(cible.tag)} — ${esc(r.libelle||'')}</h3><button id="etqFermer">Fermer</button></div>
@@ -40136,7 +40183,7 @@ function renderEtiq(){const ed=can('edit'),adm=can('admin'),A=etqActifs(),zones=
    <select id="etq-etat"><option value="">Tous les états</option>${Object.entries(ETQ_ETATS).map(([k,l])=>`<option value="${k}"${ETQ.etat===k?' selected':''}>${l} (${n(k)})</option>`).join('')}</select>
    <select id="etq-zone"><option value="">Toutes les zones</option>${zones.map(z=>`<option${ETQ.zone===z?' selected':''}>${esc(z)}</option>`).join('')}</select>
    <button id="etqAfaire" title="Cocher les étiquettes jamais émises et à réimprimer">☑ À faire (${n('jamais')+n('reimprimer')})</button><button id="etqAucun">☐ Aucune</button>
-   <button class="pri" id="etqGen"${TR&&ed&&nsel?'':' disabled'} title="${TR?'':'Ouvrir d\'abord le fichier de clés'}">🏷️ Générer et imprimer (${nsel})</button></div>
+   <button class="pri" id="etqGen"${TR&&TR.kid&&ed&&nsel?'':' disabled'} title="${TR?(TR.kid?'':'Le fichier de clés ne porte pas de clé pour ce site'):'Ouvrir d\'abord le fichier de clés'}">🏷️ Générer et imprimer (${nsel})</button></div>
    ${!TR?'<p class="hint">Ouvre le fichier de clés de l\'émetteur pour générer des étiquettes.</p>':''}
    <div class="wrap" style="max-height:calc(100vh - 360px)"><table class="grid" data-etq-table><thead><tr><th></th><th>TAG</th><th>Libellé</th><th>Famille</th><th>Zone</th><th>Classification</th><th>Note PCR</th><th>QR</th><th>Étiquette</th><th></th></tr></thead><tbody>
    ${rows.map(a=>{const e=etqEtat(a),p=String(a.r.pcr||'').trim();return `<tr data-etq="${esc(a.tag)}"><td class="selc"><input type="checkbox" data-etqsel="${esc(a.tag)}"${ETQ.sel.has(a.tag)?' checked':''}></td>
@@ -40163,17 +40210,30 @@ function renderEtiq(){const ed=can('edit'),adm=can('admin'),A=etqActifs(),zones=
   $('#etqGen').onclick=()=>etqGenerer();
   if($('#etqOuvrir'))$('#etqOuvrir').onsubmit=async e=>{e.preventDefault();const f=$('#etqFic').files[0],m=$('#etqMdp').value;$('#etqMdp').value='';
     if(!f||!m){alert('Choisis le fichier de clés et saisis son mot de passe.');return;}
-    try{TR=await WerbTag.ouvrirFichier(JSON.parse(await f.text()),m);setStatus(`Clés de l'émetteur chargées en mémoire (clé du site ${TR.kid}).`);
-      if(TR.site!==etqSite())alert(`Attention : ce fichier de clés est celui du site ${TR.site}, la base est celle du site ${etqSite()}.`);}
+    try{TR=await WerbTag.ouvrirFichier(JSON.parse(await f.text()),m);TR.kid=WerbTag.kidDuSite(TR,etqSite());
+      setStatus(TR.kid?`Clés de l'émetteur chargées en mémoire (clé du site ${TR.kid}).`:`Clés de l'émetteur chargées : pas encore de clé pour le site ${etqSite()}.`);}
     catch(x){alert('Ouverture impossible : '+x.message);}renderEtiq();};
   if($('#etqCreerD'))$('#etqCreerD').ontoggle=()=>{ETQ.creer=$('#etqCreerD').open;};
+  const aide=$('#s-etiq [data-etq-aide]');if(aide)aide.ontoggle=()=>{ETQ.aide=aide.open;};
   if($('#etqCreer'))$('#etqCreer').onsubmit=async e=>{e.preventDefault();const m1=$('#etqM1').value,m2=$('#etqM2').value;$('#etqM1').value=$('#etqM2').value='';
     if(m1!==m2){alert('Les deux mots de passe diffèrent.');return;}
     if(!confirm(`Créer un nouvel émetteur et la clé du site ${etqSite()}-1 ?\n\nLes étiquettes déjà posées avec un autre fichier de clés ne seront plus lisibles par les téléphones configurés pour ce nouvel émetteur.`))return;
     try{const r=await WerbTag.creerFichier(etqSite(),m1,USER.login);dl(`${r.fichier.site}_emetteur.wtkey.json`,JSON.stringify(r.fichier,null,1),'application/json');
-      TR=await WerbTag.ouvrirFichier(r.fichier,m1);log('Étiquettes','emetteur','Clés de l\'émetteur','Création',''," empreinte "+r.empreinte+', clé '+r.fichier.kidCourant);ETQ.creer=false;
+      TR=await WerbTag.ouvrirFichier(r.fichier,m1);TR.kid=WerbTag.kidDuSite(TR,etqSite());log('Étiquettes','emetteur','Clés de l\'émetteur','Création',''," empreinte "+r.empreinte+', clé '+r.fichier.kidCourant);ETQ.creer=false;
       alert(`Fichier de clés créé et chargé.\n\nEmpreinte de l'émetteur (à noter, elle identifie l'émetteur pour WerbTagDroid) :\n${r.empreinte}\n\nRange le fichier téléchargé au coffre-fort avec son mot de passe, et supprime-le du dossier Téléchargements.`);}
     catch(x){alert('Création impossible : '+x.message);}render();};
+  if($('#etqAjSite'))$('#etqAjSite').onsubmit=async e=>{e.preventDefault();if(!can('admin')||!TR)return;const m=$('#etqAjMdp').value;$('#etqAjMdp').value='';
+    if(!m){alert('Le mot de passe du fichier de clés est nécessaire.');return;}
+    if(!confirm(`Ajouter une clé de chiffrement pour le site ${etqSite()} au fichier de clés du groupe ?
+
+Le fichier mis à jour sera téléchargé : il remplace l'ancien au coffre-fort.`))return;
+    try{const r=await WerbTag.ajouterSite(TR.fichier,m,etqSite());dl(`${r.fichier.site}_emetteur.wtkey.json`,JSON.stringify(r.fichier,null,1),'application/json');
+      TR=await WerbTag.ouvrirFichier(r.fichier,m);TR.kid=WerbTag.kidDuSite(TR,etqSite());
+      log('Étiquettes','emetteur','Clés de l’émetteur','Clé de site ajoutée','',r.kid+' (sites : '+TR.sites.join(', ')+')');
+      alert(`Clé ${r.kid} ajoutée au fichier de clés du groupe.
+
+Range le fichier téléchargé au coffre-fort à la place de l'ancien, et supprime-le du dossier Téléchargements.`);}
+    catch(x){alert('Ajout impossible : '+x.message);}render();};
   if($('#etqPem'))$('#etqPem').onclick=()=>dl(`${TR.site||etqSite()}_emetteur_public.pem`,WerbTag.pem(TR.clePublique),'application/x-pem-file');
   if($('#etqOublier'))$('#etqOublier').onclick=()=>{oublierCles();BADGE_AFF=null;setStatus('Clés de l\'émetteur effacées de la mémoire.');renderEtiq();};
   if($('#etqDerog'))$('#etqDerog').onsubmit=e=>{e.preventDefault();if(!can('admin'))return;const k=$('#etqDk').value,m=$('#etqDm').value.trim();
@@ -40294,11 +40354,11 @@ window.addEventListener('afterprint',()=>{const P=$('#printArea');if(P.classList
 const apps=()=>S.appareils||(S.appareils=[]);
 let BADGE_AFF=null;   // { app, code, debut, fin, qr, retirees } : en mémoire, le temps de remettre le code
 const ub64s=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
-const plusUnMois=d=>{const x=new Date(d+'T12:00:00');x.setMonth(x.getMonth()+1);return x.toISOString().slice(0,10);};
+const plusUnAn=d=>{const x=new Date(d+'T12:00:00');x.setFullYear(x.getFullYear()+1);x.setDate(x.getDate()-1);return x.toISOString().slice(0,10);};   // validité par défaut : un an (1.38.0), ajustable
 const codeAffiche=c=>c.slice(0,5)+'-'+c.slice(5);
 function etqAppareilsHtml(){const adm=can('admin'),L=apps(),dis=adm?'':' disabled';
   let h=`<div class="panel" data-etq-appareils><h3>📱 Téléphones et badges de clés</h3>
-  <div class="note-recus"><p>Chaque téléphone WerbTagDroid est <b>enrôlé une fois</b> : dans l'application, <i>Enrôler ce téléphone</i> enregistre sa clé publique (fichier <code>WerbTagDroid_&lt;identifiant&gt;.pem</code>), à importer ici. On émet ensuite pour ce téléphone un <b>badge de clés</b> : un QR à scanner à l'ouverture de l'application, et un <b>code à usage unique à remettre à part</b> (de vive voix ou par un autre canal, jamais avec le badge). Valable un mois par défaut, le badge apporte les clés du site, les clés révoquées et les numéros des étiquettes réimprimées (verdict « remplacée » sur une ancienne étiquette).</p></div>`;
+  <div class="note-recus"><p>Chaque téléphone WerbTagDroid est <b>enrôlé une fois</b> : dans l'application, <i>Enrôler ce téléphone</i> enregistre sa clé publique (fichier <code>WerbTagDroid_&lt;identifiant&gt;.pem</code>), à importer ici. On émet ensuite pour ce téléphone un <b>badge de clés</b> : un QR à scanner à l'ouverture de l'application, et un <b>code à usage unique à remettre à part</b> (de vive voix ou par un autre canal, jamais avec le badge). Valable <b>un an</b> par défaut (période ajustable à l'émission), le badge apporte les clés du site, les clés révoquées et les numéros des étiquettes réimprimées (verdict « remplacée » sur une ancienne étiquette). Une fois le badge scanné et son code saisi, le téléphone le <b>garde chiffré</b> jusqu'à sa date de fin : l'agent ouvre ensuite l'application par son empreinte ou le code du téléphone, sans rescanner le badge.</p></div>`;
   if(adm)h+=`<form id="etqAppImp" class="form"><label>Téléphone ou agent<input id="etqAppNom" size="26" placeholder="ex. Téléphone astreinte OT"></label><label>Fichier d'enrôlement (.pem)<input type="file" id="etqAppFic" accept=".pem,application/x-pem-file,text/plain"></label><label><button>📥 Enrôler</button></label></form>`;
   h+=`<table class="grid" data-etq-app-table><thead><tr><th>Téléphone</th><th>Identifiant</th><th>Enrôlé</th><th>Dernier badge</th><th></th></tr></thead><tbody>
   ${L.map(a=>`<tr data-app="${esc(a.id)}"${a.retire?' class="archivee"':''}><td class="b">${esc(a.nom)}</td><td class="mono">${esc(a.id)}</td><td>${esc(fmtDay(a.le))} <span class="hint">${esc(a.par||'')}</span></td>
@@ -40306,7 +40366,8 @@ function etqAppareilsHtml(){const adm=can('admin'),L=apps(),dis=adm?'':' disable
     <td>${a.retire?'':`<button data-appbadge="${esc(a.id)}"${dis}${TR?'':' disabled title="Ouvrir d\'abord le fichier de clés de l\'émetteur"'}>🔑 Badge</button> <button class="icon" data-appretirer="${esc(a.id)}" title="Retirer ce téléphone (perdu, remplacé)"${dis}>🗑</button>`}</td></tr>`).join('')||'<tr><td colspan="5" class="hint">Aucun téléphone enrôlé.</td></tr>'}</tbody></table>`;
   const cible=L.find(a=>a.id===ETQ.badge&&!a.retire);
   if(cible&&adm&&TR){const d=stamp();h+=`<form id="etqBadge" class="form" data-etq-badge-form="${esc(cible.id)}"><b>Badge pour ${esc(cible.nom)}</b>
-    <label>Valable du<input type="date" id="etqBdDeb" value="${d}"></label><label>au<input type="date" id="etqBdFin" value="${plusUnMois(d)}"></label>
+    <label>Valable du<input type="date" id="etqBdDeb" value="${d}"></label><label>au<input type="date" id="etqBdFin" value="${plusUnAn(d)}"></label>
+    <span class="badge-sites" data-badge-sites>Sites lus par ce téléphone : ${(TR.sites||[]).map(s=>`<label class="chk"><input type="checkbox" data-bdsite="${esc(s)}"${s===etqSite()||!(TR.sites||[]).includes(etqSite())?' checked':''}> ${esc(s)}</label>`).join(' ')}</span>
     <label>Mot de passe du fichier de clés<input type="password" id="etqBdMdp" autocomplete="off"></label><label><button class="pri">🔑 Émettre le badge</button></label><label><button type="button" id="etqBdAnnuler">Annuler</button></label></form>
     <p class="hint">Le mot de passe est redemandé : les clés du site ne sont mises en clair que le temps de fabriquer le badge.</p>`;}
   /* Le badge peut être flashé directement à l'écran par le téléphone : le QR et le code ne sont JAMAIS affichés en même temps
@@ -40327,12 +40388,16 @@ function etqAppareilsHtml(){const adm=can('admin'),L=apps(),dis=adm?'':' disable
 function etqBadgeImprimer(){if(!BADGE_AFF)return;const B=BADGE_AFF,qr=WerbQR.encoder(B.qr,'Q'),mm=((qr.taille+8)*0.4).toFixed(1);
   const P=$('#printArea');P.className='etiq etiq-libre';let st=$('#etqPageStyle');if(!st){st=document.createElement('style');st.id='etqPageStyle';document.head.appendChild(st);}st.textContent='@page etiq{size:A4 portrait;margin:15mm}';
   P.innerHTML=`<div class="badge-carte"><div class="badge-titre">🔑 Badge de clés WerbTagDroid</div>
-    <p>Téléphone : <b>${esc(B.app.nom)}</b> <span class="mono">(${esc(B.app.id)})</span><br>Site : <b>${esc(TR.site||'')}</b> — valable du <b>${esc(fmtDay(B.debut))}</b> au <b>${esc(fmtDay(B.fin))}</b></p>
+    <p>Téléphone : <b>${esc(B.app.nom)}</b> <span class="mono">(${esc(B.app.id)})</span><br>Site(s) : <b>${esc((B.sites||[]).join(', '))}</b> — valable du <b>${esc(fmtDay(B.debut))}</b> au <b>${esc(fmtDay(B.fin))}</b></p>
     <div style="width:${mm}mm;height:${mm}mm">${WerbQR.svg(qr)}</div>
     <p class="badge-avert">À l'ouverture de WerbTagDroid : scanner ce QR, puis saisir le code à usage unique remis <b>à part</b> (il n'est pas sur ce badge). Ce badge ne sert que sur le téléphone indiqué. Perdu ou volé : prévenir le RSSI ; il expire le ${esc(fmtDay(B.fin))}. Ne pas photocopier, ne pas photographier.</p></div>`;
   window.print();}
-async function etqEmettreBadge(app,debut,fin,mdp){const brut=await WerbTag.clesBrutes(TR.fichier,mdp);
-  try{const k=Object.fromEntries(Object.entries(brut.cles).filter(([kid])=>!brut.revoquees.includes(kid)));
+/* Badge multi-sites (1.39.0) : clés non révoquées des sites cochés ; « s » = site de cette base, dont les émissions remplacées
+   (étiquettes réimprimées) sont jointes — le téléphone ne les applique qu'aux étiquettes de ce site. */
+async function etqEmettreBadge(app,debut,fin,mdp,sites){const brut=await WerbTag.clesBrutes(TR.fichier,mdp);
+  try{const k=Object.fromEntries(Object.entries(brut.cles).filter(([kid])=>!brut.revoquees.includes(kid)&&sites.includes(WerbTag.siteDuKid(kid))));
+    if(!Object.keys(k).length)throw new Error('aucun site coché');
+    brut.site=etqSite();
     let e=Object.entries(etqs()).filter(([,o])=>o&&o.n>1).sort((a,b)=>String(b[1].le||'').localeCompare(String(a[1].le||''))).map(([t,o])=>[t,o.n]);
     const code=WerbTag.codeAleatoire();let retirees=0;
     for(;;){try{const qr=await WerbTag.emettreBadge({contenu:{s:brut.site,k,r:brut.revoquees,e:Object.fromEntries(e)},spkiAppareil:ub64s(app.spki),debut,fin,code,clePrivee:TR.prive});return {qr,code,retirees};}
@@ -40356,9 +40421,11 @@ function etqAppareilsEvents(){
     const debut=$('#etqBdDeb').value,fin=$('#etqBdFin').value,mdp=$('#etqBdMdp').value;$('#etqBdMdp').value='';
     if(!debut||!fin||fin<debut){alert('Période de validité invalide.');return;}
     if(!mdp){alert('Le mot de passe du fichier de clés est nécessaire pour fabriquer le badge.');return;}
-    try{const r=await etqEmettreBadge(a,debut,fin,mdp);BADGE_AFF={app:a,code:r.code,debut,fin,qr:r.qr,retirees:r.retirees};
-      a.dernierBadge={debut,fin,le:stamp(),par:USER.login};ETQ.badge='';
-      log('Étiquettes',a.id,a.nom,'Badge de clés',``,`valable du ${debut} au ${fin}, clés ${Object.keys(TR.cles).filter(k=>!TR.revoquees.includes(k)).join(', ')}${r.retirees?`, ${r.retirees} émission(s) remplacée(s) non incluses`:''}`);
+    const sites=[...document.querySelectorAll('#etqBadge [data-bdsite]:checked')].map(x=>x.dataset.bdsite);
+    if(!sites.length){alert('Coche au moins un site.');return;}
+    try{const r=await etqEmettreBadge(a,debut,fin,mdp,sites);BADGE_AFF={app:a,code:r.code,debut,fin,qr:r.qr,retirees:r.retirees,sites};
+      a.dernierBadge={debut,fin,le:stamp(),par:USER.login,sites};ETQ.badge='';
+      log('Étiquettes',a.id,a.nom,'Badge de clés',``,`valable du ${debut} au ${fin}, sites ${sites.join(', ')}${r.retirees?`, ${r.retirees} émission(s) remplacée(s) non incluses`:''}`);
       render();}
     catch(x){alert('Badge non émis : '+x.message);}};
   if($('#etqBdImprimer'))$('#etqBdImprimer').onclick=etqBadgeImprimer;

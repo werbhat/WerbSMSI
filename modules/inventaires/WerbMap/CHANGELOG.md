@@ -5,6 +5,22 @@ Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/), num
 
 
 
+## [1.40.0] — 2026-11
+
+### Ajouts
+- **Aide « ❓ Comment créer les clés et les échanger avec le téléphone »** dans le cadre *Clés de l'émetteur* (Inventaires › Étiquettes) : schéma du parcours (fichier de clés → APK → téléphone enrôlé → badge + code → étiquettes lues), six étapes pas à pas (fichier du groupe créé une fois, clé de chaque site, clé publique pour l'APK, enrôlement de chaque téléphone, émission du badge multi-sites et remise du code à part, premier scan puis empreinte ou code), cas de problème (badge échu, téléphone perdu ou remplacé, clé compromise) et ce qui circule ou non. L'aide reste ouverte tant qu'on ne la referme pas.
+
+## [1.39.0] — 2026-11
+
+### Ajouts
+- **Émetteur de groupe et badge multi-sites** : le fichier de clés devient celui du **groupe** — une seule clé de signature (donc **une seule APK WerbTagDroid** pour tous les sites) et une clé de chiffrement par site. Créé une fois ; dans chaque autre site, l'ouvrir puis **➕ Ajouter la clé du site** (mot de passe demandé ; le fichier mis à jour est téléchargé et remplace l'ancien au coffre-fort ; même émetteur, étiquettes et téléphones inchangés). Tant que le fichier ne porte pas la clé du site, l'émission des étiquettes est bloquée.
+- **Badge multi-sites** : à l'émission d'un badge, cocher les sites que le téléphone doit lire (site courant coché par défaut). Les émissions remplacées jointes sont celles du site de la base ; le téléphone ne les applique qu'aux étiquettes de ce site.
+
+## [1.38.0] — 2026-11
+
+### Modifications
+- **Badge de clés valable un an par défaut** (au lieu d'un mois), période toujours ajustable à l'émission. Avec WerbTagDroid 0.6.0, le téléphone garde le badge ouvert, chiffré, jusqu'à sa date de fin : l'agent ne scanne le badge et ne saisit le code qu'une fois, puis ouvre l'application par empreinte ou code du téléphone.
+
 ## [1.37.0] — 2026-11
 
 ### Ajouts

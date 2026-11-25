@@ -11,9 +11,12 @@ Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/), num
 - **WerbMap 1.35.0 publié** : support d'impression des étiquettes au choix — planche A4 libre, planches A4 en grille (Avery L7165, L7163, 70 × 42,3 mm, personnalisée ; départ à l'étiquette n° pour une planche entamée), rouleaux d'imprimante d'étiquettes (62 × 100, 89 × 36, 100 × 50 mm, personnalisé) ; étiquette trop petite pour son QR refusée avant l'émission.
 - **WerbPCR 1.11.0 publié** : publication du plan de reprise par SI (`site:reprise`), dont WerbMap propose la note PCR des étiquettes.
 - **WerbMap 1.36.0 publié** : téléphones WerbTagDroid enrôlés (fichier de clé publique) et **badges de clés** (QR chiffré pour un téléphone, signé, valable un mois par défaut ; code à usage unique affiché une fois, jamais enregistré ; mot de passe du fichier de clés redemandé).
+- **WerbMap 1.40.0 publié** : aide pas à pas « Comment créer les clés et les échanger avec le téléphone » dans les clés de l'émetteur (Inventaires › Étiquettes).
+- **WerbMap 1.39.0 publié** : émetteur de groupe (une clé de signature, une clé de chiffrement par site, une seule APK WerbTagDroid pour le groupe) et badge multi-sites.
+- **WerbMap 1.38.0 publié** : badge de clés valable un an par défaut (ajustable) ; WerbTagDroid 0.6.0 garde le badge ouvert chiffré jusqu'à sa fin et s'ouvre par empreinte ou code du téléphone.
 - **WerbMap 1.37.0 publié** : badge de clés affiché à l'écran pour être flashé par le téléphone (jamais en même temps que le code, masqué après 2 minutes).
 - **WerbMap 1.36.1 publié** : étiquettes avec le QR sur toute la hauteur et le bandeau de classification jusqu'au QR.
-- **`APK/WerbTagDroid/`** : application Android WerbTagDroid 0.5.0 (lecture des étiquettes, badge de clés), signée par sa clé dédiée (certificat `436A 090C … 1DD5`), compilée pour l'émetteur des étiquettes DEMO (`5CB9 654B … 1DB0`) ; README avec les empreintes. Sous-dossier distinct du README de WerbVeille Droid.
+- **`APK/WerbTagDroid/`** : application Android WerbTagDroid 0.7.1 (boutons « Lampe » et « Oublier le badge » au-dessus de la barre de navigation, écrans dans les marges système ; lecture des étiquettes de plusieurs sites, badge de clés multi-sites gardé jusqu'à sa fin, ouverture par empreinte ou code, charte WerbHat de WerbVeille Droid), signée par sa clé dédiée (certificat `436A 090C … 1DD5`), compilée pour l'émetteur des étiquettes DEMO (`5CB9 654B … 1DB0`) ; README avec les empreintes. Sous-dossier distinct du README de WerbVeille Droid.
 - **Charte** : objet `site:reprise` ajouté au tableau des objets publiés, au schéma `publication_site.schema.json`, au schéma `module.schema.json` et aux objets connus de l'audit.
 
 ## [0.43.0] — 2026-11
