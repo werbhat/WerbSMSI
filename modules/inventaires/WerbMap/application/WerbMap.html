@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- WerbMap v1.40.0 – Développé par @WerbHat – build novembre 2026 -->
+<!-- WerbMap v1.41.0 – Développé par @WerbHat – build novembre 2026 -->
 <!--
   WerbMap – Cartographie VLAN / Adressage IP / Actifs / Flux
   Module « Inventaires ICS » de WerbSMSI (niveau site). Version : sources/src/signature.js.
@@ -21,7 +21,7 @@
 <title>WerbMap</title>
 <meta name="application-name" content="WerbMap">
 <meta name="author" content="@WerbHat">
-<meta name="generator" content="WerbMap v1.40.0 – Développé par @WerbHat">
+<meta name="generator" content="WerbMap v1.41.0 – Développé par @WerbHat">
 <meta name="description" content="Cartographie VLAN, adressage IP, actifs et flux d'un site">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22%3E%3Crect width=%2232%22 height=%2232%22 rx=%226%22 fill=%22%230d2238%22/%3E%3Cpath d=%22M6 9h20M6 16h20M6 23h20M11 6v20M21 6v20%22 stroke=%22%23ffd27a%22 stroke-width=%222%22/%3E%3Ccircle cx=%2221%22 cy=%2216%22 r=%223.5%22 fill=%22%238fd16a%22/%3E%3C/svg%3E">
 <style>
@@ -112,7 +112,7 @@ table.grid.mx{width:auto}
 .form label{display:flex;flex-direction:column;font-size:12px;color:var(--mut);gap:3px}
 .form input,.form select,.form textarea{padding:6px 8px;border:1px solid var(--line);border-radius:5px;font:inherit;color:var(--ink)}
 .form textarea{min-height:220px;font-size:12px;font-family:Consolas,monospace}
-.sev-err{color:var(--err);font-weight:700}.sev-warn{color:var(--warn);font-weight:700}.sev-info{color:var(--mut);font-weight:700}
+.maint-alerte td{background:color-mix(in srgb,var(--err) 9%,transparent)}.sev-err{color:var(--err);font-weight:700}.sev-warn{color:var(--warn);font-weight:700}.sev-info{color:var(--mut);font-weight:700}
 .icon{border:none;background:none;padding:2px 5px;cursor:pointer;font-size:14px}
 .grid th.sortable{cursor:pointer;user-select:none}.grid th.sortable:hover{background:var(--th-h)}.grid th.sorted{color:var(--pri)}.grid th .si{font-size:10px;opacity:.6}.grid th.sorted .si{opacity:1}
 .icon:hover{background:var(--pri2)}
@@ -36700,7 +36700,7 @@ const WERB = Object.freeze((() => {
   const bytes = [68, 195, 169, 118, 101, 108, 111, 112, 112, 195, 169, 32, 112, 97, 114, 32, 64, 87, 101, 114, 98, 72, 97, 116];
   const signature = new TextDecoder("utf-8").decode(new Uint8Array(bytes));
   const produit = "WerbMap";
-  const version = "1.40.0";
+  const version = "1.41.0";
   return {
     id: "werbmap",
     produit, version, auteur: "@WerbHat", signature,
@@ -39056,13 +39056,13 @@ const TBL={
  coffrets:{title:'Coffrets et baies informatiques',sheet:'Lst_Coffret',hk:'TAG',obj:'Coffret',label:r=>r.tag||r.libelle||'(nouveau)',
   cols:[{f:'crit',l:'Critique',x:'Coffret Critique',t:B},{f:'tag',l:'TAG',x:'TAG',cls:'b'},{f:'libelle',l:'Libellé',x:'Libellé',cls:'lg'},{f:'niveau',l:'Niveau',x:'Niveau'},{f:'pcr',l:'Note PCR',x:'Note PCR',t:TA},{f:'comment',l:'Commentaire',x:'Commentaire',cls:'lg'}]},
  rsx:{title:'Actifs informatiques (hors PC et serveurs)',sheet:'Lst_Actifs_RSX',hk:'TAG equipement',obj:'Actif réseau',label:r=>r.tag||r.libelle||'(nouveau)',
-  cols:[{f:'crit',l:'Critique',x:'Actif Critique',t:B},{f:'tag',l:'TAG équipement',x:'TAG equipement',cls:'b'},{f:'libelle',l:'Libellé',x:'Libellé',cls:'lg'},{f:'_ips',l:'IP (ID VLAN)',t:C,fn:r=>ipsOfTag(r.tag)},
+  cols:[{f:'crit',l:'Critique',x:'Actif Critique',t:B},{f:'tag',l:'TAG équipement',x:'TAG equipement',cls:'b'},{f:'libelle',l:'Libellé',x:'Libellé',cls:'lg'},{f:'_ips',l:'IP (ID VLAN)',t:C,fn:r=>ipsOfTag(r.tag)},{f:'_dif',l:'Difficulté MAJ',t:C,fn:r=>difCol(r.tag)},
    {f:'zone',l:'Zone',x:'Zone',t:SEL,opts:()=>S.refs.zones},{f:'_zv',l:'Zone (VLAN)',t:C,fn:r=>{const zs=zonesVlanTag(r.tag);return zs.join(', ')+(zoneConflit(r)?' ⚠ conflit':'');}},
    {f:'emplacement',l:'Emplacement',x:'Emplacement'},
    {f:'coffret',l:'Coffret',x:'Coffret',t:L,dl:'dlCof'},{f:'type',l:'Type actif',x:'Type Actif',t:SEL,opts:()=>S.refs.typesActif},{f:'marque',l:'Marque',x:'Marque'},{f:'reference',l:'Modèle',x:'Modèle',xa:['Référence']},
    {f:'serie',l:'N° série',x:'N°Série',cls:'mono'},{f:'fw',l:'Version firmware',x:'Version firmware'},{f:'lienFw',l:'Lien site MAJ FW',x:'Lien Site MAJ FW',t:U},{f:'lienSuivi',l:'Lien fichier suivi gestion',x:'Lien Fichier Suivi gestion',t:U},{f:'pcr',l:'Note PCR',x:'Note PCR',t:TA},{f:'comment',l:'Commentaire',x:'commentaire',cls:'lg'}]},
  machines:{title:'Machines physiques',sheet:'Lst_MachinePhysique',hk:'TAG equipement',obj:'Machine physique',label:r=>r.tag||r.libelle||'(nouvelle)',
-  cols:[{f:'crit',l:'Critique',x:'Machine\nCritique',t:B},{f:'tag',l:'TAG équipement',x:'TAG equipement',cls:'b'},{f:'libelle',l:'Libellé',x:'Libellé',cls:'lg'},{f:'_ips',l:'IP (ID VLAN)',t:C,fn:r=>ipsOfTag(r.tag)},{f:'_rn',l:'Routes / NAT',t:C,fn:r=>linksOf(r.tag)},{f:'_inv',l:'Inventaire',t:C,fn:r=>invCol(r.tag)},{f:'emplacement',l:'Emplacement',x:'Emplacement'},
+  cols:[{f:'crit',l:'Critique',x:'Machine\nCritique',t:B},{f:'tag',l:'TAG équipement',x:'TAG equipement',cls:'b'},{f:'libelle',l:'Libellé',x:'Libellé',cls:'lg'},{f:'_ips',l:'IP (ID VLAN)',t:C,fn:r=>ipsOfTag(r.tag)},{f:'_rn',l:'Routes / NAT',t:C,fn:r=>linksOf(r.tag)},{f:'_inv',l:'Inventaire',t:C,fn:r=>invCol(r.tag)},{f:'_dif',l:'Difficulté MAJ',t:C,fn:r=>difCol(r.tag)},{f:'emplacement',l:'Emplacement',x:'Emplacement'},
    {f:'coffret',l:'Coffret',x:'Coffret',t:L,dl:'dlCof'},{f:'fonction',l:'Fonction du poste',x:'Fonction du Poste'},{f:'type',l:'Type machine',x:'Type Machine',t:SEL,opts:()=>S.refs.typesMachine},
    {f:'os',l:'Système OS',x:'Système OS'},{f:'licences',l:'Licences',x:'Licences'},{f:'vos',l:'Version OS',x:'Version OS'},{f:'condMaj',l:'Condition MAJ',x:'Condition MAJ'},
    {f:'marque',l:'Marque',x:'Marque'},{f:'modele',l:'Modèle',x:'Modèle'},{f:'serie',l:'N° série',x:'N°Série',cls:'mono'},{f:'mes',l:'Date mise en service',x:'Date Mise en service',t:D},
@@ -39070,7 +39070,7 @@ const TBL={
    {f:'disques',l:'Disques durs',x:'Disques durs'},{f:'raid',l:'Description RAID',x:'Description RAID'},{f:'infoVm',l:'Information VM',x:'Information VM'},{f:'alim',l:"Type d'alimentation",x:"Type d'alimentation"},
    {f:'specs',l:'Spécificités matériels',x:'Spécificités Materiels'},{f:'pcr',l:'Note PCR',x:'Note PCR',t:TA},{f:'comment',l:'Commentaires',x:'Commentaires',cls:'lg'}]},
  vms:{title:'Machines virtuelles',sheet:'Lst_MachineVirtuelle',hk:'TAG equipement',obj:'Machine virtuelle',label:r=>r.tag||r.libelle||'(nouvelle)',
-  cols:[{f:'crit',l:'Critique',x:'Actif Critique',t:B},{f:'tag',l:'TAG équipement',x:'TAG equipement',cls:'b'},{f:'libelle',l:'Libellé',x:'Libellé',cls:'lg'},{f:'_ips',l:'IP (ID VLAN)',t:C,fn:r=>ipsOfTag(r.tag)},{f:'_rn',l:'Routes / NAT',t:C,fn:r=>linksOf(r.tag)},{f:'_inv',l:'Inventaire',t:C,fn:r=>invCol(r.tag)},{f:'hyperv',l:'Hyperviseur',x:'Hyperviseur',t:L,dl:'dlHyp'},
+  cols:[{f:'crit',l:'Critique',x:'Actif Critique',t:B},{f:'tag',l:'TAG équipement',x:'TAG equipement',cls:'b'},{f:'libelle',l:'Libellé',x:'Libellé',cls:'lg'},{f:'_ips',l:'IP (ID VLAN)',t:C,fn:r=>ipsOfTag(r.tag)},{f:'_rn',l:'Routes / NAT',t:C,fn:r=>linksOf(r.tag)},{f:'_inv',l:'Inventaire',t:C,fn:r=>invCol(r.tag)},{f:'_dif',l:'Difficulté MAJ',t:C,fn:r=>difCol(r.tag)},{f:'hyperv',l:'Hyperviseur',x:'Hyperviseur',t:L,dl:'dlHyp'},
    {f:'fonction',l:'Fonction du poste',x:'Fonction du Poste'},{f:'type',l:'Type machine',x:'Type Machine',t:SEL,opts:()=>S.refs.typesMachine},{f:'os',l:'Système OS',x:'Système OS'},{f:'licences',l:'Licences',x:'Licences'},
    {f:'vos',l:'Version OS',x:'Version OS'},{f:'cpu',l:'CPU+threads',x:'CPU+threads',cls:'sm'},{f:'ram',l:'RAM (Go)',x:'RAM \nen Go',cls:'sm'},{f:'dd1',l:'Volume DD 1 (Go)',x:'Volume DD 1 en Go',cls:'sm'},{f:'dd2',l:'Volume DD 2 (Go)',x:'Volume DD 2 en Go',cls:'sm'},
    {f:'eth',l:'Config interface Eth',x:'Config Interface Eth'},{f:'specs',l:'Spécificités matériels',x:'Spécificités Materiels'},{f:'arret',l:'Précaution arrêt',x:'Précaution Arrêt'},{f:'lienDoc',l:'Lien framework ou doc',x:'Lien Framework ou doc',t:U},{f:'pcr',l:'Note PCR',x:'Note PCR',t:TA},{f:'comment',l:'Commentaires',x:'Commentaires',cls:'lg'}]},
@@ -39655,6 +39655,11 @@ async function recevoir(){const L=liaison(),E=WerbSocle.espace;if(!E.ouvert||!L.
   if(JSON.stringify(avantI)!==JSON.stringify(inv)){
     S.recus=Object.assign({},S.recus,{inventaires:{items:inv,majLe:maj,source:'site:inventaires'}});ch=true;
     log('Fiche SI','recus','Données reçues','Inventaires de machines WerbExploitation (site:inventaires)',avantI.length+' machine(s)',inv.length+' machine(s), reçues le '+fmtD(maj));}
+  const dif=(Array.isArray(ps.difficultesMaj)?ps.difficultesMaj:[]).filter(x=>x&&x.tag&&DIF_NIV.includes(String(x.niveau))).map(difNorm);
+  const avantD=((recus('difficultes')||{}).items)||[];
+  if(JSON.stringify(avantD)!==JSON.stringify(dif)){
+    S.recus=Object.assign({},S.recus,{difficultes:{items:dif,majLe:maj,source:'site:difficultesMaj'}});ch=true;
+    log('Fiche SI','recus','Données reçues','Difficulté de mise à jour WerbExploitation (site:difficultesMaj)',avantD.length+' actif(s)',dif.length+' actif(s), reçus le '+fmtD(maj));}
   const rem=(Array.isArray(ps.remediations)?ps.remediations:[]).filter(r=>r&&r.id&&r.actif).map(r=>{const o={};REM_CHAMPS.forEach(k=>{o[k]=REM_NOMBRES.includes(k)?Math.max(0,Math.round(+r[k]||0)):String(r[k]??'');});return o;});
   const avantR=((recus('remediations')||{}).items)||[];
   if(JSON.stringify(avantR)!==JSON.stringify(rem)){
@@ -39809,6 +39814,18 @@ function invEcarts(){const out=[];Object.entries(INV_LIENS).forEach(([key,ch])=>
   ch.forEach(([f,src,siVide])=>{const av=String(r[f]||'').trim(),ap=String(i[src]||'').trim();if(!ap||av===ap||(siVide&&av))return;out.push({key,r,f,l:TBL[key].cols.find(c=>c.f===f).l,avant:av,apres:ap});});}));return out;}
 function invAppliquer(e){const T=TBL[e.key];e.r[e.f]=e.apres;log(T.obj,e.r.id,T.label(e.r),e.l+' (relevé d\'inventaire)',e.avant,e.apres);}
 const PLM_ORDRE={ko:0,warn:1,ok:2,'':3};
+/* Difficulté de mise à jour (site:difficultesMaj, WerbExploitation 1.40.0) : niveau N1 à N5 par TAG (barème en six critères, score sur 55),
+   copié dans la base comme le PLM. Colonne « Difficulté MAJ » des actifs ; fiche SI : maintenabilité, et alerte pour un actif N4 ou N5
+   critique ou visé par un risque EBIOS élevé (un des deux niveaux les plus hauts de l'échelle du groupe, résiduel s'il est coté). */
+const DIF_NIV=['N1','N2','N3','N4','N5'],DIF_LIB={N1:'Très facile',N2:'Facile',N3:'Modérée',N4:'Difficile',N5:'Très difficile'};
+const DIF_ALERTE=['N4','N5'];
+const difNorm=x=>({id:String(x.id||'DIF-'+x.tag),tag:String(x.tag),niveau:String(x.niveau),libelleNiveau:String(x.libelleNiveau||DIF_LIB[x.niveau]||''),score:Math.round(+x.score||0),releve:x.releve===true,evalueLe:String(x.evalueLe||''),
+  evaluations:(Array.isArray(x.evaluations)?x.evaluations:[]).filter(e=>e&&typeof e==='object').map(e=>({registre:String(e.registre||''),objet:String(e.objet||''),niveau:String(e.niveau||''),score:Math.round(+e.score||0),notes:String(e.notes||''),evalueLe:String(e.evalueLe||'')}))});
+function difDe(t){const k=upT(t);return k?((((recus('difficultes')||{}).items)||[]).find(x=>upT(x.tag)===k)||null):null;}
+function difCol(t){const d=difDe(t);return d?d.niveau+' · '+d.libelleNiveau+(d.score?' ('+d.score+')':''):'';}
+const difSev=n=>n==='N5'||n==='N4'?'sev-err':n==='N3'?'sev-warn':'sev-info';
+// Risque « élevé » : niveau (résiduel s'il est coté, sinon brut) parmi les deux plus hauts de l'échelle reçue (4 niveaux par défaut)
+function risqueEleve(r){const ns=((S.recus&&S.recus.niveauxRisque)||[]).map(e=>+e.niveau).filter(n=>n>0),max=ns.length?Math.max(...ns):4;return (r.niveauResiduel||r.niveauBrut)>=max-1;}
 const BCK_CHAMPS=['id','etat','categorie','typeDonnees','donnees','actifSource','actifDestination','periodicite','mode','dernierTest','statutTest'];
 const BCK_TEST={'a-jour':'à jour',echu:'échu',jamais:'jamais testé'};
 const bckTest=b=>b.etat==='ACTIF'?(BCK_TEST[b.statutTest]||''):'';
@@ -39843,7 +39860,7 @@ function siCalc(s){const vl=vlanList(),cles=new Set(s.vlans.map(String)),vs=vl.f
   const flux=S.flux.filter(f=>f.src&&f.dst&&!/^(block|reset)$/i.test(f.action||'')&&!/^off$/i.test(f.state||'')&&dans(f.src)!==dans(f.dst));
   const ech=new Map();flux.forEach(f=>{const o=dans(f.src)?f.dst:f.src,v=vlanDe(o),k=v?'v'+v.key:'n'+upT(o),e=ech.get(k)||{id:v?v.id:'',nom:v?v.nom:o,zone:v?v.zone:'',n:0};e.n++;ech.set(k,e);});
   const tags=new Set(S.ips.filter(a=>cles.has(String(a.vlan))).map(a=>upT(a.tag)).filter(Boolean)),vus=new Set();
-  const actifs=[['rsx','Actif réseau'],['machines','Machine physique'],['vms','Machine virtuelle']].flatMap(([k,t])=>S[k].filter(r=>{const g=upT(r.tag);if(!tags.has(g)||vus.has(g))return false;vus.add(g);return true;}).map(r=>({tag:r.tag,libelle:r.libelle||'',type:r.type||t})));
+  const actifs=[['rsx','Actif réseau'],['machines','Machine physique'],['vms','Machine virtuelle']].flatMap(([k,t])=>S[k].filter(r=>{const g=upT(r.tag);if(!tags.has(g)||vus.has(g))return false;vus.add(g);return true;}).map(r=>({tag:r.tag,libelle:r.libelle||'',type:r.type||t,crit:!!r.crit})));
   const risques=(((recus('risques')||{}).items)||[]).map(r=>Object.assign({},r,{touches:r.actifs.filter(g=>tags.has(upT(g)))})).filter(r=>r.touches.length)
     .sort((a,b)=>b.niveauBrut-a.niveauBrut||(b.niveauResiduel||b.niveauBrut)-(a.niveauResiduel||a.niveauBrut)||a.id.localeCompare(b.id));
   const rmax=risques.length?{brut:Math.max(...risques.map(r=>r.niveauBrut)),res:Math.max(...risques.map(r=>r.niveauResiduel||r.niveauBrut))}:null;
@@ -39853,7 +39870,11 @@ function siCalc(s){const vl=vlanList(),cles=new Set(s.vlans.map(String)),vs=vl.f
   const rem=(((recus('remediations')||{}).items)||[]).filter(r=>tags.has(upT(r.actif))).sort((a,b)=>String(a.mission).localeCompare(String(b.mission),'fr',{numeric:true})||String(a.actif).localeCompare(String(b.actif),'fr',{numeric:true}));
   const presta=(((recus('prestataires')||{}).items)||[]).filter(p=>p.sis.includes(s.id)||p.actifs.some(t=>tags.has(upT(t))));
   const carto=(((recus('cartographies')||{}).items)||[]).filter(x=>x.sis.includes(s.id)||x.actifs.some(g=>tags.has(upT(g)))).map(x=>Object.assign({},x,{parSI:x.sis.includes(s.id)}));
-  return {carto,vs,flux,ech:[...ech.values()].sort((a,b)=>b.n-a.n||String(a.nom).localeCompare(b.nom)),actifs,p1:s.prios.filter(p=>p.p==='P1').length,risques,rmax,bck,bckR:bckReperes(bck),plm,rem,remT:remTotaux(rem),presta};}
+  // Maintenabilité : difficulté de MAJ des actifs du SI ; alerte si N4 / N5 et actif critique ou visé par un risque EBIOS élevé
+  const maint=actifs.map(a=>{const d=difDe(a.tag),rs=risques.filter(r=>r.touches.some(g=>upT(g)===upT(a.tag))&&risqueEleve(r));
+    return Object.assign({},a,{d,risquesEleves:rs,alerte:!!d&&DIF_ALERTE.includes(d.niveau)&&(a.crit||rs.length>0)});})
+    .sort((a,b)=>(b.alerte-a.alerte)||((b.d?DIF_NIV.indexOf(b.d.niveau):-1)-(a.d?DIF_NIV.indexOf(a.d.niveau):-1))||((b.d?b.d.score:0)-(a.d?a.d.score:0))||String(a.tag).localeCompare(String(b.tag),'fr',{numeric:true}));
+  return {maint,carto,vs,flux,ech:[...ech.values()].sort((a,b)=>b.n-a.n||String(a.nom).localeCompare(b.nom)),actifs,p1:s.prios.filter(p=>p.p==='P1').length,risques,rmax,bck,bckR:bckReperes(bck),plm,rem,remT:remTotaux(rem),presta};}
 // RACI : une seule valeur par case ; par tâche, un seul A et au moins un R
 function raciAlertes(s){return s.raci.taches.map(t=>{const v=s.raci.acteurs.map(a=>s.raci.cases[t.id+'|'+a]);const a=v.filter(x=>x==='A').length,r=v.filter(x=>x==='R').length;
   return {t,m:[a!==1?(a?a+' A (un seul attendu)':'aucun A'):'',r?'':'aucun R'].filter(Boolean).join(', ')};}).filter(x=>x.m&&s.raci.acteurs.length);}
@@ -39937,6 +39958,14 @@ function siFiche(s){const c=siCalc(s),vl=vlanList(),roles=S.refs.roles||[],K=ech
     <table class="grid"><thead><tr><th>Nature</th><th>Fabricant / éditeur</th><th>Produit</th><th>Version</th><th>Statut</th><th>Fin de support</th><th>Fin de vie</th><th>Version cible</th><th>Actifs du SI</th></tr></thead><tbody>${c.plm.map(x=>`<tr><td>${x.nature==='logiciel'?(x.libelle==="Système d'exploitation"?'OS':'Logiciel'):'Matériel'}</td><td>${esc(x.fabricant)}</td><td class="b">${esc(x.produit)}</td><td>${esc(x.version)}</td>
      <td>${x.statut?`<span class="${x.gravite==='ko'?'sev-err':x.gravite==='warn'?'sev-warn':'sev-info'}">${esc(x.statut)}</span>`:''}</td><td>${esc(fmtDay(x.finSupport))}${x.finSupportEtendu?` <span class="hint">(étendu ${esc(fmtDay(x.finSupportEtendu))})</span>`:''}</td><td>${esc(fmtDay(x.finVie))}</td><td>${esc(x.versionCible)}</td><td class="wrapt">${esc(x.touches.join(', '))}</td></tr>`).join('')
      ||`<tr><td colspan="9" class="hint">${recus('plm')?'Aucune référence suivie dans WerbExploitation n\'est installée sur un actif du SI.':'Aucune donnée reçue : publiez depuis WerbExploitation (Intégration WerbSMSI › 📤 Publier), puis ouvrez l\'espace WerbSMSI ici (Liste des SI › ⟳ Actualiser).'}</td></tr>`}</tbody></table></div>
+   <div class="panel si-cadre" data-si-maint><h3>Maintenabilité (difficulté de mise à jour) ${recu('difficultes','WerbExploitation')}</h3><p class="hint">Difficulté de mise à jour des actifs du SI, évaluée dans WerbExploitation (barème en six critères, N1 très facile à N5 très difficile), croisée avec la criticité de l'actif et les risques EBIOS du SI. Un actif N4 ou N5 critique ou visé par un risque élevé reste exposé longtemps après la sortie d'un correctif : prévoir des mesures compensatoires (cloisonnement, surveillance, durcissement) et tracer la décision.</p>
+    ${(()=>{const m=c.maint,ev=m.filter(a=>a.d),al=m.filter(a=>a.alerte);if(!recus('difficultes'))return '';
+      return `<p class="legend">${DIF_NIV.map(n=>{const k=ev.filter(a=>a.d.niveau===n).length;return k?`<span><span class="${difSev(n)}">${n}</span> ${esc(DIF_LIB[n])} : ${k}</span>`:'';}).join('')}<span>Non évalués : ${m.length-ev.length}</span></p>
+      ${al.length?`<p class="sev-err" data-maint-alerte>⚠ ${al.length} actif(s) difficile(s) à maintenir et exposé(s) : ${al.map(a=>esc(a.tag)).join(', ')} — mesures compensatoires à prévoir.</p>`:ev.length?'<p class="hint">✅ Aucun actif N4 ou N5 critique ou visé par un risque élevé.</p>':''}`;})()}
+    <table class="grid"><thead><tr><th>TAG</th><th>Libellé</th><th>Type</th><th>Critique</th><th>Difficulté MAJ</th><th>Score</th><th>Évalué le</th><th>Évaluations</th><th>Risques élevés</th></tr></thead><tbody>${c.maint.filter(a=>a.d).map(a=>`<tr${a.alerte?' class="maint-alerte"':''}><td class="b">${a.alerte?'⚠ ':''}${esc(a.tag)}</td><td>${esc(a.libelle)}</td><td>${esc(a.type)}</td><td>${a.crit?'Oui':''}</td>
+     <td><span class="${difSev(a.d.niveau)}">${esc(a.d.niveau+' · '+a.d.libelleNiveau)}</span>${a.d.releve?' <span class="hint" title="Un critère noté 5 relève le niveau d\'un cran">(relevé)</span>':''}</td><td class="num">${a.d.score||''}</td><td>${esc(fmtDay(a.d.evalueLe))}</td>
+     <td>${a.d.evaluations.map(e=>`${esc(e.objet)} <span class="hint">${esc(e.niveau)}</span>`).join('<br>')}</td><td>${a.risquesEleves.map(r=>esc(r.id)).join(', ')}</td></tr>`).join('')
+     ||`<tr><td colspan="9" class="hint">${recus('difficultes')?'Aucun actif du SI n\'est évalué dans WerbExploitation (registres Mises à jour et Applicatifs, colonne Difficulté MAJ).':'Aucune donnée reçue : évaluez la difficulté dans WerbExploitation et publiez (Intégration WerbSMSI › 📤 Publier), puis ouvrez l\'espace WerbSMSI ici (Liste des SI › ⟳ Actualiser).'}</td></tr>`}</tbody></table></div>
    <div class="panel si-cadre"><h3>Synthèse des risques</h3><table class="grid"><thead>${tete(['Domaine','Niveau'])}</thead><tbody>${lignes('risques',[['d'],['n','sel',SI_NIVEAUX]],'Aucun domaine.')}</tbody></table>${ajout('risques','Domaine')}</div>
    <div class="panel si-cadre"><h3>Risques EBIOS du SI ${recu('risques','WerbEBIOS')}</h3><p class="hint">Risques de l'analyse EBIOS du site dont un bien support visé contient un actif du SI.</p>
     <table class="grid"><thead><tr><th>Réf.</th><th>Risque</th><th class="num">G</th><th class="num">V</th><th>Brut</th><th>Résiduel</th><th>Traitement</th><th>Actifs du SI</th></tr></thead><tbody>${c.risques.map(r=>`<tr><td class="mono">${esc(r.id)}</td><td>${esc(r.libelle)}</td><td class="num">${r.gravite||''}</td><td class="num">${r.vraisemblance||''}</td>
@@ -40050,9 +40079,10 @@ async function siWordBlob(s){const d=window.docx;if(!d)throw new Error('Biblioth
     h('8. Priorités de remédiation'),table(['Priorité','Action','Délai'],s.prios.map(r=>[fort(r.p),r.a,r.delai]),[1.5,5,1.5]),
     p(`Remédiations des tests d'intrusion (WerbPentest)${recus('remediations')?' reçues le '+fmtD(recus('remediations').majLe):' : aucune donnée reçue'}${c.rem.length?' — vulnérabilités critiques ou élevées ouvertes : '+c.remT.critEl+' ; actions en retard : '+c.remT.retard:''}`,{bold:true,color:NAVY,before:160}),
     table(['Mission','Actif','Crit.','Élev.','Moy.','Faib.','Actions ouvertes','En retard','Prochaine échéance'],c.rem.map(r=>[r.mission,r.actif,...[r.critiques,r.elevees,r.moyennes,r.faibles,r.actionsOuvertes,r.actionsEnRetard].map(n=>({t:String(n),center:true})),fmtDay(r.prochaineEcheance)]),[2,1.8,0.8,0.8,0.8,0.8,1.3,1.1,1.6]),
-    h('9. Actifs du SI'),table(['TAG','Libellé','Type'],c.actifs.map(a=>[a.tag,a.libelle,a.type]),[2,4,3]),
+    h('9. Actifs du SI'),table(['TAG','Libellé','Type','Critique','Difficulté MAJ'],c.maint.map(a=>[a.tag,a.libelle,a.type,a.crit?'Oui':'',a.d?a.d.niveau+' · '+a.d.libelleNiveau+(a.d.score?' ('+a.d.score+')':''):'']),[2,3.4,2.4,1,2.2]),
+    p(`Maintenabilité — difficulté de mise à jour (WerbExploitation)${recus('difficultes')?' reçue le '+fmtD(recus('difficultes').majLe):' : aucune donnée reçue'}${recus('difficultes')?(c.maint.some(a=>a.alerte)?' — actifs N4 ou N5 critiques ou visés par un risque élevé : '+c.maint.filter(a=>a.alerte).map(a=>a.tag).join(', ')+' ; mesures compensatoires à prévoir (cloisonnement, surveillance, durcissement).':' — aucun actif N4 ou N5 critique ou visé par un risque élevé.'):''}`,{bold:true,color:NAVY,before:160}),
     ...(s.comment?[h('Commentaire'),p(s.comment)]:[]),
-    p(`Données VLAN, flux et actifs issues de WerbMap le ${new Date().toLocaleDateString('fr-FR')}${recus('risques')?' ; risques reçus de WerbEBIOS (site:syntheseRisques) le '+fmtD(recus('risques').majLe):''}${recus('sauvegardes')?' ; sauvegardes reçues de WerbExploitation (site:sauvegardes) le '+fmtD(recus('sauvegardes').majLe):''}${recus('remediations')?' ; remédiations reçues de WerbPentest (site:remediations) le '+fmtD(recus('remediations').majLe):''}.`,{size:16,color:GREY,before:200})];
+    p(`Données VLAN, flux et actifs issues de WerbMap le ${new Date().toLocaleDateString('fr-FR')}${recus('risques')?' ; risques reçus de WerbEBIOS (site:syntheseRisques) le '+fmtD(recus('risques').majLe):''}${recus('sauvegardes')?' ; sauvegardes reçues de WerbExploitation (site:sauvegardes) le '+fmtD(recus('sauvegardes').majLe):''}${recus('remediations')?' ; remédiations reçues de WerbPentest (site:remediations) le '+fmtD(recus('remediations').majLe):''}${recus('difficultes')?' ; difficulté de mise à jour reçue de WerbExploitation (site:difficultesMaj) le '+fmtD(recus('difficultes').majLe):''}.`,{size:16,color:GREY,before:200})];
   const pied=new d.Footer({children:[new d.Paragraph({alignment:d.AlignmentType.CENTER,children:run(WERB.ligne,{size:14,color:GREY})})]});
   const doc=new d.Document({creator:USER?USER.login:'@WerbHat',title:'Fiche SI – '+(s.nom||''),description:WERB.ligne,
     styles:{paragraphStyles:[{id:'Heading1',name:'Heading 1',basedOn:'Normal',next:'Normal',run:{size:24,bold:true,color:NAVY,font:'Arial'},paragraph:{spacing:{before:200,after:80}}}]},

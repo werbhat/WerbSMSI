@@ -5,6 +5,17 @@ Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/), num
 
 
 
+## [1.41.0] — 2026-11
+
+### Ajouts
+- **Difficulté de mise à jour reçue de WerbExploitation** (`site:difficultesMaj`, WerbExploitation 1.40.0) : niveau N1 (très facile) à N5 (très difficile) de chaque actif, évalué avec le barème en six critères (arrêt, complexité, durée, réversibilité, accès, impact en cas d'échec) ; copié dans la base à l'ouverture de l'espace (journal), la fiche reste complète hors espace.
+- **Colonne « Difficulté MAJ »** dans les actifs réseau, les machines physiques et les machines virtuelles (niveau, libellé, score).
+- **Fiche SI › Maintenabilité (difficulté de mise à jour)** : répartition des actifs du SI par niveau, actifs non évalués, tableau (critique, niveau, score, date, évaluations, risques élevés). **Alerte** pour un actif **N4 ou N5** qui est **critique** ou visé par un **risque EBIOS élevé** (un des deux niveaux les plus hauts de l'échelle du groupe ; niveau résiduel s'il est coté, sinon brut) : il reste exposé longtemps après la sortie d'un correctif, des mesures compensatoires sont à prévoir (cloisonnement, surveillance, durcissement).
+- **Fiche Word du SI** : section 9 *Actifs du SI* avec la criticité et la difficulté de mise à jour, et le constat de maintenabilité.
+
+### Développement
+- `tests/test_si_difficultes.py`. Publication WerbExploitation de démonstration (espace LYON) : objet `difficultesMaj`.
+
 ## [1.40.0] — 2026-11
 
 ### Ajouts
