@@ -26,6 +26,12 @@ Un **SMSI** (système de management de la sécurité de l'information) n'est pas
 | **Vérifier** | Contrôler que ça marche vraiment | Tests réseau, tests d'intrusion, audits de conformité, évaluation des prestataires, suivi des formations, veille |
 | **Améliorer** | Corriger et décider de la suite | Revue de direction, mise à jour des risques et du plan |
 
+La même boucle, détaillée en **8 étapes** — cadrer, inventorier, analyser les risques, se conformer, mettre en œuvre, contrôler, anticiper, revoir — avec, pour chacune, la question à se poser, les actions, les articles d'ISO 27001, les modules WerbSMSI qui l'outillent et ce qu'elle transmet à la suivante. Un exemple suit un même switch de bout en bout. Cliquer sur l'image pour l'agrandir.
+
+![La gouvernance de la cybersécurité en 8 étapes : la boucle d'amélioration continue et les modules WerbSMSI de chaque étape](images/gouvernance_8_etapes.webp)
+
+Cette infographie existe en affiche **A3 paysage** à imprimer, en français et en anglais, dans le dossier `docs/infographie_gouvernance/` de WerbSMSI.
+
 Les mots que vous entendrez :
 
 | Mot | Ce que cela veut dire |

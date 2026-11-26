@@ -4,6 +4,20 @@ Toutes les évolutions notables de WerbReferentiels sont consignées ici.
 Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/), numérotation [SemVer](https://semver.org/lang/fr/).
 
 
+## [1.7.1] — 2026-11
+
+### Changements
+- **Réf. croisée WerbSMSI** régénérée : le nouveau module **WerbCyberArcade** (jeu de sensibilisation) reprend des mesures du guide d'hygiène de l'ANSSI dans ses défis « au travail ».
+
+## [1.7.0] — 2026-11
+
+### Ajouts
+- **Sections selon la nature des exigences** : **⚖️ Réglementation** — obligatoire (NIS2, CRA, RGPD), **📐 Normes** — volontaires et certifiables (ISO/IEC 27001, IEC 62443), **🧰 Guides et cadres** — recommandés (ANSSI, NIST). L'accueil s'ouvre sur un bandeau des trois natures (clic : défilement jusqu'à la section) ; chaque section rappelle sa portée et la question à se poser (« Suis-je concerné ? », « Comment le démontrer à un tiers ? », « Par où commencer ? ») ; le menu porte les mêmes en-têtes.
+- **Référentiel IEC 62443** (`referentiels/5-IEC_62443/`), juste après ISO/IEC 27001 : carte (séries 1-x à 4-x, notions de zone, conduit, SL-T / SL-C / SL-A, 7 exigences fondamentales, qui fait quoi et où dans WerbSMSI), guide complet, checklist d'audit, plan de mise en œuvre, modèles et registres (repris des guides de WerbIEC62443), sources officielles. Liens depuis le tableau de correspondances.
+
+### Changements
+- **Dossiers renumérotés dans l'ordre des sections** : 1-NIS2, 2-CRA, 3-RGPD, 4-ISO_27001, 5-IEC_62443, 6-ANSSI, 7-NIST. Les adresses des pages changent (`#guide:3-rgpd-…` au lieu de `#guide:6-rgpd-…`) : liens de WerbRGPD (1.4.1) et table des exigences de la charte mis à jour ; réf. croisée régénérée.
+
 ## [1.6.3] — 2026-11
 
 ### Changements

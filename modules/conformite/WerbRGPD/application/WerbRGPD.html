@@ -1,5 +1,5 @@
 <!doctype html>
-<!-- WerbRGPD v1.4.0 – Développé par @WerbHat – build novembre 2026 -->
+<!-- WerbRGPD v1.4.1 – Développé par @WerbHat – build novembre 2026 -->
 <html lang="fr">
 <head>
 <meta charset="utf-8">
@@ -9,7 +9,7 @@
 <title>WerbRGPD</title>
 <meta name="application-name" content="WerbRGPD">
 <meta name="author" content="@WerbHat">
-<meta name="generator" content="WerbRGPD v1.4.0 – Développé par @WerbHat">
+<meta name="generator" content="WerbRGPD v1.4.1 – Développé par @WerbHat">
 <meta name="description" content="Conformité RGPD d'un site : registre des traitements, violations de données (72 h), demandes d'exercice des droits, sous-traitants">
 <style>/*! WerbRGPD – Développé par @WerbHat */
 :root {
@@ -173,7 +173,7 @@ const WERB = Object.freeze((() => {
   const bytes = [68, 195, 169, 118, 101, 108, 111, 112, 112, 195, 169, 32, 112, 97, 114, 32, 64, 87, 101, 114, 98, 72, 97, 116];
   const signature = new TextDecoder("utf-8").decode(new Uint8Array(bytes));
   const produit = "WerbRGPD";
-  const version = "1.4.0";
+  const version = "1.4.1";
   return {
     id: "werbrgpd",
     produit, version, auteur: "@WerbHat", signature,
@@ -2397,9 +2397,9 @@ const WerbXlsx = (() => {
   /* Référentiel RGPD de WerbReferentiels (module de lecture, rubrique gouvernance) : ouvert sur une page précise par son adresse
      (#guide:…, sans rien conserver). Chemin relatif des modules publiés : modules/<rubrique>/<Produit>/application/<Produit>.html. */
   const lienReferentiels = id => `../../../gouvernance/WerbReferentiels/application/WerbReferentiels.html#${encodeURIComponent(id)}`;
-  const REF_RGPD = [["guide:6-rgpd-0-carte", "Carte RGPD"], ["guide:6-rgpd-2-principes-et-bases-legales", "Principes et bases légales"],
-    ["guide:6-rgpd-3-droits-des-personnes", "Droits des personnes"], ["guide:6-rgpd-4-obligations-du-responsable", "Obligations du responsable"],
-    ["guide:6-rgpd-5-securite-et-cyber", "Sécurité et cyber"], ["guide:6-rgpd-6-cas-industriels", "Cas industriels"], ["guide:6-rgpd-7-modeles-et-checklists", "Modèles et listes de contrôle"]];
+  const REF_RGPD = [["guide:3-rgpd-0-carte", "Carte RGPD"], ["guide:3-rgpd-2-principes-et-bases-legales", "Principes et bases légales"],
+    ["guide:3-rgpd-3-droits-des-personnes", "Droits des personnes"], ["guide:3-rgpd-4-obligations-du-responsable", "Obligations du responsable"],
+    ["guide:3-rgpd-5-securite-et-cyber", "Sécurité et cyber"], ["guide:3-rgpd-6-cas-industriels", "Cas industriels"], ["guide:3-rgpd-7-modeles-et-checklists", "Modèles et listes de contrôle"]];
   VUES.aide = () => `<h1>❓ Guide de ${esc(WERB.produit)}</h1><p class="sub">${esc(WERB.description)}</p>
     <div class="card"><h2>Démarche</h2><ol>
       <li><b>Intégration WerbSMSI</b> : ouvrir l'espace, rattacher la base au site (SI et actifs de WerbMap, prestataires de WerbPresta) ; ranger la base dans <code>sites/&lt;CODE&gt;/conformite/</code>.</li>

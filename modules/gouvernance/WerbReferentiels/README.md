@@ -1,7 +1,7 @@
 # WerbReferentiels
 
-> Référentiels cyber à lire et à relier : ANSSI, NIST, NIS2, ISO 27001, CRA, RGPD — cartes, synthèses, sources officielles, tableau de correspondances
-> Version **1.6.3** — Développé par **@WerbHat**
+> Référentiels cyber par nature d'exigence : réglementation (NIS2, CRA, RGPD), normes (ISO 27001, IEC 62443), guides (ANSSI, NIST) — cartes, correspondances
+> Version **1.7.1** — Développé par **@WerbHat**
 
 ---
 
@@ -9,7 +9,7 @@
 
 Un SMSI s'appuie sur plusieurs référentiels à la fois : la directive NIS2 impose, ISO/IEC 27001 structure, le NIST CSF décrit, IEC 62443 précise l'industriel, l'ANSSI recommande. Les avoir côte à côte, **reliés entre eux**, évite de traiter chaque texte isolément et prépare l'audit : « telle mesure couvre telle exigence ».
 
-WerbReferentiels est un **module de lecture** : il n'a pas de base de données à saisir, seulement du contenu à lire. Tous les référentiels vivent dans un seul module, un dossier par référentiel. Ajouter DORA, la LPM ou IEC 62443 revient à ajouter un dossier puis à reconstruire, sans créer de nouveau module, de nouveau dépôt ni de nouvelle version de chaque côté.
+WerbReferentiels est un **module de lecture** : il n'a pas de base de données à saisir, seulement du contenu à lire. Tous les référentiels vivent dans un seul module, un dossier par référentiel. Ajouter DORA ou la LPM revient à ajouter un dossier puis à reconstruire, sans créer de nouveau module, de nouveau dépôt ni de nouvelle version de chaque côté.
 
 ---
 
@@ -25,12 +25,16 @@ WerbReferentiels/
 ├── application/
 │   └── WerbReferentiels.html    ← l'outil (fichier unique, pages intégrées)
 └── referentiels/                ← les pages Markdown, lisibles aussi dans Obsidian
-    ├── 1-ANSSI/       0-carte.md · 1-hygiene_informatique.md · 2-systemes_industriels.md · sources.md
-    ├── 2-NIST/        0-carte.md · 1-Guide_NIST.md · 2-checklist… · 3-plan… · 4-modeles… · sources.md
-    ├── 3-NIS2/        0-carte.md · 1-obligations.md · sources.md
+    │                  ⚖️ Réglementation (obligatoire)
+    ├── 1-NIS2/        0-carte.md · 1-obligations.md · sources.md
+    ├── 2-CRA/         0-carte.md · 1-Comprendre… · 2-Qui_est_concerne · 3-Exigences… · 4-…fabricant · 5-Acheteur… · 6-Modeles… · 7-Resume_des_articles · sources.md
+    ├── 3-RGPD/        0-carte.md · 1-Comprendre… · 2-Principes… · 3-Droits… · 4-Obligations… · 5-Securite… · 6-Cas_industriels · 7-Modeles… · sources.md
+    │                  📐 Normes (volontaires, certifiables)
     ├── 4-ISO_27001/   0-carte.md · 1-Guide_ISO_IEC_27000.md · sources.md
-    ├── 5-CRA/         0-carte.md · 1-Comprendre… · 2-Qui_est_concerne · 3-Exigences… · 4-…fabricant · 5-Acheteur… · 6-Modeles… · 7-Resume_des_articles · sources.md
-    ├── 6-RGPD/        0-carte.md · 1-Comprendre… · 2-Principes… · 3-Droits… · 4-Obligations… · 5-Securite… · 6-Cas_industriels · 7-Modeles… · sources.md
+    ├── 5-IEC_62443/   0-carte.md · 1-Guide_IEC_62443.md · 2-checklist… · 3-plan… · 4-modeles… · sources.md
+    │                  🧰 Guides et cadres (recommandés)
+    ├── 6-ANSSI/       0-carte.md · 1-hygiene_informatique.md · 2-systemes_industriels.md · sources.md
+    ├── 7-NIST/        0-carte.md · 1-Guide_NIST.md · 2-checklist… · 3-plan… · 4-modeles… · sources.md
     └── correspondances.md       ← tableau croisé NIS2 ↔ ISO 27001 ↔ NIST ↔ IEC 62443 ↔ ANSSI
 ```
 
@@ -55,10 +59,11 @@ Rien n'est à enregistrer : le module ne lit ni n'écrit aucun fichier.
 
 **☰** à droite du logo masque ou réaffiche le menu latéral ; **🖨 PDF** imprime la page affichée ou l'enregistre en PDF (module de lecture : ni base à ouvrir, ni export Excel). Recherche et thème restent dans le bandeau.
 
-- **Menu par référentiel** : une catégorie par dossier de `referentiels/` (🇫🇷 ANSSI, 🇺🇸 NIST, 🇪🇺 NIS2, 🌐 ISO 27001, 🇪🇺 CRA, 🇪🇺 RGPD…), ses pages dedans ; les pages de la racine (correspondances) dans la catégorie 🧭 Référentiels.
+- **Trois sections, selon la nature des exigences** (1.7.0) : **⚖️ Réglementation** — obligatoire (NIS2, CRA, RGPD) ; **📐 Normes** — volontaires et certifiables (ISO/IEC 27001, IEC 62443) ; **🧰 Guides et cadres** — recommandés (ANSSI, NIST). L'accueil s'ouvre sur ces trois natures (un clic mène à la section), chaque section rappelle sa portée et la question à se poser ; le menu porte les mêmes en-têtes.
+- **Menu par référentiel** : une catégorie par dossier de `referentiels/` (🇪🇺 NIS2, 🇪🇺 CRA, 🇪🇺 RGPD, 🌐 ISO 27001, 🏭 IEC 62443, 🇫🇷 ANSSI, 🇺🇸 NIST), ses pages dedans ; les pages de la racine (correspondances) dans la catégorie 🧭 Référentiels.
 - **Carte de chaque référentiel** (`0-carte.md`, liste Markdown imbriquée) affichée au choix en **carte mentale**, en **arborescence** ou en liste. Exemple : les six fonctions du NIST CSF 2.0 (Gouverner, Identifier, Protéger, Détecter, Répondre, Rétablir), leurs 22 catégories, puis les liens vers les pages. Aucune bibliothèque : CSS seul, hors ligne.
 - **Lecture** avec le lecteur commun des modules WerbSMSI (`guides.js`) : sommaire cliquable, tableaux, pages précédente et suivante dans le référentiel, signature de chaque page.
-- **Liens entre pages** : les liens Markdown relatifs (`[Plan](3-plan.md)`, `[Carte NIST](../2-NIST/0-carte.md)`) ouvrent la page dans le module ; le bouton Précédent du navigateur ramène à la page d'avant.
+- **Liens entre pages** : les liens Markdown relatifs (`[Plan](3-plan.md)`, `[Carte NIST](../7-NIST/0-carte.md)`) ouvrent la page dans le module ; le bouton Précédent du navigateur ramène à la page d'avant.
 - **Sources officielles** (`sources.md`) : liens vers cyber.gouv.fr, nist.gov, EUR-Lex, iso.org, ouverts dans un nouvel onglet.
 - **Tableau de correspondances** : chaque exigence NIS2 (art. 20, 21 a à j, 23) reliée aux mesures ISO/IEC 27001:2022, aux catégories du NIST CSF 2.0, aux exigences IEC 62443, aux mesures d'hygiène de l'ANSSI et au module WerbSMSI où se trouve la preuve.
 - **🔀 Réf. croisée WerbSMSI** (bouton de l'accueil, menu 🧭 Référentiels) : où chaque exigence est utilisée dans les modules WerbSMSI — NIS2, annexe A d'ISO/IEC 27001:2022, IEC 62443-3-3 et 3-2, hygiène ANSSI, catégories `EX-…` de WerbCartoSI. Vue d'ensemble modules × référentiels (carte de chaleur), part des exigences reprises par référentiel, matrice exigences × modules (◆ référentiel embarqué, ● citation déclarée, ○ repère cité dans un texte) avec filtres et détail des fichiers.
@@ -79,7 +84,7 @@ Le contenu est un ensemble de fichiers Markdown (UTF-8) dans `referentiels/`, in
 
 | Élément | Règle |
 |---|---|
-| Dossier `<n>-<NOM>/` | Un référentiel ; le numéro fixe l'ordre, le nom sans numéro devient la catégorie du menu |
+| Dossier `<n>-<NOM>/` | Un référentiel ; le nom sans numéro devient la catégorie du menu et fixe sa section (DORA, LPM → réglementation ; ISO, IEC → normes ; ANSSI, NIST → guides ; sinon « Autres référentiels ») ; le numéro fixe l'ordre, à garder dans l'ordre des sections. Les identifiants de page (`#guide:3-rgpd-0-carte`) contiennent ce numéro : renuméroter impose de mettre à jour les liens des autres modules (`werb_charte.py exigences` les signale) |
 | `0-carte.md` | Carte du référentiel : une liste imbriquée (domaines → thèmes → liens) ; son premier paragraphe sert de présentation sur l'accueil |
 | `1-….md`, `2-….md` | Pages numérotées dans l'ordre de lecture |
 | `sources.md` | Liens officiels ; rangé en dernier (nom sans numéro) |
@@ -146,7 +151,7 @@ python <WerbSMSI>\charte\outils\werb_charte.py publier .
 
 ## Historique des versions
 
-Version courante : **1.6.3** de novembre 2026 — réf. croisée : citations des catégories de schémas de WerbCartoSI par WerbIEC62443. Précédente : **1.6.2** de novembre 2026 — réf. croisée : référentiel affiché « NIS2 », sans version. Précédente : **1.6.1** de novembre 2026 — réf. croisée : référentiel nommé **NIS2**. Précédente : **1.6.0** de novembre 2026 — bouton **🔀 Réf. croisée WerbSMSI** : table visuelle exigences × modules (NIS2, ISO/IEC 27001, IEC 62443, hygiène ANSSI, catégories EX-…), produite par la table des exigences de la charte. Versions précédentes : **1.5.1** de novembre 2026 — résumé des articles du CRA : un sous-titre par article. Versions précédentes : **1.5.0** de novembre 2026 — CRA : guide « Résumé des articles » (8 chapitres, 71 articles, 8 annexes, articles clés pour un site industriel). Versions précédentes : **1.4.0** de novembre 2026 — nouveau référentiel **RGPD** : carte, sept guides (comprendre le RGPD, principes et bases légales, droits des personnes, obligations du responsable, sécurité et cybersécurité, cas industriels, modèles et check-lists), sources. Versions précédentes : **1.3.0** de novembre 2026 — référentiel **CRA** (Cyber Resilience Act) : carte, cinq guides pour le comprendre et le mettre en œuvre (fabricant, acheteur et exploitant), modèles et check-lists, sources ; socle 1.9.0. Versions précédentes : **1.2.0** d'octobre 2026 — bandeau commun (socle 1.8.0, TRV-7). Versions précédentes : **1.1.0** d'octobre 2026 — thème clair / sombre (socle 1.7.1) ; **1.0.0** d'octobre 2026. Détail dans [CHANGELOG.md](CHANGELOG.md).
+Version courante : **1.7.1** de novembre 2026 — réf. croisée : mesures d'hygiène de l'ANSSI reprises par WerbCyberArcade. Précédente : **1.7.0** de novembre 2026 — référentiels rangés en trois sections (réglementation, normes, guides et cadres) ; nouveau référentiel **IEC 62443** après ISO/IEC 27001 (carte, guide complet, checklist d'audit, plan de mise en œuvre, modèles et registres, sources). Précédente : **1.6.3** de novembre 2026 — réf. croisée : citations des catégories de schémas de WerbCartoSI par WerbIEC62443. Avant : **1.6.2** de novembre 2026 — réf. croisée : référentiel affiché « NIS2 », sans version. Précédente : **1.6.1** de novembre 2026 — réf. croisée : référentiel nommé **NIS2**. Précédente : **1.6.0** de novembre 2026 — bouton **🔀 Réf. croisée WerbSMSI** : table visuelle exigences × modules (NIS2, ISO/IEC 27001, IEC 62443, hygiène ANSSI, catégories EX-…), produite par la table des exigences de la charte. Versions précédentes : **1.5.1** de novembre 2026 — résumé des articles du CRA : un sous-titre par article. Versions précédentes : **1.5.0** de novembre 2026 — CRA : guide « Résumé des articles » (8 chapitres, 71 articles, 8 annexes, articles clés pour un site industriel). Versions précédentes : **1.4.0** de novembre 2026 — nouveau référentiel **RGPD** : carte, sept guides (comprendre le RGPD, principes et bases légales, droits des personnes, obligations du responsable, sécurité et cybersécurité, cas industriels, modèles et check-lists), sources. Versions précédentes : **1.3.0** de novembre 2026 — référentiel **CRA** (Cyber Resilience Act) : carte, cinq guides pour le comprendre et le mettre en œuvre (fabricant, acheteur et exploitant), modèles et check-lists, sources ; socle 1.9.0. Versions précédentes : **1.2.0** d'octobre 2026 — bandeau commun (socle 1.8.0, TRV-7). Versions précédentes : **1.1.0** d'octobre 2026 — thème clair / sombre (socle 1.7.1) ; **1.0.0** d'octobre 2026. Détail dans [CHANGELOG.md](CHANGELOG.md).
 
 ---
 

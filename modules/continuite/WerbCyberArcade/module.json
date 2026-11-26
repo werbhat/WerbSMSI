@@ -1,0 +1,50 @@
+{
+  "charte": "1.0",
+  "id": "werbcyberarcade",
+  "produit": "WerbCyberArcade",
+  "version": "1.2.0",
+  "dateVersion": "2026-11",
+  "auteur": "@WerbHat",
+  "signature": "Développé par @WerbHat",
+  "description": "Jeu de quiz de sensibilisation cyber, maison et travail (guides ANSSI, Cybermalveillance.gouv.fr) ; défis de l'entreprise publiés par l'équipe SMSI",
+  "rubrique": "continuite",
+  "portees": [
+    "groupe"
+  ],
+  "entree": "application/WerbCyberArcade.html",
+  "empreinte": {
+    "algo": "SHA-256",
+    "valeur": "c0acc31f44906828b6a87c4a16db42e09e667746f57d50aae2efaf805545b8d5"
+  },
+  "donnees": {
+    "format": "WERBCYBERARCADE",
+    "schema": 1,
+    "extension": ".werbcyberarcade.json",
+    "formatsLus": []
+  },
+  "echanges": {
+    "publie": [
+      "groupe:defisCyber"
+    ],
+    "consomme": [
+      "groupe:defisCyber"
+    ]
+  },
+  "compatPortail": ">=1.1.1",
+  "licence": "MIT",
+  "navigateurs": [
+    "edge",
+    "chrome",
+    "firefox"
+  ],
+  "sources": [
+    "signature.js",
+    "socle.js",
+    "guides.js",
+    "questions.js",
+    "entreprise.js",
+    "app.js"
+  ],
+  "ouvertureParLien": true,
+  "exemple": "exemples/Exemple.werbcyberarcade.json"
+}

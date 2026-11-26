@@ -58,7 +58,7 @@ Le risque le plus concret reste commercial : sans marquage CE au titre du CRA, u
 
 | Texte | Ce qu'il vise | Lien avec le CRA |
 |---|---|---|
-| **NIS2** ([carte](../3-NIS2/0-carte.md)) | Les **organisations** de secteurs critiques | NIS2 demande de sécuriser la chaîne d'approvisionnement (art. 21 d) ; le CRA rend les produits achetés plus sûrs. Un incident sur un produit peut déclencher les deux signalements, à des destinataires différents. |
+| **NIS2** ([carte](../1-NIS2/0-carte.md)) | Les **organisations** de secteurs critiques | NIS2 demande de sécuriser la chaîne d'approvisionnement (art. 21 d) ; le CRA rend les produits achetés plus sûrs. Un incident sur un produit peut déclencher les deux signalements, à des destinataires différents. |
 | **IEC 62443-4-1 et 4-2** | Cycle de développement sécurisé et exigences des **composants** industriels | Base technique la plus proche des exigences essentielles pour l'OT ; les normes harmonisées du CRA sont en cours d'élaboration. |
 | **Règlement « machines » (UE) 2023/1230** | Sécurité des machines, y compris la protection contre la corruption (accès malveillant) | Applicable en janvier 2027 ; une machine connectée relève des deux textes, chacun pour sa partie. |
 | **ISO/IEC 27001** ([carte](../4-ISO_27001/0-carte.md)) | Le système de management de la sécurité | Les mesures fournisseurs (A.5.19 à A.5.23) et de vulnérabilités (A.8.8) s'appuient sur les engagements CRA des fabricants. |

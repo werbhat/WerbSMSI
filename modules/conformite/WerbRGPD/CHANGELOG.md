@@ -7,6 +7,11 @@ Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/), num
 
 
 
+## [1.4.1] — 2026-11
+
+### Corrections
+- Liens vers les pages RGPD de WerbReferentiels mis à jour : WerbReferentiels 1.7.0 range ses référentiels par section (réglementation, normes, guides) et le dossier RGPD devient `3-RGPD` (adresses `#guide:3-rgpd-…`, auparavant `6-rgpd`).
+
 ## [1.4.0] — 2026-11
 
 ### Modifications

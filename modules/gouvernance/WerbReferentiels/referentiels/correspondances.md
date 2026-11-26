@@ -24,7 +24,7 @@ Le tableau croisé relie chaque exigence NIS2 aux mesures ISO/IEC 27001:2022, au
 | Mesure technique — Sécurité et segmentation des réseaux | A.8.20 à A.8.22 | PR.IR, PR.PS | 3-2 (zones et conduits) ; 3-3 SR 5.1, SR 5.2 | 19 à 23, 25, 27, 28 | WerbMap (zones, conduits, flux), WerbIEC62443 |
 | Mesure technique — Journalisation et détection | A.8.15, A.8.16 | DE.CM, DE.AE | 3-3 SR 2.8, SR 6.1, SR 6.2 | 36 | WerbExploitation (registres) |
 
-Repères : ISO « Cl. » = clause du SMSI, « A.x.y » = mesure de l'Annexe A ; NIST = catégorie du CSF 2.0 ([carte NIST](2-NIST/0-carte.md)) ; IEC 62443 = partie de la série, « SR » = exigence système de 62443-3-3 ; ANSSI = numéro de mesure du [guide d'hygiène](1-ANSSI/1-hygiene_informatique.md).
+Repères : ISO « Cl. » = clause du SMSI, « A.x.y » = mesure de l'Annexe A ; NIST = catégorie du CSF 2.0 ([carte NIST](7-NIST/0-carte.md)) ; IEC 62443 = partie de la série, « SR » = exigence système de 62443-3-3 ([carte IEC 62443](5-IEC_62443/0-carte.md)) ; ANSSI = numéro de mesure du [guide d'hygiène](6-ANSSI/1-hygiene_informatique.md).
 
 ## 2. Vue par domaine pour un site industriel
 
@@ -33,7 +33,7 @@ Grille indicative pour articuler la cybersécurité industrielle avec les réfé
 | Domaine | IEC 62443 | ISO/IEC 27001:2022 | NIS2 | Repères ANSSI |
 |---|---|---|---|---|
 | Gouvernance | 2-1 | Clauses 4 et 5 | Gouvernance et responsabilité des dirigeants | Politique de sécurité et gouvernance OT |
-| Gestion des risques | 3-2, 2-1 | Clause 6 ; Annexe A selon applicabilité | Mesures de gestion des risques | [Classification industrielle](1-ANSSI/2-systemes_industriels.md) |
+| Gestion des risques | 3-2, 2-1 | Clause 6 ; Annexe A selon applicabilité | Mesures de gestion des risques | [Classification industrielle](6-ANSSI/2-systemes_industriels.md) |
 | Inventaire des actifs | 2-1, 3-2 | Annexe A, gestion des actifs | Gestion des risques et des actifs concernés | Inventaire et cartographie OT |
 | Segmentation réseau | 3-2, 3-3 | Annexe A, sécurité des réseaux | Mesures techniques et organisationnelles | Zones, filtrage et architecture industrielle |
 | Identités et accès | 2-1, 3-3, 4-2 | Annexe A, contrôle d'accès et identités | Contrôle d'accès et sécurité des systèmes | Gestion des comptes et accès distants |
@@ -72,4 +72,4 @@ Pour chaque exigence :
 - Citer les éditions : ISO/IEC 27001:2022, NIST CSF 2.0, directive (UE) 2022/2555 et sa transposition nationale.
 - Conserver la traçabilité des décisions et des risques résiduels.
 
-Pour aller plus loin : [carte ANSSI](1-ANSSI/0-carte.md) · [carte NIST](2-NIST/0-carte.md) · [obligations NIS2](3-NIS2/1-obligations.md) · [carte ISO/IEC 27001](4-ISO_27001/0-carte.md).
+Pour aller plus loin : [carte ANSSI](6-ANSSI/0-carte.md) · [carte NIST](7-NIST/0-carte.md) · [obligations NIS2](1-NIS2/1-obligations.md) · [carte ISO/IEC 27001](4-ISO_27001/0-carte.md) · [carte IEC 62443](5-IEC_62443/0-carte.md) · [guide IEC 62443](5-IEC_62443/1-Guide_IEC_62443.md).

@@ -23,7 +23,7 @@ L'ANSSI est l'autorité nationale française de cybersécurité : elle publie de
   - SecNumCloud : informatique en nuage
 - Réglementation
   - LPM : opérateurs d'importance vitale (OIV) et leurs SIIV
-  - [NIS2 : entités essentielles et importantes](../3-NIS2/0-carte.md)
+  - [NIS2 : entités essentielles et importantes](../1-NIS2/0-carte.md)
 - Crise et incidents
   - CERT-FR : alertes et avis de sécurité
   - Fiches réflexes en cas d'incident

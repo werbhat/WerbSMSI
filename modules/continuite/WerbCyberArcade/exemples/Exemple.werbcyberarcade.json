@@ -1,0 +1,83 @@
+{
+ "format": "WERBCYBERARCADE",
+ "schema": 1,
+ "famille": "WERBSMSI",
+ "meta": {
+  "produit": "WerbCyberArcade",
+  "appVersion": "1.2.0",
+  "auteur": "@WerbHat",
+  "generateur": "WerbCyberArcade v1.2.0 – Développé par @WerbHat",
+  "creeLe": "2026-11-26",
+  "modifieLe": "2026-11-26T09:00:00Z",
+  "modifiePar": "Exemple",
+  "portee": "groupe"
+ },
+ "verrou": null,
+ "journal": [],
+ "data": {
+  "titre": "Les réflexes cyber de la maison Exemple",
+  "versionPubliee": 0,
+  "publieLe": "",
+  "defis": [
+   {
+    "id": "E01",
+    "type": "qcm",
+    "lieu": "travail",
+    "theme": "entreprise",
+    "q": "Votre poste affiche un message de rançon. Quel numéro interne appeler en premier ?",
+    "choix": [
+     "Le support informatique, poste 4242 (24 h / 24)",
+     "Le standard de l'accueil",
+     "Le numéro indiqué dans le message de rançon",
+     "Personne : on attend le lendemain"
+    ],
+    "expl": "Le support informatique déclenche la procédure d'incident. Ne contactez jamais l'attaquant ; débranchez le poste du réseau sans l'éteindre.",
+    "source": "Procédure de gestion des incidents, § 2 (exemple fictif)"
+   },
+   {
+    "id": "E02",
+    "type": "vf",
+    "lieu": "travail",
+    "theme": "entreprise",
+    "q": "La charte informatique autorise l'installation d'une extension de navigateur trouvée sur Internet, si elle est gratuite.",
+    "vrai": false,
+    "expl": "Toute installation passe par une demande au support : les extensions peuvent lire les pages consultées, mots de passe compris.",
+    "source": "Charte informatique, article 4 (exemple fictif)"
+   },
+   {
+    "id": "E03",
+    "type": "piege",
+    "lieu": "travail",
+    "theme": "messagerie",
+    "forme": "courriel",
+    "q": "Ce courriel arrive à la paie, la veille du virement des salaires. Touchez les indices suspects.",
+    "entete": "De : Camille Exemple <camille.exemple.rh@messagerie-perso.example>",
+    "indiceEntete": "Une adresse personnelle, pas l'adresse professionnelle de la collègue.",
+    "segments": [
+     {
+      "t": "Bonjour,",
+      "s": false,
+      "pq": ""
+     },
+     {
+      "t": "j'ai changé de banque : voici mon nouveau RIB,",
+      "s": true,
+      "pq": "Changement de coordonnées bancaires par simple courriel."
+     },
+     {
+      "t": "à appliquer dès ce mois-ci, c'est urgent.",
+      "s": true,
+      "pq": "L'urgence empêche la vérification."
+     },
+     {
+      "t": "Merci beaucoup !",
+      "s": false,
+      "pq": ""
+     }
+    ],
+    "expl": "Un changement de RIB se vérifie toujours en appelant la personne à son numéro habituel, et suit le formulaire RH.",
+    "source": "Procédure paie, changement de coordonnées bancaires (exemple fictif)"
+   }
+  ]
+ }
+}

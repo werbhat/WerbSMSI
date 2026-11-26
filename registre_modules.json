@@ -153,7 +153,7 @@
       "chemin": "modules/gouvernance/WerbReferentiels",
       "depot": "../WerbReferentiels",
       "etat": "publie",
-      "version": "1.6.3",
+      "version": "1.7.1",
       "etape": "gouverner"
     },
     {
@@ -217,7 +217,7 @@
       "chemin": "modules/conformite/WerbRGPD",
       "depot": "../WerbRGPD",
       "etat": "publie",
-      "version": "1.4.0",
+      "version": "1.4.1",
       "etape": "exigences"
     },
     {
@@ -266,6 +266,14 @@
       "depot": "../WerbAcademie",
       "etat": "publie",
       "version": "1.10.0",
+      "etape": "competences"
+    },
+    {
+      "id": "werbcyberarcade",
+      "chemin": "modules/continuite/WerbCyberArcade",
+      "depot": "../WerbCyberArcade",
+      "etat": "publie",
+      "version": "1.2.0",
       "etape": "competences"
     }
   ]
