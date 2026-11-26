@@ -153,7 +153,7 @@
       "chemin": "modules/gouvernance/WerbReferentiels",
       "depot": "../WerbReferentiels",
       "etat": "publie",
-      "version": "1.7.1",
+      "version": "1.7.2",
       "etape": "gouverner"
     },
     {
@@ -273,7 +273,7 @@
       "chemin": "modules/continuite/WerbCyberArcade",
       "depot": "../WerbCyberArcade",
       "etat": "publie",
-      "version": "1.4.0",
+      "version": "1.8.0",
       "etape": "competences"
     }
   ]

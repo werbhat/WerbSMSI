@@ -3,6 +3,48 @@
 Toutes les évolutions notables de WerbCyberArcade sont consignées ici.
 Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/), numérotation [SemVer](https://semver.org/lang/fr/).
 
+## [1.8.0] — 2026-11
+
+### Ajouts
+- **Choix de la difficulté** à l'accueil : 🎲 toutes, 🟢 débutant, 🟠 intermédiaire, 🔴 expert, avec le nombre de défis disponibles. Les 90 défis d'origine ont reçu un niveau : tout le catalogue (204 défis) est classé. Les défis de l'entreprise peuvent avoir une difficulté (éditeur, champ facultatif ; sans difficulté, ils sortent dans toutes).
+- **🗺️ Mode Parcours** : trois niveaux de cinq défis, 🟢 → 🟠 → 🔴. Un niveau réussi à 70 % débloque le suivant et rend une vie ; sinon la partie s'arrête. Chrono, vies et combos comme en arcade ; écran « NIVEAU OK » entre deux niveaux, état des niveaux au bilan. Rien n'est retenu après la partie.
+- **🎓 Attestation de sensibilisation** : depuis le bilan, une page sobre et imprimable (ou à enregistrer en PDF) — participant (nom obligatoire), organisation, date, partie, résultat, thèmes abordés, guides sources, code défi, version du jeu, zones de signature du participant et de l'équipe SMSI, rappel des exigences couvertes (ISO/IEC 27001 A.6.3, NIS2 4.2-EI/EE, guide d'hygiène ANSSI mesure 2). Envoi préparé par courriel ou texte à copier. Le jeu n'enregistre rien.
+- **🎯 Rejouer mes erreurs** : en fin de partie, les défis manqués reviennent, mélangés, sans chrono ; ni code, ni score, ni attestation pour une révision.
+- **9 nouveaux défis** « Repère le piège » et « Bon réflexe » pour les thèmes qui n'avaient que des quiz : 💸 faux conseiller bancaire, carte bancaire saisie sur un faux site ; 📲 code d'association demandé par un faux proche, téléphone à vendre ; 🎭 faux courriel RH, faux technicien du support ; 🎩 ordre de mission de test d'intrusion non conforme, phases d'un test ; 🕸️ correction d'une injection SQL.
+
+### Modifications
+- **Code défi** : `WCA-<terrain><mode><nombre><difficulté>-<graine><catalogue>` (ex. `WCA-2010-K3Q9ZP7F`). Les deux derniers caractères sont l'empreinte du catalogue de défis : un code créé avec un autre catalogue, ou avant la 1.8.0, est refusé avec une explication au lieu de proposer en silence d'autres questions.
+- Charte : difficulté facultative `niveau` des défis de `groupe:defisCyber` (schéma et CHARTE.md).
+
+## [1.7.0] — 2026-11
+
+### Ajouts
+- **🎵 Musique de fond rétro** : « 8-bit Retro » de Monume (Pixabay, piste 629800), réencodée en MP3 mono 22,05 kHz à 40 kb/s (son lo-fi assumé, 567 Ko au lieu de 3,6 Mo) et intégrée au livrable. Bouton **🎵 Musique** à côté du bouton Son, **coupée par défaut**, lecture en boucle avec fondu d'entrée, pause quand l'onglet est masqué, reprise là où elle s'était arrêtée. En Hacker mode, la piste est ralentie et assourdie (ambiance terminal).
+- Lecture par Web Audio, décodée en mémoire au premier clic : CSP inchangée (pas de `media-src`), aucun accès réseau ; réglage oublié à la fermeture (P2).
+- Outil `outils/encoder_musique.py` : réencode un MP3 (ffmpeg) dans `sources/assets/musique.mp3` et produit `sources/src/musique.js` (crédits + piste en base 64). Crédits affichés dans 📚 Sources.
+
+## [1.6.0] — 2026-11
+
+### Ajouts
+- **Bibliothèque de quiz importée** : 93 nouveaux quiz (35 au travail, 36 à la maison, 31 en Hacker mode, moins 9 écartés), chacun avec son **niveau** 🟢 débutant, 🟠 intermédiaire ou 🔴 expert, affiché en étiquette pendant la partie.
+- **Outil d'import** `outils/importer_quiz.py` : convertit une bibliothèque JSON (terrain, thème, niveau, bonne réponse, trois mauvaises, explication, source) en `sources/src/questions_bibliotheque.js`, intégré au livrable. Table de correspondance des thèmes, sources corrigées question par question, questions écartées ; l'outil refuse une source « exemple fictif » ou une attribution ANSSI non rattachée à une mesure précise.
+- **Troisième guide source** : *Les essentiels — hygiène numérique des téléphones mobiles* de l'ANSSI (v1.1, décembre 2025, 10 règles) et 12 défis tirés de ses règles (redémarrage, bornes USB, interfaces sans fil, autorisations, réunions sensibles et mode avion, séparation des usages, messageries chiffrées, mode Isolement, CERT-FR).
+- **Onze thèmes** : maison 💸 Arnaques, 🕵️ Vie privée, 📲 Smartphone, 👨‍👩‍👧 Enfants et famille ; travail 🎭 Ingénierie sociale, 🏛️ Architecture de sécurité ; Hacker mode 🎩 Pentest et éthique, 💡 Bases du hacking, 📖 Frameworks et vocabulaire, 🕸️ Attaques web et cloud, 🔑 Cryptographie ; bons réflexes complétés (box Internet, shadow IT et IA, Kerberoasting, mouvement latéral, mémoire vive).
+- **Références nommées** (`["texte", "…"]`) : une norme, un texte ou une bonne pratique reconnue (OWASP, MITRE ATT&CK, RFC, RGPD, Code pénal…) ; page 📚 Sources : carte « Autres références ». La source d'un thème réunit désormais tous les guides et références de ses défis.
+- Mesures 9 et 34 du guide d'hygiène ajoutées aux mesures citées.
+
+### Écartés à l'import
+- TRV-001 (défi propre à une entreprise fictive : il relève des défis de l'entreprise) ; doublons de défis déjà au catalogue : TRV-008, TRV-010, TRV-013, TRV-028, MAI-004, MAI-017, MAI-022, MAI-031.
+
+## [1.5.0] — 2026-11
+
+### Ajouts
+- **💀 Hacker mode** : niveau expert, quatrième terrain (`lieu: "hacker"`) avec sa propre liste de **24 défis** tirés des mesures techniques du *Guide d'hygiène informatique* de l'ANSSI (mesures 8, 11, 12, 13, 14, 19, 20, 21, 22, 23, 27, 28, 29, 36, 42) : comptes d'administration nominatifs et distincts, authentification forte, identifiants par défaut, coffre-fort de mots de passe, poste et réseau d'administration, droits d'administration des postes, segmentation et cloisonnement, SSH, Wi-Fi WPA2, passerelle Internet, services exposés, journalisation (un an, NTP), durcissement des postes, produits qualifiés ; un « Repère le piège » (faux support éditeur) et un « Bon réflexe » (mise en service d'un commutateur).
+- Quatre thèmes experts (🔐 Authentification, 🛠️ Administration du SI, 🧱 Réseau et cloisonnement, 📜 Journaux et durcissement) et leur page **Bons réflexes › 💀 Hacker mode**.
+- Règles du mode : chrono ×0,7, points ×1,5. Ambiance **terminal vert phosphore** (pluie de code, invite `root@smsi:~$`, repère « HACKER MODE »), bannière **ACCESS GRANTED** / **ACCESS DENIED** en fin de partie.
+- « Les deux » reste maison et travail, sans les défis experts. Code défi `WCA-3…` pour une partie Hacker mode.
+- Éditeur des défis de l'entreprise : terrain **💀 Hacker mode (expert)** pour créer ses propres défis experts ; charte : valeur `hacker` du terrain dans `groupe:defisCyber`.
+
 ## [1.4.0] — 2026-11
 
 ### Ajouts

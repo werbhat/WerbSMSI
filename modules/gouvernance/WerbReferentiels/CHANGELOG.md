@@ -4,6 +4,11 @@ Toutes les évolutions notables de WerbReferentiels sont consignées ici.
 Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/), numérotation [SemVer](https://semver.org/lang/fr/).
 
 
+## [1.7.2] — 2026-11
+
+### Changements
+- **Réf. croisée WerbSMSI** régénérée : WerbCyberArcade 1.8.0 — mesures du guide d'hygiène citées par ses défis et par son attestation de sensibilisation (mesure 2), NIS2 4.2-EI/EE (programme de sensibilisation), ISO/IEC 27001 A.6.3.
+
 ## [1.7.1] — 2026-11
 
 ### Changements

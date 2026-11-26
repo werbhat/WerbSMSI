@@ -5,12 +5,15 @@ WerbCyberArcade est un jeu de quiz pour prendre les bons réflexes de cybersécu
 
 ## D'où viennent les questions
 
-Les défis sont rédigés pour le jeu à partir de deux guides publics, reformulés et jamais recopiés :
+Les défis sont rédigés pour le jeu à partir de trois guides publics, reformulés et jamais recopiés :
 
 | Terrain | Guide | Ce qu'il couvre |
 |---|---|---|
 | 🏠 À la maison | *Cyber guide famille* de Cybermalveillance.gouv.fr (10 bonnes pratiques) | Mots de passe, sauvegardes, mises à jour, antivirus, achats en ligne, messages suspects, réseaux sociaux, Wi-Fi publics, objets connectés, cyberharcèlement |
-| 🏢 Au travail | *Guide d'hygiène informatique* de l'ANSSI (42 mesures) | Les mesures qui concernent chaque collaborateur : poste de travail, messagerie, clés USB, déplacements, réaction à un incident, comptes et données |
+| 🏢 Au travail | *Guide d'hygiène informatique* de l'ANSSI (42 mesures) | Les mesures qui concernent chaque collaborateur : poste de travail, messagerie, clés USB, déplacements, réaction à un incident, comptes et données, ingénierie sociale, architecture |
+| 🏠 🏢 Les deux | *Les essentiels — hygiène numérique des téléphones mobiles* de l'ANSSI (10 règles) | Mises à jour et redémarrage, appareils inconnus, interfaces sans fil, autorisations, réunions sensibles, séparation des usages, messageries chiffrées |
+
+Certains défis, surtout en Hacker mode, citent une **référence nommée** : une norme ou un référentiel (OWASP, MITRE ATT&CK, RFC), un texte (RGPD, Code pénal) ou une bonne pratique reconnue. Chaque défi porte un **niveau** — 🟢 débutant, 🟠 intermédiaire, 🔴 expert — affiché en étiquette pendant la partie.
 
 Après chaque réponse, le jeu affiche l'explication et la source exacte (numéro de la bonne pratique ou de la mesure). La page **📚 Sources** du menu donne les références complètes et les liens vers les guides.
 
@@ -20,6 +23,26 @@ Après chaque réponse, le jeu affiche l'explication et la source exacte (numér
 - **⚖️ Vrai ou faux** : une affirmation à juger vite.
 - **🎣 Repère le piège** : un faux SMS, un faux courriel ou un faux site. Le joueur touche tous les éléments suspects (expéditeur, lien, urgence, demande de mot de passe…), puis valide. Une fausse alerte coûte des points.
 - **🧩 Bon réflexe** : remettre dans l'ordre les étapes d'une bonne réaction, par exemple face à un poste attaqué.
+
+## 💀 Hacker mode (niveau expert)
+
+Pour les informaticiens, administrateurs et référents sécurité : un quatrième terrain, **💀 Hacker mode**, avec sa propre liste de défis tirés des mesures techniques du guide d'hygiène de l'ANSSI — comptes d'administration, authentification forte, cloisonnement du réseau, protocoles sécurisés, Wi-Fi d'entreprise, journalisation. Le chrono est 30 % plus court et les points multipliés par 1,5 ; l'écran passe en terminal vert. « Les deux » ne mélange que maison et travail : le Hacker mode se choisit à part. Ses bons réflexes ont leur page (**🛡️ Bons réflexes › 💀 Hacker mode**). L'équipe SMSI peut créer ses propres défis experts dans l'éditeur (terrain *💀 Hacker mode*).
+
+## Difficulté et parcours (1.8.0)
+
+Chaque défi a un niveau : 🟢 débutant, 🟠 intermédiaire ou 🔴 expert. À l'accueil, **Quelle difficulté ?** limite la partie à un niveau (le nombre de défis disponibles s'affiche) ; « Toutes » mélange les trois. Pour un public novice, commencez en 🟢 ; pour une équipe informatique, 🔴 ou le Hacker mode.
+
+Le mode **🗺️ Parcours** enchaîne trois niveaux de cinq défis, du débutant à l'expert. Il faut **70 %** de réussite (quatre défis sur cinq) pour débloquer le niveau suivant, qui rend une vie au passage ; sinon la partie s'arrête. Chrono, vies et combos sont ceux de l'arcade. C'est un bon format de démonstration en ouverture de session : la difficulté monte d'elle-même.
+
+## Rejouer ses erreurs
+
+En fin de partie, **🎯 Rejouer mes erreurs** relance aussitôt les défis manqués, sans chrono, pour fixer la bonne réponse. Une révision ne donne ni code défi, ni score, ni attestation.
+
+## L'attestation de sensibilisation
+
+Depuis le bilan, **🎓 Établir mon attestation** ouvre une page sobre, prête à imprimer ou à enregistrer en PDF : nom du participant (obligatoire), organisation, date, partie jouée, résultat, thèmes abordés, guides sources, code défi et version du jeu, avec deux zones de signature (participant, équipe SMSI). Elle rappelle les exigences qu'elle aide à couvrir : **ISO/IEC 27001 A.6.3** (sensibilisation), **NIS2 4.2-EI/EE** (programme de sensibilisation des utilisateurs) et la **mesure 2** du guide d'hygiène de l'ANSSI.
+
+Le jeu n'enregistre rien : c'est le participant qui imprime, enregistre ou envoie son attestation (**📧 Envoyer à l'équipe SMSI** prépare le courriel). L'équipe SMSI la classe dans son registre de sensibilisation. Le code défi imprimé permet, au besoin, de rejouer exactement la même partie.
 
 ## Les deux modes
 
@@ -58,7 +81,7 @@ Idée d'animation : un **défi de la semaine**. L'animateur joue une partie, env
 
 ## L'habillage rétro
 
-Les pages du joueur (accueil, partie, bilan, scores, bons réflexes) ont un habillage de borne d'arcade : ciel étoilé, grille « synthwave », titre en pixels, envahisseurs, cœurs pixel, points qui s'envolent, « STAGE CLEAR » ou « GAME OVER » en fin de partie. Le bouton **🔇 Son coupé** active des sons 8 bits (coupés par défaut, pensez-y en salle). Les animations s'arrêtent si Windows demande de limiter les animations (*Paramètres › Accessibilité › Effets visuels*). L'administration, les sources et l'aide gardent l'affichage standard.
+Les pages du joueur (accueil, partie, bilan, scores, bons réflexes) ont un habillage de borne d'arcade : ciel étoilé, grille « synthwave », titre en pixels, envahisseurs, cœurs pixel, points qui s'envolent, « STAGE CLEAR » ou « GAME OVER » en fin de partie. Le bouton **🔇 Son coupé** active des sons 8 bits et le bouton **🎵 Musique coupée** une musique de fond rétro en boucle (tous deux coupés par défaut : pensez-y en salle, la musique se met en pause si l'onglet est masqué ; en Hacker mode, elle est ralentie et assourdie). Les animations s'arrêtent si Windows demande de limiter les animations (*Paramètres › Accessibilité › Effets visuels*). L'administration, les sources et l'aide gardent l'affichage standard.
 
 ## Au clavier
 
@@ -98,6 +121,8 @@ Les joueurs qui ouvrent le jeu depuis le portail reçoivent les défis sans rien
 
 ## Ajouter ou modifier des défis du jeu de base
 
-Les défis sont rangés dans `sources/src/questions.js`, dans le dépôt du module. Chacun porte un identifiant unique, un terrain (`maison` ou `travail`), un thème, un type et sa source (`["famille", n]` ou `["hygiene", n]`). Pour un quiz, la bonne réponse est la première de la liste : le jeu mélange l'ordre à l'affichage. Reconstruire ensuite le module, puis le publier (`werb_charte.py construire`, `empreinte`, `audit`, `publier`).
+Les défis sont rangés dans `sources/src/questions.js`, dans le dépôt du module. Chacun porte un identifiant unique, un terrain (`maison`, `travail` ou `hacker`), un thème, un type, un niveau (`debutant`, `intermediaire` ou `expert`) et sa source (`["famille", n]`, `["hygiene", n]`, `["mobiles", n]` ou `["texte", "référence"]`). Toute modification du catalogue change son empreinte : les codes défi déjà partagés sont alors refusés, avec une explication. Pour un quiz, la bonne réponse est la première de la liste : le jeu mélange l'ordre à l'affichage. Reconstruire ensuite le module, puis le publier (`werb_charte.py construire`, `empreinte`, `audit`, `publier`).
 
 Les scènes « Repère le piège » sont fictives : numéros, adresses, noms de personnes et de sites sont inventés. Gardez cette règle pour toute nouvelle scène.
+
+**Importer une bibliothèque de quiz (JSON).** `python outils\importer_quiz.py <bibliotheque.json>` convertit chaque question (terrain, thème, niveau, bonne réponse, trois mauvaises, explication, source) en quiz du jeu et écrit `sources/src/questions_bibliotheque.js`. Les tables de l'outil font correspondre les thèmes, corrigent les sources (rattachement à une mesure ou une règle précise) et écartent les doublons ; une source « exemple fictif » ou une attribution vague à l'ANSSI arrête l'import avec la liste des questions à traiter. Les défis propres à votre entreprise ne vont pas dans le catalogue de base : créez-les dans l'éditeur des défis de l'entreprise.

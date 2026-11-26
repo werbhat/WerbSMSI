@@ -2,7 +2,7 @@
   "charte": "1.0",
   "id": "werbreferentiels",
   "produit": "WerbReferentiels",
-  "version": "1.7.1",
+  "version": "1.7.2",
   "dateVersion": "2026-11",
   "auteur": "@WerbHat",
   "signature": "Développé par @WerbHat",
@@ -14,7 +14,7 @@
   "entree": "application/WerbReferentiels.html",
   "empreinte": {
     "algo": "SHA-256",
-    "valeur": "13ed9b62e0b79f2fc4bc24755133463542e56178a24a88cb924501c7eb0dff49"
+    "valeur": "eeb514e79823448892a23a2fd822abf7ef6820c527e57faeb567f71e384b4f52"
   },
   "echanges": {
     "publie": [],
