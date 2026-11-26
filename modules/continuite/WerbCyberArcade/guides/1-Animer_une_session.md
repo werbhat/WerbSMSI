@@ -56,6 +56,10 @@ Idée d'animation : un **défi de la semaine**. L'animateur joue une partie, env
 - Depuis **🛡️ Bons réflexes**, le bouton **S'entraîner** lance une partie sur un seul thème, sans chrono : utile pour revoir un point faible.
 - Pour un suivi des formations dans WerbSMSI, enregistrez la session dans **WerbAcademie** (date, public, thème).
 
+## L'habillage rétro
+
+Les pages du joueur (accueil, partie, bilan, scores, bons réflexes) ont un habillage de borne d'arcade : ciel étoilé, grille « synthwave », titre en pixels, envahisseurs, cœurs pixel, points qui s'envolent, « STAGE CLEAR » ou « GAME OVER » en fin de partie. Le bouton **🔇 Son coupé** active des sons 8 bits (coupés par défaut, pensez-y en salle). Les animations s'arrêtent si Windows demande de limiter les animations (*Paramètres › Accessibilité › Effets visuels*). L'administration, les sources et l'aide gardent l'affichage standard.
+
 ## Au clavier
 
 | Touche | Effet |
@@ -66,6 +70,17 @@ Idée d'animation : un **défi de la semaine**. L'animateur joue une partie, env
 
 ## Créer les défis de votre entreprise (équipe SMSI)
 
+**Le plus simple : un fichier à côté du jeu.** Le jeu est un fichier HTML ; posé sur un partage de fichiers de l'entreprise, il suffit de déposer à côté le fichier de défis :
+
+1. Ouvrir WerbCyberArcade, **⚙️ Administration › Défis de l'entreprise**, **✨ Nouvelle base** (puis **💾 Enregistrer**, pour retrouver ses défis la fois suivante avec **📂 Ouvrir une base**).
+2. Renseigner le **nom de l'entreprise**, créer les défis (voir ci-dessous), les **▶ Essayer**.
+3. **⬇ Exporter le fichier de défis** : enregistrer `defis_entreprise.css` **dans le même dossier que `WerbCyberArcade.html`**, sous ce nom exact.
+4. C'est tout : chaque joueur qui ouvre le jeu a les défis de l'entreprise, sans cliquer ni autoriser quoi que ce soit. Pour une mise à jour, exporter de nouveau et remplacer le fichier.
+
+Le fichier ne contient que des données (il ne peut ni exécuter de code ni changer l'apparence du jeu) ; ne le modifiez pas à la main, refaites-le depuis l'éditeur. Gardez le dossier du partage en lecture seule pour les joueurs.
+
+**Avec le portail WerbSMSI**, l'équipe SMSI peut aussi publier les défis dans l'espace du groupe :
+
 Les 66 défis du jeu viennent des guides publics. Pour parler **de chez vous** — qui appeler, où signaler, la charte informatique, un piège déjà reçu — l'équipe SMSI du groupe crée ses propres défis, **sans rien installer ni reconstruire** :
 
 1. Ouvrir WerbCyberArcade depuis la **puce « groupe »** du module dans le portail (l'espace est alors transmis), puis **⚙️ Administration › Défis de l'entreprise**.
@@ -74,7 +89,7 @@ Les 66 défis du jeu viennent des guides publics. Pour parler **de chez vous** �
 4. **▶ Essayer** : le défi tel que les joueurs le verront, sans compter dans les scores.
 5. **📤 Publier** : les défis prêts partent dans `publications/werbcyberarcade.json` (version 1, 2, 3…). La base est enregistrée aussitôt avec le numéro de version.
 
-Les joueurs qui ouvrent le jeu depuis le portail reçoivent les défis sans rien faire ; sinon, l'encart **🏢 Défis de l'entreprise** de l'accueil propose **📂 Charger les défis de l'entreprise** (choisir le dossier de l'espace). Une case permet de les mêler ou non aux défis du jeu ; ils ont leur thème, **🏢 Règles de l'entreprise**, dans les bons réflexes.
+Les joueurs qui ouvrent le jeu depuis le portail reçoivent les défis sans rien faire. L'état des défis chargés (fichier ou espace), la case pour les mêler ou non aux défis du jeu sur un poste et le chargement depuis l'espace sont dans **⚙️ Administration › Défis de l'entreprise** : la page du joueur n'en montre rien ; les défis y ont leur thème, **🏢 Règles de l'entreprise**, dans les bons réflexes.
 
 À retenir :
 

@@ -1,15 +1,15 @@
 <!doctype html>
-<!-- WerbCyberArcade v1.2.0 – Développé par @WerbHat – build novembre 2026 -->
+<!-- WerbCyberArcade v1.4.0 – Développé par @WerbHat – build novembre 2026 -->
 <html lang="fr">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data: blob:; font-src data:; connect-src blob: data:; worker-src blob:; form-action 'none'; base-uri 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline' 'self' file:; img-src data: blob:; font-src data:; connect-src blob: data:; worker-src blob:; form-action 'none'; base-uri 'none'">
 <meta name="referrer" content="no-referrer">
 <title>WerbCyberArcade</title>
 <meta name="application-name" content="WerbCyberArcade">
 <meta name="author" content="@WerbHat">
-<meta name="generator" content="WerbCyberArcade v1.2.0 – Développé par @WerbHat">
+<meta name="generator" content="WerbCyberArcade v1.4.0 – Développé par @WerbHat">
 <meta name="description" content="Jeu de quiz de sensibilisation cyber, maison et travail (guides ANSSI, Cybermalveillance.gouv.fr) ; défis de l'entreprise publiés par l'équipe SMSI">
 <style>/*! WerbCyberArcade – Développé par @WerbHat */
 /* Variables communes (charte §7.5) : valeurs claires ici, valeurs sombres des variables communes fournies par le socle ;
@@ -286,6 +286,190 @@ tr.wca-ed-sel td { background: var(--opt-act); }
 .wca-ed-etapes li { margin-bottom: 6px; }
 .wca-ed-etapes li input { width: calc(100% - 90px); margin-right: 4px; }
 ul.wca-erreur { margin: 6px 0; padding-left: 20px; }
+.wca-diffuser { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 12px; margin: 8px 0; }
+.wca-diffuser > div { border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; background: var(--info-bg); }
+.wca-diffuser p { margin: 4px 0 8px; }
+
+/* ================================================================ Thème rétro-gaming (1.4.0)
+   Pages du joueur seulement (#app.retro : accueil, partie, bilan, scores, bons réflexes) ; administration, sources et aide gardent le
+   thème standard. Décor : ciel étoilé, soleil rayé (écran titre), sol en grille « synthwave » qui défile, voile cathodique. Animations
+   limitées aux transformations et à l'opacité ; toutes coupées si le système limite les animations. Identique en clair et en sombre. */
+#sidebar { grid-column: 1; grid-row: 2; }
+#main { grid-column: 2; grid-row: 2; position: relative; z-index: 1; }
+#wca-fond { grid-column: 2; grid-row: 2; position: relative; z-index: 0; overflow: hidden; display: none; pointer-events: none;
+  background: linear-gradient(180deg, #05030f 0%, #0e0828 38%, #241044 62%, #3a1250 70%, #0b0420 71%, #07021a 100%); }
+#app.retro #wca-fond { display: block; }
+#app.retro #main { background: transparent; color: var(--ar-texte); }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* ciel : deux couches d'étoiles qui scintillent en décalé */
+.etoiles { position: absolute; inset: 0 0 30% 0; background-repeat: repeat; }
+.etoiles.e1 { background-image: radial-gradient(1px 1px at 12px 18px, #fff, transparent), radial-gradient(1px 1px at 90px 60px, #cfd8ff, transparent),
+  radial-gradient(1.5px 1.5px at 150px 120px, #fff, transparent), radial-gradient(1px 1px at 40px 140px, #ffd6f0, transparent);
+  background-size: 180px 170px; animation: wca-scintille 3.2s steps(2) infinite; }
+.etoiles.e2 { background-image: radial-gradient(1.5px 1.5px at 60px 30px, #b5f6ff, transparent), radial-gradient(1px 1px at 130px 90px, #fff, transparent),
+  radial-gradient(2px 2px at 20px 110px, #fff3a0, transparent); background-size: 230px 200px; animation: wca-scintille 4.6s steps(2) infinite reverse; }
+@keyframes wca-scintille { 50% { opacity: .35; } }
+/* soleil rayé, sur l'écran titre */
+.soleil { position: absolute; left: 50%; bottom: 29%; width: min(46vw, 420px); aspect-ratio: 1; transform: translateX(-50%); border-radius: 50%; display: none;
+  background: linear-gradient(180deg, #fff3a0 0%, #ffb020 35%, #ff3ea5 70%, #a01e8c 100%);
+  -webkit-mask: linear-gradient(180deg, #000 0 50%, transparent 50% 54%, #000 54% 62%, transparent 62% 67%, #000 67% 74%, transparent 74% 80%, #000 80% 86%, transparent 86% 93%, #000 93%);
+  mask: linear-gradient(180deg, #000 0 50%, transparent 50% 54%, #000 54% 62%, transparent 62% 67%, #000 67% 74%, transparent 74% 80%, #000 80% 86%, transparent 86% 93%, #000 93%);
+  filter: drop-shadow(0 0 40px rgba(255, 62, 165, .55)); animation: wca-soleil 6s ease-in-out infinite; }
+#app.retro[data-vue=accueil] .soleil { display: block; }
+@keyframes wca-soleil { 50% { transform: translateX(-50%) translateY(6px); } }
+/* sol : grille en perspective qui défile vers le joueur */
+.sol { position: absolute; left: -50%; right: -50%; bottom: 0; height: 30%; perspective: 320px; overflow: hidden;
+  -webkit-mask: linear-gradient(180deg, transparent, #000 35%); mask: linear-gradient(180deg, transparent, #000 35%); }
+.sol::before { content: ""; position: absolute; inset: -60px 0 0 0; transform-origin: 50% 0; transform: rotateX(62deg);
+  background: repeating-linear-gradient(90deg, rgba(255, 62, 165, .65) 0 2px, transparent 2px 64px), repeating-linear-gradient(0deg, rgba(51, 225, 255, .55) 0 2px, transparent 2px 60px);
+  animation: wca-sol 1.4s linear infinite; }
+@keyframes wca-sol { from { translate: 0 0; } to { translate: 0 60px; } }
+.crt { position: absolute; inset: 0; background: repeating-linear-gradient(0deg, rgba(0, 0, 0, .22) 0 1px, transparent 1px 3px), radial-gradient(ellipse at center, transparent 55%, rgba(0, 0, 0, .65) 100%); }
+
+/* panneaux : cadres pixel sombres et néon */
+#app.retro h1 { color: #fff; text-shadow: 0 0 10px rgba(51, 225, 255, .6); font-family: Consolas, "Courier New", monospace; letter-spacing: .02em; }
+#app.retro .sub, #app.retro .muted { color: var(--ar-doux); }
+#app.retro a { color: #ff7ac6; }
+#app.retro .card { background: rgba(10, 8, 32, .86); color: var(--ar-texte); border: 2px solid #4b3a96; border-radius: 0;
+  box-shadow: 0 0 0 2px #070418, 6px 6px 0 rgba(0, 0, 0, .55), inset 0 0 24px rgba(165, 133, 255, .12); }
+#app.retro .card h2 { color: var(--ar-cyan); font: 800 15px Consolas, "Courier New", monospace; text-transform: uppercase; letter-spacing: .08em; text-shadow: 0 0 8px rgba(51, 225, 255, .5); }
+#app.retro .card h3 { color: var(--ar-jaune); }
+#app.retro table.t th, #app.retro table.t td { border-color: #2c2566; }
+#app.retro table.t th { color: var(--ar-cyan); font-family: Consolas, monospace; text-transform: uppercase; font-size: 12px; }
+#app.retro tr.wca-top td { color: var(--ar-jaune); text-shadow: 0 0 6px rgba(255, 210, 63, .5); }
+#app.retro code { background: #1b1446; color: #b5f6ff; }
+#app.retro kbd { color: var(--ar-cyan); }
+#app.retro input[type=text] { background: #0b0826; color: #fff; border: 2px solid #3a4390; border-radius: 0; font-family: Consolas, monospace; }
+#app.retro input[type=text]:focus { outline: none; border-color: var(--ar-cyan); box-shadow: 0 0 10px rgba(51, 225, 255, .5); }
+#app.retro .wca-regles-g div { background: rgba(51, 225, 255, .06); border: 1px dashed #3a4390; border-radius: 0; }
+#app.retro .wca-regles-g b { color: var(--ar-jaune); }
+
+/* boutons pixel : relief, ombre dure, enfoncement au clic */
+#app.retro .wca-btn, #app.retro .wca-son { font: 800 14px Consolas, "Courier New", monospace; text-transform: uppercase; letter-spacing: .06em; border-radius: 0;
+  border: 3px solid #120626; box-shadow: inset -4px -4px 0 rgba(0, 0, 0, .35), inset 4px 4px 0 rgba(255, 255, 255, .35), 4px 4px 0 #000; transition: transform .06s, box-shadow .06s, filter .15s; }
+#app.retro .wca-btn:hover:not(:disabled) { filter: brightness(1.15); border-color: #120626; }
+#app.retro .wca-btn:active:not(:disabled), #app.retro .wca-son:active { transform: translate(4px, 4px); box-shadow: inset -4px -4px 0 rgba(0, 0, 0, .35), inset 4px 4px 0 rgba(255, 255, 255, .35); }
+#app.retro .wca-btn.sec, #app.retro .card .wca-btn.sec, #app.retro .verdict .wca-btn.sec { background: var(--ar-cyan); color: #06122e; border-color: #120626; }
+#app.retro .wca-jouer { font-size: 22px; padding: 12px 36px; animation: wca-appel 1.6s ease-in-out infinite; }
+@keyframes wca-appel { 50% { box-shadow: inset -4px -4px 0 rgba(0, 0, 0, .35), inset 4px 4px 0 rgba(255, 255, 255, .35), 4px 4px 0 #000, 0 0 26px rgba(255, 62, 165, .85); } }
+#app.retro .wca-son { padding: 4px 10px; font-size: 11px; background: #1b1446; color: var(--ar-doux); }
+#app.retro .wca-son[aria-pressed=true] { background: var(--ar-vert); color: #06122e; }
+.wca-titre .wca-son { position: absolute; top: 12px; right: 14px; z-index: 2; }
+#app.retro .hud .wca-son { box-shadow: 2px 2px 0 #000; border-width: 2px; }
+
+/* choix de l'accueil : cartouches, curseur clignotant sur la sélection */
+#app.retro .wca-opt, #app.retro .wca-mode, #app.retro .wca-nb { position: relative; background: rgba(255, 255, 255, .04); color: var(--ar-texte); border: 3px solid #3a4390; border-radius: 0;
+  font-family: Consolas, "Courier New", monospace; transition: transform .12s, border-color .12s, box-shadow .12s; }
+#app.retro .wca-opt small, #app.retro .wca-mode small { color: var(--ar-doux); }
+#app.retro .wca-opt:hover, #app.retro .wca-mode:hover, #app.retro .wca-nb:hover { transform: translateY(-3px); border-color: var(--ar-rose); box-shadow: 0 0 14px rgba(255, 62, 165, .45); }
+#app.retro .wca-opt.act, #app.retro .wca-mode.act, #app.retro .wca-nb.act { background: rgba(51, 225, 255, .1); border-color: var(--ar-cyan); box-shadow: 0 0 16px rgba(51, 225, 255, .55), inset 0 0 0 2px #06122e; }
+#app.retro .wca-opt.act::before, #app.retro .wca-mode.act::before { content: "▶"; position: absolute; left: 8px; top: 50%; translate: 0 -50%; color: var(--ar-jaune); animation: wca-clignote .8s steps(2, start) infinite; }
+#app.retro .wca-opt-i { filter: drop-shadow(0 0 6px rgba(255, 255, 255, .35)); }
+
+/* écran titre : envahisseurs, logo pixel, soleil derrière */
+#app.retro .wca-titre { background: transparent; border: 0; box-shadow: none; padding: 30px 22px 18px; animation: none; }
+#app.retro .wca-titre::after { display: none; }
+.wca-invaders { display: flex; justify-content: center; gap: 26px; margin-bottom: 14px; animation: wca-patrouille 4s steps(8) infinite alternate; }
+@keyframes wca-patrouille { from { translate: -40px 0; } to { translate: 40px 0; } }
+.envahisseur { position: relative; display: inline-block; }
+.envahisseur .img2 { position: absolute; left: 0; top: 0; }
+.envahisseur .img1 { animation: wca-img1 .8s steps(1) infinite; }
+.envahisseur .img2 { animation: wca-img2 .8s steps(1) infinite; }
+@keyframes wca-img1 { 50% { opacity: 0; } }
+@keyframes wca-img2 { 0% { opacity: 0; } 50% { opacity: 1; } }
+.wca-logo-px { display: inline-flex; flex-direction: column; align-items: center; gap: 6px; animation: wca-flotte 3s ease-in-out infinite; }
+.wca-logo-l { display: flex; gap: 26px; flex-wrap: wrap; justify-content: center; }
+.wca-logo-px .cyber { filter: drop-shadow(0 0 10px rgba(255, 62, 165, .9)); animation: wca-neon 2.4s ease-in-out infinite; }
+.wca-logo-px .arcade { filter: drop-shadow(0 0 10px rgba(51, 225, 255, .9)); animation: wca-neon 2.4s ease-in-out .6s infinite; }
+@keyframes wca-flotte { 50% { translate: 0 -6px; } }
+@keyframes wca-neon { 0%, 47%, 50%, 53%, 100% { opacity: 1; } 48% { opacity: .55; } 52% { opacity: .7; } }
+#app.retro .wca-slogan { font: 700 17px Consolas, "Courier New", monospace; color: #fff; text-shadow: 0 2px 0 #000, 0 0 12px rgba(255, 62, 165, .6); }
+.wca-clignote svg { display: inline-block; }
+#app.retro .wca-titre .wca-reprendre { margin-top: 12px; }
+
+/* jeu : écran, apparition pixel de chaque défi, chrono en segments, cœurs, combo */
+#app.retro .wca-ecran { border: 3px solid #4b3a96; border-radius: 0; box-shadow: 0 0 0 3px #070418, 8px 8px 0 rgba(0, 0, 0, .55), 0 0 30px rgba(165, 133, 255, .25); }
+#app.retro .wca-jeu:not(.secoue):not(.brille) { animation: wca-cadre 5s linear infinite; }
+@keyframes wca-cadre { 0%, 100% { border-color: #4b3a96; } 33% { border-color: #ff3ea5; } 66% { border-color: #33e1ff; } }
+.wca-carte.entree { animation: wca-entree .42s steps(7) both; }
+@keyframes wca-entree { from { clip-path: inset(0 0 100% 0); } to { clip-path: inset(0 0 0 0); } }
+#app.retro .wca-q { font-size: 21px; text-shadow: 0 2px 0 #000; }
+#app.retro .wca-rep { border-radius: 0; border-width: 3px; box-shadow: 3px 3px 0 #000; }
+#app.retro .wca-rep:hover:not(:disabled) { transform: translate(-1px, -2px); box-shadow: 5px 5px 0 #000, 0 0 14px rgba(51, 225, 255, .35); }
+#app.retro .wca-rep:active:not(:disabled) { transform: translate(3px, 3px); box-shadow: none; }
+#app.retro .wca-rep kbd { font-weight: 800; border-width: 2px; border-radius: 0; }
+#app.retro .tag { border-radius: 0; font-family: Consolas, monospace; text-transform: uppercase; font-size: 11px; letter-spacing: .05em; }
+#app.retro .chrono { height: 14px; border-radius: 0; background: #0b0826; border: 2px solid #2c2566; }
+#app.retro .chrono span { border-radius: 0; background: repeating-linear-gradient(90deg, var(--ar-vert) 0 12px, transparent 12px 16px); }
+#app.retro .chrono span.urgent { background: repeating-linear-gradient(90deg, var(--ar-rouge) 0 12px, transparent 12px 16px); animation: wca-clignote .5s steps(2, start) infinite; }
+.hud-vies { display: inline-flex; gap: 5px; align-items: center; }
+.hud-vies svg.plein { filter: drop-shadow(0 0 4px rgba(255, 62, 108, .8)); }
+.hud-vies svg.perdu { animation: wca-coeur .7s ease-out both; }
+@keyframes wca-coeur { 0% { transform: scale(1.8); filter: brightness(3); } 60% { transform: scale(.7) rotate(-20deg); } 100% { transform: none; } }
+#app.retro .hud-combo.chaud { animation: wca-flamme .35s steps(2) infinite; }
+@keyframes wca-flamme { 50% { text-shadow: 0 0 14px rgba(255, 82, 0, .95), 0 -2px 0 #ffd23f; } }
+#app.retro .hud-score b { text-shadow: 0 0 10px rgba(255, 210, 63, .7); }
+#app.retro .scene { border-radius: 0; box-shadow: 6px 6px 0 #000; }
+#app.retro .wca-etape { border-radius: 0; }
+
+/* verdict : panneau néon de la couleur du résultat */
+#app.retro .verdict { background: rgba(10, 8, 32, .9); color: var(--ar-texte); border: 3px solid var(--ar-doux); border-radius: 0; box-shadow: 6px 6px 0 #000; animation: wca-verdict .3s steps(4) both; }
+#app.retro .verdict.ok { border-color: var(--ar-vert); box-shadow: 6px 6px 0 #000, 0 0 22px rgba(61, 220, 132, .45); }
+#app.retro .verdict.ko { border-color: var(--ar-rouge); box-shadow: 6px 6px 0 #000, 0 0 22px rgba(255, 93, 93, .45); }
+#app.retro .verdict.partiel { border-color: var(--ar-orange); }
+#app.retro .verdict-t { font-family: Consolas, "Courier New", monospace; text-transform: uppercase; letter-spacing: .04em; }
+#app.retro .verdict.ok .verdict-t { color: var(--ar-vert); }
+#app.retro .verdict.ko .verdict-t { color: var(--ar-rouge); }
+#app.retro .verdict-src { color: var(--ar-doux); }
+#app.retro .verdict-vie { color: #ff7a9a; }
+@keyframes wca-verdict { from { transform: scale(.94); opacity: 0; } }
+
+/* effets éphémères (retro.js) */
+.wca-envol { position: fixed; z-index: 50; translate: -50% 0; pointer-events: none; font: 900 24px Consolas, "Courier New", monospace; color: #ffd23f;
+  text-shadow: 2px 2px 0 #000, 0 0 12px rgba(255, 210, 63, .8); animation: wca-envol 1.1s ease-out forwards; }
+.wca-envol.combo { color: #ffa53d; font-size: 20px; }
+@keyframes wca-envol { 0% { transform: translateY(0) scale(.6); opacity: 0; } 15% { transform: translateY(-10px) scale(1.25); opacity: 1; } 100% { transform: translateY(-80px) scale(1); opacity: 0; } }
+.wca-eclat { position: fixed; z-index: 50; width: 8px; height: 8px; pointer-events: none; animation: wca-eclat .85s cubic-bezier(.2, .7, .3, 1) forwards; }
+@keyframes wca-eclat { to { transform: translate(var(--dx), var(--dy)) scale(.2); opacity: 0; } }
+.wca-confetti { position: fixed; z-index: 50; top: -12px; width: 9px; height: 9px; pointer-events: none; animation: wca-tombe 2.4s linear forwards; }
+@keyframes wca-tombe { to { transform: translateY(105vh) rotate(var(--r)); } }
+
+/* fin de partie : bannière pixel, rang qui rebondit */
+.wca-banniere { position: relative; z-index: 1; margin: 2px 0 10px; animation: wca-banniere .6s steps(6) both; }
+.wca-banniere .clear { filter: drop-shadow(0 0 14px rgba(255, 176, 32, .85)); animation: wca-arcenciel 3s linear infinite; }
+.wca-banniere .gameover { filter: drop-shadow(0 0 14px rgba(255, 62, 62, .85)); animation: wca-neon 1.6s ease-in-out infinite; }
+@keyframes wca-banniere { from { transform: scale(2.4); opacity: 0; } }
+@keyframes wca-arcenciel { to { filter: drop-shadow(0 0 14px rgba(255, 176, 32, .85)) hue-rotate(360deg); } }
+#app.retro .wca-rang-e { display: inline-block; animation: wca-rebond 1.2s ease-in-out infinite; }
+@keyframes wca-rebond { 50% { transform: translateY(-8px) rotate(-6deg); } }
+#app.retro .wca-tuiles div { border-radius: 0; border-width: 2px; box-shadow: 4px 4px 0 #000; }
+#app.retro .wca-fin.perdue { animation: wca-cadre-rouge 1s steps(2) 3; }
+@keyframes wca-cadre-rouge { 50% { border-color: #ff3e3e; } }
+#app.retro .wca-barre { background: #0b0826; border-radius: 0; height: 14px; }
+#app.retro .wca-barre span { border-radius: 0; background-image: repeating-linear-gradient(90deg, transparent 0 10px, rgba(0, 0, 0, .35) 10px 12px); }
+#app.retro .wca-revoir { border-left-color: var(--ar-orange); }
+#app.retro .wca-partage { border-color: var(--ar-rose); }
+#app.retro .wca-code-defi b { color: var(--ar-vert); text-shadow: 0 0 8px rgba(61, 220, 132, .6); }
+#app.retro .wca-fiche { border-radius: 0; box-shadow: 6px 6px 0 #000; }
+#app.retro .wca-partage-ok { color: var(--ar-vert); }
+#app.retro .wca-erreur { color: #ff7a9a; }
+
+@media (max-width: 900px) {
+  #app { grid-template-rows: auto auto 1fr; }
+  #sidebar { grid-row: 2; }
+  #main, #wca-fond { grid-column: 1; grid-row: 3; }
+  .wca-logo-l { gap: 10px; }
+  .wca-logo-px svg.cyber, .wca-logo-px svg.arcade { width: auto; height: 60px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  #app.retro *, #app.retro *::before, #wca-fond *, #wca-fond *::before { animation: none !important; transition: none !important; }
+}
+@media print {
+  #wca-fond, .wca-son, .wca-invaders { display: none !important; }
+  #app.retro .card, #app.retro .verdict { background: #fff !important; color: #1d2330 !important; box-shadow: none !important; border-color: #bbb !important; }
+  #app.retro .card h2, #app.retro h1 { color: #1f3864 !important; text-shadow: none !important; }
+}
 </style>
 </head>
 <body>
@@ -296,11 +480,12 @@ ul.wca-erreur { margin: 6px 0; padding-left: 20px; }
     <span id="werb-theme"></span>
     <div class="tb-actions" id="tb-actions"></div>
   </header>
+  <div id="wca-fond" aria-hidden="true"><div class="etoiles e1"></div><div class="etoiles e2"></div><div class="soleil"></div><div class="sol"></div><div class="crt"></div></div>
   <nav id="sidebar"></nav>
   <main id="main"></main>
 </div>
 <script>window.BUILD_DATE="novembre 2026";</script>
-<script>window.WERB_GUIDES = [{ fichier: "1-Animer_une_session.md", texte: "<!-- WerbCyberArcade – Développé par @WerbHat -->\n# Animer une session WerbCyberArcade\n\nWerbCyberArcade est un jeu de quiz pour prendre les bons réflexes de cybersécurité, **à la maison comme au travail**. Il se joue seul, en binôme ou en équipes, sur un poste ou projeté en salle. Il fonctionne hors ligne et n'enregistre rien : ni réponse, ni score, ni nom de joueur ne quittent la page.\n\n## D'où viennent les questions\n\nLes défis sont rédigés pour le jeu à partir de deux guides publics, reformulés et jamais recopiés :\n\n| Terrain | Guide | Ce qu'il couvre |\n|---|---|---|\n| 🏠 À la maison | *Cyber guide famille* de Cybermalveillance.gouv.fr (10 bonnes pratiques) | Mots de passe, sauvegardes, mises à jour, antivirus, achats en ligne, messages suspects, réseaux sociaux, Wi-Fi publics, objets connectés, cyberharcèlement |\n| 🏢 Au travail | *Guide d'hygiène informatique* de l'ANSSI (42 mesures) | Les mesures qui concernent chaque collaborateur : poste de travail, messagerie, clés USB, déplacements, réaction à un incident, comptes et données |\n\nAprès chaque réponse, le jeu affiche l'explication et la source exacte (numéro de la bonne pratique ou de la mesure). La page **📚 Sources** du menu donne les références complètes et les liens vers les guides.\n\n## Les quatre types de défis\n\n- **🧠 Quiz** : une seule bonne réponse parmi quatre. Les réponses sont mélangées à chaque partie.\n- **⚖️ Vrai ou faux** : une affirmation à juger vite.\n- **🎣 Repère le piège** : un faux SMS, un faux courriel ou un faux site. Le joueur touche tous les éléments suspects (expéditeur, lien, urgence, demande de mot de passe…), puis valide. Une fausse alerte coûte des points.\n- **🧩 Bon réflexe** : remettre dans l'ordre les étapes d'une bonne réaction, par exemple face à un poste attaqué.\n\n## Les deux modes\n\n- **🕹️ Arcade** : chrono, trois vies, combos. Une bonne réponse vaut 100 points plus un bonus de temps, multipliés par le combo (jusqu'à ×4). Une erreur coûte une vie ; la partie s'arrête à la troisième. Idéal pour une session en équipes.\n- **📖 Entraînement** : sans chrono ni vies, pour lire les explications à son rythme.\n\nOn choisit aussi le terrain (maison, travail ou les deux) et le nombre de défis (10, 20 ou tous). Une partie de 10 défis comprend toujours au moins un « Repère le piège » et un « Bon réflexe » ; deux de chaque à partir de 20.\n\n## Déroulé conseillé d'une session de 30 minutes\n\n1. **Introduction (5 min)** : pourquoi la cybersécurité concerne tout le monde, au bureau comme à la maison. Les mêmes réflexes protègent les deux.\n2. **Partie en équipes (15 min)** : projeter le jeu, mode Arcade, 10 ou 20 défis, terrain « Les deux ». Saisir le nom de l'équipe avant de jouer. Faire voter les équipes, puis lire l'explication à voix haute.\n3. **Débriefing (10 min)** : afficher le bilan de fin de partie. Les thèmes en rouge et la liste « Les défis manqués » nourrissent la discussion. La page **🛡️ Bons réflexes** sert de support de synthèse.\n\nPour un tournoi, faites jouer chaque équipe à tour de rôle : la page **🏆 Meilleurs scores** classe les parties de la session. Elle s'efface à la fermeture de l'onglet.\n\n## Lancer un défi entre collègues\n\nChaque partie a un **code défi**, affiché au bilan (par exemple `WCA-200-K3Q9ZP`). Saisi dans **🎯 Relever un défi** sur l'accueil, il redonne **exactement les mêmes défis**, dans le même ordre et avec les mêmes règles : la comparaison des scores est équitable.\n\nAu bilan, l'encart **📣 Défier mes collègues** propose :\n\n- **📧 Envoyer par courriel** : la messagerie du poste s'ouvre avec un message prêt (score, rang, code défi, marche à suivre). Ajoutez vos collègues en destinataires, puis envoyez.\n- **🖼 Télécharger la fiche** : une image de la fiche de score (nom, rang, score, code défi), à joindre au courriel ou à publier sur l'intranet.\n- **📋 Copier le message** : pour Teams ou une messagerie en ligne.\n\nLe nom du joueur figure en tête du bilan et sur la fiche ; s'il n'a pas été saisi avant la partie, un champ permet de l'ajouter. Rien n'est envoyé sans vous, et rien n'est enregistré.\n\nIdée d'animation : un **défi de la semaine**. L'animateur joue une partie, envoie le code à toute l'équipe ; chacun relève le défi et répond avec sa fiche de score. Un même code n'est garanti que pour une même version du jeu.\n\n## Après la session\n\n- **🖨 PDF** (bandeau) imprime la page affichée : le bilan d'une partie, ou la fiche des bons réflexes à distribuer.\n- Depuis **🛡️ Bons réflexes**, le bouton **S'entraîner** lance une partie sur un seul thème, sans chrono : utile pour revoir un point faible.\n- Pour un suivi des formations dans WerbSMSI, enregistrez la session dans **WerbAcademie** (date, public, thème).\n\n## Au clavier\n\n| Touche | Effet |\n|---|---|\n| `1` à `4` | Choisir une réponse de quiz |\n| `V` / `F` | Vrai / Faux |\n| `Entrée` | Valider un « Repère le piège » ou un « Bon réflexe », puis passer au défi suivant |\n\n## Créer les défis de votre entreprise (équipe SMSI)\n\nLes 66 défis du jeu viennent des guides publics. Pour parler **de chez vous** — qui appeler, où signaler, la charte informatique, un piège déjà reçu — l'équipe SMSI du groupe crée ses propres défis, **sans rien installer ni reconstruire** :\n\n1. Ouvrir WerbCyberArcade depuis la **puce « groupe »** du module dans le portail (l'espace est alors transmis), puis **⚙️ Administration › Défis de l'entreprise**.\n2. **✨ Nouvelle base** la première fois, puis **💾 Enregistrer** dans `groupe/continuite/` de l'espace ; les fois suivantes, **📂 Ouvrir la base demandée par le portail**. La base a le verrou commun : un collègue qui l'ouvre en même temps la voit en lecture seule.\n3. **➕ Nouveau** : choisir le type (quiz, vrai ou faux, repère le piège, bon réflexe), remplir le formulaire — énoncé, réponses (la bonne d'abord), scène et indices, ou étapes dans l'ordre —, l'explication et une **source interne** (charte, procédure). **✔ Appliquer** ; un défi incomplet est signalé ⚠ avec les points à corriger.\n4. **▶ Essayer** : le défi tel que les joueurs le verront, sans compter dans les scores.\n5. **📤 Publier** : les défis prêts partent dans `publications/werbcyberarcade.json` (version 1, 2, 3…). La base est enregistrée aussitôt avec le numéro de version.\n\nLes joueurs qui ouvrent le jeu depuis le portail reçoivent les défis sans rien faire ; sinon, l'encart **🏢 Défis de l'entreprise** de l'accueil propose **📂 Charger les défis de l'entreprise** (choisir le dossier de l'espace). Une case permet de les mêler ou non aux défis du jeu ; ils ont leur thème, **🏢 Règles de l'entreprise**, dans les bons réflexes.\n\nÀ retenir :\n\n- **Rien de confidentiel** : la publication est lisible par tous les sites. Ni adresse IP, ni mot de passe, ni nom de serveur, ni vulnérabilité réelle ; des scènes « piège » fictives.\n- **Code défi** : une partie qui contient les défis de l'entreprise a un code en `-E<version>`. Après une nouvelle publication, les anciens codes ne peuvent plus être relevés avec les défis de l'entreprise : prévenez les joueurs d'un défi en cours.\n\n## Ajouter ou modifier des défis du jeu de base\n\nLes défis sont rangés dans `sources/src/questions.js`, dans le dépôt du module. Chacun porte un identifiant unique, un terrain (`maison` ou `travail`), un thème, un type et sa source (`[\"famille\", n]` ou `[\"hygiene\", n]`). Pour un quiz, la bonne réponse est la première de la liste : le jeu mélange l'ordre à l'affichage. Reconstruire ensuite le module, puis le publier (`werb_charte.py construire`, `empreinte`, `audit`, `publier`).\n\nLes scènes « Repère le piège » sont fictives : numéros, adresses, noms de personnes et de sites sont inventés. Gardez cette règle pour toute nouvelle scène.\n" }];
+<script>window.WERB_GUIDES = [{ fichier: "1-Animer_une_session.md", texte: "<!-- WerbCyberArcade – Développé par @WerbHat -->\n# Animer une session WerbCyberArcade\n\nWerbCyberArcade est un jeu de quiz pour prendre les bons réflexes de cybersécurité, **à la maison comme au travail**. Il se joue seul, en binôme ou en équipes, sur un poste ou projeté en salle. Il fonctionne hors ligne et n'enregistre rien : ni réponse, ni score, ni nom de joueur ne quittent la page.\n\n## D'où viennent les questions\n\nLes défis sont rédigés pour le jeu à partir de deux guides publics, reformulés et jamais recopiés :\n\n| Terrain | Guide | Ce qu'il couvre |\n|---|---|---|\n| 🏠 À la maison | *Cyber guide famille* de Cybermalveillance.gouv.fr (10 bonnes pratiques) | Mots de passe, sauvegardes, mises à jour, antivirus, achats en ligne, messages suspects, réseaux sociaux, Wi-Fi publics, objets connectés, cyberharcèlement |\n| 🏢 Au travail | *Guide d'hygiène informatique* de l'ANSSI (42 mesures) | Les mesures qui concernent chaque collaborateur : poste de travail, messagerie, clés USB, déplacements, réaction à un incident, comptes et données |\n\nAprès chaque réponse, le jeu affiche l'explication et la source exacte (numéro de la bonne pratique ou de la mesure). La page **📚 Sources** du menu donne les références complètes et les liens vers les guides.\n\n## Les quatre types de défis\n\n- **🧠 Quiz** : une seule bonne réponse parmi quatre. Les réponses sont mélangées à chaque partie.\n- **⚖️ Vrai ou faux** : une affirmation à juger vite.\n- **🎣 Repère le piège** : un faux SMS, un faux courriel ou un faux site. Le joueur touche tous les éléments suspects (expéditeur, lien, urgence, demande de mot de passe…), puis valide. Une fausse alerte coûte des points.\n- **🧩 Bon réflexe** : remettre dans l'ordre les étapes d'une bonne réaction, par exemple face à un poste attaqué.\n\n## Les deux modes\n\n- **🕹️ Arcade** : chrono, trois vies, combos. Une bonne réponse vaut 100 points plus un bonus de temps, multipliés par le combo (jusqu'à ×4). Une erreur coûte une vie ; la partie s'arrête à la troisième. Idéal pour une session en équipes.\n- **📖 Entraînement** : sans chrono ni vies, pour lire les explications à son rythme.\n\nOn choisit aussi le terrain (maison, travail ou les deux) et le nombre de défis (10, 20 ou tous). Une partie de 10 défis comprend toujours au moins un « Repère le piège » et un « Bon réflexe » ; deux de chaque à partir de 20.\n\n## Déroulé conseillé d'une session de 30 minutes\n\n1. **Introduction (5 min)** : pourquoi la cybersécurité concerne tout le monde, au bureau comme à la maison. Les mêmes réflexes protègent les deux.\n2. **Partie en équipes (15 min)** : projeter le jeu, mode Arcade, 10 ou 20 défis, terrain « Les deux ». Saisir le nom de l'équipe avant de jouer. Faire voter les équipes, puis lire l'explication à voix haute.\n3. **Débriefing (10 min)** : afficher le bilan de fin de partie. Les thèmes en rouge et la liste « Les défis manqués » nourrissent la discussion. La page **🛡️ Bons réflexes** sert de support de synthèse.\n\nPour un tournoi, faites jouer chaque équipe à tour de rôle : la page **🏆 Meilleurs scores** classe les parties de la session. Elle s'efface à la fermeture de l'onglet.\n\n## Lancer un défi entre collègues\n\nChaque partie a un **code défi**, affiché au bilan (par exemple `WCA-200-K3Q9ZP`). Saisi dans **🎯 Relever un défi** sur l'accueil, il redonne **exactement les mêmes défis**, dans le même ordre et avec les mêmes règles : la comparaison des scores est équitable.\n\nAu bilan, l'encart **📣 Défier mes collègues** propose :\n\n- **📧 Envoyer par courriel** : la messagerie du poste s'ouvre avec un message prêt (score, rang, code défi, marche à suivre). Ajoutez vos collègues en destinataires, puis envoyez.\n- **🖼 Télécharger la fiche** : une image de la fiche de score (nom, rang, score, code défi), à joindre au courriel ou à publier sur l'intranet.\n- **📋 Copier le message** : pour Teams ou une messagerie en ligne.\n\nLe nom du joueur figure en tête du bilan et sur la fiche ; s'il n'a pas été saisi avant la partie, un champ permet de l'ajouter. Rien n'est envoyé sans vous, et rien n'est enregistré.\n\nIdée d'animation : un **défi de la semaine**. L'animateur joue une partie, envoie le code à toute l'équipe ; chacun relève le défi et répond avec sa fiche de score. Un même code n'est garanti que pour une même version du jeu.\n\n## Après la session\n\n- **🖨 PDF** (bandeau) imprime la page affichée : le bilan d'une partie, ou la fiche des bons réflexes à distribuer.\n- Depuis **🛡️ Bons réflexes**, le bouton **S'entraîner** lance une partie sur un seul thème, sans chrono : utile pour revoir un point faible.\n- Pour un suivi des formations dans WerbSMSI, enregistrez la session dans **WerbAcademie** (date, public, thème).\n\n## L'habillage rétro\n\nLes pages du joueur (accueil, partie, bilan, scores, bons réflexes) ont un habillage de borne d'arcade : ciel étoilé, grille « synthwave », titre en pixels, envahisseurs, cœurs pixel, points qui s'envolent, « STAGE CLEAR » ou « GAME OVER » en fin de partie. Le bouton **🔇 Son coupé** active des sons 8 bits (coupés par défaut, pensez-y en salle). Les animations s'arrêtent si Windows demande de limiter les animations (*Paramètres › Accessibilité › Effets visuels*). L'administration, les sources et l'aide gardent l'affichage standard.\n\n## Au clavier\n\n| Touche | Effet |\n|---|---|\n| `1` à `4` | Choisir une réponse de quiz |\n| `V` / `F` | Vrai / Faux |\n| `Entrée` | Valider un « Repère le piège » ou un « Bon réflexe », puis passer au défi suivant |\n\n## Créer les défis de votre entreprise (équipe SMSI)\n\n**Le plus simple : un fichier à côté du jeu.** Le jeu est un fichier HTML ; posé sur un partage de fichiers de l'entreprise, il suffit de déposer à côté le fichier de défis :\n\n1. Ouvrir WerbCyberArcade, **⚙️ Administration › Défis de l'entreprise**, **✨ Nouvelle base** (puis **💾 Enregistrer**, pour retrouver ses défis la fois suivante avec **📂 Ouvrir une base**).\n2. Renseigner le **nom de l'entreprise**, créer les défis (voir ci-dessous), les **▶ Essayer**.\n3. **⬇ Exporter le fichier de défis** : enregistrer `defis_entreprise.css` **dans le même dossier que `WerbCyberArcade.html`**, sous ce nom exact.\n4. C'est tout : chaque joueur qui ouvre le jeu a les défis de l'entreprise, sans cliquer ni autoriser quoi que ce soit. Pour une mise à jour, exporter de nouveau et remplacer le fichier.\n\nLe fichier ne contient que des données (il ne peut ni exécuter de code ni changer l'apparence du jeu) ; ne le modifiez pas à la main, refaites-le depuis l'éditeur. Gardez le dossier du partage en lecture seule pour les joueurs.\n\n**Avec le portail WerbSMSI**, l'équipe SMSI peut aussi publier les défis dans l'espace du groupe :\n\nLes 66 défis du jeu viennent des guides publics. Pour parler **de chez vous** — qui appeler, où signaler, la charte informatique, un piège déjà reçu — l'équipe SMSI du groupe crée ses propres défis, **sans rien installer ni reconstruire** :\n\n1. Ouvrir WerbCyberArcade depuis la **puce « groupe »** du module dans le portail (l'espace est alors transmis), puis **⚙️ Administration › Défis de l'entreprise**.\n2. **✨ Nouvelle base** la première fois, puis **💾 Enregistrer** dans `groupe/continuite/` de l'espace ; les fois suivantes, **📂 Ouvrir la base demandée par le portail**. La base a le verrou commun : un collègue qui l'ouvre en même temps la voit en lecture seule.\n3. **➕ Nouveau** : choisir le type (quiz, vrai ou faux, repère le piège, bon réflexe), remplir le formulaire — énoncé, réponses (la bonne d'abord), scène et indices, ou étapes dans l'ordre —, l'explication et une **source interne** (charte, procédure). **✔ Appliquer** ; un défi incomplet est signalé ⚠ avec les points à corriger.\n4. **▶ Essayer** : le défi tel que les joueurs le verront, sans compter dans les scores.\n5. **📤 Publier** : les défis prêts partent dans `publications/werbcyberarcade.json` (version 1, 2, 3…). La base est enregistrée aussitôt avec le numéro de version.\n\nLes joueurs qui ouvrent le jeu depuis le portail reçoivent les défis sans rien faire. L'état des défis chargés (fichier ou espace), la case pour les mêler ou non aux défis du jeu sur un poste et le chargement depuis l'espace sont dans **⚙️ Administration › Défis de l'entreprise** : la page du joueur n'en montre rien ; les défis y ont leur thème, **🏢 Règles de l'entreprise**, dans les bons réflexes.\n\nÀ retenir :\n\n- **Rien de confidentiel** : la publication est lisible par tous les sites. Ni adresse IP, ni mot de passe, ni nom de serveur, ni vulnérabilité réelle ; des scènes « piège » fictives.\n- **Code défi** : une partie qui contient les défis de l'entreprise a un code en `-E<version>`. Après une nouvelle publication, les anciens codes ne peuvent plus être relevés avec les défis de l'entreprise : prévenez les joueurs d'un défi en cours.\n\n## Ajouter ou modifier des défis du jeu de base\n\nLes défis sont rangés dans `sources/src/questions.js`, dans le dépôt du module. Chacun porte un identifiant unique, un terrain (`maison` ou `travail`), un thème, un type et sa source (`[\"famille\", n]` ou `[\"hygiene\", n]`). Pour un quiz, la bonne réponse est la première de la liste : le jeu mélange l'ordre à l'affichage. Reconstruire ensuite le module, puis le publier (`werb_charte.py construire`, `empreinte`, `audit`, `publier`).\n\nLes scènes « Repère le piège » sont fictives : numéros, adresses, noms de personnes et de sites sont inventés. Gardez cette règle pour toute nouvelle scène.\n" }];
 window.WERB_EXEMPLE = { nom: "Exemple.werbcyberarcade.json", texte: "{\n \"format\": \"WERBCYBERARCADE\",\n \"schema\": 1,\n \"famille\": \"WERBSMSI\",\n \"meta\": {\n  \"produit\": \"WerbCyberArcade\",\n  \"appVersion\": \"1.2.0\",\n  \"auteur\": \"@WerbHat\",\n  \"generateur\": \"WerbCyberArcade v1.2.0 – Développé par @WerbHat\",\n  \"creeLe\": \"2026-11-26\",\n  \"modifieLe\": \"2026-11-26T09:00:00Z\",\n  \"modifiePar\": \"Exemple\",\n  \"portee\": \"groupe\"\n },\n \"verrou\": null,\n \"journal\": [],\n \"data\": {\n  \"titre\": \"Les réflexes cyber de la maison Exemple\",\n  \"versionPubliee\": 0,\n  \"publieLe\": \"\",\n  \"defis\": [\n   {\n    \"id\": \"E01\",\n    \"type\": \"qcm\",\n    \"lieu\": \"travail\",\n    \"theme\": \"entreprise\",\n    \"q\": \"Votre poste affiche un message de rançon. Quel numéro interne appeler en premier ?\",\n    \"choix\": [\n     \"Le support informatique, poste 4242 (24 h / 24)\",\n     \"Le standard de l'accueil\",\n     \"Le numéro indiqué dans le message de rançon\",\n     \"Personne : on attend le lendemain\"\n    ],\n    \"expl\": \"Le support informatique déclenche la procédure d'incident. Ne contactez jamais l'attaquant ; débranchez le poste du réseau sans l'éteindre.\",\n    \"source\": \"Procédure de gestion des incidents, § 2 (exemple fictif)\"\n   },\n   {\n    \"id\": \"E02\",\n    \"type\": \"vf\",\n    \"lieu\": \"travail\",\n    \"theme\": \"entreprise\",\n    \"q\": \"La charte informatique autorise l'installation d'une extension de navigateur trouvée sur Internet, si elle est gratuite.\",\n    \"vrai\": false,\n    \"expl\": \"Toute installation passe par une demande au support : les extensions peuvent lire les pages consultées, mots de passe compris.\",\n    \"source\": \"Charte informatique, article 4 (exemple fictif)\"\n   },\n   {\n    \"id\": \"E03\",\n    \"type\": \"piege\",\n    \"lieu\": \"travail\",\n    \"theme\": \"messagerie\",\n    \"forme\": \"courriel\",\n    \"q\": \"Ce courriel arrive à la paie, la veille du virement des salaires. Touchez les indices suspects.\",\n    \"entete\": \"De : Camille Exemple <camille.exemple.rh@messagerie-perso.example>\",\n    \"indiceEntete\": \"Une adresse personnelle, pas l'adresse professionnelle de la collègue.\",\n    \"segments\": [\n     {\n      \"t\": \"Bonjour,\",\n      \"s\": false,\n      \"pq\": \"\"\n     },\n     {\n      \"t\": \"j'ai changé de banque : voici mon nouveau RIB,\",\n      \"s\": true,\n      \"pq\": \"Changement de coordonnées bancaires par simple courriel.\"\n     },\n     {\n      \"t\": \"à appliquer dès ce mois-ci, c'est urgent.\",\n      \"s\": true,\n      \"pq\": \"L'urgence empêche la vérification.\"\n     },\n     {\n      \"t\": \"Merci beaucoup !\",\n      \"s\": false,\n      \"pq\": \"\"\n     }\n    ],\n    \"expl\": \"Un changement de RIB se vérifie toujours en appelant la personne à son numéro habituel, et suit le formulaire RH.\",\n    \"source\": \"Procédure paie, changement de coordonnées bancaires (exemple fictif)\"\n   }\n  ]\n }\n}\n" };
 /*! WerbCyberArcade – Développé par @WerbHat */
 /* Identité du module : source unique utilisée par l'interface et la page À propos.
@@ -310,7 +495,7 @@ const WERB = Object.freeze((() => {
   const bytes = [68, 195, 169, 118, 101, 108, 111, 112, 112, 195, 169, 32, 112, 97, 114, 32, 64, 87, 101, 114, 98, 72, 97, 116];
   const signature = new TextDecoder("utf-8").decode(new Uint8Array(bytes));
   const produit = "WerbCyberArcade";
-  const version = "1.2.0";
+  const version = "1.4.0";
   return {
     id: "werbcyberarcade",
     produit, version, auteur: "@WerbHat", signature,
@@ -2414,6 +2599,140 @@ window.WCA_ENT = (() => {
 })();
 
 /*! WerbCyberArcade – Développé par @WerbHat */
+/* Habillage rétro-gaming (1.4.0) : police pixel 5 × 7 dessinée en SVG (aucune police externe, CSP font-src data:), lutins (envahisseurs,
+   cœurs), sons 8 bits produits par le navigateur (Web Audio, aucun fichier ; coupés par défaut, réglage gardé en mémoire seulement),
+   effets éphémères (points qui s'envolent, éclats de pixels, compteurs qui défilent). Tout effet est retiré du DOM une fois joué et
+   désactivé si le système demande de limiter les animations (prefers-reduced-motion). */
+"use strict";
+window.WCA_RETRO = (() => {
+  /* --------------------------------------------- police pixel 5 × 7 (majuscules, chiffres, ponctuation courante) */
+  const G = {
+    A: ".###.#...##...#######...##...##...#", B: "####.#...##...#####.#...##...#####.", C: ".###.#...##....#....#....#...#.###.",
+    D: "####.#...##...##...##...##...#####.", E: "######....#....####.#....#....#####", F: "######....#....####.#....#....#....",
+    G: ".###.#...##....#.####...##...#.####", H: "#...##...##...#######...##...##...#", I: ".###...#....#....#....#....#...###.",
+    J: "..###...#....#....#....##..#..##...", K: "#...##..#.#.#..##...#.#..#..#.#...#", L: "#....#....#....#....#....#....#####",
+    M: "#...###.###.#.##.#.##...##...##...#", N: "#...###..##.#.##..###...##...##...#", O: ".###.#...##...##...##...##...#.###.",
+    P: "####.#...##...#####.#....#....#....", Q: ".###.#...##...##...##.#.##..#..##.#", R: "####.#...##...#####.#.#..#..#.#...#",
+    S: ".#####....#.....###.....#....#####.", T: "#####..#....#....#....#....#....#..", U: "#...##...##...##...##...##...#.###.",
+    V: "#...##...##...##...##...#.#.#...#..", W: "#...##...##...##.#.##.#.##.#.#.#.#.", X: "#...##...#.#.#...#...#.#.#...##...#",
+    Y: "#...##...#.#.#...#....#....#....#..", Z: "#####....#...#...#...#...#....#####",
+    0: ".###.#...##..###.#.###..##...#.###.", 1: "..#...##....#....#....#....#...###.", 2: ".###.#...#....#...#...#...#...#####",
+    3: "#####...#...#.....#.....##...#.###.", 4: "...#...##..#.#.#..#.#####...#....#.", 5: "######....####.....#....##...#.###.",
+    6: "..##..#...#....####.#...##...#.###.", 7: "#####....#...#...#...#....#....#...", 8: ".###.#...##...#.###.#...##...#.###.",
+    9: ".###.#...##...#.####....#...#..##..",
+    "!": "..#....#....#....#....#.........#..", "?": ".###.#...#....#...#...#.........#..", "-": "...............#####...............",
+    ".": "..............................##...", ":": "......##...##........##...##.......", "'": "..#....#...#.......................",
+    "+": ".......#....#..#####..#....#.......", "/": "....#...#....#...#...#....#...#....", " ": "...................................",
+    "×": "......#...#.#.#...#...#.#.#...#....", "♥": "......#.#.##########.###...#.......",
+  };
+  const sansAccent = s => String(s).normalize("NFD").replace(/[̀-ͯ]/g, "").toUpperCase();
+  let nGrad = 0;
+  // Texte en pixels : <svg> net à toute taille (shape-rendering crispEdges) ; couleurs : un dégradé vertical [haut, bas]
+  function pixel(texte, { pas = 4, couleurs = ["#ffffff", "#ffffff"], classe = "", ombre = true } = {}) {
+    const car = [...sansAccent(texte)].map(c => G[c] || G["?"]);
+    const larg = car.length * 6 - 1, haut = 7;
+    let d = "";
+    car.forEach((g, k) => { for (let i = 0; i < 35; i++) if (g[i] === "#") d += `M${k * 6 + (i % 5)} ${Math.floor(i / 5)}h1v1h-1z`; });
+    const id = `wcag${++nGrad}`;
+    const fond = ombre ? `<path d="${d}" fill="rgba(0,0,0,.55)" transform="translate(.35 .35)"/>` : "";
+    return `<svg class="px ${classe}" viewBox="-.2 -.2 ${larg + .8} ${haut + .8}" width="${(larg + .8) * pas}" height="${(haut + .8) * pas}" shape-rendering="crispEdges" aria-hidden="true" focusable="false">`
+      + `<defs><linearGradient id="${id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${couleurs[0]}"/><stop offset="1" stop-color="${couleurs[1]}"/></linearGradient></defs>`
+      + `${fond}<path d="${d}" fill="url(#${id})"/></svg>`;
+  }
+
+  /* --------------------------------------------- lutins : envahisseurs (deux images, animées en CSS), cœur, pièce */
+  const LUTINS = {
+    crabe1: ["..#.....#..", "...#...#...", "..#######..", ".##.###.##.", "###########", "#.#######.#", "#.#.....#.#", "...##.##..."],
+    crabe2: ["..#.....#..", "#..#...#..#", "#.#######.#", "###.###.###", "###########", ".#########.", "..#.....#..", ".#.......#."],
+    pieuvre1: ["....####....", ".##########.", "############", "###..##..###", "############", "...##..##...", "..##.##.##..", "##........##"],
+    pieuvre2: ["....####....", ".##########.", "############", "###..##..###", "############", "..###..###..", ".##..##..##.", "..##....##.."],
+    coeur: [".##.##.", "#######", "#######", ".#####.", "..###..", "...#..."],
+    cadenas: ["..###..", ".#...#.", ".#...#.", "#######", "###.###", "###.###", "#######"],
+  };
+  function lutin(nom, { pas = 4, couleur = "#3ddc84", classe = "" } = {}) {
+    const l = LUTINS[nom], h = l.length, w = l[0].length;
+    let d = "";
+    l.forEach((ligne, y) => [...ligne].forEach((c, x) => { if (c === "#") d += `M${x} ${y}h1v1h-1z`; }));
+    return `<svg class="px lutin ${classe}" viewBox="0 0 ${w} ${h}" width="${w * pas}" height="${h * pas}" shape-rendering="crispEdges" aria-hidden="true" focusable="false"><path d="${d}" fill="${couleur}"/></svg>`;
+  }
+  // Envahisseur animé : deux images superposées, alternées par CSS
+  const envahisseur = (type, couleur, pas = 4) => `<span class="envahisseur" aria-hidden="true">${lutin(type + "1", { pas, couleur, classe: "img1" })}${lutin(type + "2", { pas, couleur, classe: "img2" })}</span>`;
+
+  /* --------------------------------------------- sons 8 bits (Web Audio) : coupés par défaut */
+  let ctx = null, actif = false;
+  function note(freq, debut, duree, { type = "square", vol = .06, glisse = 0 } = {}) {
+    const o = ctx.createOscillator(), g = ctx.createGain(), t = ctx.currentTime + debut;
+    o.type = type; o.frequency.setValueAtTime(freq, t);
+    if (glisse) o.frequency.exponentialRampToValueAtTime(Math.max(40, freq + glisse), t + duree);
+    g.gain.setValueAtTime(vol, t); g.gain.exponentialRampToValueAtTime(.0001, t + duree);
+    o.connect(g).connect(ctx.destination); o.start(t); o.stop(t + duree + .02);
+  }
+  const SONS = {
+    clic: () => note(1320, 0, .04, { vol: .03 }),
+    depart: () => [523, 659, 784, 1047].forEach((f, k) => note(f, k * .07, .1)),
+    bon: () => { note(784, 0, .08); note(1175, .07, .14); },
+    combo: () => [784, 988, 1175, 1568].forEach((f, k) => note(f, k * .05, .09)),
+    faux: () => { note(220, 0, .18, { type: "sawtooth", glisse: -120, vol: .05 }); note(147, .16, .22, { type: "sawtooth", vol: .04 }); },
+    vie: () => note(440, 0, .35, { type: "triangle", glisse: -300, vol: .08 }),
+    victoire: () => [523, 659, 784, 1047, 784, 1047, 1319].forEach((f, k) => note(f, k * .09, k === 6 ? .35 : .1)),
+    perdu: () => [392, 330, 262, 196].forEach((f, k) => note(f, k * .16, .2, { type: "triangle", vol: .08 })),
+  };
+  const son = {
+    get actif() { return actif; },
+    basculer() {
+      actif = !actif;
+      if (actif && !ctx) { try { ctx = new (window.AudioContext || window.webkitAudioContext)(); } catch { actif = false; } }
+      if (actif) { ctx.resume(); SONS.clic(); }
+      return actif;
+    },
+    jouer(nom) { if (actif && ctx && SONS[nom]) { try { SONS[nom](); } catch { /* son indisponible */ } } },
+  };
+
+  /* --------------------------------------------- effets éphémères */
+  const calme = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
+  // Texte qui s'envole depuis un élément (« +300 », « ×3 COMBO »)
+  function envol(texte, cible, classe = "") {
+    if (!cible || calme()) return;
+    const r = cible.getBoundingClientRect(), e = document.createElement("span");
+    e.className = `wca-envol ${classe}`; e.setAttribute("aria-hidden", "true"); e.textContent = texte;
+    e.style.left = `${r.left + r.width / 2}px`; e.style.top = `${r.top}px`;
+    document.body.appendChild(e); setTimeout(() => e.remove(), 1200);
+  }
+  // Éclats de pixels autour d'un élément
+  function eclats(cible, n = 14, couleurs = ["#33e1ff", "#ff3ea5", "#ffd23f", "#3ddc84"]) {
+    if (!cible || calme()) return;
+    const r = cible.getBoundingClientRect(), cx = r.left + r.width / 2, cy = r.top + Math.min(r.height / 2, 60);
+    for (let i = 0; i < n; i++) {
+      const e = document.createElement("i"), a = (Math.PI * 2 * i) / n + Math.random() * .4, dist = 60 + Math.random() * 90;
+      e.className = "wca-eclat"; e.setAttribute("aria-hidden", "true");
+      e.style.cssText = `left:${cx}px;top:${cy}px;background:${couleurs[i % couleurs.length]};--dx:${Math.cos(a) * dist}px;--dy:${Math.sin(a) * dist}px`;
+      document.body.appendChild(e); setTimeout(() => e.remove(), 900);
+    }
+  }
+  // Confettis pixel sur toute la largeur (fin de partie réussie)
+  function confettis(n = 60) {
+    if (calme()) return;
+    const c = ["#33e1ff", "#ff3ea5", "#ffd23f", "#3ddc84", "#a585ff"];
+    for (let i = 0; i < n; i++) {
+      const e = document.createElement("i");
+      e.className = "wca-confetti"; e.setAttribute("aria-hidden", "true");
+      e.style.cssText = `left:${Math.random() * 100}vw;background:${c[i % c.length]};animation-delay:${Math.random() * .8}s;animation-duration:${1.8 + Math.random() * 1.4}s;--r:${Math.random() * 720 - 360}deg`;
+      document.body.appendChild(e); setTimeout(() => e.remove(), 4200);
+    }
+  }
+  // Compteur qui défile jusqu'à sa valeur (texte formaté en fr-FR)
+  function compter(el, valeur, ms = 900) {
+    if (!el) return;
+    if (calme()) { el.textContent = valeur.toLocaleString("fr-FR"); return; }
+    const debut = performance.now();
+    const pas = t => { const k = Math.min(1, (t - debut) / ms); el.textContent = Math.round(valeur * (1 - Math.pow(1 - k, 3))).toLocaleString("fr-FR"); if (k < 1) requestAnimationFrame(pas); };
+    requestAnimationFrame(pas);
+  }
+
+  return Object.freeze({ pixel, lutin, envahisseur, son, envol, eclats, confettis, compter });
+})();
+
+/*! WerbCyberArcade – Développé par @WerbHat */
 /* Jeu de sensibilisation à la cybersécurité, à la maison comme au travail (module de lecture, charte §4 : aucune base, rien
    n'est enregistré). Contenu : questions.js (window.WCA), rédigé d'après le Cyber guide famille de Cybermalveillance.gouv.fr et le
    Guide d'hygiène informatique de l'ANSSI. Quatre types de manches : quiz (qcm), vrai ou faux (vf), « Repère le piège » (piege :
@@ -2462,7 +2781,8 @@ window.WCA_ENT = (() => {
   }
   const nombre = n => Math.round(n).toLocaleString("fr-FR");
   /* --------------------------------------------- défis de l'entreprise (1.2.0) : publication groupe:defisCyber de l'espace */
-  const ENT = { defis: [], version: 0, titre: "", majLe: "", publiePar: "", organisation: "", ignores: 0, charge: false, inclure: true, message: "", erreur: "" };
+  const ENT = { defis: [], version: 0, titre: "", majLe: "", publiePar: "", organisation: "", ignores: 0, charge: false, inclure: true, message: "", erreur: "",
+    origine: "" };                                                    // « fichier » (defis_entreprise.css à côté du jeu) ou « espace » (publication)
   const avecEntreprise = () => ENT.inclure && ENT.defis.length > 0;
   const tous = (ent = avecEntreprise()) => (ent ? QUESTIONS.concat(ENT.defis) : QUESTIONS);
   const nomEntreprise = () => ENT.organisation || "votre entreprise";
@@ -2538,6 +2858,7 @@ window.WCA_ENT = (() => {
       phase: "question", sel: new Set(), ordre: [], reste: 0, debut: Date.now(), fin: 0, reglages: { ...reglages }, retour: null,
       graine: g, code: seuls ? "" : codeDefi(reglages, g, ent), releve: graine !== undefined, ent: !!ent, essai: !!seuls };
     demarrerManche();
+    WCA_RETRO.son.jouer("depart");
     if (vue === "jeu") render(); else aller("jeu");
   }
   const courante = () => partie && partie.liste[partie.i];
@@ -2603,6 +2924,15 @@ window.WCA_ENT = (() => {
     partie.retour = { ...r, ok, ratio, points, perdue };
     render();
     const v = document.querySelector(".verdict"); if (v) v.focus({ preventScroll: false });
+    const X = WCA_RETRO;
+    if (ok) {
+      X.envol(`+${nombre(points)}`, document.querySelector(".hud-score"), "pts");
+      X.eclats(document.querySelector(".wca-carte"));
+      if (r.mult > 1) { X.envol(`COMBO ×${r.mult}`, document.querySelector(".hud-combo"), "combo"); X.son.jouer("combo"); } else X.son.jouer("bon");
+    } else {
+      if (points) X.envol(`+${nombre(points)}`, document.querySelector(".hud-score"), "pts");
+      X.son.jouer(perdue ? "vie" : "faux");
+    }
   }
 
   function suivante() {
@@ -2638,11 +2968,13 @@ window.WCA_ENT = (() => {
     const nb = v => { const a = String(reglages.nb) === String(v);
       return `<button type="button" class="wca-nb${a ? " act" : ""}" data-wca-nb="${v}" aria-pressed="${a}">${v === "tout" ? "Tous" : v}</button>`; };
     const enCours = partie && partie.phase !== "fin";
+    const X = WCA_RETRO;
     return `<div class="wca-ecran wca-titre">
-        <div class="wca-logo" aria-hidden="true">▲ ● ■ ◆</div>
-        <h1 class="wca-h1">Werb<span>Cyber</span>Arcade</h1>
+        ${boutonSon()}
+        <div class="wca-invaders" aria-hidden="true">${X.envahisseur("crabe", "#3ddc84")}${X.envahisseur("pieuvre", "#ff3ea5")}${X.envahisseur("crabe", "#33e1ff")}${X.envahisseur("pieuvre", "#ffd23f")}${X.envahisseur("crabe", "#a585ff")}</div>
+        <h1 class="wca-h1"><span class="sr">WerbCyberArcade</span><span class="wca-logo-px" aria-hidden="true">${X.pixel("WERB", { pas: 5, couleurs: ["#ffffff", "#9aa4d6"], classe: "werb" })}<span class="wca-logo-l">${X.pixel("CYBER", { pas: 10, couleurs: ["#ffa3da", "#ff3ea5"], classe: "cyber" })}${X.pixel("ARCADE", { pas: 10, couleurs: ["#b5f6ff", "#33e1ff"], classe: "arcade" })}</span></span></h1>
         <p class="wca-slogan">Les bons réflexes cyber, à la maison comme au travail.</p>
-        <p class="wca-clignote" aria-hidden="true">— INSÉREZ UNE PIÈCE —</p>
+        <p class="wca-clignote" aria-hidden="true">${X.pixel("INSERT COIN", { pas: 3, couleurs: ["#fff3a0", "#ffd23f"], ombre: false })}</p>
         ${enCours ? `<button type="button" class="wca-btn wca-reprendre" data-nav="jeu">▶ Reprendre la partie en cours (défi ${partie.i + 1} / ${partie.liste.length})</button>` : ""}
       </div>
       <div class="card wca-reglages">
@@ -2659,15 +2991,6 @@ window.WCA_ENT = (() => {
           <button type="button" class="wca-btn wca-jouer" id="wca-jouer">▶ Jouer</button>
         </div>
       </div>
-      <div class="card wca-ent"><h2>🏢 Défis de l'entreprise</h2>
-        ${ENT.charge && ENT.defis.length ? `<p>✅ <b>${ENT.defis.length} défi${ENT.defis.length > 1 ? "s" : ""}</b> de ${esc(nomEntreprise())}${ENT.titre ? ` — « ${esc(ENT.titre)} »` : ""} · version ${ENT.version}${ENT.majLe ? ` publiée le ${esc(ENT.majLe)}` : ""}${ENT.publiePar ? ` par ${esc(ENT.publiePar)}` : ""}.</p>
-          <label class="wca-case"><input type="checkbox" id="wca-ent-inclure"${ENT.inclure ? " checked" : ""}> Les mêler aux défis du jeu (thème 🏢 Règles de l'entreprise et thèmes choisis par l'équipe SMSI)</label>`
-        : ENT.charge ? `<p>L'espace de ${esc(nomEntreprise())} est ouvert, mais l'équipe SMSI n'a pas encore publié de défis.</p>`
-        : `<p class="small">L'équipe SMSI de votre entreprise peut publier ses propres défis (règles internes, contacts, procédures). Ils sont rangés dans l'espace WerbSMSI du groupe.</p>
-          <button type="button" class="wca-btn sec petit" id="wca-ent-charger">📂 Charger les défis de l'entreprise</button>
-          <span class="small muted">Choisissez le dossier de l'espace (SMSI_…), puis « Sélectionner un dossier ».</span>`}
-        ${ENT.erreur ? `<p class="wca-erreur" role="alert">${esc(ENT.erreur)}</p>` : ""}${ENT.ignores ? `<p class="small muted">${ENT.ignores} défi(s) incomplet(s) de la publication ignoré(s).</p>` : ""}
-      </div>
       <div class="card wca-relever"><h2>🎯 Relever un défi</h2>
         <p class="small">Un collègue vous a envoyé sa fiche de score ? Saisissez son <b>code défi</b> : vous jouez exactement les mêmes défis, dans le même ordre et avec les mêmes règles. À vous de battre son score !</p>
         <div class="row"><input type="text" id="wca-code" maxlength="40" placeholder="WCA-200-K3Q9ZP" autocomplete="off" spellcheck="false" aria-label="Code défi" value="${esc(codeSaisi)}">
@@ -2680,9 +3003,12 @@ window.WCA_ENT = (() => {
   };
 
   /* --------------------------------------------- page de jeu */
+  const boutonSon = () => `<button type="button" class="wca-son" data-son aria-pressed="${WCA_RETRO.son.actif}" title="Sons 8 bits">${WCA_RETRO.son.actif ? "🔊 Son" : "🔇 Son coupé"}</button>`;
   function hud() {
     const R = partie.reglages, n = partie.liste.length, v = Math.max(0, partie.vies);
-    const vies = arcade() ? `<span class="hud-vies" aria-label="${v} vie(s)">${"❤️".repeat(v)}${"🖤".repeat(VIES - v)}</span>` : `<span class="hud-mode">📖 Entraînement</span>`;
+    const perdu = partie.phase === "retour" && partie.retour && partie.retour.perdue;
+    const coeurs = Array.from({ length: VIES }, (_, k) => WCA_RETRO.lutin("coeur", { pas: 3, couleur: k < v ? "#ff3e6c" : "#3a3f6b", classe: k < v ? "plein" : perdu && k === v ? "perdu" : "vide" })).join("");
+    const vies = arcade() ? `<span class="hud-vies" role="img" aria-label="${v} vie(s)">${coeurs}</span>` : `<span class="hud-mode">📖 Entraînement</span>`;
     const total = TEMPS[courante().q.type] * 1000;
     return `<div class="hud">
         <span class="hud-q">Défi <b>${partie.i + 1}</b> / ${n}</span>
@@ -2691,6 +3017,7 @@ window.WCA_ENT = (() => {
         ${vies}
         ${R.joueur ? `<span class="hud-joueur">👤 ${esc(R.joueur)}</span>` : ""}
         ${partie.releve ? `<span class="hud-defi" title="Mêmes défis que le collègue qui vous a lancé ce code">🎯 ${esc(partie.code)}</span>` : ""}
+        ${boutonSon()}
       </div>
       ${arcade() && partie.phase === "question" ? `<div class="chrono" role="timer" aria-label="Temps restant"><span id="chrono-barre" style="width:${Math.max(0, 100 * partie.reste / total)}%"></span><b id="chrono-sec">${Math.ceil(partie.reste / 1000)}</b></div>` : `<div class="chrono vide"></div>`}`;
   }
@@ -2875,15 +3202,15 @@ window.WCA_ENT = (() => {
     const bonne = q => q.type === "qcm" ? q.choix[0] : q.type === "vf" ? (q.vrai ? "Vrai" : "Faux") : q.type === "ordre" ? q.etapes.join(" → ")
       : "Indices : " + [q.indiceEntete ? `« ${q.entete} »` : "", ...q.segments.filter(s => s.s).map(s => `« ${s.t} »`)].filter(Boolean).join(", ");
     const R = P.reglages, abandon = n < P.liste.length;
-    return `<div class="wca-ecran wca-fin">
-        <p class="wca-clignote" aria-hidden="true">— PARTIE TERMINÉE —</p>
+    return `<div class="wca-ecran wca-fin${abandon ? " perdue" : ""}">
+        <div class="wca-banniere">${WCA_RETRO.pixel(abandon ? "GAME OVER" : P.reussite >= 80 ? "STAGE CLEAR!" : "FIN DE PARTIE", { pas: 7, couleurs: abandon ? ["#ffb0b0", "#ff3e3e"] : ["#fff3a0", "#ffb020"], classe: abandon ? "gameover" : "clear" })}</div>
         ${joueur ? `<div class="wca-joueur-fin">👤 <b>${esc(joueur)}</b></div>`
           : `<div class="wca-joueur-fin vide"><label for="wca-nom-fin">👤 Votre nom ou celui de l'équipe, pour la fiche de score :</label> <input type="text" id="wca-nom-fin" maxlength="30" placeholder="Ex. : Camille" autocomplete="off"> <button type="button" class="wca-btn petit" data-nom-fin>✔ Valider</button></div>`}
         ${P.releve ? `<p class="wca-releve">🎯 Défi relevé : code <b>${esc(P.code)}</b></p>` : ""}
         <div class="wca-rang"><span class="wca-rang-e">${emoji}</span><div><div class="wca-rang-t">${esc(titre)}</div><div class="wca-etoiles" aria-label="${etoiles} étoile(s) sur 3">${"★".repeat(etoiles)}${"☆".repeat(3 - etoiles)}</div></div></div>
         <p class="wca-rang-m">${esc(msg)}</p>
         <div class="wca-tuiles">
-          <div><b>${nombre(P.score)}</b><span>points</span></div>
+          <div><b data-compte="${P.score}">${nombre(P.score)}</b><span>points</span></div>
           <div><b>${bons} / ${n}</b><span>défis réussis · ${P.reussite} %</span></div>
           <div><b>×${resume(P).combo}</b><span>meilleur combo (${P.meilleurCombo} d'affilée)</span></div>
           <div><b>${duree >= 60 ? `${Math.floor(duree / 60)} min ${duree % 60} s` : `${duree} s`}</b><span>durée</span></div>
@@ -2957,7 +3284,41 @@ window.WCA_ENT = (() => {
   const LIEN = WerbSocle.lien.lire();                                 // capturé au chargement : la navigation remplace ensuite l'adresse
   const baseDemandee = LIEN && LIEN.fichier.endsWith(WERB.extension) ? LIEN : null;
 
+  /* --------------------------------------------- fichier de défis à côté du jeu (1.3.0) : defis_entreprise.css
+     Une page ouverte depuis un dossier ou un partage (file://) ne peut pas lire un .json voisin sans autorisation ; elle peut en revanche
+     charger une feuille de style voisine (CSP : style-src 'self' file:). Le fichier ne contient que des données : une propriété
+     --wca-defis (JSON encodé en base 64). Le jeu la lit, puis désactive et retire aussitôt la feuille : le fichier ne peut ni exécuter de
+     code ni changer l'apparence de la page. Les défis passent par le même contrôle qu'une publication (entreprise.js). */
+  const FICHIER_DEFIS = "defis_entreprise.css", FORMAT_FICHIER = "WERBCYBERARCADE-DEFIS";
+  const texteCourt = (v, n) => String(typeof v === "string" ? v : "").replace(/[\u0000-\u001f\u007f<>]/g, "").trim().slice(0, n);
+  function appliquerFichier(obj) {
+    if (!obj) { ENT.erreur = `Le fichier ${FICHIER_DEFIS} est illisible : exportez-le de nouveau depuis l'éditeur.`; return false; }
+    if (obj.format !== FORMAT_FICHIER) { ENT.erreur = `Le fichier ${FICHIER_DEFIS} n'est pas un fichier de défis WerbCyberArcade : exportez-le de nouveau depuis l'éditeur.`; return false; }
+    const lu = WCA_ENT.lirePublication(obj, THEMES);
+    if (!lu) { ENT.erreur = `Le fichier ${FICHIER_DEFIS} est illisible : exportez-le de nouveau depuis l'éditeur.`; return false; }
+    Object.assign(ENT, { charge: true, origine: "fichier", erreur: "", organisation: texteCourt(obj.organisation, 120), defis: lu.defis, version: lu.version,
+      titre: lu.titre, majLe: texteCourt(obj.exporteLe, 10), ignores: lu.ignores, publiePar: texteCourt(obj.exportePar, 60) });
+    return true;
+  }
+  const versBase64 = texte => { const o = new TextEncoder().encode(texte); let s = ""; for (let i = 0; i < o.length; i += 0x8000) s += String.fromCharCode(...o.subarray(i, i + 0x8000)); return btoa(s); };
+  const depuisBase64 = b => new TextDecoder().decode(Uint8Array.from(atob(b), c => c.charCodeAt(0)));
+  // apres(trouve) : appelé une fois le fichier lu ou absent
+  function lireFichierVoisin(apres = () => {}) {
+    const l = Object.assign(document.createElement("link"), { rel: "stylesheet", href: FICHIER_DEFIS });
+    const fin = trouve => { l.disabled = true; l.remove(); render(); apres(trouve); };
+    l.onload = () => {
+      const v = getComputedStyle(document.documentElement).getPropertyValue("--wca-defis").trim().replace(/^["']|["']$/g, "");
+      if (!v) return fin(false);                                      // feuille sans données de défis : ignorée
+      let obj = null;
+      try { obj = JSON.parse(depuisBase64(v)); } catch { /* fichier abîmé */ }
+      fin(appliquerFichier(obj));
+    };
+    l.onerror = () => fin(false);                                     // pas de fichier à côté du jeu
+    document.head.appendChild(l);
+  }
+
   async function chargerEntreprise({ silencieux = false } = {}) {
+    if (silencieux && ENT.origine === "fichier") return;               // le fichier voisin prime
     try {
       if (!WerbSocle.espace.ouvert) {
         const ok = LIEN ? await WerbSocle.espace.depuisRaccourci(LIEN.groupeId, { demander: !silencieux }) : false;
@@ -2967,7 +3328,7 @@ window.WCA_ENT = (() => {
       const pub = await WerbSocle.espace.publications("groupe");
       const fichier = pub.fichiers.find(f => f.module === WERB.id);
       const lu = WCA_ENT.lirePublication(pub.objets.defisCyber, THEMES);
-      Object.assign(ENT, { charge: true, organisation: String(g.organisation || g.sigle || ""), erreur: "",
+      Object.assign(ENT, { charge: true, origine: "espace", organisation: String(g.organisation || g.sigle || ""), erreur: "",
         defis: lu ? lu.defis : [], version: lu ? lu.version : 0, titre: lu ? lu.titre : "", majLe: lu ? lu.majLe : "", ignores: lu ? lu.ignores : 0,
         publiePar: fichier ? String(fichier.publiePar || "") : "" });
     } catch (e) { if (!(e && e.name === "AbortError")) ENT.erreur = e.message || String(e); }
@@ -2989,7 +3350,7 @@ window.WCA_ENT = (() => {
     const defis = (Array.isArray(d.defis) ? d.defis : []).map(x => WCA_ENT.normaliser(x, THEMES)).filter(Boolean);
     defis.forEach(x => { if (!x.id || defis.filter(y => y.id === x.id).length > 1) x.id = WCA_ENT.prochainId(defis); });
     Object.assign(ADM, { base: env, journal: Array.isArray(env.journal) ? env.journal : [],
-      data: { titre: String(d.titre || "").slice(0, WCA_ENT.MAX.titre), defis, versionPubliee: Number.isInteger(d.versionPubliee) ? d.versionPubliee : 0, publieLe: String(d.publieLe || "") },
+      data: { titre: String(d.titre || "").slice(0, WCA_ENT.MAX.titre), organisation: String(d.organisation || "").slice(0, 120), defis, versionPubliee: Number.isInteger(d.versionPubliee) ? d.versionPubliee : 0, publieLe: String(d.publieLe || "") },
       poignee: f ? f.poignee : null, modifie: f ? f.modifie : null, nom: nom || (f ? f.nom : ""), lecture: !!(f && f.lecture),
       nonEnr: false, edition: null, editionId: "", problemes: [], supprimer: "" });
   }
@@ -3027,6 +3388,38 @@ window.WCA_ENT = (() => {
     await chargerEntreprise({ silencieux: true });                   // le jeu de cette page reprend aussitôt la publication
   }
 
+  // Fichier de défis à déposer à côté du jeu : défis complets seulement, version commune avec la publication (code défi -E<version>)
+  async function exporterFichier() {
+    if (!ADM.data) return;
+    if (ADM.lecture) throw new Error("Base ouverte en lecture seule : un collègue a la main.");
+    if (ADM.edition) throw new Error("Terminez d'abord le défi en cours de modification (Appliquer ou Annuler).");
+    const defis = ADM.data.defis;
+    if (!defis.length) throw new Error("Aucun défi à exporter.");
+    const ko = defis.filter(d => WCA_ENT.verifier(d).length);
+    if (ko.length) throw new Error(`Défi(s) incomplet(s) : ${ko.map(d => d.id).join(", ")}. Complétez-les (⚠ dans la liste) avant d'exporter.`);
+    const version = (ADM.data.versionPubliee || 0) + 1, quand = instant(), par = qui();
+    const organisation = ADM.data.organisation || (WerbSocle.espace.ouvert && WerbSocle.espace.groupe ? WerbSocle.espace.groupe.organisation || "" : "");
+    const obj = { format: FORMAT_FICHIER, schema: 1, generateur: WERB.ligne, organisation, titre: ADM.data.titre, version, exporteLe: quand.slice(0, 10), exportePar: par,
+      defis: defis.map(d => ({ ...d })) };
+    const sur = s => String(s).replace(/\*\//g, "").replace(/[\r\n]+/g, " ");
+    const css = `@charset "UTF-8";\n/* WerbCyberArcade – défis de l'entreprise : ${defis.length} défi(s), version ${version}, exporté le ${quand.slice(0, 10)}${par ? ` par ${sur(par)}` : ""}.\n`
+      + `   Fichier de DONNÉES (aucun style) : à déposer à côté de WerbCyberArcade.html, sous le nom ${FICHIER_DEFIS}.\n`
+      + `   Ne pas le modifier à la main : le refaire depuis WerbCyberArcade › ⚙️ Défis de l'entreprise › Exporter. */\n`
+      + `:root { --wca-defis: "${versBase64(JSON.stringify(obj))}"; }\n`;
+    if (typeof showSaveFilePicker === "function") {
+      const h = await showSaveFilePicker({ suggestedName: FICHIER_DEFIS, types: [{ description: "Défis de l'entreprise (WerbCyberArcade)", accept: { "text/css": [".css"] } }] });
+      const w = await h.createWritable(); await w.write(css); await w.close();
+      if (h.name !== FICHIER_DEFIS) ADM.erreur = `Le fichier s'appelle « ${h.name} » : renommez-le ${FICHIER_DEFIS}, sinon le jeu ne le trouvera pas.`;
+    } else WerbSocle.telecharger(css, FICHIER_DEFIS, "text/css", { brut: true });
+    Object.assign(ADM.data, { versionPubliee: version, publieLe: quand.slice(0, 10) });
+    noter("Export", `version ${version}`, `${defis.length} défi(s) dans ${FICHIER_DEFIS}`);
+    ADM.nonEnr = true;
+    appliquerFichier(obj);                                            // le jeu de cette page reprend aussitôt les défis exportés
+    ADM.message = `⬇ Version ${version} exportée : ${defis.length} défi(s). Déposez ${FICHIER_DEFIS} à côté de WerbCyberArcade.html sur le partage : les joueurs l'ont à la prochaine ouverture du jeu.`;
+    if (ADM.poignee) { await enregistrerBase(); ADM.message += " Base enregistrée (numéro de version gardé)."; }
+    else ADM.message += " Enregistrez la base pour garder le numéro de version.";
+  }
+
   async function admAction(fn) {
     ADM.erreur = ""; ADM.message = "";
     try { await fn(); } catch (e) { if (!(e && e.name === "AbortError")) ADM.erreur = e.message || String(e); }
@@ -3039,6 +3432,7 @@ window.WCA_ENT = (() => {
     exemple: () => admAction(async () => { if (!abandonner()) return; chargerBase(WerbSocle.lireEnveloppe(window.WERB_EXEMPLE.texte), null, `Base d'exemple (${window.WERB_EXEMPLE.nom})`); }),
     enregistrer: () => admAction(enregistrerBase),
     publier: () => admAction(publierDefis),
+    exporter: () => admAction(exporterFichier),
     fermer: () => admAction(async () => { if (!abandonner()) return; if (ADM.poignee) await WerbSocle.verrou.liberer(); Object.assign(ADM, { base: null, data: null, poignee: null, nom: "", nonEnr: false, edition: null }); }),
   };
 
@@ -3108,10 +3502,21 @@ window.WCA_ENT = (() => {
     </div>`;
   }
 
+  // État des défis de l'entreprise dans ce jeu (1.4.0 : dans l'administration, plus sur la page du joueur)
+  const carteEntreprise = () => `<div class="card wca-ent"><h2>🏢 Défis de l'entreprise dans ce jeu</h2>
+      ${ENT.charge && ENT.defis.length ? `<p>✅ <b>${ENT.defis.length} défi${ENT.defis.length > 1 ? "s" : ""}</b> de ${esc(nomEntreprise())}${ENT.titre ? ` — « ${esc(ENT.titre)} »` : ""} · version ${ENT.version}${ENT.majLe ? ` ${ENT.origine === "fichier" ? "exportée" : "publiée"} le ${esc(ENT.majLe)}` : ""}${ENT.publiePar ? ` par ${esc(ENT.publiePar)}` : ""} — ${ENT.origine === "fichier" ? `lus dans le fichier <code>${FICHIER_DEFIS}</code> à côté du jeu` : "lus dans l'espace WerbSMSI"}.</p>
+        <label class="wca-case"><input type="checkbox" id="wca-ent-inclure"${ENT.inclure ? " checked" : ""}> Les mêler aux défis du jeu sur ce poste</label>`
+      : ENT.charge ? `<p>L'espace de ${esc(nomEntreprise())} est ouvert, mais aucun défi de l'entreprise n'y est publié.</p>`
+      : `<p class="small">Aucun défi de l'entreprise n'est chargé. Les joueurs les reçoivent automatiquement, sans rien voir de ce réglage, quand le fichier <code>${FICHIER_DEFIS}</code> est posé à côté du jeu. Vous pouvez aussi lire une publication de l'espace WerbSMSI :</p>
+        <button type="button" class="wca-btn sec petit" id="wca-ent-charger">📂 Charger depuis l'espace WerbSMSI</button>`}
+      ${ENT.erreur ? `<p class="wca-erreur" role="alert">${esc(ENT.erreur)}</p>` : ""}${ENT.ignores ? `<p class="small muted">${ENT.ignores} défi(s) incomplet(s) ignoré(s).</p>` : ""}
+    </div>`;
+
   VUES.admin = () => {
     const intro = `<h1>⚙️ Défis de l'entreprise</h1>
       <p class="sub">Pour l'équipe SMSI du groupe : créez vos propres défis (règles internes, contacts, procédures, pièges vus dans l'entreprise), puis publiez-les dans l'espace WerbSMSI. Les joueurs qui ouvrent le jeu avec l'espace les reçoivent, mêlés aux défis du jeu, sans rien installer ni reconstruire.</p>
-      ${ADM.erreur ? `<div class="card wca-alerte" role="alert">⚠ ${esc(ADM.erreur)}</div>` : ""}${ADM.message ? `<div class="card wca-info" role="status">${esc(ADM.message)}</div>` : ""}`;
+      ${ADM.erreur ? `<div class="card wca-alerte" role="alert">⚠ ${esc(ADM.erreur)}</div>` : ""}${ADM.message ? `<div class="card wca-info" role="status">${esc(ADM.message)}</div>` : ""}
+      ${carteEntreprise()}`;
     const nom = qui() ? "" : `<p class="small">Votre nom, pour le verrou de la base et le journal : <input type="text" id="wca-adm-nom" maxlength="60" placeholder="Prénom NOM" autocomplete="off"></p>`;
     if (!ADM.data) return intro + `<div class="card"><h2>Base des défis</h2>
         <p>Une seule base pour le groupe, rangée dans le dossier réservé à l'équipe SMSI : <code>groupe/continuite/</code> de l'espace.</p>${nom}
@@ -3131,12 +3536,22 @@ window.WCA_ENT = (() => {
     return intro + `<div class="card wca-adm-base">
         <div class="row"><h2 style="margin:0">📁 ${esc(ADM.nom || "Base des défis")}</h2>${ADM.lecture ? `<span class="wca-ko">lecture seule</span>` : ""}${ADM.nonEnr ? `<span class="wca-ko">● modifications non enregistrées</span>` : ""}<span class="spacer"></span>
           <button type="button" class="wca-btn" data-adm="enregistrer"${ADM.lecture ? " disabled" : ""}>💾 Enregistrer</button>
-          <button type="button" class="wca-btn" data-adm="publier"${ADM.lecture || !D.defis.length ? " disabled" : ""}>📤 Publier</button>
           <button type="button" data-adm="fermer">⏏ Fermer</button></div>
         ${nom}
-        <label class="wca-ed-l">Titre de la campagne <small class="muted">(facultatif, affiché aux joueurs)</small><input type="text" id="wca-adm-titre" maxlength="${WCA_ENT.MAX.titre}" value="${esc(D.titre)}" placeholder="Ex. : Les réflexes cyber de la maison Exemple"></label>
-        <p class="small">${D.defis.length} défi(s), dont ${prets} prêt(s) à publier · ${D.versionPubliee ? `dernière publication : version ${D.versionPubliee}${D.publieLe ? ` du ${esc(D.publieLe)}` : ""}` : "jamais publiée"}.
-          Publier remplace la version précédente : un code défi pris avec l'ancienne version des défis de l'entreprise ne pourra plus être relevé.</p>
+        <div class="wca-ed-g">
+          <label class="wca-ed-l">Nom de l'entreprise <small class="muted">(affiché aux joueurs)</small><input type="text" id="wca-adm-org" maxlength="120" value="${esc(D.organisation)}" placeholder="Ex. : Groupe Exemple"></label>
+          <label class="wca-ed-l">Titre de la campagne <small class="muted">(facultatif, affiché aux joueurs)</small><input type="text" id="wca-adm-titre" maxlength="${WCA_ENT.MAX.titre}" value="${esc(D.titre)}" placeholder="Ex. : Les réflexes cyber de la maison Exemple"></label>
+        </div>
+        <p class="small">${D.defis.length} défi(s), dont ${prets} prêt(s) · ${D.versionPubliee ? `dernière version diffusée : ${D.versionPubliee}${D.publieLe ? ` du ${esc(D.publieLe)}` : ""}` : "jamais diffusée"}.</p>
+        <div class="wca-diffuser">
+          <div><b>⬇ Fichier à côté du jeu</b> <span class="small">(le plus simple)</span>
+            <p class="small">Produit <code>${FICHIER_DEFIS}</code>. Déposez-le dans le même dossier que <code>WerbCyberArcade.html</code> sur le partage de l'entreprise : chaque joueur a les défis à l'ouverture du jeu, sans rien faire.</p>
+            <button type="button" class="wca-btn" data-adm="exporter"${ADM.lecture || !D.defis.length ? " disabled" : ""}>⬇ Exporter le fichier de défis</button></div>
+          <div><b>📤 Espace WerbSMSI</b> <span class="small">(si le jeu s'ouvre depuis le portail)</span>
+            <p class="small">Écrit la publication <code>groupe:defisCyber</code> dans l'espace du groupe ; le jeu ouvert depuis le portail la reçoit.</p>
+            <button type="button" class="wca-btn sec" data-adm="publier"${ADM.lecture || !D.defis.length ? " disabled" : ""}>📤 Publier dans l'espace</button></div>
+        </div>
+        <p class="small muted">Chaque export ou publication crée une nouvelle version : un code défi pris avec une version précédente des défis de l'entreprise ne pourra plus être relevé.</p>
       </div>
       ${ADM.edition ? formEditeur() : ""}
       <div class="card"><div class="row"><h2 style="margin:0">Les défis</h2><span class="spacer"></span><span class="small">➕ Nouveau :</span>
@@ -3192,6 +3607,7 @@ window.WCA_ENT = (() => {
     const t = e.target, E = ADM.edition;
     if (!t.dataset) return;
     if (t.id === "wca-adm-titre" && ADM.data) { ADM.data.titre = t.value; ADM.nonEnr = true; return; }
+    if (t.id === "wca-adm-org" && ADM.data) { ADM.data.organisation = t.value; ADM.nonEnr = true; return; }
     if (t.id === "wca-adm-nom") { if (e.type === "change") { ADM.utilisateur = WerbSocle.lien.nettoyerNom(t.value); WerbSocle.verrou.identifier(ADM.utilisateur); render(); } return; }
     if (!E) return;
     if (t.dataset.ed) { E[t.dataset.ed] = t.value; if (t.dataset.ed === "forme" && e.type === "change") render(); return; }
@@ -3217,6 +3633,15 @@ window.WCA_ENT = (() => {
     $("#main").innerHTML = guide ? WerbGuides.vue(vue, { lien, retour: `<button type="button" data-nav="accueil">← Accueil</button>`, mot: "Page" })
       : reflexes ? vueReflexes(reflexes[1]) : VUES[vue]();
     $("#main").dataset.vue = vue;                                     // repère de la page affichée (tests)
+    const app = $("#app"), jeu = ["accueil", "jeu", "fin", "scores"].includes(vue) || vue.startsWith("reflexes:");
+    app.classList.toggle("retro", jeu);                               // habillage rétro : pages du joueur seulement
+    app.dataset.vue = vue === "jeu" && partie && partie.phase === "fin" ? "fin" : vue.split(":")[0];
+    if (app.dataset.vue === "fin" && partie && !partie.effetsFin) {
+      partie.effetsFin = true;
+      WCA_RETRO.compter(document.querySelector("[data-compte]"), partie.score, 1100);
+      if (partie.res.length < partie.liste.length) WCA_RETRO.son.jouer("perdu");
+      else { WCA_RETRO.son.jouer("victoire"); if (partie.reussite >= 80) WCA_RETRO.confettis(); }
+    }
     $("#tb-titre").textContent = guide ? guide.titre : reflexes ? `Bons réflexes — ${LIEUX[reflexes[1]][1]}` : TITRES[vue] || "";
     document.title = `${$("#tb-titre").textContent} – ${WERB.produit}`;
     menu.rendre({ actif: vue === "fin" ? "jeu" : vue, pied });
@@ -3247,6 +3672,8 @@ window.WCA_ENT = (() => {
     const t = e.target;
     const nav = t.closest("[data-nav]");
     if (nav && !nav.closest("#sidebar")) { e.preventDefault(); aller(nav.dataset.nav); return; }
+    if (t.closest("[data-son]")) { WCA_RETRO.son.basculer(); const y = $("#main").scrollTop; render(); $("#main").scrollTop = y; return; }
+    if (t.closest("[data-wca-lieu], [data-wca-mode], [data-wca-nb]")) WCA_RETRO.son.jouer("clic");
     const lieu = t.closest("[data-wca-lieu]"); if (lieu) { reglages.lieu = lieu.dataset.wcaLieu; if (reglages.theme && THEMES[reglages.theme].lieu !== reglages.lieu) reglages.theme = ""; return render(); }
     const mode = t.closest("[data-wca-mode]"); if (mode) { reglages.mode = mode.dataset.wcaMode; return render(); }
     const nb = t.closest("[data-wca-nb]"); if (nb) { reglages.nb = nb.dataset.wcaNb === "tout" ? "tout" : Number(nb.dataset.wcaNb); return render(); }
@@ -3301,7 +3728,7 @@ window.WCA_ENT = (() => {
   function relever() {
     const c = lireCode(codeSaisi);
     if (!c) { codeErreur = "Code défi non reconnu : il ressemble à WCA-200-K3Q9ZP."; render(); const f = $("#wca-code"); if (f) f.focus(); return; }
-    if (c.ent !== null && !ENT.defis.length) { codeErreur = `Ce défi comprend les défis de l'entreprise (version ${c.ent}) : chargez-les d'abord, dans l'encart « 🏢 Défis de l'entreprise ».`; return render(); }
+    if (c.ent !== null && !ENT.defis.length) { codeErreur = `Ce défi comprend les défis de l'entreprise (version ${c.ent}), absents de ce poste : ouvrez le jeu là où se trouve le fichier ${FICHIER_DEFIS}.`; return render(); }
     if (c.ent !== null && ENT.version !== c.ent) { codeErreur = `Ce défi a été lancé avec la version ${c.ent} des défis de l'entreprise ; la version chargée est la ${ENT.version} : les questions ne seraient pas les mêmes.`; return render(); }
     codeErreur = "";
     Object.assign(reglages, { lieu: c.lieu, mode: c.mode, nb: c.nb, theme: c.theme });
@@ -3340,9 +3767,10 @@ window.WCA_ENT = (() => {
 
   // Bandeau commun (charte §7.6) : pas de base ; 🖨 PDF imprime la page affichée (le bilan d'une partie, par exemple)
   document.getElementById("tb-actions").innerHTML = WerbSocle.bandeau.boutons(["pdf"]);
-  window.WCA_JEU = Object.freeze({ get partie() { return partie; }, get scores() { return scores; }, get entreprise() { return ENT; }, get admin() { return ADM; } });   // pour les tests
+  window.WCA_JEU = Object.freeze({ FICHIER_DEFIS, get partie() { return partie; }, get scores() { return scores; }, get entreprise() { return ENT; }, get admin() { return ADM; } });   // pour les tests
   depuisAdresse();
-  if (LIEN) chargerEntreprise({ silencieux: true });                   // ouvert depuis une puce du portail : défis de l'entreprise sans fenêtre
+  // Défis de l'entreprise : fichier à côté du jeu, sinon (ouvert depuis une puce du portail) publication de l'espace, sans fenêtre
+  lireFichierVoisin(trouve => { if (!trouve && LIEN) chargerEntreprise({ silencieux: true }); });
 })();
 </script>
 </body>

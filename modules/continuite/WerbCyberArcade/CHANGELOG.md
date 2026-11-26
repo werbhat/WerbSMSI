@@ -3,6 +3,28 @@
 Toutes les évolutions notables de WerbCyberArcade sont consignées ici.
 Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/), numérotation [SemVer](https://semver.org/lang/fr/).
 
+## [1.4.0] — 2026-11
+
+### Ajouts
+- **Habillage rétro-gaming** des pages du joueur (accueil, partie, bilan, meilleurs scores, bons réflexes) : décor de borne d'arcade (ciel étoilé qui scintille, soleil rayé sur l'écran titre, sol en grille « synthwave » qui défile, voile cathodique) ; titre **en police pixel** dessinée dans le jeu (SVG, aucune police externe) et envahisseurs animés ; panneaux et boutons pixel (relief, ombre dure, enfoncement au clic), sélection à curseur clignotant ; apparition de chaque défi par balayage, chrono en segments, **cœurs pixel** qui éclatent à la perte d'une vie, combo enflammé ; « +300 » qui s'envole et éclats de pixels sur une bonne réponse ; bannière pixel **STAGE CLEAR!** ou **GAME OVER**, score qui défile et confettis en fin de partie. Nouveau `sources/src/retro.js`.
+- **Sons 8 bits** (Web Audio, aucun fichier) : bouton 🔇 / 🔊, **coupés par défaut**, réglage oublié à la fermeture.
+- Animations limitées aux transformations et à l'opacité, toutes coupées si le système demande de limiter les animations ; administration, sources et aide gardent le thème standard ; impression en clair.
+
+### Changements
+- L'encart **🏢 Défis de l'entreprise** quitte la page du joueur pour **⚙️ Administration › Défis de l'entreprise** (état des défis chargés, case pour les mêler sur ce poste, chargement depuis l'espace) : le joueur reçoit les défis sans rien voir de ce réglage.
+
+## [1.3.0] — 2026-11
+
+### Ajouts
+- **Fichier de défis à côté du jeu** : l'éditeur (⚙️ Défis de l'entreprise) produit **`defis_entreprise.css`** (bouton **⬇ Exporter le fichier de défis**). Déposé dans le même dossier que `WerbCyberArcade.html` sur un partage de fichiers de l'entreprise, il est lu **à l'ouverture du jeu, sans clic ni demande d'accès**, par tous les joueurs. Le jeu peut ainsi être diffusé hors de WerbSMSI : un HTML et un fichier de défis sur un partage.
+- Le fichier ne contient que des **données** (propriété `--wca-defis`, JSON encodé en base 64) : le jeu les lit, puis désactive et retire la feuille aussitôt — elle ne peut ni exécuter de code ni changer l'apparence de la page. Défis contrôlés comme une publication (incomplets ignorés et signalés, texte échappé). Fichier absent : jeu normal ; abîmé ou d'un autre format : message.
+- Éditeur : **nom de l'entreprise** (affiché aux joueurs, repris dans le fichier) ; deux façons de diffuser, côte à côte — ⬇ fichier à côté du jeu (le plus simple) et 📤 publication dans l'espace WerbSMSI. Numéro de version commun (code défi `-E<version>`), gardé dans la base, journal « Export ».
+- Le fichier voisin prime sur la publication de l'espace ; sans lui, le jeu ouvert depuis une puce du portail reprend la publication, comme en 1.2.0.
+
+### Sécurité
+- CSP : `style-src 'unsafe-inline' 'self' file:` pour charger la seule feuille de données voisine (aucun accès réseau ; scripts toujours limités au code intégré). Justification dans SECURITY.md.
+- Tests : `tests/test_fichier.py` (dossier de partage simulé en file:// : fichier présent, absent, abîmé, d'un autre format, hostile, exporté par l'éditeur puis relu).
+
 ## [1.2.0] — 2026-11
 
 ### Ajouts

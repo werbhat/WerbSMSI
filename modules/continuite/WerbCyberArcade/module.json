@@ -2,7 +2,7 @@
   "charte": "1.0",
   "id": "werbcyberarcade",
   "produit": "WerbCyberArcade",
-  "version": "1.2.0",
+  "version": "1.4.0",
   "dateVersion": "2026-11",
   "auteur": "@WerbHat",
   "signature": "Développé par @WerbHat",
@@ -14,7 +14,7 @@
   "entree": "application/WerbCyberArcade.html",
   "empreinte": {
     "algo": "SHA-256",
-    "valeur": "c0acc31f44906828b6a87c4a16db42e09e667746f57d50aae2efaf805545b8d5"
+    "valeur": "219fbb034654c0ccce083d378bab800280da54f16d8c154e9fea40786a0f15c2"
   },
   "donnees": {
     "format": "WERBCYBERARCADE",
@@ -43,6 +43,7 @@
     "guides.js",
     "questions.js",
     "entreprise.js",
+    "retro.js",
     "app.js"
   ],
   "ouvertureParLien": true,

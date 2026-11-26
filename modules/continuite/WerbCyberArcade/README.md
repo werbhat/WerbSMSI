@@ -1,7 +1,7 @@
 # WerbCyberArcade
 
 > Jeu de quiz de sensibilisation cyber, maison et travail (guides ANSSI, Cybermalveillance.gouv.fr) ; défis de l'entreprise publiés par l'équipe SMSI
-> Version **1.2.0** — Développé par **@WerbHat**
+> Version **1.4.0** — Développé par **@WerbHat**
 
 ---
 
@@ -32,6 +32,8 @@ Le dépôt source contient en plus `sources/` (dont `sources/src/questions.js`, 
 
 ## Démarrage rapide
 
+**Diffusion simple sur un partage de fichiers** : copier `application/WerbCyberArcade.html` dans un dossier du partage (lecture seule pour les joueurs) ; pour ajouter les défis de l'entreprise, y déposer à côté le `defis_entreprise.css` exporté par l'éditeur. Rien d'autre à installer.
+
 1. Ouvrir `application/WerbCyberArcade.html` avec **Microsoft Edge** (ou Chrome, Firefox), directement ou depuis le portail WerbSMSI (rubrique continuité).
 2. Choisir le terrain (🏠 maison, 🏢 travail ou les deux), le mode (🕹️ arcade ou 📖 entraînement) et le nombre de défis.
 3. **▶ Jouer**. Le guide *Animer une session* (❓ Aide) propose un déroulé de 30 minutes en équipes.
@@ -40,6 +42,7 @@ Le dépôt source contient en plus `sources/` (dont `sources/src/questions.js`, 
 
 ## Fonctionnalités
 
+- **Habillage rétro-gaming** (1.4.0) : borne d'arcade animée (étoiles, grille synthwave, titre pixel, envahisseurs, cœurs pixel, « STAGE CLEAR » / « GAME OVER »), sons 8 bits facultatifs (coupés par défaut) ; animations coupées si le système le demande.
 - **66 défis** en quatre types : 🧠 quiz, ⚖️ vrai ou faux, 🎣 « Repère le piège » (faux SMS, courriel ou site : toucher les indices), 🧩 « Bon réflexe » (remettre les étapes dans l'ordre).
 - **Deux terrains** : à la maison (*Cyber guide famille* de Cybermalveillance.gouv.fr, 35 défis), au travail (*Guide d'hygiène informatique* de l'ANSSI, 31 défis).
 - **Deux modes** : arcade (chrono, trois vies, combos, bonus de temps) et entraînement (sans chrono ni vies).
@@ -47,6 +50,7 @@ Le dépôt source contient en plus `sources/` (dont `sources/src/questions.js`, 
 - **Fin de partie** : rang, score, bilan par thème, bons réflexes à revoir, défis manqués avec la bonne réponse ; 🖨 PDF pour l'imprimer.
 - **Bons réflexes** : une fiche par thème (16 thèmes), et un entraînement sur un seul thème.
 - **Meilleurs scores** de la session, par joueur ou équipe : en mémoire seulement.
+- **Fichier de défis à côté du jeu** (1.3.0) : l'éditeur produit `defis_entreprise.css` ; déposé dans le même dossier que `WerbCyberArcade.html` sur un partage de fichiers, il donne les défis de l'entreprise à tous les joueurs dès l'ouverture, sans clic ni autorisation.
 - **Défis de l'entreprise** (1.2.0) : l'équipe SMSI du groupe crée ses propres défis dans *⚙️ Administration › Défis de l'entreprise* (formulaires, contrôle, essai), les enregistre dans une base du groupe et les **publie** dans l'espace ; les joueurs les reçoivent, mêlés aux défis du jeu, sans reconstruction ni nouvelle version du module.
 - **Défi entre collègues** : un code défi par partie, pour rejouer exactement les mêmes questions ; au bilan, le nom du joueur, une **fiche de score** (image), un **courriel prêt à envoyer** et le message à copier pour Teams.
 - **📚 Sources** : références complètes des deux guides et des parties utilisées.
@@ -56,6 +60,7 @@ Le dépôt source contient en plus `sources/` (dont `sources/src/questions.js`, 
 ## Données et format
 
 - **Base des défis de l'entreprise** (1.2.0) : fichier **`*.werbcyberarcade.json`** à l'enveloppe commune WerbSMSI (`format` : `WERBCYBERARCADE`, schéma 1), niveau groupe, rangé dans `groupe/continuite/`. `data` : `titre` (campagne), `defis` (même format que ci-dessous, avec `source` en texte libre interne), `versionPubliee`, `publieLe`. Verrou et journal du socle. Exemple fictif : `exemples/Exemple.werbcyberarcade.json`.
+- **Fichier voisin** `defis_entreprise.css` (1.3.0) : feuille de style qui ne porte que des données — `:root { --wca-defis: "<base 64>"; }`, JSON `{ format: "WERBCYBERARCADE-DEFIS", schema: 1, organisation, titre, version, exporteLe, exportePar, defis }`. Produit par l'éditeur, jamais à modifier à la main. Une page ouverte depuis un dossier ne peut pas lire un `.json` voisin sans autorisation ; une feuille de style voisine, si.
 - **Publication** `groupe:defisCyber` (objet unique) : `titre`, `version`, `defis` — relue et contrôlée par le jeu (`sources/src/entreprise.js`).
 - Le contenu de base du jeu est intégré au livrable : `sources/src/questions.js` (`window.WCA`) — sources, thèmes et bons réflexes, défis.
 
@@ -132,7 +137,7 @@ python <WerbSMSI>\charte\outils\werb_charte.py publier .
 
 ## Historique des versions
 
-Version courante : **1.2.0** de novembre 2026 — défis de l'entreprise : éditeur de l'équipe SMSI, base du groupe, publication `groupe:defisCyber` reçue par les joueurs. Précédente : **1.1.0** de novembre 2026 — défi entre collègues : code défi, nom du joueur au bilan, fiche de score en image, courriel prêt à envoyer. Précédente : **1.0.0** de novembre 2026 — première version : 66 défis maison et travail, quatre types de défis, modes arcade et entraînement, bilan et bons réflexes. Détail dans [CHANGELOG.md](CHANGELOG.md).
+Version courante : **1.4.0** de novembre 2026 — habillage rétro-gaming animé des pages du joueur, sons 8 bits facultatifs ; état des défis de l'entreprise déplacé dans l'administration. Précédente : **1.3.0** de novembre 2026 — fichier de défis `defis_entreprise.css` à côté du jeu, lu sans clic ni autorisation. Précédente : **1.2.0** de novembre 2026 — défis de l'entreprise : éditeur de l'équipe SMSI, base du groupe, publication `groupe:defisCyber` reçue par les joueurs. Précédente : **1.1.0** de novembre 2026 — défi entre collègues : code défi, nom du joueur au bilan, fiche de score en image, courriel prêt à envoyer. Précédente : **1.0.0** de novembre 2026 — première version : 66 défis maison et travail, quatre types de défis, modes arcade et entraînement, bilan et bons réflexes. Détail dans [CHANGELOG.md](CHANGELOG.md).
 
 ---
 
