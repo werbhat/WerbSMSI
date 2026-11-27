@@ -39,6 +39,18 @@ class Silencieux(http.server.SimpleHTTPRequestHandler):
         pass
 
 
+def connecter(pg, login="admin.demo", mdp="Demo-Admin-2026"):
+    """Connexion à l'espace (portail 1.22.0) : compte de démonstration, ou premier compte d'un espace neuf."""
+    pg.wait_for_selector("[data-connexion], [data-creation-admin]", timeout=15000)
+    if pg.locator("[data-creation-admin]").count():
+        for k, v in (("#caLogin", "admin.test"), ("#caNom", "Admin TEST"), ("#caMdp", "Admin-Test-2026!"), ("#caMdp2", "Admin-Test-2026!")):
+            pg.fill(k, v)
+        pg.click("[data-act=caValider]")
+    else:
+        pg.fill("#cxLogin", login); pg.fill("#cxMdp", mdp); pg.click("[data-act=cxValider]")
+    pg.wait_for_selector("#tb-user [data-act=monCompte]", timeout=30000)
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--visible", action="store_true")
@@ -88,7 +100,7 @@ def main() -> int:
         ok(pg.inner_text("#main h1") == "📚 Sources publiques du groupe" and f"{len(DEFAUT)} source(s) sont proposées" in pg.inner_text("#main"), "menu ⚙️ Administration › Sources publiques : catalogue de départ annoncé")
 
         print("Catalogue de départ et première publication")
-        pg.click("#sidebar [data-wnav=accueil]"); pg.click("[data-act=espace]"); pg.wait_for_selector("h1:has-text('Groupe Démo Industrie')")
+        pg.click("#sidebar [data-wnav=accueil]"); pg.click("[data-act=espace]"); connecter(pg); pg.wait_for_selector("h1:has-text('Groupe Démo Industrie')")
         pg.click("#sidebar [data-wnav=sources]")
         ok(lignes() == len(DEFAUT) and "Aucune source publiée" in pg.inner_text("#main"), f"{len(DEFAUT)} sources de départ (WerbReferentiels, WerbIEC62443)")
         pg.select_option("#spRef", "RGPD"); ok(lignes() == sum("RGPD" in s["referentiels"] for s in DEFAUT), "filtre par référentiel")

@@ -50,6 +50,18 @@ class Silencieux(http.server.SimpleHTTPRequestHandler):
         pass
 
 
+def connecter(pg, login="admin.demo", mdp="Demo-Admin-2026"):
+    """Connexion à l'espace (portail 1.22.0) : compte de démonstration, ou premier compte d'un espace neuf."""
+    pg.wait_for_selector("[data-connexion], [data-creation-admin]", timeout=15000)
+    if pg.locator("[data-creation-admin]").count():
+        for k, v in (("#caLogin", "admin.test"), ("#caNom", "Admin TEST"), ("#caMdp", "Admin-Test-2026!"), ("#caMdp2", "Admin-Test-2026!")):
+            pg.fill(k, v)
+        pg.click("[data-act=caValider]")
+    else:
+        pg.fill("#cxLogin", login); pg.fill("#cxMdp", mdp); pg.click("[data-act=cxValider]")
+    pg.wait_for_selector("#tb-user [data-act=monCompte]", timeout=30000)
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--visible", action="store_true")
@@ -111,14 +123,15 @@ def main() -> int:
 
         print("Première publication")
         pg.click("#sidebar [data-wnav=accueil]")
-        pg.click("[data-act=espace]")
+        pg.click("[data-act=espace]"); connecter(pg)
         pg.wait_for_selector("h1:has-text('Groupe Démo Industrie')")
         pg.click("#sidebar [data-wnav=listes]")
         txt = pg.inner_text("#main")
         ok("WerbExploitation" in txt and "WerbMap" in txt and "Aucune liste publiée" in txt, "listes rangées par module, rien de publié")
         ok(pg.locator("details.lg .badge:text-is('non publiée')").count() == 2, "deux listes « non publiée »")
         ok(pg.eval_on_selector_all(f".lg-v[data-l='{PE}']", "l => l.map(x => x.value)") == LISTES["werbexploitation"][0]["defaut"], "valeurs par défaut du module proposées")
-        pg.click("[data-act=lgPublier]")
+        ok(pg.input_value("#lgAuteur") == "Administrateur DEMO", "« Publiée par » repris du compte connecté")
+        pg.fill("#lgAuteur", ""); pg.click("[data-act=lgPublier]")
         ok("Publiée par" in pg.inner_text("#toasts"), "auteur obligatoire")
         pg.fill("#lgAuteur", "Alice MARTIN")
         publier()

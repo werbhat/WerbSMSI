@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 440" font-family="Segoe UI, Arial, sans-serif">
+  <title>La route WerbSMSI : départ, sept stations et terminus</title>
+  <rect width="1200" height="440" rx="16" fill="#f6f8fc"/>
+  <text x="40" y="52" font-size="26" font-weight="700" fill="#1f3864">La route WerbSMSI</text>
+  <text x="40" y="78" font-size="15" fill="#5d6676">Un trajet d'une demi-journée, du dossier vide au tableau de bord : suivez les stations dans l'ordre.</text>
+  <!-- la route : asphalte, bas-côtés, marquage central -->
+  <path d="M110 150 H1060 A90 90 0 0 1 1060 330 H330" fill="none" stroke="#c9d3e3" stroke-width="34" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M110 150 H1060 A90 90 0 0 1 1060 330 H330" fill="none" stroke="#3b4a63" stroke-width="26" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M110 150 H1060 A90 90 0 0 1 1060 330 H330" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-dasharray="16 14"/>
+  <!-- stations : rangée du haut (aller) -->
+  <g font-size="15" text-anchor="middle">
+    <g><circle cx="110" cy="150" r="27" fill="#ffffff" stroke="#2e7d32" stroke-width="6"/><text x="110" y="157" font-size="19" font-weight="700" fill="#2e7d32">D</text>
+      <text x="110" y="205" font-weight="700" fill="#1d2330">Départ</text><text x="110" y="224" fill="#5d6676">Préparer le voyage</text></g>
+    <g><circle cx="320" cy="150" r="27" fill="#ffffff" stroke="#6a3fa0" stroke-width="6"/><text x="320" y="157" font-size="19" font-weight="700" fill="#6a3fa0">1</text>
+      <text x="320" y="205" font-weight="700" fill="#1d2330">Le plan de la ligne</text><text x="320" y="224" fill="#5d6676">Comprendre l'ensemble</text></g>
+    <g><circle cx="530" cy="150" r="27" fill="#ffffff" stroke="#6a3fa0" stroke-width="6"/><text x="530" y="157" font-size="19" font-weight="700" fill="#6a3fa0">2</text>
+      <text x="530" y="205" font-weight="700" fill="#1d2330">Bâtir l'espace</text><text x="530" y="224" fill="#5d6676">Groupe et sites</text></g>
+    <g><circle cx="740" cy="150" r="27" fill="#ffffff" stroke="#b26a00" stroke-width="6"/><text x="740" y="157" font-size="19" font-weight="700" fill="#b26a00">3</text>
+      <text x="740" y="205" font-weight="700" fill="#1d2330">Prendre les clés</text><text x="740" y="224" fill="#5d6676">Premier compte</text></g>
+    <g><circle cx="950" cy="150" r="27" fill="#ffffff" stroke="#b26a00" stroke-width="6"/><text x="950" y="157" font-size="19" font-weight="700" fill="#b26a00">4</text>
+      <text x="950" y="205" font-weight="700" fill="#1d2330">Distribuer les badges</text><text x="950" y="224" fill="#5d6676">Comptes et droits</text></g>
+  </g>
+  <!-- stations : rangée du bas (retour) -->
+  <g font-size="15" text-anchor="middle">
+    <g><circle cx="950" cy="330" r="27" fill="#ffffff" stroke="#1e7d8c" stroke-width="6"/><text x="950" y="337" font-size="19" font-weight="700" fill="#1e7d8c">5</text>
+      <text x="950" y="385" font-weight="700" fill="#1d2330">Poser la première base</text><text x="950" y="404" fill="#5d6676">Créer, ranger, déclarer</text></g>
+    <g><circle cx="740" cy="330" r="27" fill="#ffffff" stroke="#1e7d8c" stroke-width="6"/><text x="740" y="337" font-size="19" font-weight="700" fill="#1e7d8c">6</text>
+      <text x="740" y="385" font-weight="700" fill="#1d2330">Prendre le raccourci</text><text x="740" y="404" fill="#5d6676">Les puces du portail</text></g>
+    <g><circle cx="530" cy="330" r="27" fill="#ffffff" stroke="#1f5fa8" stroke-width="6"/><text x="530" y="337" font-size="19" font-weight="700" fill="#1f5fa8">7</text>
+      <text x="530" y="385" font-weight="700" fill="#1d2330">Faire circuler</text><text x="530" y="404" fill="#5d6676">Publier, consolider</text></g>
+    <g><rect x="303" y="303" width="54" height="54" rx="8" fill="#ffffff" stroke="#b3261e" stroke-width="6"/>
+      <rect x="317" y="317" width="13" height="13" fill="#1d2330"/><rect x="330" y="330" width="13" height="13" fill="#1d2330"/>
+      <rect x="330" y="317" width="13" height="13" fill="#ffffff"/><rect x="317" y="330" width="13" height="13" fill="#ffffff"/>
+      <text x="330" y="385" font-weight="700" fill="#1d2330">Terminus</text><text x="330" y="404" fill="#5d6676">Le rythme de croisière</text></g>
+  </g>
+  <!-- légende des tronçons -->
+  <g font-size="13" fill="#5d6676">
+    <circle cx="60" cy="300" r="7" fill="#6a3fa0"/><text x="74" y="305">Comprendre et bâtir</text>
+    <circle cx="60" cy="324" r="7" fill="#b26a00"/><text x="74" y="329">Comptes</text>
+    <circle cx="60" cy="348" r="7" fill="#1e7d8c"/><text x="74" y="353">Bases</text>
+    <circle cx="60" cy="372" r="7" fill="#1f5fa8"/><text x="74" y="377">Pilotage</text>
+  </g>
+</svg>

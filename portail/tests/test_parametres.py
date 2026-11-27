@@ -42,6 +42,18 @@ class Silencieux(http.server.SimpleHTTPRequestHandler):
         pass
 
 
+def connecter(pg, login="admin.demo", mdp="Demo-Admin-2026"):
+    """Connexion à l'espace (portail 1.22.0) : compte de démonstration, ou premier compte d'un espace neuf."""
+    pg.wait_for_selector("[data-connexion], [data-creation-admin]", timeout=15000)
+    if pg.locator("[data-creation-admin]").count():
+        for k, v in (("#caLogin", "admin.test"), ("#caNom", "Admin TEST"), ("#caMdp", "Admin-Test-2026!"), ("#caMdp2", "Admin-Test-2026!")):
+            pg.fill(k, v)
+        pg.click("[data-act=caValider]")
+    else:
+        pg.fill("#cxLogin", login); pg.fill("#cxMdp", mdp); pg.click("[data-act=cxValider]")
+    pg.wait_for_selector("#tb-user [data-act=monCompte]", timeout=30000)
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--visible", action="store_true")
@@ -88,7 +100,7 @@ def main() -> int:
 
         print("Paramètres par défaut")
         pg.click("#sidebar [data-wnav=accueil]")
-        pg.click("[data-act=espace]")
+        pg.click("[data-act=espace]"); connecter(pg)
         pg.wait_for_selector("h1:has-text('Groupe Démo Industrie')")
         ok("WerbAcademie" in titres() and pg.locator("[data-masques]").count() == 0, "page Groupe : tous les modules, aucun masqué")
         pg.click("#sidebar [data-wnav=parametres]")
@@ -124,7 +136,7 @@ def main() -> int:
 
         print("Relecture")
         ouvrir_portail()
-        pg.click("[data-act=espace]")
+        pg.click("[data-act=espace]"); connecter(pg)
         pg.wait_for_selector("h1:has-text('Groupe Démo Industrie')")
         ok("WerbAcademie" not in titres(), "après rechargement : paramètres relus dans l'espace")
 

@@ -16,9 +16,10 @@
   // État en mémoire seulement
   const P = { vue: "accueil", site: "", groupe: null, pubGroupe: null, sites: {}, basesGroupe: null, verif: null, chargement: false, manquants: [],
     raccourcis: WerbSocle.preference.lire("raccourcis", true), raccourciOk: null,
-    utilisateur: "" };   // nom saisi une fois à l'ouverture du portail (1.16.0), transmis aux modules ouverts d'ici ; mémoire seulement
+    utilisateur: "", compte: null, expire: 0, ticket: "", comptesData: null, comptesErr: "", messageConnexion: "" };   // compte connecté (1.22.0) ; nom saisi une fois à l'ouverture du portail (1.16.0), transmis aux modules ouverts d'ici ; mémoire seulement
 
   WerbSocle.activerPurgeAutomatique();
+  WerbSocle.comptes.gereParLePortail();   // le portail a sa propre page de connexion (1.22.0) : pas de fenêtre du socle
 
   /* ===================================================== utilitaires */
   const $ = s => document.querySelector(s);
@@ -82,6 +83,9 @@
     P.chargement = true; render();
     try {
       P.groupe = E.groupe;
+      P.comptesErr = "";   // comptes de l'espace (1.22.0)
+      try { P.comptesData = await WerbSocle.comptes.lire(); } catch (e) { P.comptesData = null; P.comptesErr = e.message; }
+      resynchroniserSession();
       P.pubGroupe = await E.publications("groupe");
       LG.brouillon = null;                                   // listes de choix : brouillon repris de la publication relue
       PA.brouillon = null;                                   // paramètres : brouillon repris de werbsmsi.groupe.json
@@ -131,7 +135,7 @@
   }
 
   /* ===================================================== consolidation (lecture des publications) */
-  const sitesAccessibles = () => (P.groupe ? P.groupe.sites || [] : []).filter(s => P.sites[s.code] && P.sites[s.code].accessible);
+  const sitesAccessibles = () => (P.groupe ? P.groupe.sites || [] : []).filter(s => P.sites[s.code] && P.sites[s.code].accessible && (!P.compte || voitSite(s.code)));
   const objetsSite = (code, nom) => (((P.sites[code] || {}).pub || {}).objets || {})[nom] || [];
   const publication = (code, module) => { const l = ((P.sites[code] || {}).pub || {}).fichiers || []; return l.find(f => f.module === module) || l.find(f => idActuel(f.module) === module); };
   const libelleNiveau = n => { const e = ((P.pubGroupe || {}).objets || {}).echelles; const l = e && (e.niveauxRisque || []).find(x => x.niveau === n); return l ? `${n} – ${l.libelle}` : String(n); };
@@ -155,7 +159,7 @@
   // Lien qui ouvre le module sur une base de l'espace (#werbsmsi=…) ; null si le module ne sait pas l'ouvrir.
   function lienBase(m, b, site = "") {
     const url = lienModule(m);
-    return url && m.manifeste.ouvertureParLien ? WerbSocle.lien.creer(url, { groupeId: P.groupe.groupeId, fichier: b.chemin, site, libelle: b.libelle || "", espace: E.nom, theme: WerbSocle.theme.mode, utilisateur: P.utilisateur,
+    return url && m.manifeste.ouvertureParLien ? WerbSocle.lien.creer(url, { groupeId: P.groupe.groupeId, fichier: b.chemin, site, libelle: b.libelle || "", espace: E.nom, theme: WerbSocle.theme.mode, utilisateur: P.utilisateur, ticket: connecte() ? P.ticket : "",
       sigle: P.groupe.sigle || "", organisation: P.groupe.organisation || "", siteNom: ((P.groupe.sites || []).find(x => x.code === site) || {}).nom || "" }) : null;   // sigle, organisation, nom du site : nommage des exports (§7.8)
   }
   // Verrou valable d'une base (charte §5.7) : texte « Ouverte par X depuis 14:32 », sinon « »
@@ -194,7 +198,7 @@
 
   function tuileModule(m, niveau) {
     const man = m.manifeste;
-    const lien = lienModule(m) && WerbSocle.lien.avecContexte(lienModule(m), { theme: WerbSocle.theme.mode, utilisateur: P.utilisateur,
+    const lien = lienModule(m) && WerbSocle.lien.avecContexte(lienModule(m), { theme: WerbSocle.theme.mode, utilisateur: P.utilisateur, ticket: connecte() ? P.ticket : "",
       sigle: E.ouvert && P.groupe ? P.groupe.sigle || "" : "", organisation: E.ouvert && P.groupe ? P.groupe.organisation || "" : "" });   // thème (§7.5), nom (§5.5), nommage des exports (§7.8)
     const etat = { publie: ["publié", "b-ok"], "a-integrer": ["à intégrer", "b-warn"], "a-creer": ["à créer", ""] }[m.etat] || [m.etat, ""];
     return `<div class="tile"><h3>${esc(man ? man.produit : libelleModule(m.id))}</h3>
@@ -243,9 +247,18 @@
   const ouvrirRecueil = () => window.open(lienRecueil(), "_blank", "noopener");
 
   // Guides du portail (portail/guides/) : lecture dans ❓ Aide ; « Démarrer avec WerbSMSI » est proposé à l'accueil
-  WerbGuides.guides().forEach(g => { VUES[g.id] = () => WerbGuides.vue(g.id, { lien: id => `data-nav="${id}"` }); });
+  /* Un guide du portail dans un nouvel onglet (1.24.0) : le recueil s'ouvre directement sur ce guide (#<id du recueil>), dans le thème
+     du portail (?theme=), pour le garder à côté du portail ou d'un module. Identifiant du recueil : chemin portail/guides/<fichier>,
+     calculé comme le fait le composant des guides (charte §7.4). */
+  const idRecueil = g => "guide:" + ("portail/guides/" + g.fichier.replace(/\.md$/i, "")).normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+  const lienGuideOnglet = g => `${RECUEIL}${["clair", "sombre"].includes(WerbSocle.theme.mode) ? `?theme=${WerbSocle.theme.mode}` : ""}#${encodeURIComponent(idRecueil(g))}`;
+  const boutonOnglet = g => `<div class="row noprint guide-onglet"><a class="btn" href="${esc(lienGuideOnglet(g))}" target="_blank" rel="noopener" data-guide-onglet="${esc(g.id)}">↗ Ouvrir dans un nouvel onglet</a><span class="small muted">pour garder ce guide à côté du portail ou d'un module</span></div>`;
+  WerbGuides.guides().forEach(g => { VUES[g.id] = () => boutonOnglet(g) + WerbGuides.vue(g.id, { lien: id => `data-nav="${id}"` }); });
   const guideDemarrer = () => WerbGuides.guides().find(g => /demarrer/i.test(g.fichier)) || null;
+  const guideEnRoute = () => WerbGuides.guides().find(g => /en_route/i.test(g.fichier)) || null;   // premiers pas, station par station (1.23.0)
   VUES.accueil = () => `<div class="hero"><h1>🛡️ WerbSMSI</h1><p class="sub">${esc(WERB.description)}</p>
+    ${guideEnRoute() ? `<div class="infobox" data-en-route>🛣️ <b>Première utilisation ?</b> Suivez <a href="#" data-nav="${esc(guideEnRoute().id)}">« ${esc(guideEnRoute().titre)} »</a> : du dossier vide au tableau de bord, en sept stations (espace, comptes, premières bases, publications). <a href="${esc(lienGuideOnglet(guideEnRoute()))}" target="_blank" rel="noopener" data-guide-onglet="accueil">↗ L'ouvrir dans un nouvel onglet</a>, pour le suivre à côté du portail.</div>` : ""}
     ${guideDemarrer() ? `<div class="infobox">🧭 <b>Dirigeant, ou nouveau dans la cybersécurité ?</b> Commencez par le guide <a href="#" data-nav="${esc(guideDemarrer().id)}">« ${esc(guideDemarrer().titre)} »</a> : le SMSI en termes simples, qui fait quoi, et une feuille de route réaliste sur douze mois.</div>` : ""}
     ${E.ouvert ? "" : `<div class="infobox">Ouvrez l'espace <code>SMSI_&lt;GROUPE&gt;</code> du drive protégé pour voir le groupe, les sites et la consolidation. Le dossier est redemandé à chaque session.</div>`}
     ${E.disponible ? "" : `<div class="warnbox">Ce navigateur ne permet pas d'ouvrir un dossier : utilisez Microsoft Edge.</div>`}
@@ -579,11 +592,12 @@
 
 | Dossier ou fichier | Équipe SMSI groupe | Équipe du site X | Autres sites |
 |---|---|---|---|
-| \`werbsmsi.groupe.json\`, \`publications/\` | lecture-écriture | lecture | lecture |
+| \`werbsmsi.groupe.json\`, \`werbsmsi.comptes.json\`, \`publications/\` | lecture-écriture | lecture | lecture |
 | \`groupe/\` | lecture-écriture | aucun | aucun |
 | \`sites/X/\` | lecture (écriture si le groupe administre) | lecture-écriture | aucun |
 
 - \`modeles/\` contient le modèle Word d'entreprise commun (\`Modele_entete.docx\`), lu par tous les modules : lecture pour tous, écriture pour l'équipe SMSI groupe.
+- \`werbsmsi.comptes.json\` (comptes et droits, mots de passe chiffrés) : seule l'équipe SMSI groupe l'écrit ; c'est ce droit d'écriture qui permet de créer le premier compte administrateur.
 - \`publications/\` à la racine est lisible par tous les sites : les modules du groupe n'y publient que ce qui doit être diffusé.
 - Désactiver l'héritage des droits sur \`groupe/\` et sur chaque \`sites/<CODE>/\`.
 - Activer l'historique des versions du drive : il sert de sauvegarde des bases.
@@ -790,67 +804,6 @@ ${sites.map(s => `    ├── ${s.code || "?"}/  (werbsmsi.site.json, ${DOSSIE
       </tbody></table></div>`;
   };
 
-  // Guide pas à pas : créer la base d'un site et faire apparaître son raccourci. Le tableau des dossiers est déduit du registre.
-  function dossiersModules() {
-    const lignes = [];
-    REG.modules.filter(m => m.manifeste && m.manifeste.donnees && m.etat === "publie").forEach(m => {
-      const man = m.manifeste, [emo] = rubStyle(man.rubrique);
-      man.portees.forEach(n => lignes.push(`<tr><td>${emo} <b>${esc(man.produit)}</b>${man.portees.length > 1 ? ` <span class="small muted">(${n})</span>` : ""}</td>
-        <td class="mono">${n === "site" ? `sites/&lt;CODE&gt;/${esc(man.rubrique)}/` : `groupe/${esc(man.rubrique)}/`}</td><td class="mono">${esc(man.donnees.extension)}</td>
-        <td>${n === "site" ? "📍 CODE" : "🏢 Groupe"}${man.ouvertureParLien ? "" : ` <span class="small muted">(copie le chemin)</span>`}</td></tr>`));
-    });
-    return lignes.join("");
-  }
-  const etape = (n, emoji, texte, teinte, corps) => `<div class="card etape">${titre(emoji, `${n ? `Étape ${n} – ` : ""}${texte}`, teinte)}${corps}</div>`;
-  VUES.aide = () => `<h1>❓ Aide – créer la base d'un site et son raccourci</h1>
-    <p class="sub">Exemple : WerbExploitation sur le site LYON. Pour les autres modules, seuls le dossier et la fin du nom de fichier changent.</p>
-    <div class="card">${titre("🧭", "Ce que le portail repère", "bleu")}
-      <p>Le portail affiche une puce pour un fichier rangé <b>directement</b> dans le dossier du module (pas dans un sous-dossier) et dont le nom se termine par <b>l'extension du module</b>. Chemins à partir du dossier de l'espace <code>SMSI_&lt;SIGLE&gt;</code> :</p>
-      <div class="tablewrap"><table class="t"><thead><tr><th>Module</th><th>Dossier de la base</th><th>Fin du nom de fichier</th><th>Puce</th></tr></thead><tbody>${dossiersModules()}</tbody></table></div>
-      <div class="legende-puces"><span class="chip">📍 LYON</span> base déclarée, un clic l'ouvre · <span class="chip nondecl">📍 LYON</span> présente mais non déclarée (déjà cliquable) ·
-      <span class="chip vide">📍 NANTES</span> aucune base · <span class="chip ferme">🔒 PARIS</span> dossier du site inaccessible</div></div>
-    ${etape(0, "🏗️", "Prérequis : l'espace et le site existent", "violet", `<ol>
-      <li>Ouvrir <code>portail\\WerbSMSI.html</code> dans <b>Microsoft Edge</b>.</li>
-      <li>Pas encore d'espace : <b>🛠️ Outils › Mise en place › 🏗️ Créer un espace</b>, remplir l'organisation, le sigle et les sites, puis <b>Choisir le dossier parent et créer</b>.</li>
-      <li>Espace existant sans le site : <b>Ouvrir l'espace…</b>, puis <b>Mise en place › 📍 Ajouter un site</b>, code et nom, <b>Créer sites/CODE/</b>.</li>
-      <li>Le site apparaît dans <b>📍 Sites</b> du menu, sans 🔒. Un 🔒 indique un dossier absent ou des droits insuffisants sur le drive.</li></ol>
-      <p><button data-act="assistant" data-k="espace">🏗️ Ouvrir la mise en place</button></p>`)}
-    ${etape(1, "📝", "Créer la base dans le module", "bleu", `<ol>
-      <li>Sur la carte <b>WerbExploitation</b>, cliquer <b>Ouvrir</b> : le module s'ouvre dans un nouvel onglet.</li>
-      <li>Si vous vous êtes identifié dans le portail (<b>👤</b> du bandeau), le module ne redemande pas votre nom ; sinon, le saisir. Puis <b>✨ Nouvelle base</b>. Le module affiche <b>Intégration WerbSMSI</b>.</li>
-      <li><b>Choisir l'espace…</b> : dans la fenêtre de Windows, aller jusqu'au dossier <code>SMSI_&lt;SIGLE&gt;</code> et cliquer « Sélectionner un dossier ».</li>
-      <li>Choisir le site <b>LYON</b>, puis <b>Rattacher</b> : la base est liée au site et l'inventaire WerbMap publié est chargé.</li></ol>
-      <div class="infobox small"><b>WerbMap</b> : sur l'écran d'accès, <b>➕ Créer une nouvelle base…</b> demande tout de suite l'emplacement (étape 2), puis le compte administrateur ; rattacher ensuite dans <b>Administration › Intégration WerbSMSI</b>.<br>
-      <b>WerbIEC62443</b> : <b>Nouveau projet</b>, puis <b>Intégration WerbSMSI</b>. · <b>WerbGouvernance</b> : <b>Nouvelle base</b>, puis rattachement au <b>groupe</b>.</div>`)}
-    ${etape(2, "💾", "Enregistrer au bon endroit", "ambre", `<ol>
-      <li><b>Enregistrer</b> (Ctrl+S) : le sélecteur d'Edge s'ouvre.</li>
-      <li>Aller dans <code>SMSI_&lt;SIGLE&gt;\\sites\\LYON\\exploitation\\</code>.</li>
-      <li>Garder le nom proposé <code>Exploitation_LYON.werbexploitation.json</code>. Pour le renommer, garder la fin <code>.werbexploitation.json</code>.</li>
-      <li>Valider : les enregistrements suivants écrivent au même endroit, sans sélecteur.</li></ol>
-      <div class="warnbox small">Sous Firefox, l'enregistrement télécharge le fichier : le déplacer à la main dans ce dossier.</div>`)}
-    ${etape(3, "📍", "Faire apparaître la puce dans le portail", "vert", `<ol>
-      <li>Revenir au portail et cliquer <b>Actualiser</b> (en haut à droite) : le portail ne relit l'espace qu'à l'ouverture ou sur ce bouton.</li>
-      <li>Sous la carte <b>WerbExploitation</b> (rubrique ou vue groupe › 📍 Bases par module et par site), la puce <span class="chip nondecl">📍 LYON</span> apparaît : base présente, pas encore déclarée.</li>
-      <li>Menu <b>📍 Sites › LYON</b>, carte <b>🗂️ Bases du site</b>, ligne « non déclarée » : <b>Déclarer</b>, saisir un libellé, valider.</li>
-      <li>La puce passe au vert <span class="chip">📍 LYON</span> : la base est inscrite dans <code>sites/LYON/werbsmsi.site.json</code>.</li></ol>`)}
-    ${etape(4, "🚀", "Utiliser le raccourci", "cyan", `<ol>
-      <li>Cliquer la puce <span class="chip">📍 LYON</span> : le module s'ouvre dans un nouvel onglet.</li>
-      <li>Votre nom est repris du portail (<b>👤</b>) ; sans identification, le module le demande.</li>
-      <li>Avec l'option <b>🔗 Raccourcis</b> du portail (cochée par défaut, en haut à droite), l'espace chargé dans le portail est confié au module : <b>la base s'ouvre directement</b>, sans autre clic (portail 1.17.0, socle 1.11.0). Si Edge demande d'abord d'<b>autoriser</b> l'accès, le module affiche l'encadré « Base demandée par le portail » et son bouton <b>📂 Ouvrir</b>.</li>
-      <li>Sans raccourci (portail fermé, option décochée ou refus d'Edge), la fenêtre de Windows demande un <b>dossier</b> : choisir celui de l'espace (<code>SMSI_&lt;SIGLE&gt;</code>), du site (<code>LYON</code>) ou du module (<code>exploitation</code>), puis « Sélectionner un dossier ». Inutile d'aller jusqu'au fichier : la base est trouvée et s'ouvre, puis s'enregistre à sa place.</li>
-      <li>Astuce : épinglez le dossier de l'espace dans <b>Accès rapide</b> de l'Explorateur Windows (clic droit › Épingler) ; il sera à un clic dans cette fenêtre.</li></ol>`)}
-    ${etape(0, "🩺", "Si la puce n'apparaît pas", "rouge", `<div class="tablewrap"><table class="t"><thead><tr><th>Symptôme</th><th>Cause probable</th></tr></thead><tbody>
-      <tr><td>Puce grisée</td><td>Fichier dans un autre dossier ou un sous-dossier (<code>exploitation\\2026\\</code>), ou extension modifiée</td></tr>
-      <tr><td>Puce absente après l'enregistrement</td><td>Portail non actualisé (<b>Actualiser</b>)</td></tr>
-      <tr><td>🔒 sur le site</td><td>Dossier du site absent ou droits insuffisants sur le drive</td></tr>
-      <tr><td>« … pas celui de la base demandée »</td><td>Un autre espace a été choisi dans le sélecteur : choisir l'espace d'origine</td></tr>
-      <tr><td>« Le dossier … ne mène pas à … »</td><td>Dossier choisi hors du chemin de la base (autre site, sous-dossier du fichier) : choisir l'espace, le site ou le dossier du module</td></tr>
-      <tr><td>Erreur de <code>werb_charte.py espace</code> sur la base</td><td>Base non rattachée au site dans le module (étape 1, point 4)</td></tr></tbody></table></div>`)}
-    ${etape(0, "🔐", "Bon à savoir", "ardoise", `<ul>
-      <li>Aucune donnée n'est conservée dans le navigateur. Seule exception, l'option <b>🔗 Raccourcis</b> : le portail y range la <b>référence</b> au dossier de l'espace (pas son contenu) pour les modules ouverts depuis ses puces ; elle est effacée à la fermeture du portail, de l'espace, ou en décochant l'option.</li>
-      <li>La sécurité est celle du drive : appliquer les droits décrits dans <code>DROITS.md</code> à la racine de l'espace.</li>
-      <li>Le portail n'écrit que sur action explicite : création d'un espace ou d'un site, déclaration d'une base. Il ne modifie jamais une base.</li></ul>`)}`;
-
   VUES.apropos = () => `<h1>ℹ️ À propos</h1><p class="sub">${esc(WERB.description)}</p><div class="card"><table class="t"><tbody>
     <tr><td class="muted" style="width:220px">Produit</td><td><strong>${esc(WERB.produit)}</strong> v${esc(WERB.version)} (build ${esc(window.BUILD_DATE)})</td></tr>
     <tr><td class="muted">Auteur</td><td>${esc(WERB.signature)}</td></tr>
@@ -862,7 +815,9 @@ ${sites.map(s => `    ├── ${s.code || "?"}/  (werbsmsi.site.json, ${DOSSIE
   /* ===================================================== rendu */
   function renderTopbar() {
     const u = $("#tb-user");
-    if (u) u.innerHTML = `<button class="tb-user${P.utilisateur ? "" : " anonyme"}" data-act="identifier" title="${esc(P.utilisateur
+    if (u && E.ouvert && connecte()) u.innerHTML = `<button class="tb-user" data-act="monCompte" title="${esc(`Connecté(e) : ${P.compte.login}. Mon compte, mot de passe, déconnexion.`)}">👤 ${esc(P.compte.nom)}</button>`;
+    else if (u && E.ouvert && P.groupe) u.innerHTML = `<span class="tb-user anonyme">🔐 Connexion requise</span>`;
+    else if (u) u.innerHTML = `<button class="tb-user${P.utilisateur ? "" : " anonyme"}" data-act="identifier" title="${esc(P.utilisateur
       ? `Identifié(e) : ${P.utilisateur}. Les modules ouverts depuis le portail ne redemandent pas votre nom. Cliquer pour changer.`
       : "Indiquez votre nom une fois : les modules ouverts depuis le portail ne le redemanderont pas.")}">👤 ${esc(P.utilisateur || "S'identifier")}</button>`;
     $("#tb-espace").textContent = E.ouvert ? `${P.groupe ? P.groupe.organisation : ""} — dossier ${E.nom}` : "Aucun espace ouvert";
@@ -891,21 +846,28 @@ ${sites.map(s => `    ├── ${s.code || "?"}/  (werbsmsi.site.json, ${DOSSIE
   } });
   function renderNav() {
     const sites = P.groupe ? P.groupe.sites || [] : [];
+    const attente = E.ouvert && !!P.groupe && !connecte(), sitesVus = sites.filter(s => !connecte() || voitSite(s.code));
+    const tGroupe = [...(voitGroupe() || sitesVus.length ? [["grc", "Tableau de bord GRC"]] : []), ...(voitGroupe() ? [["groupe", P.groupe.sigle || "Vue groupe"]] : [])];
+    const tAdmin = E.ouvert ? (adminEspace() ? [["comptes", "Comptes et droits"], ["sauvegarde", "Sauvegarde et restauration"], ["listes", "Listes de choix du groupe"], ["sources", "Sources publiques"], ["parametres", "Paramètres"]] : [])
+      : [["sauvegarde", "Sauvegarde et restauration"], ["listes", "Listes de choix du groupe"], ["sources", "Sources publiques"], ["parametres", "Paramètres"]];
     MENU.splice(0, MENU.length, { g: "accueil", i: "🏠", l: "Accueil", c: "bleu", t: [["accueil", "Rubriques et modules"]] },
-      ...(P.groupe ? [{ g: "groupe", i: "🏢", l: "Groupe", c: "violet", t: [["grc", "Tableau de bord GRC"], ["groupe", P.groupe.sigle || "Vue groupe"]] },
-        { g: "sites", i: "📍", l: "Sites", c: "vert", t: sites.map(s => ["site:" + s.code, s.code]) }] : []),
-      { g: "outils", i: "🛠️", l: "Outils", c: "orange", t: [["assistant", "Mise en place"], ["verif", "Vérifier les modules"], ["modeles", "Modèles de documents"]] },
-      { g: "admin", i: "⚙️", l: "Administration", c: "ardoise", t: [["sauvegarde", "Sauvegarde et restauration"], ["listes", "Listes de choix du groupe"], ["sources", "Sources publiques"], ["parametres", "Paramètres"]] },
-      { g: "aide", i: "❓", l: "Aide", c: "olive", t: [["recueil", "📚 Recueil de tous les guides ↗"], ...WerbGuides.entrees(), ...((window.WERB_MEDIAS || {}).infographie_demarrer ? [["infographie", "Infographie : démarrer"]] : []), ["aide", "Créer la base d'un site"], ["apropos", "À propos"]] });
+      ...(P.groupe && !attente ? [...(tGroupe.length ? [{ g: "groupe", i: "🏢", l: "Groupe", c: "violet", t: tGroupe }] : []),
+        ...(sitesVus.length ? [{ g: "sites", i: "📍", l: "Sites", c: "vert", t: sitesVus.map(s => ["site:" + s.code, s.code]) }] : [])] : []),
+      ...(attente ? [] : [{ g: "outils", i: "🛠️", l: "Outils", c: "orange", t: [...(!E.ouvert || adminEspace() ? [["assistant", "Mise en place"]] : []), ["verif", "Vérifier les modules"], ["modeles", "Modèles de documents"]] },
+        ...(tAdmin.length ? [{ g: "admin", i: "⚙️", l: "Administration", c: "ardoise", t: tAdmin }] : [])]),
+      { g: "aide", i: "❓", l: "Aide", c: "olive", t: [...WerbGuides.entrees().filter(([id]) => guideEnRoute() && id === guideEnRoute().id), ["recueil", "📚 Recueil de tous les guides ↗"], ...WerbGuides.entrees().filter(([id]) => !guideEnRoute() || id !== guideEnRoute().id), ...((window.WERB_MEDIAS || {}).infographie_demarrer ? [["infographie", "Infographie : démarrer"]] : []), ["apropos", "À propos"]] });
     const cnt = Object.fromEntries(sites.filter(s => !(P.sites[s.code] || {}).accessible).map(s => ["site:" + s.code, "🔒"]));
-    menu.rendre({ actif: P.vue === "site" ? "site:" + P.site : P.vue, compteurs: cnt,
+    menu.rendre({ actif: attente ? "" : P.vue === "site" ? "site:" + P.site : P.vue, compteurs: cnt,
       pied: `<footer class="sig"><strong>${esc(WERB.produit)}</strong><br>${esc(WERB.signature)}<br>v${esc(WERB.version)} · ${esc(window.BUILD_DATE)}</footer>` });
   }
   function render() {
     renderTopbar(); renderNav();
     const m = $("#main");
     if (P.chargement) { m.innerHTML = `<p class="muted">Lecture de l'espace…</p>`; return; }
-    const vue = (P.vue === "groupe" || P.vue === "site") && !P.groupe ? "accueil" : P.vue;
+    if (E.ouvert && P.compte && !connecte()) { fermerSession(); P.messageConnexion = `Session expirée (${CPT.TICKET_H} h) : reconnectez-vous.`; }
+    let vue = (P.vue === "groupe" || P.vue === "site") && !P.groupe ? "accueil" : P.vue;
+    if (E.ouvert && P.groupe && !connecte()) vue = "connexion";
+    else if (!autorise(vue)) vue = "refuse";
     m.innerHTML = VUES[vue]();
     if (vue === "accueil") setTimeout(proposerIdentification, 0);   // identification, puis invitation à ouvrir l'espace de démonstration
   }
@@ -1421,7 +1383,7 @@ ${sites.map(s => `    ├── ${s.code || "?"}/  (werbsmsi.site.json, ${DOSSIE
       catch (e) { toast("Création impossible (droits d'écriture sur l'espace ?) : " + e.message, "err"); }
       render();
     },
-    async fermer() { E.fermer(); await majRaccourci(); Object.assign(P, { vue: "accueil", site: "", groupe: null, pubGroupe: null, sites: {}, basesGroupe: null }); render(); },
+    async fermer() { E.fermer(); fermerSession(); P.comptesData = null; P.comptesErr = ""; P.messageConnexion = ""; await majRaccourci(); Object.assign(P, { vue: "accueil", site: "", groupe: null, pubGroupe: null, sites: {}, basesGroupe: null }); render(); },
     async verifier() {
       let d;
       try { d = await showDirectoryPicker({ mode: "read" }); } catch (e) { if (e.name !== "AbortError") toast(e.message, "err"); return; }
@@ -1956,6 +1918,227 @@ ${sites.map(s => `    ├── ${s.code || "?"}/  (werbsmsi.site.json, ${DOSSIE
 
   ACTIONS.allerEtape = el => { const c = document.getElementById("etape-" + el.dataset.e); if (c) c.scrollIntoView({ behavior: "smooth", block: "start" }); };
   if (!ACTIONS.imprimerPage) ACTIONS.imprimerPage = () => window.print();
+
+  /* ===================================================== comptes de l'espace (portail 1.22.0, socle 1.13.0, charte §5.10)
+     À l'ouverture d'un espace : connexion (identifiant, mot de passe), ou création du compte administrateur si l'espace n'a pas encore
+     de comptes. Session en mémoire seulement, 12 h. Droits : matrice compte × colonne (GROUPE, chaque site) ; un site se consulte avec
+     un rôle sur ce site ou sur le groupe ; administration de l'espace (comptes, paramètres, listes, sources, sauvegarde, mise en place) :
+     administrateur du groupe. Sans espace ouvert, l'identification reste déclarative (nom seul), comme les modules ouverts hors espace. */
+  const CPT = WerbSocle.comptes;
+  const connecte = () => !!P.compte && Date.now() < P.expire;
+  const adminEspace = () => connecte() && CPT.administrateurEspace(P.compte);
+  const voitGroupe = () => connecte() && CPT.peut(P.compte, CPT.GROUPE);
+  const voitSite = code => connecte() && (CPT.peut(P.compte, code) || CPT.peut(P.compte, CPT.GROUPE));
+  const libRole = r => CPT.LIBELLES[r] || "—";
+  // Pages réservées une fois l'espace ouvert : condition d'accès
+  const ACCES = { groupe: () => voitGroupe(), site: () => voitSite(P.site), grc: () => voitGroupe() || sitesAccessibles().length > 0,
+    assistant: () => adminEspace(), sauvegarde: () => adminEspace(), listes: () => adminEspace(), sources: () => adminEspace(), parametres: () => adminEspace(), comptes: () => adminEspace() };
+  const autorise = vue => !E.ouvert || !ACCES[vue] || ACCES[vue]();
+
+  async function ouvrirSession(c) {
+    P.compte = c; P.expire = Date.now() + CPT.TICKET_H * 3600e3; P.compteGroupe = (P.groupe || {}).groupeId || "";
+    P.ticket = await CPT.ticket(c).catch(() => "");
+    const ancien = P.utilisateur; P.utilisateur = c.nom;
+    if (!SV.auteur || SV.auteur === ancien) SV.auteur = c.nom;
+    if (!LG.auteur || LG.auteur === ancien) LG.auteur = c.nom;
+    if (P.vue === "accueil" || !autorise(P.vue)) { P.vue = voitGroupe() ? "groupe" : (sitesAccessibles()[0] ? "site" : "accueil"); if (P.vue === "site") P.site = sitesAccessibles()[0].code; }   // page demandée à l'ouverture si les droits le permettent
+  }
+  function fermerSession() { P.compte = null; P.expire = 0; P.ticket = ""; CP.brouillon = null; }
+  // Après relecture de l'espace : le compte connecté reprend ses droits du fichier ; désactivé ou supprimé : déconnexion
+  function resynchroniserSession() {
+    if (!P.compte) return;
+    if (P.compteGroupe !== ((P.groupe || {}).groupeId || "")) { fermerSession(); return; }   // autre espace ouvert : nouvelle connexion
+    const c = P.comptesData && P.comptesData.comptes.find(x => x.login === P.compte.login && x.actif !== false);
+    if (!c) { fermerSession(); toast("Votre compte n'existe plus ou est désactivé : reconnectez-vous.", "err"); return; }
+    P.compte = { login: c.login, nom: c.nom, droits: CPT.nettoyerDroits(c.droits) };
+  }
+
+  VUES.connexion = () => {
+    const g = P.groupe || {};
+    if (P.comptesErr) return `<h1>🔐 Connexion</h1><div class="warnbox">${esc(P.comptesErr)}</div>`;
+    if (!P.comptesData) return `<h1>🔐 Premier compte de l'espace</h1><p class="sub">${esc(g.organisation || "")} — dossier ${esc(E.nom)}</p>
+      <div class="card cx" data-creation-admin><h2>Créer le compte administrateur</h2>
+      <p>Cet espace n'a pas encore de comptes. Le premier compte est <b>administrateur du groupe et de tous les sites</b> : il crée ensuite les comptes des équipes et leur attribue des droits dans <b>Administration › Comptes et droits</b>.</p>
+      <div class="cx-champs"><label class="f" for="caLogin">Identifiant</label><input id="caLogin" autocomplete="username" placeholder="prenom.nom">
+      <label class="f" for="caNom">Nom</label><input id="caNom" autocomplete="name" placeholder="Prénom NOM" value="${esc(P.utilisateur)}">
+      <label class="f" for="caMdp">Mot de passe (${CPT.MDP_MIN} caractères au moins)</label><input id="caMdp" type="password" autocomplete="new-password">
+      <label class="f" for="caMdp2">Confirmation</label><input id="caMdp2" type="password" autocomplete="new-password"></div>
+      <p class="err" id="caErr"></p>
+      <div class="row"><button class="primary" data-act="caValider">Créer le compte et entrer</button><button data-act="fermer">Fermer l'espace</button></div>
+      <p class="small muted">Le compte est écrit dans <code>${esc(CPT.FICHIER)}</code>, à la racine de l'espace : seule l'équipe SMSI du groupe, qui a le droit d'écriture sur cette racine, peut le créer. Le mot de passe n'est jamais enregistré en clair.</p></div>`;
+    return `<h1>🔐 Connexion</h1><p class="sub">${esc(g.organisation || "")} — dossier ${esc(E.nom)}</p>
+      <div class="card cx" data-connexion><h2>Se connecter à l'espace</h2>
+      ${P.messageConnexion ? `<div class="warnbox">${esc(P.messageConnexion)}</div>` : ""}
+      <div class="cx-champs"><label class="f" for="cxLogin">Identifiant</label><input id="cxLogin" autocomplete="username">
+      <label class="f" for="cxMdp">Mot de passe</label><input id="cxMdp" type="password" autocomplete="current-password"></div>
+      <p class="err" id="cxErr"></p>
+      <div class="row"><button class="primary" data-act="cxValider" id="cxGo">Se connecter</button><button data-act="fermer">Fermer l'espace</button></div>
+      ${P.comptesData.demo ? `<div class="infobox small" data-demo-comptes>Espace de démonstration : <b>admin.demo</b> / Demo-Admin-2026 (administrateur), <b>tech.demo</b> / Demo-Tech-2026 (éditeur LYON, lecteur NANTES), <b>audit.demo</b> / Demo-Audit-2026 (lecteur partout).</div>` : ""}
+      <p class="small muted">Session de ${CPT.TICKET_H} h, gardée en mémoire seulement. Les modules ouverts depuis le portail reprennent votre compte sans vous le redemander. Mot de passe oublié : un administrateur du groupe le réinitialise.</p></div>`;
+  };
+  VUES.refuse = () => `<h1>⛔ Accès réservé</h1><div class="infobox">Votre compte n'a pas de droit sur cette page. Les droits se donnent dans <b>Administration › Comptes et droits</b>, par un administrateur du groupe.</div>`;
+
+  /* ---------- Administration › Comptes et droits : matrice compte × colonne, brouillon puis enregistrement tracé ---------- */
+  const CP = { brouillon: null, revision: 0, filtre: "" };
+  const cpVue = c => ({ login: c.login, nom: c.nom, actif: c.actif !== false, droits: { ...CPT.nettoyerDroits(c.droits) } });
+  function cpCharger() { const d = P.comptesData; CP.revision = d ? d.revision || 0 : 0; CP.brouillon = d ? d.comptes.map(cpVue) : []; }
+  const cpEtat = () => JSON.stringify(CP.brouillon.map(({ _mdp, ...c }) => c));
+  const cpModifie = () => !!CP.brouillon && (cpEtat() !== JSON.stringify((P.comptesData ? P.comptesData.comptes : []).map(cpVue)) || CP.brouillon.some(c => c._mdp));
+  const cpColonnes = () => { const s = (P.groupe.sites || []).map(x => x.code), autres = [...new Set(CP.brouillon.flatMap(c => Object.keys(c.droits)))].filter(k => k !== CPT.GROUPE && !s.includes(k));
+    return [CPT.GROUPE, ...s, ...autres]; };
+  function cpControles() {
+    const l = [], actifs = CP.brouillon.filter(c => c.actif);
+    if (!actifs.some(c => c.droits.GROUPE === "administrateur")) l.push(["ko", "Aucun administrateur du groupe actif : l'espace ne pourrait plus être administré."]);
+    const moi = CP.brouillon.find(c => c.login === P.compte.login);
+    if (moi && (!moi.actif || moi.droits.GROUPE !== "administrateur")) l.push(["ko", "Vous retirez votre propre droit d'administrateur du groupe : demandez-le à un autre administrateur."]);
+    actifs.filter(c => !Object.keys(c.droits).length).forEach(c => l.push(["warn", `${c.login} : compte actif sans aucun droit.`]));
+    (P.groupe.sites || []).forEach(s => { if (!actifs.some(c => ["editeur", "administrateur"].includes(c.droits[s.code]))) l.push(["warn", `${s.code} : aucun éditeur ni administrateur pour ce site.`]); });
+    cpColonnes().filter(k => k !== CPT.GROUPE && !(P.groupe.sites || []).some(s => s.code === k)).forEach(k => l.push(["warn", `${k} : droits sur un site qui n'est plus déclaré dans l'espace.`]));
+    return l;
+  }
+  VUES.comptes = () => {
+    if (!CP.brouillon) cpCharger();
+    const cols = cpColonnes(), d = P.comptesData || {}, ctl = cpControles(), bloquant = ctl.some(x => x[0] === "ko"), mod = cpModifie();
+    const titreCol = k => k === CPT.GROUPE ? "🏢 Groupe" : `📍 ${k}`;
+    const nb = (k, r) => CP.brouillon.filter(c => c.actif && c.droits[k] === r).length;
+    const original = new Map((d.comptes || []).map(c => [c.login, c]));
+    return `<h1>👥 Comptes et droits</h1><p class="sub">Matrice des rôles par compte : une colonne pour le groupe, une par site. Lecteur : consulte ; Éditeur : modifie les bases ; Administrateur : administre (sur le groupe : comptes, paramètres et administration de l'espace).</p>
+      ${mod ? `<div class="warnbox">Modifications non enregistrées.</div>` : ""}
+      ${ctl.length ? `<div class="${bloquant ? "warnbox" : "infobox"} small" data-cp-controles>${ctl.map(([n, t]) => `<div>${n === "ko" ? "⛔" : "⚠️"} ${esc(t)}</div>`).join("")}</div>` : ""}
+      <div class="card" data-cp-matrice><div class="row cp-noprint">${titre("🧮", "Matrice des droits", "violet")}<span class="spacer"></span>
+        <button data-act="cpImprimer">🖨 Imprimer</button><button data-act="cpExporter">⬇ Exporter (CSV)</button>
+        <button data-act="cpAnnuler"${mod ? "" : " disabled"}>Annuler</button><button class="primary" data-act="cpEnregistrer"${mod && !bloquant ? "" : " disabled"}>💾 Enregistrer</button></div>
+        <p class="small muted cp-imprime">${esc((P.groupe || {}).organisation || "")} — matrice des droits au ${esc(frDate(new Date().toISOString().slice(0, 10)))}, éditée par ${esc(P.compte.nom)} (${esc(P.compte.login)}) · révision ${esc(CP.revision)}</p>
+        <div class="tablewrap"><table class="t cp-mx"><thead><tr><th>Compte</th><th>État</th>${cols.map(k => `<th class="n">${esc(titreCol(k))}</th>`).join("")}<th class="cp-noprint"></th></tr></thead><tbody>
+        ${CP.brouillon.map(c => { const o = original.get(c.login);
+          return `<tr data-cp-compte="${esc(c.login)}"${c.actif ? "" : ` class="cp-inactif"`}><td><b>${esc(c.login)}</b>${c.login === P.compte.login ? ` <span class="small muted">(vous)</span>` : ""}<div class="small muted">${esc(c.nom)}${o ? "" : " · nouveau"}${c._mdp ? " · mot de passe à enregistrer" : o && o.mdpLe ? ` · mot de passe du ${esc(frDate(o.mdpLe.slice(0, 10)))}` : ""}</div></td>
+            <td>${c.actif ? badge("actif", "b-ok") : badge("désactivé", "")}</td>
+            ${cols.map(k => { const r = c.droits[k] || "";
+              return `<td class="n cp-c" data-role="${r}"><select data-cpl="${esc(c.login)}" data-cpc="${esc(k)}" aria-label="${esc(`${c.login} – ${titreCol(k)}`)}"${c.actif ? "" : " disabled"}><option value="">—</option>${CPT.ROLES.map(x => `<option value="${x}"${x === r ? " selected" : ""}>${esc(libRole(x))}</option>`).join("")}</select><span class="cp-txt">${esc(r ? libRole(r) : "—")}</span></td>`; }).join("")}
+            <td class="cp-noprint" style="white-space:nowrap"><button class="small" data-act="cpMdp" data-l="${esc(c.login)}" title="Donner un nouveau mot de passe">🔑</button>
+              <button class="small" data-act="cpActif" data-l="${esc(c.login)}">${c.actif ? "Désactiver" : "Réactiver"}</button></td></tr>`; }).join("")}
+        </tbody><tfoot><tr><td colspan="2" class="small muted">Comptes actifs par rôle</td>${cols.map(k => `<td class="n small">${CPT.ROLES.slice().reverse().map(r => `${libRole(r).slice(0, 3)}. ${nb(k, r)}`).join(" · ")}</td>`).join("")}<td class="cp-noprint"></td></tr></tfoot></table></div>
+        <p class="small muted">Un site se consulte avec un rôle sur ce site ou sur le groupe. Un compte n'est jamais supprimé : il est désactivé, pour garder la trace de ce qu'il a fait.</p></div>
+      <div class="card cp-noprint" data-cp-ajout>${titre("➕", "Ajouter un compte", "vert")}
+        <div class="grid g3"><div><label class="f" for="cpLogin">Identifiant</label><input id="cpLogin" placeholder="prenom.nom" autocomplete="off"></div>
+        <div><label class="f" for="cpNom">Nom</label><input id="cpNom" placeholder="Prénom NOM" autocomplete="off"></div>
+        <div><label class="f" for="cpMdp">Mot de passe initial (${CPT.MDP_MIN} caractères au moins)</label><input id="cpMdp" type="password" autocomplete="new-password"></div></div>
+        <div class="row" style="margin-top:8px"><button class="primary" data-act="cpAjouter">Ajouter à la matrice</button><span class="small muted">Puis choisissez ses rôles dans la matrice et enregistrez. Transmettez le mot de passe initial par un autre canal ; l'utilisateur le change dans 👤 Mon compte.</span></div></div>
+      <div class="card" data-cp-journal>${titre("📜", "Journal des comptes", "ardoise")}
+        ${(d.journal || []).length ? `<div class="tablewrap"><table class="t"><thead><tr><th>Date</th><th>Par</th><th>Action</th><th>Compte</th><th>Avant</th><th>Après</th></tr></thead><tbody>
+        ${d.journal.slice(-200).reverse().map(j => `<tr><td class="small" style="white-space:nowrap">${esc(frDate(j.le))}</td><td>${esc(j.par)}</td><td>${esc(j.action)}</td><td>${esc(j.compte)}</td><td class="small">${esc(j.avant)}</td><td class="small">${esc(j.apres)}</td></tr>`).join("")}
+        </tbody></table></div>` : `<p class="small muted">Aucune entrée.</p>`}</div>`;
+  };
+  function cpCsv() {
+    const cols = cpColonnes(), q = v => `"${String(v ?? "").replace(/"/g, '""')}"`, orig = new Map((P.comptesData.comptes || []).map(c => [c.login, c]));
+    const lignes = [["Identifiant", "Nom", "État", ...cols.map(k => k === CPT.GROUPE ? "Groupe" : k), "Mot de passe changé le", "Créé le"].map(q).join(";"),
+      ...CP.brouillon.map(c => { const o = orig.get(c.login) || {}; return [c.login, c.nom, c.actif ? "actif" : "désactivé", ...cols.map(k => c.droits[k] ? libRole(c.droits[k]) : ""), (o.mdpLe || "").slice(0, 10), (o.creeLe || "").slice(0, 10)].map(q).join(";"); })];
+    return "﻿" + lignes.join("\r\n") + "\r\n";
+  }
+  function fenetreMdp(titreFen, intro, login, avecAncien) {
+    const v = document.createElement("div"); v.id = "mdp-fen"; v.className = "fen-back";
+    v.innerHTML = `<div class="fen" role="dialog" aria-modal="true" aria-labelledby="mdp-titre"><h2 id="mdp-titre">${esc(titreFen)}</h2><p>${intro}</p>
+      ${avecAncien ? `<label class="f" for="mdpAncien">Mot de passe actuel</label><input id="mdpAncien" type="password" autocomplete="current-password">` : ""}
+      <label class="f" for="mdpNouveau">Nouveau mot de passe (${CPT.MDP_MIN} caractères au moins)</label><input id="mdpNouveau" type="password" autocomplete="new-password">
+      <label class="f" for="mdpConf">Confirmation</label><input id="mdpConf" type="password" autocomplete="new-password"><p class="err" id="mdpErr"></p>
+      <div class="fen-a"><span class="spacer"></span><button data-act="mdpFermer">Annuler</button><button class="primary" data-act="mdpValider" data-l="${esc(login)}" data-ancien="${avecAncien ? 1 : 0}">Valider</button></div></div>`;
+    v.addEventListener("keydown", e => { if (e.key === "Escape") v.remove(); });
+    document.body.appendChild(v); v.querySelector("input").focus();
+  }
+  function fenetreCompte() {
+    if ($("#compte-fen")) return;
+    const v = document.createElement("div"), c = P.compte; v.id = "compte-fen"; v.className = "fen-back";
+    const droits = Object.entries(c.droits);
+    v.innerHTML = `<div class="fen" role="dialog" aria-modal="true" aria-labelledby="compte-titre"><h2 id="compte-titre">👤 ${esc(c.nom)}</h2>
+      <p>Connecté(e) à <b>${esc(P.groupe.organisation)}</b> avec l'identifiant <b>${esc(c.login)}</b>, jusqu'à ${esc(frDate(P.expire))}.</p>
+      <table class="t"><thead><tr><th>Périmètre</th><th>Rôle</th></tr></thead><tbody>${droits.map(([k, r]) => `<tr><td>${k === CPT.GROUPE ? "🏢 Groupe" : "📍 " + esc(k)}</td><td>${esc(libRole(r))}</td></tr>`).join("") || `<tr><td colspan="2" class="empty">Aucun droit.</td></tr>`}</tbody></table>
+      <div class="fen-a"><button data-act="deconnecter">Se déconnecter</button><span class="spacer"></span><button data-act="compteFermer">Fermer</button><button class="primary" data-act="monMdp">🔑 Changer mon mot de passe</button></div></div>`;
+    v.addEventListener("keydown", e => { if (e.key === "Escape") v.remove(); });
+    document.body.appendChild(v);
+  }
+  const ACTIONS_COMPTES = {
+    async cxValider() {
+      const l = $("#cxLogin").value.trim(), m = $("#cxMdp").value, e = $("#cxErr"), b = $("#cxGo");
+      if (!l || !m) { e.textContent = "Saisissez l'identifiant et le mot de passe."; return; }
+      b.disabled = true; e.textContent = "Vérification…";
+      const c = await CPT.connecter(l, m).catch(err => { e.textContent = err.message; return null; });
+      if (!c) { b.disabled = false; if (e.textContent === "Vérification…") e.textContent = "Identifiant ou mot de passe incorrect."; $("#cxMdp").value = ""; $("#cxMdp").focus(); return; }
+      P.messageConnexion = ""; await ouvrirSession(c); render(); $("#main").scrollTop = 0; toast(`Bonjour ${c.nom}.`, "ok");
+    },
+    async caValider() {
+      const e = $("#caErr"), m = $("#caMdp").value;
+      if (m !== $("#caMdp2").value) { e.textContent = "Les deux mots de passe ne correspondent pas."; return; }
+      e.textContent = "Création…";
+      try { const c = await CPT.creerAdministrateur($("#caLogin").value.trim(), $("#caNom").value, m); P.comptesData = await CPT.lire(); await ouvrirSession(c); render(); toast(`Compte administrateur ${c.login} créé.`, "ok"); }
+      catch (err) { e.textContent = err.message; }
+    },
+    monCompte() { fenetreCompte(); },
+    compteFermer() { const f = $("#compte-fen"); if (f) f.remove(); },
+    deconnecter() { const f = $("#compte-fen"); if (f) f.remove(); fermerSession(); render(); toast("Déconnecté(e). L'espace reste ouvert.", "ok"); },
+    monMdp() { const f = $("#compte-fen"); if (f) f.remove(); fenetreMdp("🔑 Changer mon mot de passe", "Le nouveau mot de passe vaut pour le portail et pour les modules ouverts depuis le portail.", P.compte.login, true); },
+    mdpFermer() { const f = $("#mdp-fen"); if (f) f.remove(); },
+    async mdpValider(el) {
+      const n = $("#mdpNouveau").value, e = $("#mdpErr"), l = el.dataset.l;
+      if (n !== $("#mdpConf").value) { e.textContent = "Les deux mots de passe ne correspondent pas."; return; }
+      const m = CPT.controlerMdp(n, l); if (m) { e.textContent = m; return; }
+      if (el.dataset.ancien === "1") {
+        e.textContent = "Enregistrement…";
+        try { await CPT.changerMotDePasse(l, $("#mdpAncien").value, n); P.comptesData = await CPT.lire(); CP.brouillon = null; $("#mdp-fen").remove(); toast("Mot de passe changé.", "ok"); render(); }
+        catch (err) { e.textContent = err.message; }
+        return;
+      }
+      const c = CP.brouillon.find(x => x.login === l); if (c) c._mdp = n;
+      $("#mdp-fen").remove(); render(); toast(`Nouveau mot de passe de ${l} prêt : enregistrez la matrice.`, "ok");
+    },
+    cpMdp(el) { fenetreMdp(`🔑 Nouveau mot de passe de ${el.dataset.l}`, "Transmettez-le par un autre canal ; l'utilisateur le changera dans 👤 Mon compte.", el.dataset.l, false); },
+    cpActif(el) { const c = CP.brouillon.find(x => x.login === el.dataset.l); if (c) { c.actif = !c.actif; render(); } },
+    cpAnnuler() { CP.brouillon = null; render(); },
+    cpImprimer() { window.print(); },
+    cpExporter() { WerbSocle.telecharger(new Blob([cpCsv()], { type: "text/csv;charset=utf-8" }), `Comptes_droits_${(P.groupe.sigle || "ESPACE").replace(/[^\w-]+/g, "_")}_${new Date().toISOString().slice(0, 10)}.csv`); toast("Matrice exportée (CSV).", "ok"); },
+    cpAjouter() {
+      const l = $("#cpLogin").value.trim(), n = WerbSocle.lien.nettoyerNom($("#cpNom").value), m = $("#cpMdp").value;
+      if (!CPT.identifiantValide(l)) { toast("Identifiant : 3 à 40 caractères parmi lettres, chiffres, point, tiret et soulignement.", "err"); return; }
+      if (CP.brouillon.some(c => c.login.toLowerCase() === l.toLowerCase())) { toast("Cet identifiant existe déjà.", "err"); return; }
+      if (!n) { toast("Indiquez le nom (Prénom NOM).", "err"); return; }
+      const e = CPT.controlerMdp(m, l); if (e) { toast(e, "err"); return; }
+      CP.brouillon.push({ login: l, nom: n, actif: true, droits: {}, _mdp: m }); render(); toast(`${l} ajouté : choisissez ses rôles puis enregistrez.`, "ok");
+    },
+    async cpEnregistrer() {
+      if (cpControles().some(x => x[0] === "ko")) return;
+      const d = JSON.parse(JSON.stringify(P.comptesData)), par = P.compte.login, anciens = new Map(d.comptes.map(c => [c.login, c])), sortie = [];
+      try {
+        for (const b of CP.brouillon) {
+          let c = anciens.get(b.login);
+          if (!c) { c = await CPT.nouveauCompte(b.login, b.nom, b._mdp, b.droits); c.actif = b.actif; CPT.tracer(d, par, "Création", b.login, "", `${b.nom} – ${CPT.texteDroits(b.droits)}`); }
+          else {
+            const av = CPT.texteDroits(c.droits), ap = CPT.texteDroits(b.droits);
+            if (av !== ap) { CPT.tracer(d, par, "Droits", b.login, av, ap); c.droits = CPT.nettoyerDroits(b.droits); }
+            if ((c.actif !== false) !== b.actif) { CPT.tracer(d, par, b.actif ? "Réactivation" : "Désactivation", b.login); c.actif = b.actif; }
+            if (b._mdp) { const n = await CPT.nouveauCompte(b.login, b.nom, b._mdp, {}); Object.assign(c, { sel: n.sel, iterations: n.iterations, empreinte: n.empreinte, mdpLe: n.mdpLe }); CPT.tracer(d, par, "Mot de passe", b.login, "", "réinitialisé par un administrateur"); }
+          }
+          sortie.push(c);
+        }
+        d.comptes = sortie;
+        await CPT.ecrire(d, par, CP.revision);
+        P.comptesData = await CPT.lire(); CP.brouillon = null; resynchroniserSession(); P.ticket = connecte() ? await CPT.ticket(P.compte).catch(() => "") : "";
+        toast("Comptes et droits enregistrés.", "ok");
+      } catch (err) { toast(err.message, "err"); }
+      render();
+    },
+  };
+  Object.assign(ACTIONS, ACTIONS_COMPTES);
+  document.addEventListener("change", e => {
+    const s = e.target.closest("select[data-cpl]"); if (!s || !CP.brouillon) return;
+    const c = CP.brouillon.find(x => x.login === s.dataset.cpl); if (!c) return;
+    if (s.value) c.droits[s.dataset.cpc] = s.value; else delete c.droits[s.dataset.cpc];
+    render();
+  });
+  document.addEventListener("keydown", e => {
+    if (e.key !== "Enter") return;
+    if (["cxLogin", "cxMdp"].includes(e.target.id)) ACTIONS.cxValider();
+    else if (["caLogin", "caNom", "caMdp", "caMdp2"].includes(e.target.id)) ACTIONS.caValider();
+  });
+
   document.addEventListener("click", e => {
     const site = e.target.closest("[data-site]");
     if (site) { e.preventDefault(); P.vue = "site"; P.site = site.dataset.site; render(); $("#main").scrollTop = 0; return; }

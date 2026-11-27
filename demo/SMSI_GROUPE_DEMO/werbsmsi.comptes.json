@@ -1,0 +1,92 @@
+{
+ "format": "WERBSMSI-COMPTES",
+ "schema": 1,
+ "famille": "WERBSMSI",
+ "meta": {
+  "produit": "WerbSMSI",
+  "appVersion": "1.22.0",
+  "auteur": "@WerbHat",
+  "generateur": "WerbSMSI v1.22.0 – Développé par @WerbHat",
+  "groupeId": "e6a47cd7-77fe-463f-b6ea-b50ff390bfc7",
+  "modifieLe": "2026-11-27T08:00:00Z",
+  "modifiePar": "admin.demo"
+ },
+ "data": {
+  "groupeId": "e6a47cd7-77fe-463f-b6ea-b50ff390bfc7",
+  "demo": true,
+  "cle": "6de75c9d0fa9bc5fe881388797211a0769ad0f5e648adcf2d53661a9181cb532",
+  "revision": 1,
+  "comptes": [
+   {
+    "login": "admin.demo",
+    "nom": "Administrateur DEMO",
+    "droits": {
+     "GROUPE": "administrateur",
+     "LYON": "administrateur",
+     "NANTES": "administrateur"
+    },
+    "actif": true,
+    "sel": "7d5d94d4ad3fcfff07aa46f29e4cdad3",
+    "iterations": 600000,
+    "empreinte": "bb133ab51faa17a66eef3bfb827281e733c659dde19aa8e905792bf5545eb19c",
+    "creeLe": "2026-11-27T08:00:00Z",
+    "mdpLe": "2026-11-27T08:00:00Z"
+   },
+   {
+    "login": "tech.demo",
+    "nom": "Technicien DEMO",
+    "droits": {
+     "LYON": "editeur",
+     "NANTES": "lecteur"
+    },
+    "actif": true,
+    "sel": "7d1fb2ed247ad8a6b6c25e15edfd850d",
+    "iterations": 600000,
+    "empreinte": "5b867763af8c579e7ba3834add8a203868ee67ea9655709ce5954b04646715b1",
+    "creeLe": "2026-11-27T08:00:00Z",
+    "mdpLe": "2026-11-27T08:00:00Z"
+   },
+   {
+    "login": "audit.demo",
+    "nom": "Auditeur DEMO",
+    "droits": {
+     "GROUPE": "lecteur",
+     "LYON": "lecteur",
+     "NANTES": "lecteur"
+    },
+    "actif": true,
+    "sel": "a49e91803bc7116b0ff5d32bb17ca723",
+    "iterations": 600000,
+    "empreinte": "746cf199ff7950e1dd82216498a61753f7b41a42aa7fcac498ccd2c8d4ef1039",
+    "creeLe": "2026-11-27T08:00:00Z",
+    "mdpLe": "2026-11-27T08:00:00Z"
+   }
+  ],
+  "journal": [
+   {
+    "le": "2026-11-27T08:00:00Z",
+    "par": "admin.demo",
+    "action": "Création",
+    "compte": "admin.demo",
+    "avant": "",
+    "apres": "Administrateur DEMO"
+   },
+   {
+    "le": "2026-11-27T08:00:00Z",
+    "par": "admin.demo",
+    "action": "Création",
+    "compte": "tech.demo",
+    "avant": "",
+    "apres": "Technicien DEMO"
+   },
+   {
+    "le": "2026-11-27T08:00:00Z",
+    "par": "admin.demo",
+    "action": "Création",
+    "compte": "audit.demo",
+    "avant": "",
+    "apres": "Auditeur DEMO"
+   }
+  ]
+ }
+}

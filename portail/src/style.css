@@ -190,3 +190,22 @@ h2.tc .pc-num { width: 22px; height: 22px; font-size: 12px; margin-right: 2px; }
 @media (max-width: 1150px) { .grc-2 { grid-template-columns: minmax(0, 1fr); } .grc-kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 760px) { .grc-risques { grid-template-columns: minmax(0, 1fr); } .grc-filtres { align-items: flex-start; } }
 @media (max-width: 460px) { .grc-kpis { grid-template-columns: minmax(0, 1fr); } }
+/* Comptes de l'espace (portail 1.22.0) : connexion, matrice des droits */
+.card.cx { max-width: 520px; }
+.cx-champs { display: grid; gap: 2px; margin: 6px 0; }
+.cx-champs input { width: 100%; }
+.cp-mx td.cp-c select { min-width: 130px; }
+.cp-mx td.cp-c[data-role="administrateur"] { background: var(--ko-bg); }
+.cp-mx td.cp-c[data-role="editeur"] { background: var(--warn-bg); }
+.cp-mx td.cp-c[data-role="lecteur"] { background: var(--ok-bg); }
+.cp-mx tr.cp-inactif td { opacity: .55; }
+.cp-mx .cp-txt, .cp-imprime { display: none; }
+.cp-mx tfoot td { border-top: 2px solid var(--line); }
+@media print {
+  #topbar, #sidebar, .cp-noprint, .toast, [data-cp-ajout] { display: none !important; }
+  #app { display: block; } #main { padding: 0; overflow: visible; }
+  .cp-mx select { display: none; } .cp-mx .cp-txt, .cp-imprime { display: inline; }
+  .cp-mx td.cp-c[data-role] { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}
+/* Guide dans un nouvel onglet (portail 1.24.0) */
+.guide-onglet { margin: 0 0 10px; gap: 10px; }

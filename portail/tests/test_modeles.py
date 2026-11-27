@@ -46,6 +46,18 @@ class Silencieux(http.server.SimpleHTTPRequestHandler):
         pass
 
 
+def connecter(pg, login="admin.demo", mdp="Demo-Admin-2026"):
+    """Connexion à l'espace (portail 1.22.0) : compte de démonstration, ou premier compte d'un espace neuf."""
+    pg.wait_for_selector("[data-connexion], [data-creation-admin]", timeout=15000)
+    if pg.locator("[data-creation-admin]").count():
+        for k, v in (("#caLogin", "admin.test"), ("#caNom", "Admin TEST"), ("#caMdp", "Admin-Test-2026!"), ("#caMdp2", "Admin-Test-2026!")):
+            pg.fill(k, v)
+        pg.click("[data-act=caValider]")
+    else:
+        pg.fill("#cxLogin", login); pg.fill("#cxMdp", mdp); pg.click("[data-act=cxValider]")
+    pg.wait_for_selector("#tb-user [data-act=monCompte]", timeout=30000)
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--visible", action="store_true")
@@ -91,7 +103,7 @@ def main() -> int:
         pg.evaluate(ECRIRE, ["SMSI/modeles/Modele_maison.dotx", base64.b64encode(b"fictif").decode()])
         avant = pg.evaluate(LISTER)
         pg.click("#sidebar [data-wnav=accueil]"); pg.wait_for_timeout(200)
-        pg.click("[data-act=espace] >> nth=0")
+        pg.click("[data-act=espace] >> nth=0"); connecter(pg)
         pg.wait_for_timeout(1500)
         pg.click("#sidebar [data-wnav=modeles]"); pg.wait_for_timeout(300)
         presents = pg.locator("tr[data-modele] .badge:has-text('présent')").count()

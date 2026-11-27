@@ -1,7 +1,7 @@
 # WerbMap
 
 > Cartographie VLAN, adressage IP, actifs et flux d'un site, alignée sur le classeur **Base_Inventaires_actifs**
-> Version **1.41.1** — Développé par **@WerbHat**
+> Version **1.42.0** — Développé par **@WerbHat**
 
 ---
 
@@ -92,16 +92,18 @@ Double-cliquez sur **`application/WerbMap.html`**.
 #### Étape 2 — Ouvrir la base de démonstration
 
 1. Cliquez sur **🧪 Base de démonstration** (base intégrée à l'outil), ou sur **📂 Ouvrir une base…** puis sélectionnez **`exemples/WerbMap_DEMO.werbmap.json`**
-2. Connectez-vous avec l'un des comptes de démonstration (rappelés à l'écran) :
+2. Saisissez l'un des noms de démonstration (rappelés à l'écran, sans mot de passe) :
 
-| Identifiant | Mot de passe | Rôle | Ce qu'il peut faire |
-|---|---|---|---|
-| `admin.demo` | `Demo-Admin-2026` | Administrateur | Tout, y compris comptes et référentiels |
-| `tech.demo` | `Demo-Tech-2026` | Éditeur | Modifier et enregistrer des versions |
-| `audit.demo` | `Demo-Audit-2026` | Lecteur | Consulter, filtrer, exporter |
+| Nom | Rôle | Ce qu'il peut faire |
+|---|---|---|
+| `admin.demo` | Administrateur | Tout, y compris les référentiels |
+| `tech.demo` | Éditeur | Modifier et enregistrer des versions |
+| `audit.demo` | Lecteur | Consulter, filtrer, exporter |
+
+Dans l'espace de démonstration ouvert depuis le portail, ce sont les comptes de l'espace (mêmes identifiants, avec mot de passe) qui s'appliquent.
 
 > 💡 La base de démonstration intégrée s'ouvre en mode téléchargement : l'enregistrement produit une copie, la démo reste intacte.
-> 🔐 Ces mots de passe sont publics : **ne réutilisez jamais `WerbMap_DEMO.werbmap.json` comme base réelle.**
+> 🔐 Base publique : **ne réutilisez jamais `WerbMap_DEMO.werbmap.json` comme base réelle.**
 
 #### Étape 3 — Faire le tour
 
@@ -146,7 +148,6 @@ Les onglets sont rangés par catégorie dans le **menu latéral**, commun à tou
 | | Fiches de procédure | `Procedures_Etapes`, `MATRICE PLM` | Étapes par phase, et version rédigée exportable en Word ou en PDF |
 | ⚙️ Administration | Référentiels | `TableauListeChoix`, `LEGENDE` | Listes déroulantes, abréviations de TAG, pare-feux, zones, types de NAT (administrateurs) |
 | | Historique | — | Versions enregistrées et journal des modifications |
-| | Utilisateurs | — | Gestion des comptes (administrateurs) |
 | | Intégration WerbSMSI | — | Rattachement au site, SL-T des zones, publication des zones, conduits et actifs |
 | ❓ Aide | Guide du module | — | Mode d'emploi de WerbMap, cartes des guides |
 | | Les actifs d'un système et leur rôle | — | **Guide du débutant** (1.20.0) : chaque type d'actif de l'inventaire (réseau, serveurs et stockage, postes, OT, sûreté, équipements du quotidien), son rôle, s'il a une fonction de sécurité, ce qu'un attaquant peut en faire ; champs de WerbMap utiles à la sécurité ; pièges fréquents |
@@ -387,10 +388,10 @@ La **base** est un fichier `.json` stocké dans une bibliothèque SharePoint syn
 1. Dans SharePoint, ouvrez la bibliothèque et cliquez sur **Synchroniser** (ou **Ajouter un raccourci à Mes fichiers**).
 2. Ouvrez `WerbMap.html` dans **Edge**.
 3. Cliquez sur **➕ Créer une nouvelle base…** et enregistrez-la dans le dossier synchronisé, par exemple `WerbMap_SITE1.werbmap.json`.
-4. Créez votre compte **administrateur** (mot de passe de 10 caractères minimum).
+4. Indiquez votre nom (hors espace). Dans un espace WerbSMSI, ouvrez plutôt la base depuis le portail : votre compte et ses droits s'appliquent.
 5. Faites **📥 Import Excel** avec votre classeur actuel. L'outil reconnaît les feuilles `VLAN`, `VLAN-SITE1`, `TableIP_VLAN-SITE1`… et vous demande de choisir s'il y a plusieurs sites.
 6. Contrôlez le résultat, puis **💾 Enregistrer** (version 1).
-7. Dans **Utilisateurs**, créez les comptes des collègues avec un mot de passe provisoire. Ils le changent ensuite avec le bouton 👤.
+7. Les comptes des collègues se créent dans le **portail WerbSMSI** (Administration › Comptes et droits), avec leur rôle sur le site.
 8. Déposez `WerbMap.html` dans le même dossier SharePoint, ou sur les postes.
 
 > 💡 **Une base par site** : `WerbMap_SITE1.werbmap.json`, `WerbMap_SITE2.werbmap.json`…
@@ -410,7 +411,9 @@ Chaque enregistrement **télécharge** le fichier `.json`. Il faut alors le red�
 
 ## Comptes, rôles et versioning
 
-| Rôle | Consulter / exporter | Modifier / enregistrer | Comptes et référentiels |
+Depuis la 1.42.0, WerbMap n'a plus de comptes propres : dans un espace WerbSMSI qui a des comptes, le rôle est celui du compte de l'espace sur le site de la base (portail › Comptes et droits, charte §5.11) ; hors espace, le nom suffit et donne tous les droits. Une base antérieure qui contient encore des comptes propose de les **importer dans l'espace** (*Intégration WerbSMSI* : administrateur de la base → administrateur du site ; le mot de passe est conservé), puis les retire à l'enregistrement suivant.
+
+| Rôle | Consulter / exporter | Modifier / enregistrer | Référentiels |
 |---|:-:|:-:|:-:|
 | Lecteur | ✅ | — | — |
 | Éditeur | ✅ | ✅ | — |
@@ -489,7 +492,7 @@ Le navigateur demande l'autorisation d'écrire dans le fichier : acceptez. Si vo
 Vérifiez que vous avez bien cliqué sur **Enregistrer** (le bouton orange indique des modifications en attente) et que OneDrive a fini de synchroniser. Le collègue clique ensuite sur 🔄.
 
 **J'ai oublié mon mot de passe**
-Un administrateur le réinitialise dans **Utilisateurs → 🔑**, puis enregistre une version.
+Dans un espace WerbSMSI, un administrateur du groupe en donne un nouveau dans le portail (Comptes et droits). Hors espace, il n'y a pas de mot de passe.
 
 **L'import ne trouve pas une feuille**
 Le compte rendu indique « feuille non trouvée ». Vérifiez que la ligne d'en-têtes de la feuille contient bien les intitulés d'origine (`Debut VLAN`, `NOM_DU_RESEAU`, `Adresse IP` et `TAG Actif`, `TAG equipement`…).
@@ -514,7 +517,7 @@ WerbMap 1.2 efface automatiquement, à l'ouverture, les brouillons, la base et l
 | Clé | Contenu |
 |---|---|
 | `version`, `savedAt`, `savedBy` | Numéro, date et auteur de la dernière version enregistrée |
-| `comptes` | Comptes : identifiant, nom, rôle, sel et empreinte PBKDF2-SHA256 du mot de passe, état |
+| `comptes` | Comptes d'une version antérieure (1.41 ou avant), vide ensuite : importés dans l'espace puis retirés à l'enregistrement suivant |
 | `inventaire` | Matrice VLAN, adressage, plan IP, coffrets, actifs, machines, VM, flux, routes, NAT, procédures, référentiels ; `meta.werbsmsi` (rattachement) et `meta.zonesSec` (nom publié et SL-T des zones) |
 | `versions` | Une entrée par version : numéro, date, auteur, commentaire, nombre de modifications, **empreinte chaînée** |
 | `journal` | Une entrée par modification : version, date, utilisateur, objet, élément, champ, avant, après |
@@ -564,7 +567,7 @@ WerbMap 1.2 efface automatiquement, à l'ouverture, les brouillons, la base et l
 - La **protection réelle** repose sur les **droits du dossier** (drive protégé du site ou bibliothèque SharePoint). Limitez l'accès en écriture aux personnes concernées.
 - Le plan d'adressage et la matrice de flux sont des **informations sensibles** : ne les stockez pas dans un espace partagé largement.
 - L'**historique des versions** du drive ou de SharePoint sert de sauvegarde supplémentaire de la base.
-- Les mots de passe sont stockés sous forme d'empreinte (PBKDF2-SHA256, 150 000 itérations), jamais en clair.
+- Plus de mots de passe dans la base depuis la 1.42.0 : les comptes sont ceux de l'espace (PBKDF2-SHA256, fichier `werbsmsi.comptes.json`).
 - **Hors ligne par construction** : la politique de sécurité (CSP) de la page bloque toute connexion sortante.
 - **Rien dans le navigateur** depuis la 1.2 : ni brouillon (qui contenait les empreintes des mots de passe), ni base, ni modèle Excel mémorisés. La purge ne touche que les données de WerbMap, pas celles des autres modules WerbSMSI.
 - **Publication maîtrisée** : seules les zones, les conduits et l'identité des actifs (TAG, type, famille, libellé, emplacement, OS, hyperviseur, fonction, marque) sont publiés vers le site, sur action explicite. Adresses IP, VLAN, numéros de série et matrice de flux restent dans la base.
@@ -640,7 +643,7 @@ python <WerbSMSI>\charte\outils\werb_charte.py publier .
 
 ## Historique des versions
 
-Version courante : **1.41.1** de novembre 2026 — version, signature et date de build en bas du menu latéral. Précédente : **1.41.0** de novembre 2026 — difficulté de mise à jour reçue de WerbExploitation : colonne des actifs, maintenabilité et alerte dans la fiche SI. Précédente : **1.40.0** de novembre 2026 — aide pas à pas pour créer les clés et les échanger avec le téléphone. Précédente : **1.39.0** de novembre 2026 — émetteur de groupe (une seule APK pour tous les sites), badge multi-sites. Avant : **1.38.0** de novembre 2026 — badge de clés valable un an par défaut. Avant : **1.37.0** de novembre 2026 — badge de clés affiché à l'écran pour être flashé par le téléphone. Avant : **1.36.1** de novembre 2026 — étiquettes : QR sur toute la hauteur, bandeau de classification jusqu'au QR. Avant : **1.36.0** de novembre 2026 — téléphones WerbTagDroid enrôlés et badges de clés (code à usage unique). Avant : **1.35.0** de novembre 2026 — support d'impression des étiquettes (planches A4 en grille, rouleaux, personnalisé). Avant : **1.34.0** de novembre 2026 — étiquettes d'actifs chiffrées et signées pour WerbTagDroid (Inventaires › Étiquettes), note PCR proposée depuis WerbPCR. Avant : **1.33.0** de novembre 2026 — fichiers exportés nommés « SIGLE-SITE_… », nom du site dans les titres (socle 1.12.0). Avant : **1.32.0** de novembre 2026 — base demandée par le portail ouverte directement quand l'espace est chargé dans le portail (socle 1.11.0). Précédente : **1.31.0** de novembre 2026 — liste des coffrets publiée (`site:coffrets`) pour le brassage de WerbAssets. Versions précédentes : **1.30.0** de novembre 2026 — matrice de flux publiée (`site:flux`, sans adresse) pour l'annexe des schémas de flux de WerbCartoSI. Versions précédentes : **1.29.1** de novembre 2026 — renvois vers le menu réorganisé de WerbExploitation. Versions précédentes : **1.29.0** de novembre 2026 — relevés de machines importés (matériel, adresses, routes, ports, heure), consolidation proposée, ports et NTP face à la matrice de flux. Versions précédentes : **1.28.0** de novembre 2026 — publications des autres modules relues sans fermer la page (retour sur la page, chaque minute, bouton dans Intégration WerbSMSI). Versions précédentes : **1.27.0** de novembre 2026 — inventaires de machines reçus de WerbExploitation (`site:inventaires`) : colonne Inventaire, consolidation proposée. Versions précédentes : **1.26.0** de novembre 2026 — fiche SI : cycle de vie (PLM) des actifs du SI reçu de WerbExploitation (`site:plm`). Versions précédentes : **1.25.1** de novembre 2026 — justification des flux reportés de WerbExploitation reprise en commentaire. Versions précédentes : **1.25.0** de novembre 2026 — matrice de flux : flux des demandes réalisées reportés de WerbExploitation (`site:fluxRealises`). Versions précédentes : **1.24.0** de novembre 2026 — fiche SI : schémas d'architecture reçus de WerbCartoSI (`site:cartographies`). Versions précédentes : **1.23.0** de novembre 2026 — publication des VLAN du plan (`site:vlans`, sans adressage) pour les fiches pare-feu et switch de WerbAssets ; **1.22.1** d'octobre 2026 — correction de texte dans le guide « Les mots de passe ». Versions précédentes : **1.22.0** d'octobre 2026 — prestataires qui interviennent dans la fiche SI (site:evaluationsPrestataires, WerbPresta) ; **1.21.0** d'octobre 2026 — page **Mots de passe** dans les inventaires (arborescence du coffre-fort KeePass par SI et TAG, sans secret) et guide « Les mots de passe ». Versions précédentes : **1.20.0** d'octobre 2026 — guides pour débuter dans ❓ Aide : les actifs d'un système et leur rôle, les étages de la cybersécurité (charte §7.4) ; **1.19.0** d'octobre 2026 — remédiations des tests d'intrusion reçues de WerbPentest dans la fiche SI (site:remediations, MAP-7.4c) ; **1.18.0** d'octobre 2026 — registre des sauvegardes reçu de WerbExploitation dans la fiche SI (site:sauvegardes, MAP-7.4b) ; **1.17.0** d'octobre 2026 — sélection multiple et archivage, chercher / remplacer, largeur des colonnes (socle 1.9.0) ; **1.16.0** d'octobre 2026 — bandeau commun (socle 1.8.0, TRV-7) ; **1.15.1** d'octobre 2026 — fiches SI d'exemple dans la base de démonstration ; **1.15.0** d'octobre 2026 — tri et filtre de la Liste des SI (MAP-9) ; **1.14.0** d'octobre 2026 — doublons d'adresse tolérés en ID VLAN 1 (MAP-10) ; **1.13.0** d'octobre 2026 — fiche SI alimentée par WerbEBIOS, publication des SI (MAP-7.4) ; **1.12.0** d'octobre 2026 — TAG verrouillé après création, renommage par l'administrateur ; **1.11.0** d'octobre 2026 — modèle, version firmware et commentaire publiés pour WerbAssets ; **1.10.0** d'octobre 2026 — page Actifs réseau plus dense, « Référence » devient « Modèle » ; **1.9.0** d'octobre 2026 — liste des SI et fiche de synthèse, export Word au modèle d'entreprise, base au schéma 5 ; **1.8.0** d'octobre 2026 — zone d'un actif réseau ; **1.7.0** d'octobre 2026 — thème clair / sombre (socle 1.7.1) ; **1.6.0** d'octobre 2026 — listes de choix reçues du groupe (charte §5.9). Auparavant : **1.5.0** d'octobre 2026 — saisie en masse (modèle de saisie et import de lignes avec rapport) sur le Plan IP, les coffrets, les actifs réseau et les machines. La 1.4.0 a apporté le verrou commun des bases. Auparavant : **1.4.0** d'octobre 2026 — verrou commun des bases (lecture seule ou prise de main, bandeau « Ouvert par … ») ; **1.3.0** — menu latéral commun WerbSMSI (catégories sur fond de couleur), registres d'exploitation transférés à WerbExploitation, actifs publiés enrichis. Détail de toutes les versions dans [CHANGELOG.md](CHANGELOG.md).
+Version courante : **1.42.0** de novembre 2026 — plus de comptes propres : compte de l'espace WerbSMSI (rôle sur le site de la base) ou nom seul hors espace, import des anciens comptes dans l'espace. Précédente : **1.41.1** de novembre 2026 — version, signature et date de build en bas du menu latéral. Précédente : **1.41.0** de novembre 2026 — difficulté de mise à jour reçue de WerbExploitation : colonne des actifs, maintenabilité et alerte dans la fiche SI. Précédente : **1.40.0** de novembre 2026 — aide pas à pas pour créer les clés et les échanger avec le téléphone. Précédente : **1.39.0** de novembre 2026 — émetteur de groupe (une seule APK pour tous les sites), badge multi-sites. Avant : **1.38.0** de novembre 2026 — badge de clés valable un an par défaut. Avant : **1.37.0** de novembre 2026 — badge de clés affiché à l'écran pour être flashé par le téléphone. Avant : **1.36.1** de novembre 2026 — étiquettes : QR sur toute la hauteur, bandeau de classification jusqu'au QR. Avant : **1.36.0** de novembre 2026 — téléphones WerbTagDroid enrôlés et badges de clés (code à usage unique). Avant : **1.35.0** de novembre 2026 — support d'impression des étiquettes (planches A4 en grille, rouleaux, personnalisé). Avant : **1.34.0** de novembre 2026 — étiquettes d'actifs chiffrées et signées pour WerbTagDroid (Inventaires › Étiquettes), note PCR proposée depuis WerbPCR. Avant : **1.33.0** de novembre 2026 — fichiers exportés nommés « SIGLE-SITE_… », nom du site dans les titres (socle 1.12.0). Avant : **1.32.0** de novembre 2026 — base demandée par le portail ouverte directement quand l'espace est chargé dans le portail (socle 1.11.0). Précédente : **1.31.0** de novembre 2026 — liste des coffrets publiée (`site:coffrets`) pour le brassage de WerbAssets. Versions précédentes : **1.30.0** de novembre 2026 — matrice de flux publiée (`site:flux`, sans adresse) pour l'annexe des schémas de flux de WerbCartoSI. Versions précédentes : **1.29.1** de novembre 2026 — renvois vers le menu réorganisé de WerbExploitation. Versions précédentes : **1.29.0** de novembre 2026 — relevés de machines importés (matériel, adresses, routes, ports, heure), consolidation proposée, ports et NTP face à la matrice de flux. Versions précédentes : **1.28.0** de novembre 2026 — publications des autres modules relues sans fermer la page (retour sur la page, chaque minute, bouton dans Intégration WerbSMSI). Versions précédentes : **1.27.0** de novembre 2026 — inventaires de machines reçus de WerbExploitation (`site:inventaires`) : colonne Inventaire, consolidation proposée. Versions précédentes : **1.26.0** de novembre 2026 — fiche SI : cycle de vie (PLM) des actifs du SI reçu de WerbExploitation (`site:plm`). Versions précédentes : **1.25.1** de novembre 2026 — justification des flux reportés de WerbExploitation reprise en commentaire. Versions précédentes : **1.25.0** de novembre 2026 — matrice de flux : flux des demandes réalisées reportés de WerbExploitation (`site:fluxRealises`). Versions précédentes : **1.24.0** de novembre 2026 — fiche SI : schémas d'architecture reçus de WerbCartoSI (`site:cartographies`). Versions précédentes : **1.23.0** de novembre 2026 — publication des VLAN du plan (`site:vlans`, sans adressage) pour les fiches pare-feu et switch de WerbAssets ; **1.22.1** d'octobre 2026 — correction de texte dans le guide « Les mots de passe ». Versions précédentes : **1.22.0** d'octobre 2026 — prestataires qui interviennent dans la fiche SI (site:evaluationsPrestataires, WerbPresta) ; **1.21.0** d'octobre 2026 — page **Mots de passe** dans les inventaires (arborescence du coffre-fort KeePass par SI et TAG, sans secret) et guide « Les mots de passe ». Versions précédentes : **1.20.0** d'octobre 2026 — guides pour débuter dans ❓ Aide : les actifs d'un système et leur rôle, les étages de la cybersécurité (charte §7.4) ; **1.19.0** d'octobre 2026 — remédiations des tests d'intrusion reçues de WerbPentest dans la fiche SI (site:remediations, MAP-7.4c) ; **1.18.0** d'octobre 2026 — registre des sauvegardes reçu de WerbExploitation dans la fiche SI (site:sauvegardes, MAP-7.4b) ; **1.17.0** d'octobre 2026 — sélection multiple et archivage, chercher / remplacer, largeur des colonnes (socle 1.9.0) ; **1.16.0** d'octobre 2026 — bandeau commun (socle 1.8.0, TRV-7) ; **1.15.1** d'octobre 2026 — fiches SI d'exemple dans la base de démonstration ; **1.15.0** d'octobre 2026 — tri et filtre de la Liste des SI (MAP-9) ; **1.14.0** d'octobre 2026 — doublons d'adresse tolérés en ID VLAN 1 (MAP-10) ; **1.13.0** d'octobre 2026 — fiche SI alimentée par WerbEBIOS, publication des SI (MAP-7.4) ; **1.12.0** d'octobre 2026 — TAG verrouillé après création, renommage par l'administrateur ; **1.11.0** d'octobre 2026 — modèle, version firmware et commentaire publiés pour WerbAssets ; **1.10.0** d'octobre 2026 — page Actifs réseau plus dense, « Référence » devient « Modèle » ; **1.9.0** d'octobre 2026 — liste des SI et fiche de synthèse, export Word au modèle d'entreprise, base au schéma 5 ; **1.8.0** d'octobre 2026 — zone d'un actif réseau ; **1.7.0** d'octobre 2026 — thème clair / sombre (socle 1.7.1) ; **1.6.0** d'octobre 2026 — listes de choix reçues du groupe (charte §5.9). Auparavant : **1.5.0** d'octobre 2026 — saisie en masse (modèle de saisie et import de lignes avec rapport) sur le Plan IP, les coffrets, les actifs réseau et les machines. La 1.4.0 a apporté le verrou commun des bases. Auparavant : **1.4.0** d'octobre 2026 — verrou commun des bases (lecture seule ou prise de main, bandeau « Ouvert par … ») ; **1.3.0** — menu latéral commun WerbSMSI (catégories sur fond de couleur), registres d'exploitation transférés à WerbExploitation, actifs publiés enrichis. Détail de toutes les versions dans [CHANGELOG.md](CHANGELOG.md).
 
 ---
 

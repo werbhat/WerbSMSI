@@ -5,6 +5,18 @@ Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/), num
 
 
 
+## [1.42.0] — 2026-11
+
+### Modifications — plus de gestion des utilisateurs dans WerbMap
+- **Compte de l'espace WerbSMSI** (socle 1.14.0, charte §5.11) : une base ouverte dans un espace qui a des comptes (lien du portail, ou espace choisi) prend le compte connecté et son rôle sur le site de la base (Lecteur, Éditeur, Administrateur ; à défaut celui du groupe). Plus d'écran de connexion propre : le ticket du portail suffit, sinon la connexion du socle. Un Lecteur ouvre la base en **lecture seule** (bandeau « Lecture seule · compte … »). Compte sans aucun rôle sur le site : accès refusé.
+- **Hors espace** : le nom seul suffit (repris du portail s'il est transmis), avec tous les droits, comme dans les autres modules. **Base de démonstration** : saisir `admin.demo`, `tech.demo` ou `audit.demo` (sans mot de passe) donne le rôle correspondant.
+- **Supprimés** : page *Administration › Utilisateurs*, création du compte administrateur d'une base, changement de mot de passe (bouton 👤 : identité courante). Session verrouillée après 15 minutes : le mot de passe du compte de l'espace est redemandé ; identifié par le nom : simple reprise.
+- **Import des anciens comptes** (*Intégration WerbSMSI*, administrateur du groupe connecté) : les comptes d'une base 1.41 ou antérieure sont créés dans l'espace avec leur mot de passe actuel (PBKDF2, 150 000 itérations) et leur rôle sur le site de la base (Administrateur de la base → administrateur du site) ; un identifiant déjà présent garde son mot de passe et reçoit le rôle s'il est plus élevé. Tracé au journal des comptes de l'espace et au journal de la base ; la base ne garde plus ses comptes après l'enregistrement suivant. Le contrôle d'intégrité reste valide (même calcul, sur les comptes présents dans le fichier).
+
+### Développement
+- Socle 1.14.0. Tests adaptés (identification par le nom, espace de démonstration copié sans ses comptes) ; contrôles des comptes dans `charte/tests/test_comptes_modules.py` (WerbSMSI).
+- `test_si_liens.py` : la démonstration compte deux risques EBIOS à LYON (portail 1.21.0).
+
 ## [1.41.1] — 2026-11
 
 ### Corrections

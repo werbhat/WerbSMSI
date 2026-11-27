@@ -5,7 +5,7 @@
     "werbtools-iec62443"
   ],
   "produit": "WerbIEC62443",
-  "version": "1.16.0",
+  "version": "1.17.0",
   "dateVersion": "2026-11",
   "auteur": "@WerbHat",
   "signature": "Développé par @WerbHat",
@@ -18,7 +18,7 @@
   "entree": "application/WerbIEC62443.html",
   "empreinte": {
     "algo": "SHA-256",
-    "valeur": "c7c2ba335d0997b6b9d0f039e052c26cdde5a6934186ae047260986ea27a29df"
+    "valeur": "cdd36c0d227c2372bb172dec7289fe76a7bc169c5537b272e47a82c6d826f3be"
   },
   "donnees": {
     "format": "WERBIEC62443",

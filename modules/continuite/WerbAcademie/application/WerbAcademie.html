@@ -1,5 +1,5 @@
 <!doctype html>
-<!-- WerbAcademie v1.10.0 – Développé par @WerbHat – build novembre 2026 -->
+<!-- WerbAcademie v1.11.0 – Développé par @WerbHat – build novembre 2026 -->
 <html lang="fr">
 <head>
 <meta charset="utf-8">
@@ -9,7 +9,7 @@
 <title>WerbAcademie</title>
 <meta name="application-name" content="WerbAcademie">
 <meta name="author" content="@WerbHat">
-<meta name="generator" content="WerbAcademie v1.10.0 – Développé par @WerbHat">
+<meta name="generator" content="WerbAcademie v1.11.0 – Développé par @WerbHat">
 <meta name="description" content="Formation et sensibilisation des collaborateurs du groupe : catalogue de formations, slides, liens, quiz, suivi des sessions et des renouvellements">
 <style>/*! WerbAcademie – Développé par @WerbHat */
 :root {
@@ -36511,7 +36511,7 @@ const WERB = Object.freeze((() => {
   const bytes = [68, 195, 169, 118, 101, 108, 111, 112, 112, 195, 169, 32, 112, 97, 114, 32, 64, 87, 101, 114, 98, 72, 97, 116];
   const signature = new TextDecoder("utf-8").decode(new Uint8Array(bytes));
   const produit = "WerbAcademie";
-  const version = "1.10.0";
+  const version = "1.11.0";
   return {
     id: "werbacademie",
     produit, version, auteur: "@WerbHat", signature,
@@ -36530,13 +36530,13 @@ const WERB = Object.freeze((() => {
 window.WERB = WERB;
 console.info(`%c${WERB.produit}%c v${WERB.version} — ${WERB.signature}`, "font-weight:bold;color:#1f3864", "color:#595959");
 
-/*! WerbSMSI socle 1.12.0 – Développé par @WerbHat */
+/*! WerbSMSI socle 1.14.0 – Développé par @WerbHat */
 /* Fonctions communes à tous les modules WerbSMSI (charte 1.0).
    Copier ce fichier tel quel dans sources/src/ : ne pas le modifier dans un module,
    faire évoluer la version de la charte à la place.
    Prérequis : signature.js chargé avant (objet global WERB). */
 const WerbSocle = Object.freeze((() => {
-  const VERSION = "1.12.0";
+  const VERSION = "1.14.0";
   const FAMILLE = "WERBSMSI";
   const TAILLE_MAX = 20 * 1024 * 1024;
   const prefixe = () => `werb.${WERB.id}.`;
@@ -36764,6 +36764,7 @@ const WerbSocle = Object.freeze((() => {
       if (el) {
         const e = etat, v = e.v || {};
         const [cls, txt, titre] = e.mode === "mien" ? ["", `🔒 Ouvert par ${v.par === utilisateur ? "vous" : v.par} ${quand(v.depuis)}`, "Vous avez la main : un collègue qui ouvre cette base la verra en lecture seule jusqu'à sa fermeture."]
+          : e.mode === "lecture" && e.droits ? ["lecture", `🔒 Lecture seule · ${e.droits}`, "Votre compte n'a pas le rôle Éditeur sur ce périmètre : un administrateur du groupe le donne dans le portail (Comptes et droits)."]
           : e.mode === "lecture" ? (e.libre ? ["lecture", "🔓 Lecture seule · base libérée", `${e.libre} a fermé la base : rouvrez-la pour la modifier.`]
             : ["lecture", `🔒 Ouvert par ${v.par} ${quand(v.depuis)} · lecture seule`, "Vos modifications ne pourront pas être enregistrées sans prendre la main."])
           : e.mode === "perdu" ? ["perdu", `⚠ ${v.par} a pris la main ${quand(v.depuis)}`, "Vos modifications en cours n'écraseront son travail que si vous reprenez la main à l'enregistrement."]
@@ -36787,6 +36788,7 @@ const WerbSocle = Object.freeze((() => {
       e.modifie = f.lastModified;
       if (e.mode === "mien" && actif(v)) etat = { ...e, mode: "perdu", v };
       else if (e.mode === "perdu" && !actif(v)) etat = { ...e, mode: "mien", v: e.mien };
+      else if (e.mode === "lecture" && e.droits) etat = e;
       else if (e.mode === "lecture") etat = actif(v) ? { ...e, v, libre: "" } : { ...e, libre: e.libre || (e.v && e.v.par) || "Le titulaire" };
       // A la main mais son verrou n'est plus dans le fichier (collègue parti, écriture d'un outil sans verrou) : il est réinscrit
       if (etat.mode === "mien" && !(v && v.session === SESSION)) {
@@ -36809,8 +36811,10 @@ const WerbSocle = Object.freeze((() => {
 
     // Prend le verrou de la base ouverte { poignee, nom, texte, modifie }. Renvoie le même objet complété de
     // { modifie (après écriture du verrou), lecture, ecriture } ; « Annuler » lève une AbortError.
-    async function prendre(f) {
+    // { droits } (1.14.0) : lecture seule imposée par le rôle du compte (texte affiché), sans poser de verrou
+    async function prendre(f, { droits = "" } = {}) {
       const v = lireVerrou(f.texte);
+      if (droits && f.poignee) { await liberer(); surveiller(); etat = { mode: "lecture", v, poignee: f.poignee, modifie: f.modifie, libre: "", droits }; afficher(); return { ...f, lecture: true, ecriture: false }; }
       let choix = "main";
       if (f.poignee && actif(v)) {
         choix = await dialogue("Base déjà ouverte", `<p>Cette base est ouverte par <b>${esc(v.par)}</b> ${esc(quand(v.depuis))}.</p>
@@ -36841,6 +36845,10 @@ const WerbSocle = Object.freeze((() => {
     async function avantEcriture(poignee, { nouveau = false } = {}) {
       if (!poignee) return "ok";
       const suivi = await memeFichier(etat.poignee, poignee);
+      if (suivi && etat.droits && !nouveau) {
+        await dialogue("Enregistrement impossible", `<p>Votre compte est en <b>lecture seule</b> sur cette base (${esc(etat.droits)}).</p><p>Pour garder vos modifications, utilisez « Enregistrer sous » vers un autre fichier, ou demandez le rôle Éditeur à un administrateur du groupe.</p>`, [["ok", "Fermer", "p"]]);
+        return false;
+      }
       if (!nouveau) {
         let v = null;
         try { v = lireVerrou(await (await poignee.getFile()).text()); } catch (e) { /* fichier illisible : écrit tel quel */ }
@@ -36894,6 +36902,7 @@ const WerbSocle = Object.freeze((() => {
       surChangement(fn) { rappel = typeof fn === "function" ? fn : null; },
       get etat() { return { mode: etat.mode, par: etat.v ? etat.v.par : "", depuis: etat.v ? etat.v.depuis : "", libre: etat.libre || "" }; },
       get lectureSeule() { return etat.mode === "lecture"; },
+      get lectureDroits() { return etat.mode === "lecture" ? etat.droits || "" : ""; },
       get utilisateur() { return utilisateur; },
       afficher,
     });
@@ -36967,7 +36976,10 @@ const WerbSocle = Object.freeze((() => {
         racine = avant;
         throw new Error("Ce dossier n'est pas un espace WerbSMSI (werbsmsi.groupe.json absent ou illisible).");
       }
+      const groupeAvant = groupe;
       groupe = g.data;
+      try { await comptes.exiger(); }   // 1.14.0 : espace avec comptes → ticket du portail ou connexion
+      catch (e) { racine = avant; groupe = groupeAvant; throw e; }
       return groupe;
     }
 
@@ -37002,6 +37014,7 @@ const WerbSocle = Object.freeze((() => {
     // Écrit publications/<id>.json du niveau. « objets » : {nom: [éléments]} ; pour chaque nom fourni, les éléments existants
     // pour lesquels remplacer(élément) est vrai sont retirés avant ajout (tous par défaut).
     async function publier({ niveau, site, objets, utilisateur = "", remplacer = () => true }) {
+      comptes.exigerRole(niveau === "groupe" ? comptes.GROUPE : site, "editeur", "publier");   // 1.14.0
       if (!racine) throw new Error("Aucun espace WerbSMSI ouvert.");
       if (!WERB.portees.includes(niveau)) throw new Error(`${WERB.produit} ne publie pas au niveau « ${niveau} ».`);
       const chemin = `${prefixeNiveau(niveau, site)}publications/${WERB.id}.json`;
@@ -37105,6 +37118,215 @@ const WerbSocle = Object.freeze((() => {
       site: code => lire(`${prefixeNiveau("site", code)}werbsmsi.site.json`).then(j => (j && j.format === "WERBSMSI-SITE" ? j.data : null)),
       fermer() { racine = null; groupe = null; },
     });
+  })();
+
+  /* ---------- Comptes de l'espace (charte §5.10, socle 1.13.0) ---------- */
+
+  // Fichier werbsmsi.comptes.json à la racine de l'espace : comptes, matrice des droits (une case par colonne : GROUPE et chaque
+  // site ; rôle lecteur, editeur ou administrateur), clé des tickets et journal des modifications (audit). Mot de passe : PBKDF2-SHA256,
+  // sel aléatoire, 600 000 itérations ; jamais en clair. La racine n'est modifiable que par l'équipe SMSI du groupe (droits du drive) :
+  // seule elle peut créer ou modifier les comptes. Les comptes tracent qui fait quoi et guident l'interface ; la confidentialité reste
+  // celle du dossier (P3). Rien n'est écrit dans le navigateur : la session vit en mémoire, le ticket passe dans le lien (§5.5).
+  const comptes = (() => {
+    const FICHIER = "werbsmsi.comptes.json", FORMAT = "WERBSMSI-COMPTES", ITERATIONS = 600000, MDP_MIN = 12, TICKET_H = 12;
+    const ROLES = Object.freeze(["lecteur", "editeur", "administrateur"]);
+    const LIBELLES = Object.freeze({ lecteur: "Lecteur", editeur: "Éditeur", administrateur: "Administrateur" });
+    const GROUPE = "GROUPE";
+    const hex = u => [...new Uint8Array(u)].map(b => b.toString(16).padStart(2, "0")).join("");
+    const unhex = h => new Uint8Array((String(h).match(/../g) || []).map(x => parseInt(x, 16)));
+    const aleatoire = n => hex(crypto.getRandomValues(new Uint8Array(n)));
+    const b64u = s => btoa(unescape(encodeURIComponent(s))).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+    const deb64u = s => decodeURIComponent(escape(atob(String(s).replace(/-/g, "+").replace(/_/g, "/"))));
+    const identifiantValide = l => /^[A-Za-z0-9._-]{3,40}$/.test(String(l || ""));
+    const rang = r => ROLES.indexOf(r);
+
+    async function hacher(mdp, sel, iterations = ITERATIONS) {
+      const k = await crypto.subtle.importKey("raw", new TextEncoder().encode(String(mdp)), "PBKDF2", false, ["deriveBits"]);
+      return hex(await crypto.subtle.deriveBits({ name: "PBKDF2", salt: unhex(sel), iterations, hash: "SHA-256" }, k, 256));
+    }
+    async function hmac(cle, texte) {
+      const k = await crypto.subtle.importKey("raw", unhex(cle), { name: "HMAC", hash: "SHA-256" }, false, ["sign"]);
+      return hex(await crypto.subtle.sign("HMAC", k, new TextEncoder().encode(texte)));
+    }
+    // Droits nettoyés : { GROUPE|<CODE>: rôle } ; une case vide n'est pas écrite
+    const nettoyerDroits = d => Object.fromEntries(Object.entries(d && typeof d === "object" ? d : {}).filter(([k, r]) => /^[A-Z0-9_-]{1,40}$/.test(k) && ROLES.includes(r)));
+    // Compte sans secret (session, ticket, affichage)
+    const public_ = c => ({ login: c.login, nom: c.nom, droits: nettoyerDroits(c.droits) });
+
+    // Lecture du fichier : { data, brut } ; null s'il est absent (ou illisible avec les droits du drive)
+    async function lire() {
+      const j = await espace.lire(FICHIER);
+      if (!j) return null;
+      if (j.format !== FORMAT || !j.data || !Array.isArray(j.data.comptes)) throw new Error(`${FICHIER} : fichier de comptes non reconnu.`);
+      return j.data;
+    }
+    function fichier(data, par) {
+      const g = espace.groupe || {};
+      return { format: FORMAT, schema: 1, famille: FAMILLE,
+        meta: { produit: WERB.produit, appVersion: WERB.version, auteur: WERB.auteur, generateur: WERB.ligne, groupeId: g.groupeId || data.groupeId || "", modifieLe: maintenant(), modifiePar: par || "" },
+        data };
+    }
+    // Écriture avec contrôle de conflit : refusée si le fichier a changé depuis la lecture (autre administrateur)
+    async function ecrire(data, par, attendu) {
+      const actuel = await espace.lire(FICHIER);
+      if (attendu !== undefined && ((actuel && actuel.data && actuel.data.revision) || 0) !== attendu)
+        throw new Error("Les comptes ont été modifiés par un autre administrateur pendant votre saisie : relisez-les avant d'enregistrer.");
+      data.revision = (attendu || 0) + 1;
+      try { await espace.ecrire(FICHIER, fichier(data, par)); }
+      catch (e) { throw new Error("Écriture impossible à la racine de l'espace : seule l'équipe SMSI du groupe (droit d'écriture sur le drive) peut créer ou modifier les comptes."); }
+      return data;
+    }
+    const tracer = (data, par, action, compte, avant = "", apres = "") => {
+      data.journal = Array.isArray(data.journal) ? data.journal : [];
+      data.journal.push({ le: maintenant(), par, action, compte, avant: String(avant), apres: String(apres) });
+    };
+    const texteDroits = d => Object.entries(nettoyerDroits(d)).map(([k, r]) => `${k} : ${LIBELLES[r]}`).join(", ") || "aucun droit";
+    function controlerMdp(mdp, login = "") {
+      if (String(mdp).length < MDP_MIN) return `Mot de passe : ${MDP_MIN} caractères au moins.`;
+      if (login && String(mdp).toLowerCase().includes(String(login).toLowerCase())) return "Le mot de passe ne doit pas contenir l'identifiant.";
+      return "";
+    }
+    async function nouveauCompte(login, nom, mdp, droits) {
+      const sel = aleatoire(16);
+      return { login: String(login).trim(), nom: lien.nettoyerNom(nom), droits: nettoyerDroits(droits), actif: true, sel, iterations: ITERATIONS,
+        empreinte: await hacher(mdp, sel), creeLe: maintenant(), mdpLe: maintenant() };
+    }
+
+    // Premier compte : administrateur du groupe et de tous les sites déclarés. Refusé s'il existe déjà des comptes.
+    async function creerAdministrateur(login, nom, mdp) {
+      if (!identifiantValide(login)) throw new Error("Identifiant : 3 à 40 caractères parmi lettres, chiffres, point, tiret et soulignement.");
+      if (!lien.nettoyerNom(nom)) throw new Error("Indiquez le nom (Prénom NOM).");
+      const m = controlerMdp(mdp, login); if (m) throw new Error(m);
+      if (await lire()) throw new Error("Cet espace a déjà des comptes : connectez-vous.");
+      const g = espace.groupe || {}, droits = { [GROUPE]: "administrateur" };
+      (g.sites || []).forEach(s => { droits[s.code] = "administrateur"; });
+      const c = await nouveauCompte(login, nom, mdp, droits);
+      const data = { groupeId: g.groupeId || "", cle: aleatoire(32), comptes: [c], journal: [] };
+      tracer(data, c.login, "Création", c.login, "", `premier compte, ${texteDroits(c.droits)}`);
+      await ecrire(data, c.login, 0);
+      return public_(c);
+    }
+    // Connexion : compte public, ou null (attente d'une seconde en cas d'échec : freine les essais répétés)
+    async function connecter(login, mdp) {
+      const data = await lire(); if (!data) return null;
+      const c = data.comptes.find(x => x.actif !== false && x.login.toLowerCase() === String(login || "").trim().toLowerCase());
+      const ok = c && (await hacher(mdp, c.sel, c.iterations || ITERATIONS)) === c.empreinte;
+      if (!ok) { await new Promise(r => setTimeout(r, 1000)); return null; }
+      return public_(c);
+    }
+    async function changerMotDePasse(login, ancien, nouveau) {
+      const data = await lire(); if (!data) throw new Error("Aucun compte dans cet espace.");
+      const c = data.comptes.find(x => x.login === login && x.actif !== false); if (!c) throw new Error("Compte introuvable ou désactivé.");
+      if ((await hacher(ancien, c.sel, c.iterations || ITERATIONS)) !== c.empreinte) throw new Error("Mot de passe actuel incorrect.");
+      const m = controlerMdp(nouveau, login); if (m) throw new Error(m);
+      c.sel = aleatoire(16); c.iterations = ITERATIONS; c.empreinte = await hacher(nouveau, c.sel); c.mdpLe = maintenant();
+      tracer(data, login, "Mot de passe", login, "", "changé par l'utilisateur");
+      await ecrire(data, login, data.revision || 0);
+    }
+
+    // Rôle d'un compte sur une colonne (GROUPE ou code de site) ; « » sans droit
+    const role = (c, colonne) => (c && c.droits && ROLES.includes(c.droits[colonne]) ? c.droits[colonne] : "");
+    // Le compte a-t-il au moins ce rôle sur la colonne ?
+    const peut = (c, colonne, minimum = "lecteur") => rang(role(c, colonne)) >= rang(minimum);
+    const administrateurEspace = c => role(c, GROUPE) === "administrateur";
+
+    // Ticket transmis aux modules (lien #werbsmsi=…, champ t) : compte public et expiration (12 h), signé HMAC-SHA256 avec la clé
+    // du fichier de comptes. Le module le vérifie avec l'espace qu'il ouvre. Il empêche de changer son nom ou ses droits en modifiant le
+    // lien ; il n'arrête pas quelqu'un qui lit la clé dans le fichier (même limite que P3).
+    async function ticket(c) {
+      const data = await lire(); if (!data || !data.cle) return "";
+      const corps = b64u(JSON.stringify({ ...public_(c), g: data.groupeId || "", x: Date.now() + TICKET_H * 3600e3, i: aleatoire(8) }));
+      return `${corps}.${await hmac(data.cle, corps)}`;
+    }
+    // Compte public si le ticket est valide pour cet espace (signature, groupe, expiration, compte encore actif), sinon null
+    async function verifierTicket(t) {
+      try {
+        const [corps, sig] = String(t || "").split("."); if (!corps || !sig) return null;
+        const data = await lire(); if (!data || !data.cle || (await hmac(data.cle, corps)) !== sig) return null;
+        const p = JSON.parse(deb64u(corps));
+        if (!p || p.x < Date.now() || (p.g && data.groupeId && p.g !== data.groupeId)) return null;
+        const c = data.comptes.find(x => x.login === p.login && x.actif !== false);
+        return c ? public_(c) : null;   // droits relus dans le fichier : un retrait de droit vaut immédiatement
+      } catch (e) { return null; }
+    }
+
+    /* Session d'un module (1.14.0) : quand le module ouvre un espace qui a des comptes, le ticket transmis par le portail est vérifié ;
+       sans ticket valable, une fenêtre de connexion s'affiche (Annuler : l'espace n'est pas ouvert). Sans comptes dans l'espace, ou
+       module ouvert hors espace : identification par le nom seul (§5.5). Le portail gère sa propre connexion (gereParLePortail). */
+    let session = null, parPortail = false;
+    const rappels = [];
+    const STYLE = `.wc-back{position:fixed;inset:0;z-index:10001;background:rgba(16,24,40,.45);display:flex;align-items:center;justify-content:center;padding:16px}
+.wc-box{background:#fff;color:#1d2330;max-width:420px;width:100%;border-radius:10px;padding:18px 20px;box-shadow:0 12px 40px rgba(0,0,0,.3);font:14px/1.45 system-ui,"Segoe UI",Arial,sans-serif}
+.wc-box h2{margin:0 0 6px;font-size:17px;color:#1f3864}.wc-box p{margin:0 0 8px}.wc-box .wc-n{font-size:12px;color:#5b6474}.wc-box .wc-e{color:#b3261e;font-size:12.5px;min-height:1.2em}
+.wc-box label{display:block;font-size:12px;color:#5b6474;margin:8px 0 2px}.wc-box input{width:100%;box-sizing:border-box;font:inherit;padding:6px 8px;border:1px solid #c4cad4;border-radius:5px;background:#fff;color:#1d2330}
+.wc-box .wc-a{display:flex;justify-content:flex-end;gap:8px;margin-top:12px}.wc-box button{font:inherit;padding:7px 14px;border-radius:6px;border:1px solid #c4cad4;background:#fff;color:#1d2330;cursor:pointer}
+.wc-box button.p{background:#1f3864;border-color:#1f3864;color:#fff}`;
+    function ouvrirSession(c, groupeId) {
+      session = { ...c, g: groupeId || "", x: Date.now() + TICKET_H * 3600e3 };
+      verrou.identifier(c.nom);
+      rappels.forEach(fn => { try { fn({ ...c }); } catch (e) { /* sans effet */ } });
+      return session;
+    }
+    const valide = () => !!session && Date.now() < session.x && (!espace.groupe || session.g === espace.groupe.groupeId);
+    function fenetreConnexion(organisation) {
+      if (typeof document !== "undefined" && !document.getElementById("werb-comptes-style")) document.head.appendChild(Object.assign(document.createElement("style"), { id: "werb-comptes-style", textContent: STYLE }));
+      return new Promise((ok, ko) => {
+        const back = document.createElement("div");
+        back.className = "wc-back"; back.id = "werb-connexion";
+        back.innerHTML = `<div class="wc-box" role="dialog" aria-modal="true" aria-labelledby="wc-titre"><h2 id="wc-titre">🔐 Connexion à l'espace</h2>
+          <p>${esc(organisation || "Cet espace")} a des comptes : connectez-vous pour continuer.</p>
+          <label for="wcLogin">Identifiant</label><input id="wcLogin" autocomplete="username"><label for="wcMdp">Mot de passe</label><input id="wcMdp" type="password" autocomplete="current-password">
+          <p class="wc-e" id="wcErr"></p><p class="wc-n">Ouvert depuis le portail après connexion, le module ne vous le demande pas. Les droits sont ceux de votre compte.</p>
+          <div class="wc-a"><button type="button" data-wc="annuler">Annuler</button><button type="button" class="p" data-wc="ok" id="wcGo">Se connecter</button></div></div>`;
+        const essayer = async () => {
+          const e = back.querySelector("#wcErr"), b = back.querySelector("#wcGo");
+          b.disabled = true; e.textContent = "Vérification…";
+          const c = await connecter(back.querySelector("#wcLogin").value, back.querySelector("#wcMdp").value).catch(x => { e.textContent = x.message; return null; });
+          if (c) { back.remove(); ok(c); return; }
+          b.disabled = false; if (e.textContent === "Vérification…") e.textContent = "Identifiant ou mot de passe incorrect."; back.querySelector("#wcMdp").value = ""; back.querySelector("#wcMdp").focus();
+        };
+        back.addEventListener("click", e => { const k = e.target.dataset && e.target.dataset.wc; if (k === "annuler") { back.remove(); ko(annule()); } if (k === "ok") essayer(); });
+        back.addEventListener("keydown", e => { if (e.key === "Escape") { back.remove(); ko(annule()); } if (e.key === "Enter") essayer(); });
+        document.body.appendChild(back);
+        back.querySelector("#wcLogin").focus();
+      });
+    }
+    // Appelé par espace.adopter : rien sans comptes ; sinon session existante, ticket du portail, ou fenêtre de connexion
+    async function exiger() {
+      if (parPortail) return null;
+      let data = null;
+      try { data = await lire(); } catch (e) { throw new Error(`${FICHIER} illisible : ${e.message}`); }
+      if (!data) { session = null; return null; }
+      const gid = (espace.groupe || {}).groupeId || data.groupeId || "";
+      if (session && Date.now() < session.x && session.g === gid && data.comptes.some(x => x.login === session.login && x.actif !== false)) return session;
+      session = null;
+      const t = lien.ticket(), c = t ? await verifierTicket(t) : null;
+      if (c) return ouvrirSession(c, gid);
+      if (typeof document === "undefined") throw new Error("Connexion requise.");
+      return ouvrirSession(await fenetreConnexion((espace.groupe || {}).organisation), gid);
+    }
+    // Texte de lecture seule si le compte connecté n'est pas éditeur de la colonne (site ou GROUPE) ; « » sinon ou sans compte
+    function motifLecture(colonne) {
+      if (!valide()) return "";
+      const c = colonne || GROUPE;
+      return peut(session, c, "editeur") || (c !== GROUPE && peut(session, GROUPE, "editeur")) ? "" : `compte ${session.login} : ${LIBELLES[role(session, c)] || "aucun rôle"} sur ${c === GROUPE ? "le groupe" : c}`;
+    }
+    function exigerRole(colonne, minimum, action) {
+      if (!valide()) return;
+      const c = colonne || GROUPE;
+      if (!(peut(session, c, minimum) || (c !== GROUPE && peut(session, GROUPE, minimum))))
+        throw new Error(`Votre compte (${session.login}) n'a pas le rôle ${LIBELLES[minimum]} sur ${c === GROUPE ? "le groupe" : c} : impossible de ${action}. Un administrateur du groupe le donne dans le portail (Comptes et droits).`);
+    }
+
+    return Object.freeze({ FICHIER, FORMAT, ROLES, LIBELLES, GROUPE, MDP_MIN, TICKET_H, ITERATIONS, identifiantValide, controlerMdp, nettoyerDroits, texteDroits,
+      lire, ecrire, tracer, nouveauCompte, creerAdministrateur, connecter, changerMotDePasse, role, peut, administrateurEspace, ticket, verifierTicket, hacher,
+      exiger, motifLecture, exigerRole,
+      // Compte connecté dans le module (public : login, nom, droits), ou null
+      get session() { return valide() ? { login: session.login, nom: session.nom, droits: { ...session.droits } } : null; },
+      // Le module reprend le nom du compte connecté (journal, publications) : fn({ login, nom, droits })
+      surConnexion(fn) { if (typeof fn === "function") rappels.push(fn); },
+      gereParLePortail() { parPortail = true; },
+      fermerSession() { session = null; } });
   })();
 
   /* ---------- Listes de choix du groupe (charte §5.9) ---------- */
@@ -37329,15 +37551,17 @@ const WerbSocle = Object.freeze((() => {
   // e: nom du dossier de l'espace, th: thème, u: nom de l'utilisateur identifié dans le portail }. Rien n'est conservé : le lien ne contient qu'un chemin relatif, le module redemande un dossier.
   // En file://, Edge ne retient pas le dernier dossier choisi : on accepte donc le dossier de l'espace, du site ou du module.
   const nomInitial = nomDuLien();
+  const ticketInitial = (d => (d && typeof d.t === "string" ? d.t : ""))(lireLien());
   const lien = Object.freeze({
     // theme (facultatif) : mode choisi dans le portail (« clair » ou « sombre » ; « auto » n'est pas transmis), §7.5
     // utilisateur (facultatif, 1.10.0) : nom saisi une fois dans le portail ; le module n'affiche pas son écran « Votre nom », §5.5
     // sigle, organisation, siteNom (facultatifs, 1.12.0) : nommage des fichiers exportés et titres (§7.8) quand l'espace n'est pas ouvert dans le module
-    creer(url, { groupeId, fichier, site = "", libelle = "", espace: nomEspace = "", theme: th = "", utilisateur: u = "", sigle = "", organisation = "", siteNom = "" }) {
+    creer(url, { groupeId, fichier, site = "", libelle = "", espace: nomEspace = "", theme: th = "", utilisateur: u = "", sigle = "", organisation = "", siteNom = "", ticket: t = "" }) {
       const d = { g: groupeId, f: fichier, s: site, l: libelle, e: nomEspace };
       if (sigle) d.gs = String(sigle); if (organisation) d.go = String(organisation); if (siteNom) d.sn = String(siteNom);
       if (th === "clair" || th === "sombre") d.th = th;
       if (nettoyerNom(u)) d.u = nettoyerNom(u);
+      if (t) d.t = String(t);
       return `${url}#werbsmsi=${encodeURIComponent(JSON.stringify(d))}`;
     },
     lire() {
@@ -37348,11 +37572,12 @@ const WerbSocle = Object.freeze((() => {
     // Lien vers un module sans base : seulement le thème choisi dans le portail (rien si « auto »)
     avecTheme(url, th) { return lien.avecContexte(url, { theme: th }); },
     // Lien vers un module sans base : thème et nom de l'utilisateur identifié dans le portail (1.10.0) ; url seule s'il n'y a rien à transmettre
-    avecContexte(url, { theme: th = "", utilisateur: u = "", sigle = "", organisation = "" } = {}) {
+    avecContexte(url, { theme: th = "", utilisateur: u = "", sigle = "", organisation = "", ticket: t = "" } = {}) {
       const d = {};
       if (sigle) d.gs = String(sigle); if (organisation) d.go = String(organisation);
       if (th === "clair" || th === "sombre") d.th = th;
       if (nettoyerNom(u)) d.u = nettoyerNom(u);
+      if (t) d.t = String(t);
       return Object.keys(d).length ? `${url}#werbsmsi=${encodeURIComponent(JSON.stringify(d))}` : url;
     },
     // Thème seul transmis par le portail (lien sans base, ou avant que le module ne lise la demande)
@@ -37360,6 +37585,8 @@ const WerbSocle = Object.freeze((() => {
     // Nom de l'utilisateur transmis par le portail (1.10.0), lu au chargement de la page : il reste disponible après lien.effacer().
     // Le module l'utilise à la place de son écran « Votre nom » ; le verrou (§5.7) le connaît déjà. « » s'il n'y en a pas.
     utilisateur() { return nomInitial; },
+    // Ticket du compte connecté dans le portail (1.13.0, §5.10), lu au chargement : à vérifier par comptes.verifierTicket() une fois l'espace ouvert
+    ticket() { return ticketInitial; },
     nettoyerNom,
     effacer() { try { history.replaceState(null, "", location.pathname + location.search); } catch (e) { /* sans effet */ } },
     // Dossiers que l'utilisateur peut choisir pour atteindre la base : espace, puis chaque dossier du chemin (site, module).
@@ -37389,7 +37616,8 @@ const WerbSocle = Object.freeze((() => {
     // (publications, rattachement) ; sinon la base est cherchée sous le dossier choisi, par la fin de son chemin.
     async ouvrir(demande, { verrou: prendreVerrou = true } = {}) {
       const r = await lien.ouvrirBrut(demande);
-      return prendreVerrou ? verrou.prendre(r) : r;
+      const motif = comptes.motifLecture(demande.site || comptes.GROUPE);   // 1.14.0
+      return prendreVerrou ? verrou.prendre(r, { droits: motif }) : motif ? { ...r, lecture: true } : r;
     },
     async ouvrirBrut(demande) {
       if (espace.ouvert && espace.groupe.groupeId === demande.groupeId) return espace.ouvrirFichier(demande.fichier);
@@ -37738,7 +37966,7 @@ body.wt-glisse{cursor:col-resize!important;user-select:none!important}
     if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", poser); else bandeau.menuBouton();
   }
 
-  return Object.freeze({ VERSION, FAMILLE, LOGO, afficherLogo, purger, preference, activerPurgeAutomatique, esc, enveloppe, lireEnveloppe, qualifier, decomposer, sha256, accesDirect, ouvrir, enregistrer, telecharger, espace, lien, nommage, menu, bandeau, tables, TEINTES, teinteCss, verrou, listes, theme });
+  return Object.freeze({ VERSION, FAMILLE, LOGO, afficherLogo, purger, preference, activerPurgeAutomatique, esc, enveloppe, lireEnveloppe, qualifier, decomposer, sha256, accesDirect, ouvrir, enregistrer, telecharger, espace, lien, nommage, menu, bandeau, tables, TEINTES, teinteCss, verrou, listes, theme, comptes });
 })());
 window.WerbSocle = WerbSocle;
 
@@ -38702,6 +38930,7 @@ window.AcademieWord = AcademieWord;
 
   /* ===================================================== état (en mémoire seulement) */
   let S = null, ENV = { creeLe: "", journal: [] }, LIAISON = {}, fichier = { poignee: null, nom: "", modifie: null }, dirty = false, user = WerbSocle.lien.utilisateur();   // nom saisi dans le portail (socle 1.10.0, charte §5.5) : pas d'écran « Votre nom »
+  WerbSocle.comptes.surConnexion(c => { user = c.nom; try { renderTopbar(); } catch (e) { /* bandeau absent */ } });   // compte de l'espace connecté (socle 1.14.0, charte §5.11) : il signe le journal et les publications
   let vue = "tdb";
   // f : formation ouverte ; s : session ouverte ; imp : import CSV en attente ; impF : import de formations en attente ; quiz, corrige : options des slides ; corrigeQuiz : quiz papier ;
   // modele : habiller les documents Word du modèle de l'entreprise ; sf, ssite : filtres des sessions

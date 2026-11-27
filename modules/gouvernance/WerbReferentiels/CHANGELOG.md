@@ -4,6 +4,14 @@ Toutes les évolutions notables de WerbReferentiels sont consignées ici.
 Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/), numérotation [SemVer](https://semver.org/lang/fr/).
 
 
+## [1.8.0] — 2026-11
+
+### Modifications
+- Socle 1.14.0 (comptes de l'espace, charte §5.11) : module de lecture sans base, rien ne change pour l'utilisateur ; s'il ouvre un espace qui a des comptes, la connexion est demandée comme dans les autres modules.
+
+### Développement
+- Socle 1.14.0 ; tests : espace de démonstration copié sans ses comptes (identification par le nom), socle 1.14.0.
+
 ## [1.7.2] — 2026-11
 
 ### Changements

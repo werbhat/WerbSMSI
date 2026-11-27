@@ -2,7 +2,7 @@
   "charte": "1.0",
   "id": "werbrgpd",
   "produit": "WerbRGPD",
-  "version": "1.4.1",
+  "version": "1.5.0",
   "dateVersion": "2026-11",
   "auteur": "@WerbHat",
   "signature": "Développé par @WerbHat",
@@ -14,7 +14,7 @@
   "entree": "application/WerbRGPD.html",
   "empreinte": {
     "algo": "SHA-256",
-    "valeur": "e399052f708de1c0d91bfbd12436d383ea5d21584c8114af6cad0b37b9beb410"
+    "valeur": "32ad4c54ec6eeab705ea08246cd7f4f3b8033b377557708ad12ec3c457f2672c"
   },
   "donnees": {
     "format": "WERBRGPD",

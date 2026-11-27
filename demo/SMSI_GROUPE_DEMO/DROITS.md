@@ -4,7 +4,7 @@
 
 | Dossier ou fichier | Équipe SMSI groupe | Équipe du site X | Autres sites |
 |---|---|---|---|
-| `werbsmsi.groupe.json`, `publications/` | lecture-écriture | lecture | lecture |
+| `werbsmsi.groupe.json`, `werbsmsi.comptes.json`, `publications/` | lecture-écriture | lecture | lecture |
 | `groupe/` | lecture-écriture | aucun | aucun |
 | `sites/X/` | lecture (écriture si le groupe administre) | lecture-écriture | aucun |
 

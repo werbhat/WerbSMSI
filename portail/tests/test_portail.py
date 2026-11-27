@@ -78,6 +78,18 @@ class Silencieux(http.server.SimpleHTTPRequestHandler):
         pass
 
 
+def connecter(pg, login="admin.demo", mdp="Demo-Admin-2026"):
+    """Connexion à l'espace (portail 1.22.0) : compte de démonstration, ou premier compte d'un espace neuf."""
+    pg.wait_for_selector("[data-connexion], [data-creation-admin]", timeout=15000)
+    if pg.locator("[data-creation-admin]").count():
+        for k, v in (("#caLogin", "admin.test"), ("#caNom", "Admin TEST"), ("#caMdp", "Admin-Test-2026!"), ("#caMdp2", "Admin-Test-2026!")):
+            pg.fill(k, v)
+        pg.click("[data-act=caValider]")
+    else:
+        pg.fill("#cxLogin", login); pg.fill("#cxMdp", mdp); pg.click("[data-act=cxValider]")
+    pg.wait_for_selector("#tb-user [data-act=monCompte]", timeout=30000)
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--visible", action="store_true")
@@ -154,13 +166,29 @@ def main() -> int:
               and page.locator("#sidebar [data-wnav=infographie]").count() == 1, "infographie : page dans ❓ Aide, image intégrée (WebP 1024 px)")
         page.click("#sidebar [data-wnav=accueil]"); page.wait_for_timeout(150)
         check(page.locator("#sidebar .wm-cat").count() == 4 and page.locator("#sidebar [data-wnav=sauvegarde]").count() == 1, "menu commun : Accueil, Outils, Administration, Aide (sans espace)")
-        page.click("#sidebar [data-wnav=aide]")
-        lignes_aide = page.locator(".card:has(h2:has-text('Ce que le portail repère')) tbody tr").all_inner_texts()
+        print("— Guide « En route avec WerbSMSI » (premiers pas, portail 1.23.0)")
+        ok_aide = page.locator("#sidebar [data-wnav=aide]").count() == 0
+        entrees = page.locator("#sidebar .wm-cat:last-of-type [data-wnav]").evaluate_all("l => l.map(x => x.dataset.wnav)")
+        check(ok_aide and page.locator("#sidebar [data-wnav='guide:0-en-route-avec-werbsmsi']").count() == 1
+              and page.locator("#sidebar [data-wnav]").evaluate_all("l => l.map(x => x.dataset.wnav)").index("guide:0-en-route-avec-werbsmsi")
+              < page.locator("#sidebar [data-wnav]").evaluate_all("l => l.map(x => x.dataset.wnav)").index("recueil"),
+              "menu ❓ Aide : « En route avec WerbSMSI » en premier, plus de page « Créer la base d'un site »")
+        check(page.locator("[data-en-route] a[data-nav]").count() == 1 and page.locator("[data-en-route] a[data-guide-onglet][target=_blank]").count() == 1, "accueil : guide des premiers pas proposé, aussi dans un nouvel onglet")
+        page.click("[data-en-route] a[data-nav]"); page.wait_for_timeout(300)
+        g = page.inner_text("#main")
+        check(all(x in g for x in ("Départ — Préparer le voyage", "Station 1 — Le plan de la ligne", "Station 3 — Prendre les clés", "Station 4 — Distribuer les badges",
+                                   "Station 5 — Poser la première base", "Station 7 — Faire circuler", "Terminus — Le rythme de croisière", "Billet à composter"))
+              and page.locator(".wg-doc figure img[src^='data:image/svg+xml']").count() == 1, "guide : départ, sept stations, terminus, billets, plan de la route (SVG intégré)")
         manifestes = [json.loads((RACINE / m["chemin"] / "module.json").read_text(encoding="utf-8")) for m in PUBLIES]
-        attendu = sum(len(man["portees"]) for man in manifestes if "donnees" in man)   # un module de lecture n'a pas de base
-        check(len(lignes_aide) == attendu and any("sites/<CODE>/exploitation/" in l and ".werbexploitation.json" in l for l in lignes_aide),
-              f"aide : dossier et extension de chaque module, déduits du registre ({len(lignes_aide)} ligne(s))")
-        check(page.locator(".card.etape").count() == 7, "aide : prérequis, 4 étapes, dépannage, bon à savoir")
+        absents = [man["produit"] for man in manifestes if "donnees" in man and not all(x in g for x in (man["produit"], man["donnees"]["extension"], f"/{man['rubrique']}/"))]
+        check(not absents, f"guide : dossier et extension de chaque module publié du registre{(' – absents : ' + ', '.join(absents)) if absents else ''}")
+        with page.expect_popup() as fen:
+            page.click("[data-guide-onglet='guide:0-en-route-avec-werbsmsi']")
+        onglet = fen.value
+        onglet.wait_for_load_state(); onglet.wait_for_timeout(600)
+        check("Station 4 — Distribuer les badges" in onglet.inner_text("body") and "Recueil_guides_WerbSMSI.html" in onglet.url and onglet.title().startswith("En route avec WerbSMSI"),
+              "↗ nouvel onglet : le recueil s'ouvre directement sur le guide, à côté du portail")
+        onglet.close()
         capture(page, "portail_aide")
         page.click("#sidebar [data-wnav=accueil]")
         liens = sorted(h.split("#")[0] for h in page.eval_on_selector_all("a.btn.primary", "l => l.map(a => a.getAttribute('href'))"))   # nom transmis après « #werbsmsi= » (1.16.0)
@@ -170,14 +198,14 @@ def main() -> int:
         check(page.locator(".tile .badge:has-text('à intégrer')").count() == a_integrer, f"modules à intégrer signalés ({a_integrer})")
 
         print("— Guide « Démarrer avec WerbSMSI » (dirigeants et débutants)")
-        lien_guide = page.locator(".infobox a[data-nav^='guide:']")
+        lien_guide = page.locator(".infobox:not([data-en-route]) a[data-nav^='guide:']")
         check(lien_guide.count() == 1 and "Démarrer avec WerbSMSI" in lien_guide.inner_text(), "accueil : guide proposé aux dirigeants et aux débutants")
         lien_guide.click(); page.wait_for_timeout(200)
         guide = page.inner_text("#main")
         check(all(s in guide for s in ("Le SMSI en cinq minutes", "Qui fait quoi", "La feuille de route sur douze mois", "Phase 0", "Phase 5", "Ce que le dirigeant doit faire", "Vos premiers pas cette semaine")),
               "guide affiché : SMSI, rôles, feuille de route en phases, rôle du dirigeant, premiers pas")
         check(all(m in guide for m in ("WerbGouvernance", "WerbEBIOS", "WerbMap", "WerbPCR", "WerbVeille")) and "Développé par @WerbHat" in guide, "guide : modules cités, signature")
-        check(page.locator("#sidebar [data-wnav^='guide:']").count() == 2 and page.locator("#sidebar [data-wnav=aide]").count() == 1, "menu ❓ Aide : guide et « Créer la base d'un site »")
+        check(page.locator("#sidebar [data-wnav^='guide:']").count() == 3, "menu ❓ Aide : trois guides du portail")
         capture(page, "portail_guide_demarrer")
         page.click("#sidebar [data-wnav=accueil]")
 
@@ -203,7 +231,7 @@ def main() -> int:
             for d in DOSSIERS["site"] + ["publications"]:
                 page.evaluate(DOSSIER, [f"SMSI/sites/{code}/{d}", "creer"])
         avant = page.evaluate(EMPREINTES)
-        page.click("[data-act=espace]")
+        page.click("[data-act=espace]"); connecter(page)
         page.wait_for_selector("h1:has-text('Groupe Démo Industrie')")
         check(page.locator("#sidebar .wm-cat").count() == 6 and page.locator("#sidebar [data-wnav='site:PARIS'] .wm-n").inner_text() == "🔒", "menu avec l'espace : Groupe et Sites ajoutés, site inaccessible marqué 🔒")
         capture(page, "portail_groupe")
@@ -309,7 +337,7 @@ def main() -> int:
         mod.fill("#versionCom", "Version de test"); mod.click("#modal-root [data-version] [data-x=oui]")   # WerbExploitation 1.13 : commentaire de version
         mod.wait_for_timeout(400)
         j = json.loads(page.evaluate(LIRE, "SMSI/sites/LYON/exploitation/Exploitation_LYON.werbexploitation.json"))
-        check(any(e.get("par") == "Camille TEST" and e.get("action") in ("Enregistrement", "Version") for e in j["journal"]), "enregistrement à sa place dans l'espace (sans sélecteur de fichier), journal au nom saisi dans le portail")
+        check(any(e.get("par") == "Administrateur DEMO" and e.get("action") in ("Enregistrement", "Version") for e in j["journal"]), "enregistrement à sa place dans l'espace (sans sélecteur de fichier), journal au nom saisi dans le portail")
         mod.close()
         page.uncheck("#optRaccourcis")
         page.wait_for_timeout(300)
@@ -356,7 +384,7 @@ def main() -> int:
         page.wait_for_timeout(100)
         capture(page, "portail_creer_espace")
         check("SMSI_TST/" in page.inner_text("pre.arbo") and "USINE1/" in page.inner_text("pre.arbo"), "aperçu de l'arborescence (sigle et code en majuscules)")
-        page.click("[data-act=creerEspace]")
+        page.click("[data-act=creerEspace]"); connecter(page)
         page.wait_for_selector("h1:has-text('Groupe Test (fictif)')")
         g = json.loads(page.evaluate(LIRE, "SMSI/SMSI_TST/werbsmsi.groupe.json"))
         s = json.loads(page.evaluate(LIRE, "SMSI/SMSI_TST/sites/USINE1/werbsmsi.site.json"))

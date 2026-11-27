@@ -50,6 +50,18 @@ class Silencieux(http.server.SimpleHTTPRequestHandler):
         pass
 
 
+def connecter(pg, login="admin.demo", mdp="Demo-Admin-2026"):
+    """Connexion à l'espace (portail 1.22.0) : compte de démonstration, ou premier compte d'un espace neuf."""
+    pg.wait_for_selector("[data-connexion], [data-creation-admin]", timeout=15000)
+    if pg.locator("[data-creation-admin]").count():
+        for k, v in (("#caLogin", "admin.test"), ("#caNom", "Admin TEST"), ("#caMdp", "Admin-Test-2026!"), ("#caMdp2", "Admin-Test-2026!")):
+            pg.fill(k, v)
+        pg.click("[data-act=caValider]")
+    else:
+        pg.fill("#cxLogin", login); pg.fill("#cxMdp", mdp); pg.click("[data-act=cxValider]")
+    pg.wait_for_selector("#tb-user [data-act=monCompte]", timeout=30000)
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--visible", action="store_true")
@@ -79,12 +91,12 @@ def main() -> int:
         for chemin, data in demo.items():
             opfs("ecrire", f"SMSI/{chemin}", data)
         pg.wait_for_selector("h1:has-text('WerbSMSI')")
-        pg.click("[data-act=espace]")
+        pg.click("[data-act=espace]"); connecter(pg)
         pg.wait_for_selector("h1:has-text('Groupe Démo Industrie')")
         bt = pg.locator("#topbar [data-act=sauvegarderBandeau]")
         ok(bt.count() == 1 and bt.inner_text() == "💾 Sauvegarder l'espace" and "fait" not in (bt.get_attribute("class") or ""), "bandeau : bouton « Sauvegarder l'espace » mis en évidence")
         bt.click(); pg.wait_for_timeout(200)
-        ok(pg.inner_text("#main h1") == "💾 Sauvegarde et restauration" and pg.evaluate("document.activeElement && document.activeElement.id") == "svAuteur", "bandeau : page de sauvegarde ouverte, « Réalisée par » à renseigner")
+        ok(pg.inner_text("#main h1") == "💾 Sauvegarde et restauration" and pg.input_value("#svAuteur") == "Administrateur DEMO", "bandeau : page de sauvegarde ouverte, « Réalisée par » repris du compte connecté")
         pg.click("#sidebar [data-wnav=sauvegarde]")
         ok(pg.inner_text("#main h1") == "💾 Sauvegarde et restauration", "menu ⚙️ Administration › Sauvegarde et restauration")
         # Attente de la fin d'une sauvegarde (data-sauv) ou d'une lecture d'archive (data-archive) : le repère de la vue change
@@ -97,7 +109,7 @@ def main() -> int:
         ok(pg.is_checked("#svChiffrer") and pg.locator("#svMdp").count() == 1, "chiffrement proposé par défaut (mot de passe et confirmation)")
         pg.uncheck("#svChiffrer"); pg.wait_for_timeout(100)
         ok(pg.locator("#svMdp").count() == 0 and "Archive en clair" in pg.inner_text("[data-sv-chiffre]"), "case décochée : avertissement « archive en clair »")
-        pg.click("[data-act=sauvegarder]")
+        pg.fill("#svAuteur", ""); pg.click("[data-act=sauvegarder]")
         ok("Réalisée par" in pg.inner_text("#toasts"), "auteur obligatoire")
         pg.fill("#svAuteur", "Alice MARTIN")
         action("[data-act=sauvegarder]", "sauv")
