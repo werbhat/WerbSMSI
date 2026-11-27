@@ -1,5 +1,5 @@
 <!doctype html>
-<!-- WerbEBIOS v1.19.1 – Développé par @WerbHat – build novembre 2026 -->
+<!-- WerbEBIOS v1.21.0 – Développé par @WerbHat – build novembre 2026 -->
 <html lang="fr">
 <head>
 <meta charset="utf-8">
@@ -9,7 +9,7 @@
 <title>WerbEBIOS</title>
 <meta name="application-name" content="WerbEBIOS">
 <meta name="author" content="@WerbHat">
-<meta name="generator" content="WerbEBIOS v1.19.1 – Développé par @WerbHat">
+<meta name="generator" content="WerbEBIOS v1.21.0 – Développé par @WerbHat">
 <meta name="description" content="Analyse de risques EBIOS Risk Manager (ANSSI) du groupe et des sites : 5 ateliers, MITRE ATT&CK, rapport Word">
 <style>/*! WerbEBIOS – Développé par @WerbHat */
 :root {
@@ -36581,7 +36581,7 @@ const WERB = Object.freeze((() => {
   const bytes = [68, 195, 169, 118, 101, 108, 111, 112, 112, 195, 169, 32, 112, 97, 114, 32, 64, 87, 101, 114, 98, 72, 97, 116];
   const signature = new TextDecoder("utf-8").decode(new Uint8Array(bytes));
   const produit = "WerbEBIOS";
-  const version = "1.19.1";
+  const version = "1.21.0";
   return {
     id: "werbebios",
     produit, version, auteur: "@WerbHat", signature,
@@ -39037,7 +39037,8 @@ window.RapportWord = RapportWord;
       cols: [c("id", "ID", "id"), c("nom", "Bien support"), c("type", "Type", "select", { o: () => REF.typesBS }), c("vm", "Valeurs métier", "multi", { o: liste("vm") }),
         c("actifs", "Actifs WerbMap", "multi", { o: () => S.inventaire.actifs.map(a => [a.id, `${a.id} – ${a.libelle || a.type || ""}`]), vide: "Chargez l'inventaire WerbMap (Intégration WerbSMSI) pour choisir les actifs." }),
         c("responsable", "Responsable", "text", { liste: false }), c("description", "Description", "area", { liste: false }),
-        c("_si", "SI WerbMap", "calc", { liste: false, fn: r => r.si ? { v: (siDe(r.si) || { nom: r.si }).nom, b: "b-info" } : { v: "" } })] },
+        c("_si", "SI WerbMap", "calc", { liste: false, fn: r => r.si ? { v: (siDe(r.si) || { nom: r.si }).nom, b: "b-info" } : { v: "" } }),
+        c("_dif", "Difficulté MAJ", "calc", { fn: r => difBadge(difSynthese(r.actifs)) })] },
     er: { titre: "Événements redoutés", obj: "Événement redouté", prefixe: "ER", atelier: 1, sub: "Atteinte à une valeur métier et ses impacts, cotés en gravité.",
       cols: [c("id", "ID", "id"), c("vm", "Valeur métier", "select", { o: liste("vm") }), c("description", "Événement redouté", "area", { cls: "lg" }),
         c("criteres", "Critères de sécurité", "multi", { o: () => CRITERES }), c("besoin", "Besoin de sécurité", "niv", { echelle: "besoins" }),
@@ -39072,6 +39073,7 @@ window.RapportWord = RapportWord;
     so: { titre: "Scénarios opérationnels", obj: "Scénario opérationnel", prefixe: "SO", atelier: 4, sub: "Mode opératoire technique d'un scénario stratégique : séquence Connaître / Rentrer / Trouver / Exploiter (techniques MITRE ATT&CK) et vraisemblance.",
       cols: [c("id", "ID", "id"), c("ss", "Scénario stratégique", "select", { o: () => S.ss.map(x => [x.id, `${x.id} – ${x.description}`.slice(0, 90)]) }),
         c("description", "Mode opératoire", "area", { cls: "lg" }), c("bs", "Biens supports visés", "multi", { o: liste("bs") }),
+        c("_dif", "Difficulté MAJ des biens visés", "calc", { fn: r => difBadge(difSynthese(actifsDesBS(r.bs))) }),
         c("_act", "Séquence d'attaque", "calc", { fn: r => ({ v: REF.phases.map(([k, l]) => `${l} ${r.actions.filter(a => a.phase === k).length}`).join(" · ") }) }),
         c("methodeV", "Méthode de cotation", "select", { o: () => METHODES_V, liste: false }),
         c("_vProp", "V proposée", "calc", { fn: r => { const p = vPropose(r); return p ? { v: `V${p.v}`, b: p.v === n(r.vraisemblance) ? "b-ok" : "b-warn" } : { v: "" }; } }),
@@ -39260,6 +39262,22 @@ window.RapportWord = RapportWord;
   const normSI = s => ({ id: str(s && s.id), nom: str(s && s.nom), fonction: str(s && s.fonction), d: n(s && s.d), i: n(s && s.i), c: n(s && s.c),
     actifs: (Array.isArray(s && s.actifs) ? s.actifs : []).map(str).filter(Boolean) });
   const siDe = id => S.inventaire.si.find(s => s.id === id);
+  /* Difficulté de mise à jour des actifs (site:difficultesMaj, WerbExploitation 1.40.0) : niveau N1 à N5 par TAG, barème en six critères,
+     score sur 55. Complément du module, hors guide EBIOS RM : affichée comme aide à la cotation de la vraisemblance (un actif difficile à
+     mettre à jour reste exposé longtemps après un correctif), sans effet sur la vraisemblance proposée ni sur la cotation. */
+  const NIV_DIF = ["N1", "N2", "N3", "N4", "N5"];
+  const normDif = x => ({ tag: str(x.tag), niveau: str(x.niveau), libelle: str(x.libelleNiveau), score: Math.max(0, Math.min(55, Math.round(Number(x.score) || 0))), evalueLe: str(x.evalueLe) });
+  const difDe = tag => { const k = str(tag).trim().toUpperCase(); return k ? (S.inventaire.difficultes || []).find(d => d.tag.toUpperCase() === k) || null : null; };
+  // Synthèse sur une liste de TAG : niveau le plus difficile (puis score le plus fort), actifs évalués / total
+  function difSynthese(tags) {
+    const l = [...new Set((tags || []).map(t => str(t).trim()).filter(Boolean))], ev = l.map(difDe).filter(Boolean);
+    if (!ev.length) return null;
+    const m = ev.slice().sort((a, b) => NIV_DIF.indexOf(b.niveau) - NIV_DIF.indexOf(a.niveau) || b.score - a.score)[0];
+    return { niveau: m.niveau, libelle: m.libelle, score: m.score, tag: m.tag, evalues: ev.length, total: l.length, difficiles: ev.filter(d => NIV_DIF.indexOf(d.niveau) >= 3).map(d => d.tag) };
+  }
+  const difBadge = x => !x ? { v: "" } : { v: `${x.niveau}${x.libelle ? " " + x.libelle : ""} (${x.tag}, ${x.score}/55)${x.evalues < x.total ? ` – ${x.evalues}/${x.total} actifs évalués` : ""}`,
+    b: NIV_DIF.indexOf(x.niveau) >= 3 ? "b-warn" : "b-info" };
+  const actifsDesBS = ids => (ids || []).flatMap(id => ((S.bs || []).find(b => b.id === id) || {}).actifs || []);
 
   /* ===================================================== fichier */
   function toEnvelope() {
@@ -39705,7 +39723,8 @@ window.RapportWord = RapportWord;
       <div class="row"><button class="primary" data-act="reprendre">⇩ Reprendre du groupe</button><button data-act="smsiRelire">Relire les publications</button></div></div>
       <div class="card"><h2>Inventaire WerbMap du site</h2><p>${S.inventaire.actifs.length} actif(s) chargé(s)${S.inventaire.chargeLe ? ` le ${esc(frDate(S.inventaire.chargeLe))}` : ""} : ils se choisissent dans les biens supports (champ « Actifs WerbMap »).</p>
       <p class="small muted">${(S.inventaire.prestataires || []).length} prestataire(s) évalué(s) dans WerbPresta reçu(s) avec l'inventaire : ils proposent la maturité et la confiance des parties prenantes (atelier 3).</p>
-      <button data-act="chargerInventaire">⟳ Charger les actifs et les SI publiés par WerbMap et les prestataires de WerbPresta</button></div>
+      <p class="small muted" data-dif-recus>${(S.inventaire.difficultes || []).length} actif(s) dont la difficulté de mise à jour est évaluée dans WerbExploitation (N1 très facile à N5 très difficile) : affichée dans les biens supports (atelier 1) et les scénarios opérationnels (atelier 4) comme aide à la cotation de la vraisemblance — complément du module, hors guide, sans effet sur la cotation.</p>
+      <button data-act="chargerInventaire">⟳ Charger les actifs et les SI publiés par WerbMap, les prestataires de WerbPresta et la difficulté de mise à jour de WerbExploitation</button></div>
       ${carteSI()}
       <div class="card"><h2>Publier vers le site</h2><p>${s.evenementsRedoutes.length} événement(s) redouté(s) (valeur métier, critères et besoin de sécurité, impacts, gravité : WerbPCR les reprend dans le périmètre métier du plan), ${s.valeursMetier.length} valeur(s) métier (nom, nature, description), ${s.biensSupports.length} bien(s) support(s) (nom, actifs, valeurs métier portées : WerbPCR en déduit les valeurs métier de chaque SI) et ${s.syntheseRisques.length} risque(s) (événement redouté du groupe, gravité, vraisemblance, niveaux brut et résiduel, traitement, biens supports visés et leurs actifs : WerbMap les rattache à ses fiches SI). Les scénarios détaillés restent dans l'analyse. Écrit <code>sites/${esc(LIAISON.site)}/publications/${esc(WERB.id)}.json</code> sous le préfixe « ${esc(refEtude())} ».</p>
       ${dirty ? `<div class="warnbox">Des modifications ne sont pas enregistrées : enregistrez l'analyse avant de publier.</div>` : ""}<button class="primary" data-act="publierSite"${dirty ? " disabled" : ""}>Publier</button></div>`;
@@ -40273,7 +40292,8 @@ window.RapportWord = RapportWord;
   function objetsGroupe() {
     const e = S.echelles, ech = k => e[k].map(x => ({ niveau: x.niveau, libelle: x.libelle }));
     return {
-      echelles: { gravite: ech("gravite"), vraisemblance: ech("vraisemblance"), niveauxRisque: ech("niveauxRisque"), besoins: ech("besoins") },
+      echelles: { gravite: ech("gravite"), vraisemblance: ech("vraisemblance"), niveauxRisque: ech("niveauxRisque"), besoins: ech("besoins"),
+        matrice: (e.matrice || []).map(l => l.map(Number)) },   // 1.21.0 : matrice[vraisemblance − 1][gravité − 1] = niveau (tableau de bord GRC du portail)
       valeursMetier: S.vm.map(v => ({ id: v.id, nom: v.nom, description: v.description })),
       evenementsRedoutes: S.er.filter(x => n(x.gravite)).map(x => Object.assign({ id: x.id, nom: x.description, valeurMetier: x.vm, gravite: n(x.gravite), impacts: x.impacts.join(", "), criteres: critEr(x) }, n(x.besoin) ? { besoin: n(x.besoin) } : {})),
       sourcesRisque: S.srov.filter(x => x.retenu).map(x => Object.assign({ id: x.id, sourceRisque: x.source, objectif: x.objectif }, pertinence(x) ? { pertinence: pertinence(x) } : {})),
@@ -40300,7 +40320,11 @@ window.RapportWord = RapportWord;
         const r = { id: `${ref}/${o.id}`, libelle: (o.description || ss.description || o.id).slice(0, 200), gravite: graviteSO(o), vraisemblance: n(o.vraisemblance), niveauBrut: niveauBrut(o),
           traitement: o.traitement || "a-decider", etude: ref };
         if (er) r.evenementRedoute = er.rg || er.id;
-        if (niveauResiduel(o)) r.niveauResiduel = niveauResiduel(o);
+        if (niveauResiduel(o)) Object.assign(r, { niveauResiduel: niveauResiduel(o), graviteResiduelle: n(o.gRes) || graviteSO(o), vraisemblanceResiduelle: n(o.vRes) || n(o.vraisemblance) });
+        // Acceptation du risque résiduel (1.21.0) : état et dates seulement, jamais le nom de la personne qui accepte
+        r.acceptation = { ok: "acceptee", expiree: "expiree", afaire: "a-faire" }[accEtat(o)] || "a-faire";
+        if (o.accepteLe) r.accepteLe = str(o.accepteLe);
+        if (o.accepteJusqua) r.accepteJusqua = str(o.accepteJusqua);
         // Biens supports visés et leurs actifs (TAG) : WerbMap rattache le risque aux fiches SI qui contiennent ces actifs (MAP-7.4)
         const bs = (o.bs || []).map(id => S.bs.find(b => b.id === id)).filter(Boolean);
         if (bs.length) { r.biensSupports = bs.map(b => `${ref}/${b.id}`); r.actifs = [...new Set(bs.flatMap(b => b.actifs))]; }
@@ -40513,9 +40537,10 @@ window.RapportWord = RapportWord;
         if (!act.length) throw new Error("Aucun actif publié par WerbMap pour ce site.");
         const si = (pub.objets.si || []).map(normSI).filter(s => s.id);
         const presta = (pub.objets.evaluationsPrestataires || []).filter(x => x && x.id).map(normPresta);
-        S.inventaire = { site: LIAISON.site, chargeLe: new Date().toISOString(), actifs: act.map(a => ({ id: str(a.id), libelle: str(a.libelle), type: str(a.type), famille: str(a.famille) })), si, prestataires: presta };
-        journaliser("Inventaire", "WerbSMSI", LIAISON.site, "Actifs / SI / prestataires", "", `${act.length} / ${si.length} / ${presta.length}`); marquer(); render();
-        toast(`${act.length} actif(s) et ${si.length} SI WerbMap chargé(s)${presta.length ? `, ${presta.length} prestataire(s) WerbPresta` : ""}.`, "ok");
+        const dif = (pub.objets.difficultesMaj || []).filter(x => x && x.tag && NIV_DIF.includes(str(x.niveau))).map(normDif);
+        S.inventaire = { site: LIAISON.site, chargeLe: new Date().toISOString(), actifs: act.map(a => ({ id: str(a.id), libelle: str(a.libelle), type: str(a.type), famille: str(a.famille) })), si, prestataires: presta, difficultes: dif };
+        journaliser("Inventaire", "WerbSMSI", LIAISON.site, "Actifs / SI / prestataires / difficultés de MAJ", "", `${act.length} / ${si.length} / ${presta.length} / ${dif.length}`); marquer(); render();
+        toast(`${act.length} actif(s) et ${si.length} SI WerbMap chargé(s)${presta.length ? `, ${presta.length} prestataire(s) WerbPresta` : ""}${dif.length ? `, difficulté de mise à jour de ${dif.length} actif(s) (WerbExploitation)` : ""}.`, "ok");
       } catch (e) { toast(e.message, "err"); }
     },
     siBien(el) {

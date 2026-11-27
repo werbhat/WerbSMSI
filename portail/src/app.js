@@ -90,6 +90,7 @@
       P.sites = {};
       for (const s of P.groupe.sites || []) P.sites[s.code] = await chargerSite(s.code);
       P.modeles = await chargerModeles();
+      P.luLe = Date.now();   // tableau de bord GRC : heure de lecture des publications
     } finally { P.chargement = false; }
   }
 
@@ -323,6 +324,183 @@
     h += `<div class="card">${titre("📍", "Bases par module et par site", "vert")}<p class="small muted">Une puce par site : 📍 base présente (cliquer pour l'ouvrir dans son module), grisée si le site n'a pas de base, 🔒 si le dossier du site n'est pas accessible.</p>
       <div class="tiles">${REG.modules.filter(m => m.manifeste && m.etat === "publie" && !masques().has(m.id)).map(m => `<div class="tile"><h3>${esc(m.manifeste.produit)}</h3>${basesModule(m)}</div>`).join("")}</div></div>`;
     h += `<h2 class="section">🧩 Modules du niveau groupe</h2>${rubriquesHtml("groupe")}`;
+    return h;
+  };
+
+  /* ===================================================== tableau de bord GRC (1.21.0)
+     Gouvernance, risques et conformité du groupe, consolidés à partir des publications de l'espace (lecture seule, rien n'est écrit).
+     Objets lus : site:syntheseRisques et groupe:echelles (WerbEBIOS), site:syntheseConformite (WerbIEC62443), site:syntheseNis2 (WerbNIS2),
+     groupe:mesuresSocle (WerbGouvernance), site:sauvegardes, site:plm, site:difficultesMaj (WerbExploitation), site:actifs (WerbMap),
+     site:veille (WerbVeille), site:remediations (WerbPentest), site:evaluationsPrestataires (WerbPresta), groupe:formations (WerbAcademie). */
+  const GRC = { perimetre: "tous", vue: "res", cellule: null };
+  const GRC_FRAIS = 90, GRC_PROCHE = 60, GRC_CIBLE = 80;   // publication à jour (jours) ; acceptation à renouveler (jours) ; cible de conformité (%)
+  const grcAuj = () => new Date().toISOString().slice(0, 10);
+  const grcJours = iso => iso ? Math.floor((Date.parse(grcAuj()) - Date.parse(String(iso).slice(0, 10))) / 864e5) : null;
+  const grcDans = (iso, j) => !!iso && iso >= grcAuj() && grcJours(iso) >= -j;
+  const grcObjet = (code, nom) => ((((P.sites[code] || {}).pub || {}).objets || {})[nom]);
+  const grcListe = (code, nom) => { const l = grcObjet(code, nom); return Array.isArray(l) ? l : []; };
+  const grcSites = () => sitesAccessibles().filter(s => GRC.perimetre === "tous" || s.code === GRC.perimetre);
+  // Échelles du groupe : dimensions, libellés des niveaux et matrice[v − 1][g − 1] (WerbEBIOS 1.21.0) ; sans matrice publiée, grille estimée
+  function grcEchelles() {
+    const e = ((P.pubGroupe || {}).objets || {}).echelles || {}, dim = k => Math.max(4, ...((e[k] || []).map(x => +x.niveau || 0)));
+    const G = dim("gravite"), V = dim("vraisemblance"), N = dim("niveauxRisque");
+    const m = Array.isArray(e.matrice) && e.matrice.length >= V && e.matrice.every(l => Array.isArray(l) && l.length >= G) ? e.matrice : null;
+    const niveau = (g, v) => m ? +m[v - 1][g - 1] || 0 : Math.min(N, Math.max(1, Math.ceil(g * v / (G * V) * N)));
+    const lib = n => ((e.niveauxRisque || []).find(x => +x.niveau === +n) || {}).libelle || (n ? `Niveau ${n}` : "—");
+    return { G, V, N, niveau, lib, matrice: !!m, teinte: n => n ? Math.min(4, Math.max(1, Math.ceil(n / N * 4))) : 0 };
+  }
+  // Risques publiés par les sites : position brute et résiduelle dans la matrice (résiduel non coté = brut)
+  function grcRisques(sites = grcSites()) {
+    return sites.flatMap(s => grcListe(s.code, "syntheseRisques").map(r => {
+      const gb = +r.gravite || 0, vb = +r.vraisemblance || 0, nb = +r.niveauBrut || 0, nr = +(r.niveauResiduel ?? r.niveauBrut) || 0;
+      return { site: s.code, r, gb, vb, nb, gr: +r.graviteResiduelle || gb, vr: +r.vraisemblanceResiduelle || vb, nr };
+    }));
+  }
+  const grcPos = x => GRC.vue === "res" ? [x.gr, x.vr, x.nr] : [x.gb, x.vb, x.nb];
+  const LIB_TRAIT = { reduire: "Réduire", accepter: "Accepter", transferer: "Transférer", eviter: "Éviter", "a-decider": "À décider" };
+
+  // Conformité par référentiel et par site : socle du groupe (mesures appliquées), NIS2 (couverture), IEC 62443 (moyenne des projets)
+  function grcConformite(sites = sitesAccessibles()) {
+    const socle = ((P.pubGroupe || {}).objets || {}).mesuresSocle || [];
+    const moy = l => l.length ? Math.round(l.reduce((a, b) => a + b, 0) / l.length) : null;
+    return [
+      { ref: "Socle de mesures du groupe", src: "WerbGouvernance · WerbIEC62443", v: Object.fromEntries(sites.map(s => { const sy = grcListe(s.code, "syntheseConformite");
+        if (!socle.length || !sy.length) return [s.code, null];
+        const ko = new Set(sy.flatMap(c => c.mesuresSocleNonAppliquees || []));
+        return [s.code, Math.round(100 * socle.filter(m => !ko.has(m.id)).length / socle.length)]; })) },
+      { ref: "NIS2 (ANSSI)", src: "WerbNIS2", v: Object.fromEntries(sites.map(s => [s.code, moy(grcListe(s.code, "syntheseNis2").map(y => y.couverture).filter(x => x !== null && x !== undefined).map(Number))])) },
+      { ref: "IEC 62443-3-3", src: "WerbIEC62443", v: Object.fromEntries(sites.map(s => [s.code, moy(grcListe(s.code, "syntheseConformite").filter(c => /62443/.test(c.referentiel || "")).map(c => Math.round(+c.taux)).filter(Number.isFinite))])) }
+    ];
+  }
+  // Actifs critiques (WerbMap) dont la difficulté de mise à jour est N4 ou N5 (WerbExploitation) ; null : rien de publié
+  function grcDifficiles(c, liste = false) {
+    const d = grcObjet(c, "difficultesMaj"); if (!Array.isArray(d)) return liste ? [] : null;
+    const crit = new Set(grcListe(c, "actifs").filter(a => /critique/i.test(a.criticite || "")).map(a => String(a.id).toUpperCase()));
+    const l = d.filter(x => ["N4", "N5"].includes(x.niveau) && crit.has(String(x.tag).toUpperCase()));
+    return liste ? l : l.length;
+  }
+  // Indicateurs d'hygiène par site : éléments à reprendre (null : rien de publié par le module) ; grave : rouge dès 1 ; pct : taux en %
+  const GRC_HYG = [
+    { lib: "Sauvegardes sans test de restauration depuis un an", obj: "site:sauvegardes", f: c => { const l = grcObjet(c, "sauvegardes"); return Array.isArray(l) ? l.filter(x => ["jamais", "echu"].includes(x.statutTest)).length : null; } },
+    { lib: "Références hors support installées", obj: "site:plm", grave: true, f: c => { const l = grcObjet(c, "plm"); return Array.isArray(l) ? l.filter(x => x.gravite === "ko").length : null; } },
+    { lib: "Actifs critiques difficiles à mettre à jour (N4, N5)", obj: "site:difficultesMaj", grave: true, f: c => grcDifficiles(c) },
+    { lib: "Alertes de veille « Concerné » ouvertes", obj: "site:veille", f: c => { const v = grcObjet(c, "veille"); return v && v.indicateurs ? +v.indicateurs.concerneesOuvertes || 0 : null; } },
+    { lib: "Actions de remédiation en retard (tests d'intrusion)", obj: "site:remediations", grave: true, f: c => { const l = grcObjet(c, "remediations"); return Array.isArray(l) ? l.reduce((n, x) => n + (+x.actionsEnRetard || 0), 0) : null; } },
+    { lib: "Prestataires dont la revue est dépassée", obj: "site:evaluationsPrestataires", f: c => { const l = grcObjet(c, "evaluationsPrestataires"); return Array.isArray(l) ? l.filter(x => x.prochaineRevue && x.prochaineRevue < grcAuj()).length : null; } },
+    { lib: "Formations exigées à jour", obj: "groupe:formations", pct: true, f: c => { const f = formationsGroupe(), x = f && (f.parSite || []).find(y => y.site === c); return x && x.taux !== null && x.taux !== undefined ? +x.taux : null; } }
+  ];
+  // Publications par module : groupe (périmètre « Groupe » seulement) et sites, avec leur date
+  function grcPublications(sites = grcSites()) {
+    const lignes = [];
+    if (GRC.perimetre === "tous") ((P.pubGroupe || {}).fichiers || []).forEach(f => lignes.push({ ou: "Groupe", module: idActuel(f.module), le: f.publieLe }));
+    sites.forEach(s => (((P.sites[s.code] || {}).pub || {}).fichiers || []).forEach(f => lignes.push({ ou: s.code, module: idActuel(f.module), le: f.publieLe })));
+    return lignes.filter(p => p.le);
+  }
+  /* Points à traiter : bloquant (rouge) ou à surveiller (orange), avec le site, le module d'origine et l'échéance.
+     Bloquant : acceptation du risque résiduel expirée ; risque d'un des deux plus hauts niveaux sans traitement décidé ; risque résiduel au
+     plus haut niveau non accepté ; actions en retard (remédiations, plan NIS2) ; actif critique N4 ou N5 ; référence hors support.
+     À surveiller : acceptation qui expire dans les 60 jours ; mesures NIS2 non conformes ; écarts majeurs IEC 62443 ; sauvegarde non testée
+     depuis un an ; revue de prestataire dépassée ; alertes de veille « Concerné » ouvertes ; publication de plus de 90 jours. */
+  function grcATraiter() {
+    const E2 = grcEchelles(), out = [], add = (site, sev, t, d, src, ech = "") => out.push({ site, sev, t, d, src, ech });
+    grcRisques().forEach(x => {
+      const r = x.r, nom = `${r.id} – ${r.libelle || ""}`;
+      if (r.acceptation === "expiree") add(x.site, "ko", "Acceptation du risque résiduel expirée", `${nom} : renouveler l'acceptation ou retraiter le risque.`, "werbebios", r.accepteJusqua || "");
+      else if (r.traitement === "a-decider" && x.nr >= E2.N - 1) add(x.site, "ko", "Risque élevé sans traitement décidé", `${nom} (${E2.lib(x.nr)}) : choisir le traitement et le propriétaire du risque.`, "werbebios");
+      else if (x.nr >= E2.N && r.acceptation !== "acceptee") add(x.site, "ko", `Risque résiduel « ${E2.lib(x.nr)} » non accepté`, `${nom} : à réduire ou à faire accepter formellement.`, "werbebios");
+      else if (r.acceptation === "acceptee" && grcDans(r.accepteJusqua, GRC_PROCHE)) add(x.site, "warn", "Acceptation du risque à renouveler", `${nom} : acceptée jusqu'au ${frDate(r.accepteJusqua)}.`, "werbebios", r.accepteJusqua);
+    });
+    grcSites().forEach(s => {
+      const c = s.code, rem = grcListe(c, "remediations").filter(x => +x.actionsEnRetard > 0), nRem = rem.reduce((a, x) => a + (+x.actionsEnRetard), 0);
+      if (nRem) add(c, "ko", `${nRem} action(s) de remédiation en retard`, `Tests d'intrusion, actifs : ${rem.map(x => x.actif).join(", ")}.`, "werbpentest", rem.map(x => x.prochaineEcheance).filter(Boolean).sort()[0] || "");
+      grcListe(c, "syntheseNis2").forEach(y => {
+        if (+y.actionsEnRetard > 0) add(c, "ko", `${y.actionsEnRetard} action(s) du plan NIS2 en retard`, `${y.actionsOuvertes} action(s) ouverte(s) au plan d'actions NIS2.`, "werbnis2");
+        if (+y.nc > 0) add(c, "warn", `${y.nc} mesure(s) NIS2 non conforme(s)`, `Couverture ${y.couverture ?? "—"} %, ${y.nonEvaluees ?? 0} mesure(s) non évaluée(s).`, "werbnis2", y.prochaineEcheance || "");
+      });
+      grcListe(c, "syntheseConformite").filter(y => +y.ecartsMajeurs > 0).forEach(y => add(c, "warn", `${y.ecartsMajeurs} écart(s) majeur(s) ${y.referentiel || ""}`, `Périmètre ${y.perimetre || "—"} : taux ${y.taux} %.`, y.source || "werbiec62443"));
+      const dif = grcDifficiles(c, true);
+      if (dif.length) add(c, "ko", `${dif.length} actif(s) critique(s) très difficile(s) à mettre à jour`, `${dif.map(x => `${x.tag} (${x.niveau}, ${x.score}/55)`).join(", ")} : prévoir des mesures compensatoires (cloisonnement, surveillance, durcissement).`, "werbexploitation");
+      const plm = grcListe(c, "plm").filter(x => x.gravite === "ko");
+      if (plm.length) add(c, "ko", `${plm.length} référence(s) hors support installée(s)`, plm.map(x => [x.produit, x.version].filter(Boolean).join(" ") || x.libelle).join(", ") + ".", "werbexploitation");
+      const sv = grcListe(c, "sauvegardes").filter(x => ["jamais", "echu"].includes(x.statutTest));
+      if (sv.length) add(c, "warn", `${sv.length} sauvegarde(s) sans test de restauration depuis un an`, sv.map(x => `${x.id} (${x.statutTest === "jamais" ? "jamais testée" : "test du " + frDate(x.dernierTest)})`).join(", ") + ".", "werbexploitation");
+      grcListe(c, "evaluationsPrestataires").filter(x => x.prochaineRevue && x.prochaineRevue < grcAuj()).forEach(x => add(c, "warn", `Revue du prestataire ${x.nom} dépassée`, `Criticité ${x.criticite || "—"}${x.distant ? `, accès à distance (${x.distant})` : ""} : relancer l'évaluation.`, "werbpresta", x.prochaineRevue));
+      const ve = grcObjet(c, "veille");
+      if (ve && ve.indicateurs && +ve.indicateurs.concerneesOuvertes > 0) add(c, "warn", `${ve.indicateurs.concerneesOuvertes} alerte(s) de veille « Concerné » ouverte(s)`, "Vulnérabilités qui touchent le parc du site, à traiter dans WerbVeille.", "werbveille");
+    });
+    grcPublications().filter(p => grcJours(p.le) > GRC_FRAIS).forEach(p => add(p.ou === "Groupe" ? "" : p.ou, "warn", `Publication ${libelleModule(p.module)} de plus de ${GRC_FRAIS} jours`, `Publiée le ${frDate(String(p.le).slice(0, 10))} (${grcJours(p.le)} jours) : la synthèse peut être dépassée.`, p.module));
+    return out.sort((a, b) => (a.sev === b.sev ? 0 : a.sev === "ko" ? -1 : 1) || (a.ech || "9999").localeCompare(b.ech || "9999"));
+  }
+
+  VUES.grc = () => {
+    if (!P.groupe) return `<h1>📊 Tableau de bord GRC</h1><div class="infobox">Ouvrez l'espace WerbSMSI du groupe pour consolider les publications des sites.</div>`;
+    const E2 = grcEchelles(), tous = sitesAccessibles(), sites = grcSites(), risques = grcRisques(), conf = grcConformite(tous), at = grcATraiter();
+    const ko = at.filter(a => a.sev === "ko").length, pubs = grcPublications(), aJour = pubs.filter(p => grcJours(p.le) <= GRC_FRAIS).length;
+    const hauts = risques.filter(x => x.nr >= E2.N - 1), confV = conf.flatMap(c => sites.map(s => c.v[s.code])).filter(v => v !== null && v !== undefined);
+    const moy = confV.length ? Math.round(confV.reduce((a, b) => a + b, 0) / confV.length) : null;
+    const etatCmp = v => v >= GRC_CIBLE ? "ok" : v >= 60 ? "warn" : "ko";
+    const kpi = (e, l, v, d) => `<div class="grc-kpi" data-etat="${e}"><span class="l">${l}</span><span class="v">${v}</span><span class="d">${d}</span></div>`;
+    const thSites = `<thead><tr><th></th>${tous.map(s => `<th class="n${GRC.perimetre === s.code ? " on" : ""}">${esc(s.code)}</th>`).join("")}</tr></thead>`;
+    let h = `<div class="grc-entete"><div><h1>📊 Tableau de bord GRC</h1><p class="sub">Gouvernance, risques et conformité de ${esc(P.groupe.organisation)}, consolidés à partir des publications des modules. Seules les synthèses remontent des sites : niveaux, taux et compteurs.</p></div>
+      <div class="grc-filtres"><div class="grc-chips" role="group" aria-label="Périmètre">${[["tous", "Groupe"], ...tous.map(s => [s.code, s.code])].map(([k, t]) => `<button type="button" data-act="grcPerimetre" data-p="${esc(k)}" aria-pressed="${GRC.perimetre === k}"${k === "tous" ? ` title="Tous les sites lisibles"` : ` title="${esc((tous.find(s => s.code === k) || {}).nom || "")}"`}>${esc(t)}</button>`).join("")}</div>
+      <span class="small muted">Publications lues le ${esc(frDate(P.luLe || Date.now()))} · <a href="#" data-act="grcRelire">⟳ Relire</a></span></div></div>`;
+    const nonLus = (P.groupe.sites || []).filter(s => !(P.sites[s.code] || {}).accessible);
+    if (nonLus.length) h += `<div class="warnbox">Site(s) non lisible(s), absent(s) du tableau : ${nonLus.map(s => esc(s.code)).join(", ")} (dossier absent ou fermé par les droits du drive).</div>`;
+    h += `<section class="grc-kpis" aria-label="Chiffres clés">
+      ${kpi(hauts.length ? "ko" : "ok", `Risques résiduels « ${esc(E2.lib(E2.N - 1))} » ou plus`, `${hauts.length} <small>/ ${risques.length}</small>`, `dont ${risques.filter(x => x.nr >= E2.N).length} « ${esc(E2.lib(E2.N))} »`)}
+      ${kpi(moy === null ? "" : etatCmp(moy), "Conformité moyenne", moy === null ? "—" : `${moy} <small>%</small>`, `${confV.length} évaluation(s) · cible ${GRC_CIBLE} %`)}
+      ${kpi(ko ? "ko" : "ok", "Points bloquants", `${ko}`, `et ${at.length - ko} à surveiller`)}
+      ${kpi(aJour < pubs.length ? "warn" : "ok", "Publications à jour", `${aJour} <small>/ ${pubs.length}</small>`, `publiées depuis moins de ${GRC_FRAIS} jours`)}</section>`;
+    h += `<div class="grc-2"><section class="card" data-grc-traiter>${titre("📌", "À traiter", "rouge")}<p class="small muted">${ko} bloquant(s), ${at.length - ko} à surveiller. ${(g => g ? `<a href="#" data-nav="${esc(g.id)}">Règles et seuils</a>` : "Règles et seuils : guide du portail.")(WerbGuides.guides().find(x => /tableau_de_bord_grc/i.test(x.fichier)))}</p>
+      ${at.length ? `<ul class="grc-todo">${at.map(a => { const retard = a.ech && a.ech < grcAuj();
+        return `<li data-sev="${a.sev}"${retard ? " data-retard" : ""}><span class="grc-bar"></span><span class="t">${esc(a.t)}</span><span class="ech">${a.ech ? `${retard ? "en retard · " : ""}${esc(frDate(a.ech))}` : ""}</span>
+          <span class="meta">${a.site ? `<a href="#" class="chip" data-site="${esc(a.site)}">📍 ${esc(a.site)}</a>` : `<span class="chip">🏢 Groupe</span>`}<span class="badge">${esc(libelleModule(a.src))}</span><span>${esc(a.d)}</span></span></li>`; }).join("")}</ul>`
+        : `<p class="muted">Rien à traiter sur ce périmètre d'après les publications lues.</p>`}</section>
+      <div class="grc-pile">
+      <section class="card" data-grc-conformite>${titre("✅", "Conformité par référentiel", "cyan")}
+        <div class="tablewrap"><table class="t grc-cmp">${thSites}<tbody>
+        ${conf.map(c => `<tr><td>${esc(c.ref)}<div class="small muted">${esc(c.src)}</div></td>${tous.map(s => { const v = c.v[s.code];
+          return `<td class="${GRC.perimetre === s.code ? "on" : ""}">${v === null || v === undefined ? `<span class="small muted">non publié</span>` : `<div class="grc-jauge" data-etat="${etatCmp(v)}"><span class="rail"><i style="width:${Math.max(0, Math.min(100, v))}%"></i></span><b>${v} %</b></div>`}</td>`; }).join("")}</tr>`).join("")}
+        </tbody></table></div><p class="small muted">Cible du groupe : ${GRC_CIBLE} %. Socle : mesures du groupe appliquées d'après les synthèses IEC 62443 ; NIS2 : (OK + PL +) / mesures applicables.</p></section>
+      <section class="card" data-grc-hygiene>${titre("🛠️", "Hygiène et exploitation", "orange")}
+        <div class="tablewrap"><table class="t grc-cmp">${thSites}<tbody>
+        ${GRC_HYG.map(x => `<tr><td>${esc(x.lib)}<div class="mono small muted">${esc(x.obj)}</div></td>${tous.map(s => { const v = x.f(s.code);
+          const e = v === null ? "na" : x.pct ? (v >= GRC_CIBLE ? "ok" : v >= 50 ? "warn" : "ko") : v === 0 ? "ok" : x.grave ? "ko" : "warn";
+          return `<td class="n${GRC.perimetre === s.code ? " on" : ""}"><span class="grc-etat" data-etat="${e}"${v === null ? ` title="Rien de publié par ce module pour le site"` : ""}>${v === null ? "—" : x.pct ? v + " %" : v}</span></td>`; }).join("")}</tr>`).join("")}
+        </tbody></table></div></section></div></div>`;
+    // Matrice gravité × vraisemblance, liée à la liste des risques
+    const dansCase = x => { const [g, v] = grcPos(x); return !GRC.cellule || (g === GRC.cellule[0] && v === GRC.cellule[1]); };
+    const liste = risques.filter(dansCase).sort((a, b) => grcPos(b)[2] - grcPos(a)[2] || grcPos(b)[0] - grcPos(a)[0]);
+    let mx = "";
+    for (let g = E2.G; g >= 1; g--) {
+      mx += `<span class="ax">${g}</span>`;
+      for (let v = 1; v <= E2.V; v++) {
+        const n = risques.filter(x => { const [a, b] = grcPos(x); return a === g && b === v; }).length, on = !!GRC.cellule && GRC.cellule[0] === g && GRC.cellule[1] === v, niv = E2.niveau(g, v);
+        mx += `<button type="button" data-act="grcCase" data-g="${g}" data-v="${v}" data-t="${E2.teinte(niv)}" class="${n ? "" : "zero"}" aria-pressed="${on}" aria-label="Gravité ${g}, vraisemblance ${v} : ${n} risque(s), ${esc(E2.lib(niv))}">${n}</button>`;
+      }
+    }
+    mx += `<span></span>${Array.from({ length: E2.V }, (_, i) => `<span class="ax">${i + 1}</span>`).join("")}`;
+    h += `<section class="card" data-grc-risques><div class="row">${titre("⚠️", "Risques", "rouge")}<span class="spacer"></span>
+        <span class="grc-seg" role="group" aria-label="Cotation affichée"><button type="button" data-act="grcVue" data-v="res" aria-pressed="${GRC.vue === "res"}">Résiduel</button><button type="button" data-act="grcVue" data-v="brut" aria-pressed="${GRC.vue === "brut"}">Brut</button></span></div>
+      ${risques.length ? `<div class="grc-risques"><div class="grc-mxbloc"><div class="grc-mx" style="--g:${E2.G};--v:${E2.V}">${mx}</div><div class="grc-axes small muted"><span>↑ Gravité</span><span>Vraisemblance →</span></div>
+        <div class="grc-leg small">${Array.from({ length: E2.N }, (_, i) => `<span><i data-t="${E2.teinte(i + 1)}"></i>${esc(E2.lib(i + 1))}</span>`).join("")}</div>
+        ${E2.matrice ? "" : `<p class="small muted" data-grc-estimee>Matrice du groupe non publiée (WerbEBIOS 1.21.0, niveau groupe › Publier) : niveaux des cases estimés.</p>`}</div>
+        <div class="grc-liste"><p class="small muted">${GRC.cellule ? `Case G${GRC.cellule[0]} × V${GRC.cellule[1]} : ${liste.length} risque(s) · <a href="#" data-act="grcCase">Tout afficher</a>` : `${liste.length} risque(s) ${GRC.vue === "res" ? "résiduels" : "bruts"}, du plus élevé au plus faible`}</p>
+        <div class="tablewrap"><table class="t"><thead><tr><th>Site</th><th>Risque</th><th>Scénario</th><th class="n">G</th><th class="n">V</th><th>Niveau</th><th>Traitement</th><th>Acceptation</th></tr></thead><tbody>
+        ${liste.map(x => { const [g, v, n] = grcPos(x), r = x.r, acc = r.acceptation === "expiree" ? badge("expirée", "b-ko") : r.acceptation === "acceptee" ? badge(r.accepteJusqua ? `jusqu'au ${frDate(r.accepteJusqua)}` : "acceptée", "b-ok") : r.acceptation === "a-faire" ? badge("à accepter", "b-warn") : `<span class="small muted">—</span>`;
+          return `<tr><td><a href="#" data-site="${esc(x.site)}">${esc(x.site)}</a></td><td class="mono" style="white-space:nowrap">${esc(r.id)}</td><td>${esc(r.libelle || "")}</td><td class="n">${g || "—"}</td><td class="n">${v || "—"}</td>
+            <td><span class="grc-niv" data-t="${E2.teinte(n)}">${esc(E2.lib(n))}</span></td><td>${r.traitement === "a-decider" ? badge("À décider", "b-ko") : esc(LIB_TRAIT[r.traitement] || r.traitement || "")}</td><td>${acc}</td></tr>`; }).join("") || `<tr><td colspan="8" class="empty">Aucun risque dans cette case.</td></tr>`}
+        </tbody></table></div></div></div>` : `<p class="muted">Aucune synthèse de risques publiée sur ce périmètre (WerbEBIOS, base de site › Intégration WerbSMSI › Publier).</p>`}
+      <p class="small muted">Lu dans <code>site:syntheseRisques</code> (WerbEBIOS) · échelles et matrice <code>groupe:echelles</code>.</p></section>`;
+    // Fraîcheur des publications
+    const cols = GRC.perimetre === "tous" ? ["Groupe", ...sites.map(s => s.code)] : sites.map(s => s.code);
+    const mods = [...new Set(pubs.map(p => p.module))].sort((a, b) => libelleModule(a).localeCompare(libelleModule(b), "fr"));
+    h += `<section class="card" data-grc-fraicheur>${titre("🕒", "Fraîcheur des publications", "ardoise")}<p class="small muted">Au-delà de ${GRC_FRAIS} jours, la synthèse publiée peut être dépassée.</p>
+      ${mods.length ? `<div class="tablewrap"><table class="t"><thead><tr><th>Module</th>${cols.map(c => `<th>${esc(c)}</th>`).join("")}</tr></thead><tbody>
+      ${mods.map(m => `<tr><td>${esc(libelleModule(m))}</td>${cols.map(c => { const p = pubs.find(x => x.ou === c && x.module === m); if (!p) return `<td><span class="small muted">—</span></td>`;
+        const j = grcJours(p.le), e = j > GRC_FRAIS ? "ko" : j > GRC_PROCHE ? "warn" : "ok";
+        return `<td style="white-space:nowrap"><span class="grc-dot" data-etat="${e}"></span>${esc(frDate(String(p.le).slice(0, 10)))} <span class="small muted">· ${j <= 0 ? "aujourd'hui" : j + " j"}</span></td>`; }).join("")}</tr>`).join("")}
+      </tbody></table></div>` : `<p class="muted">Aucune publication.</p>`}</section>`;
     return h;
   };
 
@@ -714,7 +892,7 @@ ${sites.map(s => `    ├── ${s.code || "?"}/  (werbsmsi.site.json, ${DOSSIE
   function renderNav() {
     const sites = P.groupe ? P.groupe.sites || [] : [];
     MENU.splice(0, MENU.length, { g: "accueil", i: "🏠", l: "Accueil", c: "bleu", t: [["accueil", "Rubriques et modules"]] },
-      ...(P.groupe ? [{ g: "groupe", i: "🏢", l: "Groupe", c: "violet", t: [["groupe", P.groupe.sigle || "Vue groupe"]] },
+      ...(P.groupe ? [{ g: "groupe", i: "🏢", l: "Groupe", c: "violet", t: [["grc", "Tableau de bord GRC"], ["groupe", P.groupe.sigle || "Vue groupe"]] },
         { g: "sites", i: "📍", l: "Sites", c: "vert", t: sites.map(s => ["site:" + s.code, s.code]) }] : []),
       { g: "outils", i: "🛠️", l: "Outils", c: "orange", t: [["assistant", "Mise en place"], ["verif", "Vérifier les modules"], ["modeles", "Modèles de documents"]] },
       { g: "admin", i: "⚙️", l: "Administration", c: "ardoise", t: [["sauvegarde", "Sauvegarde et restauration"], ["listes", "Listes de choix du groupe"], ["sources", "Sources publiques"], ["parametres", "Paramètres"]] },
@@ -1192,6 +1370,10 @@ ${sites.map(s => `    ├── ${s.code || "?"}/  (werbsmsi.site.json, ${DOSSIE
   };
 
   const ACTIONS = {
+    grcPerimetre(el) { GRC.perimetre = el.dataset.p; GRC.cellule = null; render(); },
+    grcVue(el) { GRC.vue = el.dataset.v; GRC.cellule = null; render(); },
+    grcCase(el, e) { if (e) e.preventDefault(); const k = el.dataset.g ? [+el.dataset.g, +el.dataset.v] : null; GRC.cellule = k && !(GRC.cellule && GRC.cellule[0] === k[0] && GRC.cellule[1] === k[1]) ? k : null; render(); },
+    async grcRelire(el, e) { if (e) e.preventDefault(); await chargerEspace(); render(); toast("Publications relues.", "ok"); },
     assistant(el) { F.onglet = el.dataset.k || F.onglet; P.vue = "assistant"; render(); },
     onglet(el) { F.onglet = el.dataset.k; render(); },
     ajouterLigneSite() { F.espace.sites.push({ code: "", nom: "", entite: "", correspondant: "" }); render(); },

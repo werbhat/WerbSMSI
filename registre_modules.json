@@ -161,7 +161,7 @@
       "chemin": "modules/inventaires/WerbMap",
       "depot": "../WerbMap",
       "etat": "publie",
-      "version": "1.41.0",
+      "version": "1.41.1",
       "etape": "connaitre"
     },
     {
@@ -185,7 +185,7 @@
       "chemin": "modules/risques/WerbEBIOS",
       "depot": "../WerbEBIOS",
       "etat": "publie",
-      "version": "1.19.1",
+      "version": "1.21.0",
       "etape": "risques"
     },
     {
@@ -193,7 +193,7 @@
       "chemin": "modules/conformite/WerbNIS2",
       "depot": "../WerbNIS2",
       "etat": "publie",
-      "version": "1.12.2",
+      "version": "1.13.0",
       "etape": "exigences"
     },
     {

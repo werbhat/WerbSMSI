@@ -6,3 +6,4 @@
 /charte/
 # Sorties des tests (documents générés) : jamais versionnées
 **/tests/sortie/
+RoadMap.md

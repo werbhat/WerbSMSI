@@ -5,6 +5,11 @@ Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/), num
 
 
 
+## [1.41.1] — 2026-11
+
+### Corrections
+- **Pied du menu latéral** : nom du produit, signature, version et date de build affichés en bas du menu, comme dans les autres modules.
+
 ## [1.41.0] — 2026-11
 
 ### Ajouts

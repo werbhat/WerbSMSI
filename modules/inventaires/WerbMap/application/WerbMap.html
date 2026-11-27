@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- WerbMap v1.41.0 – Développé par @WerbHat – build novembre 2026 -->
+<!-- WerbMap v1.41.1 – Développé par @WerbHat – build novembre 2026 -->
 <!--
   WerbMap – Cartographie VLAN / Adressage IP / Actifs / Flux
   Module « Inventaires ICS » de WerbSMSI (niveau site). Version : sources/src/signature.js.
@@ -21,7 +21,7 @@
 <title>WerbMap</title>
 <meta name="application-name" content="WerbMap">
 <meta name="author" content="@WerbHat">
-<meta name="generator" content="WerbMap v1.41.0 – Développé par @WerbHat">
+<meta name="generator" content="WerbMap v1.41.1 – Développé par @WerbHat">
 <meta name="description" content="Cartographie VLAN, adressage IP, actifs et flux d'un site">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22%3E%3Crect width=%2232%22 height=%2232%22 rx=%226%22 fill=%22%230d2238%22/%3E%3Cpath d=%22M6 9h20M6 16h20M6 23h20M11 6v20M21 6v20%22 stroke=%22%23ffd27a%22 stroke-width=%222%22/%3E%3Ccircle cx=%2221%22 cy=%2216%22 r=%223.5%22 fill=%22%238fd16a%22/%3E%3C/svg%3E">
 <style>
@@ -227,6 +227,7 @@ label.blk{display:block;margin-top:8px}
   #printArea h4{margin:10px 0 4px}
   #printArea .pf{position:fixed;bottom:0;left:0;right:0;border-top:1px solid #999;padding-top:3px;font-size:8px;color:#444;text-align:center}
 }
+footer.sig{position:static;display:block;background:none;border:0;padding:0;z-index:auto;margin:18px 8px 8px;font-size:11px;color:var(--mut)}
 </style>
 </head>
 <body>
@@ -36700,7 +36701,7 @@ const WERB = Object.freeze((() => {
   const bytes = [68, 195, 169, 118, 101, 108, 111, 112, 112, 195, 169, 32, 112, 97, 114, 32, 64, 87, 101, 114, 98, 72, 97, 116];
   const signature = new TextDecoder("utf-8").decode(new Uint8Array(bytes));
   const produit = "WerbMap";
-  const version = "1.41.0";
+  const version = "1.41.1";
   return {
     id: "werbmap",
     produit, version, auteur: "@WerbHat", signature,
@@ -39200,7 +39201,9 @@ const MENU=[{g:'pilot',i:'📊',l:'Pilotage',c:'bleu',t:[['dash','Tableau de bor
 /* Guides d'accompagnement (charte §7.4) : guides/*.md intégrés par le build, lus par guides.js ; vue « guide:… » dans la section s-guide */
 const lienGuide=id=>`data-gnav="${WerbSocle.esc(id)}"`,estGuide=k=>String(k).startsWith('guide:');
 const MENU_LAT=WerbSocle.menu($('#tabs'),MENU,{surNav:k=>{cur=k;render();}});
-(function build(){MENU_LAT.rendre({actif:'dash'});
+/* Pied du menu latéral : produit, signature, version et date de build (comme les autres modules) */
+const MENU_SIG=`<footer class="sig"><b>${esc(WERB.produit)}</b><br>${esc(WERB.signature)}<br>v${esc(WERB.version)} · ${esc(window.BUILD_DATE)}</footer>`;
+(function build(){MENU_LAT.rendre({actif:'dash',pied:MENU_SIG});
   let h=`<section id="s-dash" class="act"></section>
   <section id="s-matrix"><div class="panel" style="padding:8px 12px"><div class="legend"><b>Criticité (ligne) :</b>${CRITS.map(c=>`<span><span class="sw crit-${c}"></span>${c} – ${esc(CRIT_TXT[c])}</span>`).join('')}</div>
    <div class="legend" style="margin-top:6px"><b>Statut (case) :</b>${STATS.map(s=>`<span><span class="sw ${STAT_CLS[s]}"></span>${esc(STAT_TXT[s])}</span>`).join('')}<span class="hint">Nom de réseau RSX_xxx ⇒ nom de VLAN VLnnn_xxx (ex. RSX_PROC_PESAGE = VL115_PROC_PESAGE)</span></div></div>

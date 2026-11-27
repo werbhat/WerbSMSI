@@ -177,7 +177,7 @@ def main() -> int:
         check(all(s in guide for s in ("Le SMSI en cinq minutes", "Qui fait quoi", "La feuille de route sur douze mois", "Phase 0", "Phase 5", "Ce que le dirigeant doit faire", "Vos premiers pas cette semaine")),
               "guide affiché : SMSI, rôles, feuille de route en phases, rôle du dirigeant, premiers pas")
         check(all(m in guide for m in ("WerbGouvernance", "WerbEBIOS", "WerbMap", "WerbPCR", "WerbVeille")) and "Développé par @WerbHat" in guide, "guide : modules cités, signature")
-        check(page.locator("#sidebar [data-wnav^='guide:']").count() == 1 and page.locator("#sidebar [data-wnav=aide]").count() == 1, "menu ❓ Aide : guide et « Créer la base d'un site »")
+        check(page.locator("#sidebar [data-wnav^='guide:']").count() == 2 and page.locator("#sidebar [data-wnav=aide]").count() == 1, "menu ❓ Aide : guide et « Créer la base d'un site »")
         capture(page, "portail_guide_demarrer")
         page.click("#sidebar [data-wnav=accueil]")
 
@@ -212,7 +212,7 @@ def main() -> int:
         conf = page.locator(".card:has(h2:has-text('Conformité par site')) tbody tr").all_inner_texts()
         check(len(conf) == 2 and any("62.5 %" in l for l in conf) and any("41.7 %" in l for l in conf), "conformité consolidée (LYON 62,5 %, NANTES 41,7 %)")
         rq = page.locator(".card:has(h2:has-text('Risques par site')) table").first.locator("tbody tr").all_inner_texts()
-        check(any(l.startswith("NANTES") and l.rstrip().endswith("2") for l in rq) and any(l.startswith("LYON") and l.rstrip().endswith("1") for l in rq), "risques consolidés par site (LYON 1, NANTES 2)")
+        check(any(l.startswith("NANTES") and l.rstrip().endswith("3") for l in rq) and any(l.startswith("LYON") and l.rstrip().endswith("2") for l in rq), "risques consolidés par site (LYON 2, NANTES 3)")
         check(page.is_visible("th:has-text('Résiduel 3 – Élevé')"), "niveaux de risque libellés avec l'échelle du groupe")
         socle = page.locator(".card:has(h2:has-text('Socle de mesures')) tbody tr").all_inner_texts()
         ms1 = next(l for l in socle if l.startswith("MS-01"))

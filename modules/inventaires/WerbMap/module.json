@@ -2,7 +2,7 @@
   "charte": "1.0",
   "id": "werbmap",
   "produit": "WerbMap",
-  "version": "1.41.0",
+  "version": "1.41.1",
   "dateVersion": "2026-11",
   "auteur": "@WerbHat",
   "signature": "Développé par @WerbHat",
@@ -14,7 +14,7 @@
   "entree": "application/WerbMap.html",
   "empreinte": {
     "algo": "SHA-256",
-    "valeur": "d6b29e3991158d140d35fde99013d4c7ef6face7d7dd0210affb50cb8f67f0ab"
+    "valeur": "eb82ec329a37e65bcc2d137c5beb7d15087093679e14357e81880719b1189864"
   },
   "donnees": {
     "format": "WERBMAP",

@@ -9,6 +9,18 @@ Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/), num
 
 
 
+## [1.13.0] — 2026-11
+
+### Ajouts
+- **Publication de la synthèse NIS2 du site** (`site:syntheseNis2`, nouvel objet de la charte) : *Intégration WerbSMSI › 📤 Publier*, base de site enregistrée. Contenu : référentiel, statut (EI, EE), couverture ((OK + PL +) / mesures applicables), mesures, applicables, évaluées, compteurs par cotation, couverture et non-conformités par objectif, actions ouvertes et en retard, prochaine échéance, date de la dernière évaluation. Lue par le **tableau de bord GRC** du portail (1.21.0).
+- Ne sont jamais publiés : commentaires, preuves, intitulés et responsables des actions. Une base du groupe ne publie rien.
+
+### Choix
+- Objet dédié plutôt que `site:syntheseConformite` : cet objet appartient à WerbIEC62443 et la charte n'admet qu'un module propriétaire par objet.
+
+### Développement
+- `tests/test_publication.py`.
+
 ## [1.12.2] — 2026-11
 
 ### Changements

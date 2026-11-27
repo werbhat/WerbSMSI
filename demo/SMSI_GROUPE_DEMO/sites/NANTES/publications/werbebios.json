@@ -30,7 +30,12 @@
     "traitement": "reduire",
     "etude": "EBIOS_NANTES",
     "source": "werbebios",
-    "majLe": "2026-10-23"
+    "majLe": "2026-10-23",
+    "graviteResiduelle": 4,
+    "vraisemblanceResiduelle": 2,
+    "acceptation": "expiree",
+    "accepteLe": "2025-10-15",
+    "accepteJusqua": "2026-10-31"
    },
    {
     "id": "R-NAN-02",
@@ -38,9 +43,27 @@
     "evenementRedoute": "ER-01",
     "gravite": 3,
     "vraisemblance": 2,
-    "niveauBrut": 2,
+    "niveauBrut": 3,
     "niveauResiduel": 1,
     "traitement": "accepter",
+    "etude": "EBIOS_NANTES",
+    "source": "werbebios",
+    "majLe": "2026-10-23",
+    "graviteResiduelle": 2,
+    "vraisemblanceResiduelle": 1,
+    "acceptation": "acceptee",
+    "accepteLe": "2026-03-02",
+    "accepteJusqua": "2027-06-30"
+   },
+   {
+    "id": "R-NAN-03",
+    "libelle": "Intrusion dans le réseau OT par le VPN",
+    "evenementRedoute": "ER-01",
+    "gravite": 4,
+    "vraisemblance": 4,
+    "niveauBrut": 4,
+    "traitement": "a-decider",
+    "acceptation": "a-faire",
     "etude": "EBIOS_NANTES",
     "source": "werbebios",
     "majLe": "2026-10-23"

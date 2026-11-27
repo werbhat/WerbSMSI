@@ -1,0 +1,187 @@
+{
+ "format": "WERBSMSI-PUBLICATION",
+ "schema": 1,
+ "famille": "WERBSMSI",
+ "meta": {
+  "produit": "WerbNIS2",
+  "appVersion": "1.13.0",
+  "auteur": "@WerbHat",
+  "generateur": "WerbNIS2 v1.13.0 – Développé par @WerbHat",
+  "creeLe": "2026-11-25",
+  "modifieLe": "2026-11-25T10:00:00Z",
+  "modifiePar": "Exemple",
+  "groupeId": "e6a47cd7-77fe-463f-b6ea-b50ff390bfc7",
+  "module": "werbnis2",
+  "portee": "site",
+  "publiePar": "Exemple",
+  "publieLe": "2026-11-25T10:00:00Z",
+  "site": "LYON"
+ },
+ "data": {
+  "syntheseNis2": [
+   {
+    "id": "NIS2/LYON",
+    "referentiel": "NIS2 (ANSSI)",
+    "statut": "EE",
+    "couverture": 62,
+    "mesures": 152,
+    "applicables": 140,
+    "evaluees": 131,
+    "ok": 61,
+    "plPlus": 26,
+    "plMoins": 28,
+    "nc": 7,
+    "na": 12,
+    "nonEvaluees": 9,
+    "objectifs": [
+     {
+      "n": 1,
+      "titre": "Recensement des systèmes d’information",
+      "couverture": 90,
+      "nc": 0,
+      "nonEvaluees": 2
+     },
+     {
+      "n": 2,
+      "titre": "Mise en œuvre d’un cadre de gouvernance de la sécurité numérique",
+      "couverture": 75,
+      "nc": 0,
+      "nonEvaluees": 0
+     },
+     {
+      "n": 3,
+      "titre": "Maîtrise de l’écosystème",
+      "couverture": 60,
+      "nc": 0,
+      "nonEvaluees": 0
+     },
+     {
+      "n": 4,
+      "titre": "Intégration de la sécurité numérique dans la gestion des ressources humaines",
+      "couverture": 82,
+      "nc": 0,
+      "nonEvaluees": 0
+     },
+     {
+      "n": 5,
+      "titre": "Maîtrise des systèmes d’information",
+      "couverture": 40,
+      "nc": 1,
+      "nonEvaluees": 2
+     },
+     {
+      "n": 6,
+      "titre": "Maîtrise des accès physiques aux locaux",
+      "couverture": 55,
+      "nc": 0,
+      "nonEvaluees": 0
+     },
+     {
+      "n": 7,
+      "titre": "Sécurisation de l’architecture des systèmes d’information",
+      "couverture": 70,
+      "nc": 0,
+      "nonEvaluees": 0
+     },
+     {
+      "n": 8,
+      "titre": "Sécurisation des accès distants aux systèmes d’information",
+      "couverture": 64,
+      "nc": 0,
+      "nonEvaluees": 0
+     },
+     {
+      "n": 9,
+      "titre": "Protection des systèmes d’information contre les codes malveillants",
+      "couverture": 50,
+      "nc": 0,
+      "nonEvaluees": 2
+     },
+     {
+      "n": 10,
+      "titre": "Gestion des identités et des accès des utilisateurs aux systèmes d’information",
+      "couverture": 88,
+      "nc": 0,
+      "nonEvaluees": 0
+     },
+     {
+      "n": 11,
+      "titre": "Maîtrise de l’administration des systèmes d’information",
+      "couverture": 45,
+      "nc": 1,
+      "nonEvaluees": 0
+     },
+     {
+      "n": 12,
+      "titre": "Identification et réaction aux incidents de sécurité",
+      "couverture": 72,
+      "nc": 0,
+      "nonEvaluees": 0
+     },
+     {
+      "n": 13,
+      "titre": "Continuité et reprise d’activité",
+      "couverture": 58,
+      "nc": 0,
+      "nonEvaluees": 2
+     },
+     {
+      "n": 14,
+      "titre": "Réaction aux crises d’origine cyber",
+      "couverture": 66,
+      "nc": 0,
+      "nonEvaluees": 0
+     },
+     {
+      "n": 15,
+      "titre": "Exercices, tests et entrainements",
+      "couverture": 80,
+      "nc": 0,
+      "nonEvaluees": 0
+     },
+     {
+      "n": 16,
+      "titre": "Mise en œuvre d’une approche par les risques",
+      "couverture": 35,
+      "nc": 1,
+      "nonEvaluees": 0
+     },
+     {
+      "n": 17,
+      "titre": "Audit de la sécurité des systèmes d’information",
+      "couverture": 62,
+      "nc": 0,
+      "nonEvaluees": 2
+     },
+     {
+      "n": 18,
+      "titre": "Sécurisation de la configuration des ressources des systèmes d’information",
+      "couverture": 70,
+      "nc": 0,
+      "nonEvaluees": 0
+     },
+     {
+      "n": 19,
+      "titre": "Administration des systèmes d’information depuis des ressources dédiées",
+      "couverture": 50,
+      "nc": 0,
+      "nonEvaluees": 0
+     },
+     {
+      "n": 20,
+      "titre": "Supervision de la sécurité des systèmes d’information",
+      "couverture": 75,
+      "nc": 0,
+      "nonEvaluees": 0
+     }
+    ],
+    "actionsOuvertes": 11,
+    "actionsEnRetard": 2,
+    "prochaineEcheance": "2026-12-15",
+    "derniereEvaluation": "2026-11-24",
+    "source": "werbnis2",
+    "majLe": "2026-11-25"
+   }
+  ]
+ }
+}

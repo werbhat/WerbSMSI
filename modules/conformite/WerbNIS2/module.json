@@ -2,7 +2,7 @@
   "charte": "1.0",
   "id": "werbnis2",
   "produit": "WerbNIS2",
-  "version": "1.12.2",
+  "version": "1.13.0",
   "dateVersion": "2026-11",
   "auteur": "@WerbHat",
   "signature": "Développé par @WerbHat",
@@ -15,7 +15,7 @@
   "entree": "application/WerbNIS2.html",
   "empreinte": {
     "algo": "SHA-256",
-    "valeur": "cc23b035e0ef0578c66f2219e17a71da7d052fe75aa98bbe62b5fbe701a84c89"
+    "valeur": "28a63d7f6cc73c0e75bb043762df0a0a9a8e7a1358180fa9989772c8ca09f378"
   },
   "donnees": {
     "format": "WERBNIS2",
@@ -24,7 +24,9 @@
     "formatsLus": []
   },
   "echanges": {
-    "publie": [],
+    "publie": [
+      "site:syntheseNis2"
+    ],
     "consomme": [
       "groupe:organisation",
       "groupe:sites",

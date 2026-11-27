@@ -1,5 +1,5 @@
 <!doctype html>
-<!-- WerbNIS2 v1.12.2 – Développé par @WerbHat – build novembre 2026 -->
+<!-- WerbNIS2 v1.13.0 – Développé par @WerbHat – build novembre 2026 -->
 <html lang="fr">
 <head>
 <meta charset="utf-8">
@@ -9,7 +9,7 @@
 <title>WerbNIS2</title>
 <meta name="application-name" content="WerbNIS2">
 <meta name="author" content="@WerbHat">
-<meta name="generator" content="WerbNIS2 v1.12.2 – Développé par @WerbHat">
+<meta name="generator" content="WerbNIS2 v1.13.0 – Développé par @WerbHat">
 <meta name="description" content="Conformité NIS2 d'une entité ou d'un site selon le référentiel NIS2 : 20 objectifs, 152 mesures EI / EE, couverture, plan d'actions, rapport">
 <style>/*! WerbNIS2 – Développé par @WerbHat */
 :root {
@@ -189,7 +189,7 @@ const WERB = Object.freeze((() => {
   const bytes = [68, 195, 169, 118, 101, 108, 111, 112, 112, 195, 169, 32, 112, 97, 114, 32, 64, 87, 101, 114, 98, 72, 97, 116];
   const signature = new TextDecoder("utf-8").decode(new Uint8Array(bytes));
   const produit = "WerbNIS2";
-  const version = "1.12.2";
+  const version = "1.13.0";
   return {
     id: "werbnis2",
     produit, version, auteur: "@WerbHat", signature,
@@ -3836,6 +3836,16 @@ const WerbXlsx = (() => {
     return { ...n, total: points.length, applicables, evalues: points.length - n.vide - n.hors, couverture: applicables ? (n.OK + n["PL+"]) / applicables : null };
   }
   const pointsTheme = n => POINTS.filter(p => p.theme === n);
+  /* Synthèse NIS2 publiée pour le site (site:syntheseNis2, 1.13.0) : couverture, compteurs par cotation, par objectif, actions — lue par le
+     tableau de bord GRC du portail. Jamais publiés : commentaires, preuves, intitulés des actions, responsables. */
+  function syntheseNis2() {
+    const g = bilan(POINTS), pc = v => v === null ? null : Math.round(v * 100), dates = Object.values(S.evaluations).map(e => (e.majLe || "").slice(0, 10)).filter(Boolean).sort();
+    const ech = ouvertes().map(a => a.echeance).filter(Boolean).sort();
+    return { id: `NIS2/${LIAISON.site}`, referentiel: "NIS2 (ANSSI)", statut: statutCourt(), couverture: pc(g.couverture),
+      mesures: g.total - g.hors, applicables: g.applicables, evaluees: g.evalues, ok: g.OK, plPlus: g["PL+"], plMoins: g["PL-"], nc: g.NC, na: g.NA, nonEvaluees: g.vide,
+      objectifs: NIS2_REGLES.filter(r => !(r.ee && statutCourt() === "EI")).map(r => { const b = bilan(pointsRegle(r)); return { n: r.n, titre: r.titre, couverture: pc(b.couverture), nc: b.NC, nonEvaluees: b.vide }; }),
+      actionsOuvertes: ouvertes().length, actionsEnRetard: enRetard().length, prochaineEcheance: ech.find(d => d >= auj()) || "", derniereEvaluation: dates.pop() || "" };
+  }
   const pointsRegle = r => POINTS.filter(p => r.themes.includes(p.theme));
   const pct = (v, brut = false) => v === null ? `<span class="pct muted">—</span>` : brut ? `${Math.round(v * 100)} %` : `<span class="pct ${v >= .8 ? "bon" : v >= .5 ? "moyen" : "faible"}">${Math.round(v * 100)} %</span>`;
   const barre = b => `<div class="barre" title="${COTES.map(x => `${x.l} : ${b[x.c]}`).join(" · ")} · non évalués : ${b.vide}">${COTES.map(x => b[x.c] ? `<i class="${x.cl}" style="width:${b[x.c] / Math.max(1, b.total - b.hors) * 100}%"></i>` : "").join("")}</div>`;
@@ -4108,7 +4118,10 @@ const WerbXlsx = (() => {
         <tr data-recus-sauv><td><code>site:sauvegardes</code></td><td>${LIAISON.portee === "groupe" ? "non lu au niveau du groupe (base de site seulement)" : S.recus.sauvegardes ? (s => `WerbExploitation, site ${esc(s.site)}, publié le ${esc(frDate(s.publieLe))} : ${sauvActives().length} sauvegarde(s) active(s), ${sauvActives().filter(horsLigne).length} copie(s) hors ligne, ${sauvActives().filter(x => statutTest(x) === "a-jour").length} testée(s) depuis moins d'un an. Reçu le ${esc(frDate(s.majLe))}.`)(S.recus.sauvegardes)
           : "non reçu (WerbExploitation du site › Intégration WerbSMSI › Publier)"}</td></tr></tbody></table>
         <p class="small muted">Copiés dans la base. Formation : preuves des mesures ${esc(Object.keys(POINTS_FORMATION).join(", "))}. Schémas d'architecture : preuves des mesures ${esc(Object.keys(POINTS_CARTO).join(", "))}. Registre des sauvegardes : preuves des mesures ${esc(Object.keys(POINTS_SAUV).join(", "))}. Bouton « Citer dans les preuves » sous chaque mesure : la cotation reste celle de l'auditeur.</p>${ok ? `<button data-act="recevoir">⟳ Actualiser</button>` : ""}</div>
-      <div class="card"><h2>Publication</h2><p class="muted">Cette version ne publie rien : l'audit NIS2 reste dans la base du site ou du groupe. La synthèse de conformité d'un site (<code>site:syntheseConformite</code>) est aujourd'hui publiée par WerbIEC62443 ; une remontée NIS2 au groupe demandera un objet d'échange dédié dans la charte.</p></div>`;
+      <div class="card" data-publication><h2>Publication</h2>${LIAISON.portee !== "site" ? `<p class="muted">Seule une base de site publie sa synthèse NIS2 (<code>site:syntheseNis2</code>) : une base du groupe ne publie rien.</p>`
+        : (y => `<p>Publie <code>site:syntheseNis2</code> dans <code>sites/${esc(LIAISON.site)}/publications/werbnis2.json</code> : couverture <b>${y.couverture === null ? "—" : y.couverture + " %"}</b>, ${y.evaluees} / ${y.mesures} mesure(s) évaluée(s), ${y.nc} non conforme(s), couverture par objectif, ${y.actionsOuvertes} action(s) ouverte(s) dont ${y.actionsEnRetard} en retard. Lue par le tableau de bord GRC du portail.</p>
+          <p class="small muted">Ne sont jamais publiés : commentaires, preuves, intitulés et responsables des actions.</p>
+          ${dirty ? `<div class="warnbox">Des modifications ne sont pas enregistrées : enregistrez la base avant de publier.</div>` : ""}<button class="primary" data-act="publierSite"${ok && !dirty ? "" : " disabled"}>📤 Publier</button>`)(syntheseNis2())}</div>`;
   };
 
   /* Reprise de la grille 2025 (1.12.0) : cotations sans mesure NIS2 correspondante, à reporter à la main ; « Marquer comme traité »
@@ -4317,6 +4330,13 @@ const WerbXlsx = (() => {
       const site = (E.groupe.sites || []).find(s => s.code === v);
       if (site && !S.entite.site) S.entite.site = `${site.code} – ${site.nom}`;
       journaliser("Rattachement", "WerbSMSI", E.groupe.organisation, "Niveau", avant, v === "__groupe__" ? "Groupe" : v); marquer(); recevoir().then(render);
+    },
+    async publierSite() {
+      const y = syntheseNis2();
+      if (!(await confirmer(`Publier la synthèse NIS2 du site ${esc(LIAISON.site)} (couverture ${y.couverture === null ? "—" : y.couverture + " %"}, ${y.nc} non-conformité(s)) ?`, "Publier"))) return;
+      try { const ch = await E.publier({ niveau: "site", site: LIAISON.site, objets: { syntheseNis2: [y] }, utilisateur: user });
+        journaliser("Publication", "WerbSMSI", ch, "site:syntheseNis2", "", `couverture ${y.couverture === null ? "—" : y.couverture + " %"}`); toast("Synthèse NIS2 publiée.", "ok"); render(); }
+      catch (e) { SMSI.err = "Publication impossible : " + e.message; render(); }
     },
     async smsiUnlink() { if (!(await confirmer("Détacher la base de l'espace WerbSMSI ?", "Détacher"))) return; journaliser("Détachement", "WerbSMSI"); LIAISON = {}; marquer(); render(); },
   };

@@ -7,6 +7,28 @@ Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/), num
 
 
 
+## [1.21.0] — 2026-11
+
+### Ajouts
+- **Synthèse des risques publiée** (`site:syntheseRisques`) complétée pour le **tableau de bord GRC du portail** : gravité et vraisemblance résiduelles (`graviteResiduelle`, `vraisemblanceResiduelle`, quand le risque résiduel est coté), état de l'acceptation du risque résiduel (`acceptation` : `acceptee`, `expiree`, `a-faire`) et ses dates (`accepteLe`, `accepteJusqua`). Le nom de la personne qui accepte n'est pas publié.
+- **Échelles publiées par le groupe** (`groupe:echelles`) : la **matrice** gravité × vraisemblance → niveau de risque s'y ajoute (`matrice[v − 1][g − 1]`), pour que le tableau de bord du portail colore sa matrice comme l'analyse. Les sites ne reprennent toujours que les libellés.
+
+### Développement
+- `tests/test_evenements.py` : contrôle des nouveaux champs.
+
+## [1.20.0] — 2026-11
+
+### Ajouts
+- **Difficulté de mise à jour reçue de WerbExploitation** (`site:difficultesMaj`, WerbExploitation 1.40.0) : chargée avec l'inventaire WerbMap (*Intégration WerbSMSI › ⟳ Charger…*), gardée dans l'analyse (TAG, niveau N1 à N5, libellé, score sur 55, date ; ni le détail des évaluations ni les notes), trace au journal.
+- **Biens supports** (atelier 1) : colonne **Difficulté MAJ** — niveau le plus difficile parmi les actifs WerbMap du bien support, actif concerné, score, nombre d'actifs évalués s'ils ne le sont pas tous ; N4 et N5 en alerte.
+- **Scénarios opérationnels** (atelier 4) : colonne **Difficulté MAJ des biens visés**, même synthèse sur les actifs des biens supports visés.
+
+### Choix
+- **Aide à la cotation, sans effet sur elle** : un actif difficile à mettre à jour reste exposé longtemps après la sortie d'un correctif, ce que l'analyste peut retenir en cotant la vraisemblance. Le guide EBIOS RM ne décrit pas ce facteur : c'est un **complément du module**, et ni la vraisemblance proposée ni la cotation ne changent.
+
+### Développement
+- `tests/test_difficulte_maj.py`.
+
 ## [1.19.1] — 2026-11
 
 ### Développement

@@ -31,7 +31,7 @@ OPFS = """async ([action, chemin, b64]) => {
   if (action === "ecrire") { const u = Uint8Array.from(atob(b64), c => c.charCodeAt(0)); const w = await (await d.getFileHandle(nom, { create: true })).createWritable(); await w.write(u); await w.close(); return null; }
   return await (await (await d.getFileHandle(nom)).getFile()).text();
 }"""
-MASQUES = ["werbacademie", "werbpcr", "werbrgpd", "werbveille"]   # dont toute l'étape « Faire vivre le SMSI » et l'étape « Assurer la résilience »
+MASQUES = ["werbacademie", "werbcyberarcade", "werbpcr", "werbrgpd", "werbveille"]   # dont toute l'étape « Faire vivre le SMSI » et l'étape « Assurer la résilience »
 
 if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8", errors="replace")
@@ -106,7 +106,7 @@ def main() -> int:
         g = json.loads(opfs("lire", "SMSI/werbsmsi.groupe.json"))
         ok(g["data"]["parametres"]["modulesMasques"] == sorted(MASQUES) and g["meta"]["modifiePar"] == "Portail WerbSMSI", "enregistré dans werbsmsi.groupe.json")
         ok(g["data"]["sites"] and g["data"]["groupeId"], "reste du fichier conservé (sites, groupeId)")
-        ok("4 module(s) masqué(s) actuellement" in pg.inner_text("#main"), "paramètres : état enregistré affiché")
+        ok(f"{len(MASQUES)} module(s) masqué(s) actuellement" in pg.inner_text("#main"), "paramètres : état enregistré affiché")
 
         print("Pages du portail")
         pg.click("#sidebar [data-wnav=groupe]")

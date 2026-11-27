@@ -2,7 +2,7 @@
   "charte": "1.0",
   "id": "werbebios",
   "produit": "WerbEBIOS",
-  "version": "1.19.1",
+  "version": "1.21.0",
   "dateVersion": "2026-11",
   "auteur": "@WerbHat",
   "signature": "Développé par @WerbHat",
@@ -15,7 +15,7 @@
   "entree": "application/WerbEBIOS.html",
   "empreinte": {
     "algo": "SHA-256",
-    "valeur": "07a76f6493449d199a22d594b31ab6ced480b9ebf7c0472e6dd3d31a8a86f0c9"
+    "valeur": "37a644ad0571a16fa26d2e782ab7671782d6e72169b2218e3539fa835e1c79d9"
   },
   "donnees": {
     "format": "WERBEBIOS",
@@ -43,7 +43,8 @@
       "groupe:mesuresSocle",
       "site:actifs",
       "site:si",
-      "site:evaluationsPrestataires"
+      "site:evaluationsPrestataires",
+      "site:difficultesMaj"
     ]
   },
   "compatPortail": ">=1.0.0",

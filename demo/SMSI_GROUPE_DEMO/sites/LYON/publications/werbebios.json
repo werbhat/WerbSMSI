@@ -51,6 +51,33 @@
     ],
     "actifs": [
      "SRV_SCADA01"
+    ],
+    "graviteResiduelle": 3,
+    "vraisemblanceResiduelle": 1,
+    "acceptation": "acceptee",
+    "accepteLe": "2026-10-23",
+    "accepteJusqua": "2026-12-31"
+   },
+   {
+    "id": "R-LYON-03",
+    "libelle": "Prise en main par la maintenance à distance du prestataire",
+    "evenementRedoute": "ER-01",
+    "gravite": 4,
+    "vraisemblance": 3,
+    "niveauBrut": 4,
+    "niveauResiduel": 3,
+    "graviteResiduelle": 4,
+    "vraisemblanceResiduelle": 2,
+    "traitement": "reduire",
+    "acceptation": "a-faire",
+    "etude": "EBIOS_LYON_L2",
+    "source": "werbebios",
+    "majLe": "2026-11-20",
+    "biensSupports": [
+     "BS-SCADA"
+    ],
+    "actifs": [
+     "HYP_OT01"
     ]
    }
   ],
