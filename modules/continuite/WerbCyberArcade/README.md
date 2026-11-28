@@ -1,7 +1,7 @@
 # WerbCyberArcade
 
 > Jeu de quiz de sensibilisation cyber, maison et travail (guides ANSSI, Cybermalveillance.gouv.fr) ; défis de l'entreprise publiés par l'équipe SMSI
-> Version **1.9.0** — Développé par **@WerbHat**
+> Version **1.10.0** — Développé par **@WerbHat**
 
 ---
 
@@ -144,7 +144,7 @@ python <WerbSMSI>\charte\outils\werb_charte.py publier .
 
 ## Historique des versions
 
-Version courante : **1.9.0** de novembre 2026 — comptes de l'espace : connexion, lecture seule selon le rôle (socle 1.14.0). Précédente : **1.8.0** de novembre 2026 — difficulté, mode Parcours, attestation de sensibilisation, révision des erreurs, 9 défis pièges et bons réflexes, code défi lié au catalogue. Précédente : **1.7.0** de novembre 2026 — musique de fond rétro intégrée, coupée par défaut. Précédente : **1.6.0** de novembre 2026 — catalogue enrichi : 195 défis, niveaux, essentiels ANSSI des téléphones mobiles, outil d'import. Précédente : **1.5.0** de novembre 2026 — Hacker mode : niveau expert, 24 défis techniques, ambiance terminal. Précédente : **1.4.0** de novembre 2026 — habillage rétro-gaming animé des pages du joueur, sons 8 bits facultatifs ; état des défis de l'entreprise déplacé dans l'administration. Précédente : **1.3.0** de novembre 2026 — fichier de défis `defis_entreprise.css` à côté du jeu, lu sans clic ni autorisation. Précédente : **1.2.0** de novembre 2026 — défis de l'entreprise : éditeur de l'équipe SMSI, base du groupe, publication `groupe:defisCyber` reçue par les joueurs. Précédente : **1.1.0** de novembre 2026 — défi entre collègues : code défi, nom du joueur au bilan, fiche de score en image, courriel prêt à envoyer. Précédente : **1.0.0** de novembre 2026 — première version : 66 défis maison et travail, quatre types de défis, modes arcade et entraînement, bilan et bons réflexes. Détail dans [CHANGELOG.md](CHANGELOG.md).
+Version courante : **1.10.0** de novembre 2026 — assistant IA optionnel « Demander à l'assistant » (socle 1.15.0), rien sans déclaration dans l'espace. Précédente : **1.9.0** de novembre 2026 — comptes de l'espace : connexion, lecture seule selon le rôle (socle 1.14.0). Précédente : **1.8.0** de novembre 2026 — difficulté, mode Parcours, attestation de sensibilisation, révision des erreurs, 9 défis pièges et bons réflexes, code défi lié au catalogue. Précédente : **1.7.0** de novembre 2026 — musique de fond rétro intégrée, coupée par défaut. Précédente : **1.6.0** de novembre 2026 — catalogue enrichi : 195 défis, niveaux, essentiels ANSSI des téléphones mobiles, outil d'import. Précédente : **1.5.0** de novembre 2026 — Hacker mode : niveau expert, 24 défis techniques, ambiance terminal. Précédente : **1.4.0** de novembre 2026 — habillage rétro-gaming animé des pages du joueur, sons 8 bits facultatifs ; état des défis de l'entreprise déplacé dans l'administration. Précédente : **1.3.0** de novembre 2026 — fichier de défis `defis_entreprise.css` à côté du jeu, lu sans clic ni autorisation. Précédente : **1.2.0** de novembre 2026 — défis de l'entreprise : éditeur de l'équipe SMSI, base du groupe, publication `groupe:defisCyber` reçue par les joueurs. Précédente : **1.1.0** de novembre 2026 — défi entre collègues : code défi, nom du joueur au bilan, fiche de score en image, courriel prêt à envoyer. Précédente : **1.0.0** de novembre 2026 — première version : 66 défis maison et travail, quatre types de défis, modes arcade et entraînement, bilan et bons réflexes. Détail dans [CHANGELOG.md](CHANGELOG.md).
 
 ---
 

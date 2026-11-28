@@ -2,7 +2,7 @@
   "charte": "1.0",
   "id": "werbpcr",
   "produit": "WerbPCR",
-  "version": "1.12.0",
+  "version": "1.13.0",
   "dateVersion": "2026-11",
   "auteur": "@WerbHat",
   "signature": "Développé par @WerbHat",
@@ -14,7 +14,7 @@
   "entree": "application/WerbPCR.html",
   "empreinte": {
     "algo": "SHA-256",
-    "valeur": "419d34e02fb132d870f5f0e5c0900bf4b5cee0b60d75c51aa9bc81b01b25ed50"
+    "valeur": "32a3fe7368b6e8a8b1b7e0e5ada127cbb73560dfc75b79cc9bfc014fe41efd45"
   },
   "donnees": {
     "format": "WERBPCR",

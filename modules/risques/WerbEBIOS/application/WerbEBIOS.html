@@ -1,15 +1,15 @@
 <!doctype html>
-<!-- WerbEBIOS v1.22.0 – Développé par @WerbHat – build novembre 2026 -->
+<!-- WerbEBIOS v1.23.0 – Développé par @WerbHat – build novembre 2026 -->
 <html lang="fr">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data: blob:; font-src data:; connect-src blob: data:; worker-src blob:; form-action 'none'; base-uri 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data: blob:; font-src data:; connect-src blob: data: https://127.0.0.1:8443 https://werbsmsi-ai.interne:8443; worker-src blob:; form-action 'none'; base-uri 'none'">
 <meta name="referrer" content="no-referrer">
 <title>WerbEBIOS</title>
 <meta name="application-name" content="WerbEBIOS">
 <meta name="author" content="@WerbHat">
-<meta name="generator" content="WerbEBIOS v1.22.0 – Développé par @WerbHat">
+<meta name="generator" content="WerbEBIOS v1.23.0 – Développé par @WerbHat">
 <meta name="description" content="Analyse de risques EBIOS Risk Manager (ANSSI) du groupe et des sites : 5 ateliers, MITRE ATT&CK, rapport Word">
 <style>/*! WerbEBIOS – Développé par @WerbHat */
 :root {
@@ -36581,7 +36581,7 @@ const WERB = Object.freeze((() => {
   const bytes = [68, 195, 169, 118, 101, 108, 111, 112, 112, 195, 169, 32, 112, 97, 114, 32, 64, 87, 101, 114, 98, 72, 97, 116];
   const signature = new TextDecoder("utf-8").decode(new Uint8Array(bytes));
   const produit = "WerbEBIOS";
-  const version = "1.22.0";
+  const version = "1.23.0";
   return {
     id: "werbebios",
     produit, version, auteur: "@WerbHat", signature,
@@ -36600,13 +36600,13 @@ const WERB = Object.freeze((() => {
 window.WERB = WERB;
 console.info(`%c${WERB.produit}%c v${WERB.version} — ${WERB.signature}`, "font-weight:bold;color:#1f3864", "color:#595959");
 
-/*! WerbSMSI socle 1.14.0 – Développé par @WerbHat */
+/*! WerbSMSI socle 1.15.0 – Développé par @WerbHat */
 /* Fonctions communes à tous les modules WerbSMSI (charte 1.0).
    Copier ce fichier tel quel dans sources/src/ : ne pas le modifier dans un module,
    faire évoluer la version de la charte à la place.
    Prérequis : signature.js chargé avant (objet global WERB). */
 const WerbSocle = Object.freeze((() => {
-  const VERSION = "1.14.0";
+  const VERSION = "1.15.0";
   const FAMILLE = "WERBSMSI";
   const TAILLE_MAX = 20 * 1024 * 1024;
   const prefixe = () => `werb.${WERB.id}.`;
@@ -37050,6 +37050,7 @@ const WerbSocle = Object.freeze((() => {
       groupe = g.data;
       try { await comptes.exiger(); }   // 1.14.0 : espace avec comptes → ticket du portail ou connexion
       catch (e) { racine = avant; groupe = groupeAvant; throw e; }
+      ia.charger().catch(() => {});     // 1.15.0 : assistant IA optionnel (rien si le module ne l'a pas activé ou sans déclaration)
       return groupe;
     }
 
@@ -37186,7 +37187,7 @@ const WerbSocle = Object.freeze((() => {
       // Relit werbsmsi.groupe.json après une modification (site ajouté, base déclarée)
       async relire() { const g = await lire("werbsmsi.groupe.json"); if (g && g.format === "WERBSMSI-GROUPE" && g.data) groupe = g.data; return groupe; },
       site: code => lire(`${prefixeNiveau("site", code)}werbsmsi.site.json`).then(j => (j && j.format === "WERBSMSI-SITE" ? j.data : null)),
-      fermer() { racine = null; groupe = null; },
+      fermer() { racine = null; groupe = null; ia.charger().catch(() => {}); },
     });
   })();
 
@@ -37397,6 +37398,179 @@ const WerbSocle = Object.freeze((() => {
       surConnexion(fn) { if (typeof fn === "function") rappels.push(fn); },
       gereParLePortail() { parPortail = true; },
       fermerSession() { session = null; } });
+  })();
+
+  /* ---------- Assistant IA optionnel dans un module (socle 1.15.0, charte §5.12) ----------
+     Inerte tant que le module n'appelle pas WerbSocle.ia.activer({ contexte }) ; ensuite, rien sans déclaration dans l'espace.
+     Trois verrous, comme le portail : CSP limitée aux deux ADRESSES ; werbsmsi.ia.json à la racine de l'espace (écrit par un
+     administrateur du groupe depuis le portail) ; /sante, contrat d'API et défi signé vérifié avec la clé DÉCLARÉE.
+     Les questions partent avec un ticket du compte connecté dans le module (comptes.ticket) : sans compte, rien n'est proposé.
+     Les réponses s'affichent par textContent : jamais interprétées comme HTML. */
+  const ia = (() => {
+    const FICHIER = "werbsmsi.ia.json", FORMAT = "WERBSMSI-IA";
+    const ADRESSES = Object.freeze(["https://127.0.0.1:8443", "https://werbsmsi-ai.interne:8443"]);   // = CSP connect-src du module
+    const CONTRATS = ["1"], DOMAINE = "WERBSMSI-IA/identite/v1:";
+    const MENTION = "Réponse générée par une IA locale, à vérifier.";
+    const ETATS = { verification: "Vérification…", actif: "Assistant", indisponible: "Indisponible", refuse: "Identité refusée" };
+    const STYLE = `#werb-ia{position:fixed;right:18px;bottom:18px;z-index:40;display:flex;flex-direction:column;align-items:flex-end;gap:8px;font:14px/1.45 system-ui,"Segoe UI",Arial,sans-serif}
+#werb-ia button{font:inherit;padding:4px 10px;border:1px solid var(--line,#c4cad4);border-radius:5px;background:var(--card,#fff);color:var(--ink,#1d2330);cursor:pointer}
+#werb-ia .ia-lanceur{background:var(--navy-fond,#1f3864);border-color:var(--navy-fond,#1f3864);color:#fff;border-radius:20px;padding:7px 16px;box-shadow:0 2px 8px rgba(0,0,0,.25)}
+#werb-ia .ia-lanceur.inactif{background:var(--card,#fff);color:var(--muted,#5b6474)}
+#werb-ia .ia-panneau{order:-1;width:min(460px,calc(100vw - 36px));height:min(640px,calc(100vh - 110px));background:var(--card,#fff);color:var(--ink,#1d2330);border:1px solid var(--line,#c4cad4);border-radius:10px;box-shadow:0 6px 24px rgba(0,0,0,.25);display:flex;flex-direction:column}
+#werb-ia header{display:flex;align-items:center;gap:8px;padding:9px 12px;border-bottom:1px solid var(--line,#c4cad4)}#werb-ia header b{flex:1}
+#werb-ia .ia-fil{flex:1;overflow-y:auto;padding:10px 12px;display:flex;flex-direction:column;gap:8px}
+#werb-ia .ia-q{align-self:flex-end;background:var(--info-bg,#e8eef9);border-radius:10px 10px 2px 10px;padding:6px 10px;max-width:85%;white-space:pre-wrap}
+#werb-ia .ia-r{background:var(--th,#f3f5f8);border-radius:10px 10px 10px 2px;padding:7px 10px;max-width:95%}
+#werb-ia .ia-txt{white-space:pre-wrap}#werb-ia .ia-src{margin-top:6px;font-size:12px}#werb-ia .ia-src ul{margin:4px 0 0;padding-left:18px}
+#werb-ia .ia-pied{display:flex;gap:6px;align-items:center;margin-top:6px;font-size:12px}#werb-ia .ia-pied span{flex:1;color:var(--muted,#5b6474)}
+#werb-ia .ia-sugg{display:flex;flex-wrap:wrap;gap:6px}#werb-ia .ia-sugg button{font-size:12px;text-align:left}#werb-ia .ia-sugg button.p{background:var(--navy-fond,#1f3864);color:#fff}
+#werb-ia .ia-err{color:#b3261e;font-size:12px;margin-top:4px}#werb-ia .ia-etape{font-size:12px;color:var(--muted,#5b6474)}
+#werb-ia footer{display:flex;gap:8px;padding:8px 12px;border-top:1px solid var(--line,#c4cad4);align-items:flex-end}
+#werb-ia textarea{flex:1;resize:none;font:inherit;background:var(--champ,#fff);color:var(--ink,#1d2330);border:1px solid var(--line,#c4cad4);border-radius:5px;padding:5px 8px}
+#werb-ia .ia-mention{margin:0;padding:0 12px 8px;font-size:12px;color:var(--muted,#5b6474)}
+@media print{#werb-ia{display:none!important}}`;
+    let fournisseur = null, racineIa = null;
+    const S = { decl: null, etat: "", detail: "", ouvert: false, conv: [], abandon: null, suggestions: null };
+    const b64u = o => btoa(String.fromCharCode(...new Uint8Array(o))).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+    const deb64u = s => Uint8Array.from(atob(String(s).replace(/-/g, "+").replace(/_/g, "/")), c => c.charCodeAt(0));
+    const jwkValide = j => j && j.kty === "EC" && j.crv === "P-256" && /^[A-Za-z0-9_-]{43}$/.test(j.x || "") && /^[A-Za-z0-9_-]{43}$/.test(j.y || "");
+    const delai = ms => AbortSignal.timeout(ms);
+    const ctx = () => { try { return { module: WERB.produit, ...(fournisseur.contexte() || {}) }; } catch (e) { return { module: WERB.produit }; } };
+    // Compte connecté autorisé par la déclaration (sites pilotes : droit sur l'un d'eux, ou sur le groupe)
+    function pourCompte() {
+      const c = comptes.session;
+      if (!c || !S.decl) return false;
+      const sites = Array.isArray(S.decl.sites) ? S.decl.sites : [];
+      return !sites.length || sites.some(x => comptes.peut(c, x) || comptes.peut(c, comptes.GROUPE));
+    }
+
+    function activer(options = {}) {
+      if (fournisseur) return;
+      fournisseur = { contexte: typeof options.contexte === "function" ? options.contexte : () => ({}) };
+      if (espace.ouvert) charger();
+    }
+    async function charger() {
+      if (!fournisseur || typeof document === "undefined") return;
+      if (S.abandon) S.abandon.abort();
+      Object.assign(S, { decl: null, etat: "", detail: "", ouvert: false, conv: [], abandon: null, suggestions: null });
+      let j = null;
+      if (espace.ouvert) { try { j = await espace.lire(FICHIER); } catch (e) { j = null; } }
+      const d = j && j.data;
+      if (!d || j.format !== FORMAT || !d.actif || !ADRESSES.includes(d.adresse) || !jwkValide(d.cle_publique)) { afficher(); return; }   // rien, aucune requête
+      S.decl = d;
+      if (!pourCompte()) { afficher(); return; }
+      S.etat = "verification"; afficher();
+      try {
+        const sante = await fetch(`${d.adresse}/sante`, { signal: delai(2500), cache: "no-store" });
+        const v = sante.ok ? await (await fetch(`${d.adresse}/version`, { signal: delai(2500), cache: "no-store" })).json() : null;
+        if (!v) { S.etat = "indisponible"; S.detail = "la passerelle signale un état dégradé"; }
+        else if (!CONTRATS.includes(String(v.contrat_api))) { S.etat = "indisponible"; S.detail = `contrat d'API ${v.contrat_api} non pris en charge`; }
+        else {
+          const defi = b64u(crypto.getRandomValues(new Uint8Array(32)));
+          const r = await fetch(`${d.adresse}/identite`, { method: "POST", signal: delai(2500), headers: { "Content-Type": "application/json" }, body: JSON.stringify({ defi }) });
+          const rep = r.ok ? await r.json() : {};
+          const cle = await crypto.subtle.importKey("jwk", { kty: "EC", crv: "P-256", x: d.cle_publique.x, y: d.cle_publique.y }, { name: "ECDSA", namedCurve: "P-256" }, false, ["verify"]);
+          const ok = !!rep.signature && await crypto.subtle.verify({ name: "ECDSA", hash: "SHA-256" }, cle, deb64u(rep.signature), new TextEncoder().encode(DOMAINE + defi));
+          S.etat = ok ? "actif" : "refuse"; S.detail = ok ? "identité vérifiée" : "la passerelle ne détient pas la clé déclarée : aucune question ne lui sera envoyée";
+        }
+      } catch (e) { S.etat = "indisponible"; S.detail = "passerelle injoignable"; }
+      afficher();
+    }
+
+    function afficher() {
+      if (typeof document === "undefined" || !fournisseur) return;
+      if (!racineIa) {
+        if (!document.getElementById("werb-ia-style")) document.head.appendChild(Object.assign(document.createElement("style"), { id: "werb-ia-style", textContent: STYLE }));
+        racineIa = Object.assign(document.createElement("div"), { id: "werb-ia", hidden: true });
+        document.body.appendChild(racineIa);
+        racineIa.addEventListener("click", clic);
+        racineIa.addEventListener("keydown", e => { if (e.target.id === "iaQuestion" && e.key === "Enter" && !e.shiftKey) { e.preventDefault(); envoyer(e.target.value); } });
+      }
+      if (!S.decl || !S.etat || !pourCompte()) { racineIa.hidden = true; racineIa.innerHTML = ""; return; }
+      racineIa.hidden = false;
+      const actif = S.etat === "actif";
+      const bouton = `<button class="ia-lanceur${actif ? "" : " inactif"}" data-ia="bascule" title="${esc(actif ? "Demander à l'assistant IA local" : `Assistant IA : ${S.detail}`)}">🤖 ${esc(actif ? "Demander à l'assistant" : ETATS[S.etat] || S.etat)}</button>`;
+      if (!S.ouvert || !actif) { racineIa.innerHTML = bouton; return; }
+      const c = ctx();
+      const msgs = S.conv.map((m, i) => m.role === "user" ? `<div class="ia-q">${esc(m.texte)}</div>`
+        : `<div class="ia-r" data-ia-msg="${i}"><div class="ia-txt"></div>
+          ${m.sources && m.sources.length ? `<details class="ia-src"><summary>${m.sources.length} source(s)</summary><ul>${m.sources.map(s => `<li><b>${esc(s.etiquette)}</b>${s.version ? ` v${esc(s.version)}` : ""}</li>`).join("")}</ul></details>` : ""}
+          ${m.fin ? `<div class="ia-pied"><span>${esc(MENTION)}</span>${m.note ? "Merci." : `<button data-ia="retour" data-note="+" data-i="${i}">👍</button><button data-ia="retour" data-note="-" data-i="${i}">👎</button>`}</div>` : ""}
+          ${m.erreur ? `<div class="ia-err">${esc(m.erreur)}</div>` : ""}</div>`).join("");
+      const sugg = !S.conv.length && S.suggestions ? `<div class="ia-sugg">${S.suggestions.questions.map(q => `<button data-ia="question" data-q="${esc(q)}">${esc(q)}</button>`).join("")}${S.suggestions.skills.map(s => `<button class="p" data-ia="skill" data-skill="${esc(s.nom)}" title="${esc(s.description)}">M'accompagner : ${esc(s.nom)}</button>`).join("")}</div>` : "";
+      racineIa.innerHTML = `${bouton}<section class="ia-panneau" role="dialog" aria-label="Assistant IA">
+        <header><b>🤖 Assistant IA local</b><span class="ia-etape">${esc(c.module)} · ${esc(c.ecran || "")}</span><button data-ia="nouveau" title="Nouvelle conversation">↺</button><button data-ia="bascule" title="Fermer">✕</button></header>
+        <div class="ia-fil">${sugg}${msgs}${S.abandon ? `<div class="ia-etape">⏳ …</div>` : ""}</div>
+        <footer><textarea id="iaQuestion" rows="2" maxlength="2000" placeholder="Votre question sur ce module, la démarche ou les référentiels…"${S.abandon ? " disabled" : ""}></textarea>
+          ${S.abandon ? `<button data-ia="stop">■ Arrêter</button>` : `<button data-ia="envoyer">Envoyer</button>`}</footer>
+        <p class="ia-mention">${esc(MENTION)} Aucune donnée ne quitte l'organisation.</p></section>`;
+      S.conv.forEach((m, i) => { if (m.role === "assistant") { const n = racineIa.querySelector(`[data-ia-msg="${i}"] .ia-txt`); if (n) n.textContent = m.texte; } });
+      const fil = racineIa.querySelector(".ia-fil"); if (fil) fil.scrollTop = fil.scrollHeight;
+    }
+
+    async function entetes() {
+      const t = await comptes.ticket(comptes.session);       // ticket du compte connecté, signé avec la clé de l'espace
+      return { "Content-Type": "application/json", Authorization: `WerbTicket ${t}` };
+    }
+    async function suggestions() {
+      const c = ctx();
+      try {
+        const r = await fetch(`${S.decl.adresse}/suggestions?module=${encodeURIComponent(c.module)}&ecran=${encodeURIComponent(c.ecran || "")}`, { headers: await entetes(), signal: delai(4000) });
+        S.suggestions = r.ok ? await r.json() : { questions: [], skills: [] };
+      } catch (e) { S.suggestions = { questions: [], skills: [] }; }
+      afficher();
+    }
+    async function envoyer(question, skill = null) {
+      question = String(question || "").trim();
+      if (!question || S.abandon || S.etat !== "actif") return;
+      const historique = S.conv.filter(m => !m.erreur).slice(-6).map(m => ({ role: m.role, content: m.texte.slice(0, 4000) }));
+      S.conv.push({ role: "user", texte: question });
+      const rep = { role: "assistant", texte: "", sources: [], fin: false, question };
+      S.conv.push(rep);
+      S.abandon = new AbortController(); afficher();
+      const c = ctx();
+      try {
+        const r = await fetch(`${S.decl.adresse}/question`, { method: "POST", headers: await entetes(), signal: S.abandon.signal,
+          body: JSON.stringify({ question, historique, contexte_page: c, skill, site: /^[A-Z0-9_-]{1,40}$/.test(c.site || "") ? c.site : "", flux: true }) });
+        if (!r.ok) rep.erreur = { 401: "Session expirée : reconnectez-vous.", 429: "Trop de questions : patientez une minute.", 503: "Assistant indisponible." }[r.status] || `Erreur ${r.status}.`;
+        else {
+          const lecteur = r.body.getReader(), dec = new TextDecoder();
+          let tampon = "";
+          for (;;) {
+            const { value, done } = await lecteur.read();
+            if (done) break;
+            tampon += dec.decode(value, { stream: true });
+            let k;
+            while ((k = tampon.indexOf("\n\n")) >= 0) {
+              const ligne = tampon.slice(0, k).split("\n").find(l => l.startsWith("data: ")); tampon = tampon.slice(k + 2);
+              if (!ligne) continue;
+              const ev = JSON.parse(ligne.slice(6));
+              if (ev.type === "texte") { rep.texte += ev.texte; const n = racineIa.querySelector(`[data-ia-msg="${S.conv.indexOf(rep)}"] .ia-txt`); if (n) n.textContent = rep.texte; }
+              else if (ev.type === "sources") rep.sources = ev.sources || [];
+              else if (ev.type === "fin") { rep.fin = true; rep.trace = ev.trace; }
+              else if (ev.type === "erreur") rep.erreur = ev.message;
+            }
+          }
+        }
+      } catch (e) { rep.erreur = e.name === "AbortError" ? "Réponse arrêtée." : "Assistant injoignable."; }
+      S.abandon = null; afficher();
+    }
+    async function clic(e) {
+      const b = e.target.closest("[data-ia]"); if (!b) return;
+      const a = b.dataset.ia;
+      if (a === "bascule") { S.ouvert = !S.ouvert; afficher(); if (S.ouvert && !S.suggestions && S.etat === "actif") suggestions(); }
+      else if (a === "nouveau" && !S.abandon) { S.conv = []; afficher(); }
+      else if (a === "envoyer") { const t = racineIa.querySelector("#iaQuestion"); if (t) envoyer(t.value); }
+      else if (a === "stop" && S.abandon) S.abandon.abort();
+      else if (a === "question") envoyer(b.dataset.q);
+      else if (a === "skill") envoyer("Accompagne-moi pas à pas.", b.dataset.skill);
+      else if (a === "retour") {
+        const m = S.conv[Number(b.dataset.i)]; if (!m || !m.trace || m.note) return;
+        m.note = b.dataset.note; afficher();
+        try { await fetch(`${S.decl.adresse}/retour`, { method: "POST", headers: await entetes(), signal: delai(4000), body: JSON.stringify({ trace: m.trace, note: m.note, question: m.question.slice(0, 2000) }) }); } catch (x) { /* avis perdu */ }
+      }
+    }
+    return Object.freeze({ ADRESSES, FICHIER, activer, charger, get etat() { return { etat: S.etat, detail: S.detail, declare: !!S.decl }; } });
   })();
 
   /* ---------- Listes de choix du groupe (charte §5.9) ---------- */
@@ -38036,7 +38210,7 @@ body.wt-glisse{cursor:col-resize!important;user-select:none!important}
     if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", poser); else bandeau.menuBouton();
   }
 
-  return Object.freeze({ VERSION, FAMILLE, LOGO, afficherLogo, purger, preference, activerPurgeAutomatique, esc, enveloppe, lireEnveloppe, qualifier, decomposer, sha256, accesDirect, ouvrir, enregistrer, telecharger, espace, lien, nommage, menu, bandeau, tables, TEINTES, teinteCss, verrou, listes, theme, comptes });
+  return Object.freeze({ VERSION, FAMILLE, LOGO, afficherLogo, purger, preference, activerPurgeAutomatique, esc, enveloppe, lireEnveloppe, qualifier, decomposer, sha256, accesDirect, ouvrir, enregistrer, telecharger, espace, lien, nommage, menu, bandeau, tables, TEINTES, teinteCss, verrou, listes, theme, comptes, ia });
 })());
 window.WerbSocle = WerbSocle;
 
@@ -39578,6 +39752,7 @@ window.RapportWord = RapportWord;
     { g: "aide", i: "❓", l: "Aide", c: "olive", t: [["aide", "Guide du module"], ["bdc", "Base de connaissances"], ...WerbGuides.entrees()] },
   ];
   const menu = WerbSocle.menu($("#sidebar"), MENU, { surNav: id => { vue = id; render(); $("#main").scrollTop = 0; } });
+  WerbSocle.ia.activer({ contexte: () => ({ ecran: vue, site: LIAISON.site || "", niveau: LIAISON.portee || "" }) });   // assistant IA optionnel (socle 1.15.0, charte §5.12) : rien sans déclaration dans l'espace
 
   const kpi = (v, l, alerte = false, nav = "") => `<div class="kpi${alerte ? " alerte" : ""}"${nav ? ` data-nav="${nav}" style="cursor:pointer"` : ""}><div class="v">${v}</div><div class="l">${esc(l)}</div></div>`;
   VUES.tdb = () => {

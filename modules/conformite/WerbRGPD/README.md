@@ -1,7 +1,7 @@
 # WerbRGPD
 
 > Conformité RGPD d'un site : registre des traitements, violations de données (72 h), demandes d'exercice des droits, sous-traitants
-> Version **1.5.0** — Développé par **@WerbHat**
+> Version **1.6.0** — Développé par **@WerbHat**
 
 ---
 
@@ -118,7 +118,7 @@ python <WerbSMSI>\charte\outils\werb_charte.py publier .
 
 ## Historique des versions
 
-Version courante : **1.5.0** de novembre 2026 — comptes de l'espace : connexion, lecture seule selon le rôle (socle 1.14.0). Précédente : **1.4.1** de novembre 2026 — liens vers les pages RGPD de WerbReferentiels mis à jour (dossier `3-RGPD`). Précédente : **1.4.0** de novembre 2026 — aide : lien qui ouvre WerbReferentiels directement sur la partie RGPD. Avant : **1.3.0** de novembre 2026 — fichiers exportés nommés « SIGLE-SITE_… », nom du site dans les titres (socle 1.12.0). Précédente : **1.2.0** de novembre 2026 — base demandée par le portail ouverte directement quand l'espace est chargé dans le portail (socle 1.11.0). Précédente : **1.1.0** de novembre 2026 — identification unique : ouvert depuis le portail WerbSMSI, le module reprend le nom saisi dans le portail, sans écran « Votre nom » (socle 1.10.0). Précédente : **1.0.0** de novembre 2026 — première version : registre des traitements, violations de données, demandes d'exercice des droits, sous-traitants, liens WerbMap et WerbPresta. Détail dans [CHANGELOG.md](CHANGELOG.md).
+Version courante : **1.6.0** de novembre 2026 — assistant IA optionnel « Demander à l'assistant » (socle 1.15.0), rien sans déclaration dans l'espace. Précédente : **1.5.0** de novembre 2026 — comptes de l'espace : connexion, lecture seule selon le rôle (socle 1.14.0). Précédente : **1.4.1** de novembre 2026 — liens vers les pages RGPD de WerbReferentiels mis à jour (dossier `3-RGPD`). Précédente : **1.4.0** de novembre 2026 — aide : lien qui ouvre WerbReferentiels directement sur la partie RGPD. Avant : **1.3.0** de novembre 2026 — fichiers exportés nommés « SIGLE-SITE_… », nom du site dans les titres (socle 1.12.0). Précédente : **1.2.0** de novembre 2026 — base demandée par le portail ouverte directement quand l'espace est chargé dans le portail (socle 1.11.0). Précédente : **1.1.0** de novembre 2026 — identification unique : ouvert depuis le portail WerbSMSI, le module reprend le nom saisi dans le portail, sans écran « Votre nom » (socle 1.10.0). Précédente : **1.0.0** de novembre 2026 — première version : registre des traitements, violations de données, demandes d'exercice des droits, sous-traitants, liens WerbMap et WerbPresta. Détail dans [CHANGELOG.md](CHANGELOG.md).
 
 ---
 

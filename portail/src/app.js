@@ -95,6 +95,7 @@
       for (const s of P.groupe.sites || []) P.sites[s.code] = await chargerSite(s.code);
       P.modeles = await chargerModeles();
       P.luLe = Date.now();   // tableau de bord GRC : heure de lecture des publications
+      if (window.WerbAssistant) await WerbAssistant.charger();   // assistant IA optionnel : déclaration de l'espace (werbsmsi.ia.json)
     } finally { P.chargement = false; }
   }
 
@@ -848,7 +849,7 @@ ${sites.map(s => `    ├── ${s.code || "?"}/  (werbsmsi.site.json, ${DOSSIE
     const sites = P.groupe ? P.groupe.sites || [] : [];
     const attente = E.ouvert && !!P.groupe && !connecte(), sitesVus = sites.filter(s => !connecte() || voitSite(s.code));
     const tGroupe = [...(voitGroupe() || sitesVus.length ? [["grc", "Tableau de bord GRC"]] : []), ...(voitGroupe() ? [["groupe", P.groupe.sigle || "Vue groupe"]] : [])];
-    const tAdmin = E.ouvert ? (adminEspace() ? [["comptes", "Comptes et droits"], ["sauvegarde", "Sauvegarde et restauration"], ["listes", "Listes de choix du groupe"], ["sources", "Sources publiques"], ["parametres", "Paramètres"]] : [])
+    const tAdmin = E.ouvert ? (adminEspace() ? [["comptes", "Comptes et droits"], ["sauvegarde", "Sauvegarde et restauration"], ["listes", "Listes de choix du groupe"], ["sources", "Sources publiques"], ["parametres", "Paramètres"], ...(window.WerbAssistant ? [["ia", "Assistant IA"]] : [])] : [])
       : [["sauvegarde", "Sauvegarde et restauration"], ["listes", "Listes de choix du groupe"], ["sources", "Sources publiques"], ["parametres", "Paramètres"]];
     MENU.splice(0, MENU.length, { g: "accueil", i: "🏠", l: "Accueil", c: "bleu", t: [["accueil", "Rubriques et modules"]] },
       ...(P.groupe && !attente ? [...(tGroupe.length ? [{ g: "groupe", i: "🏢", l: "Groupe", c: "violet", t: tGroupe }] : []),
@@ -869,6 +870,7 @@ ${sites.map(s => `    ├── ${s.code || "?"}/  (werbsmsi.site.json, ${DOSSIE
     if (E.ouvert && P.groupe && !connecte()) vue = "connexion";
     else if (!autorise(vue)) vue = "refuse";
     m.innerHTML = VUES[vue]();
+    if (window.WerbAssistant) WerbAssistant.afficher();   // rien d'affiché sans déclaration active
     if (vue === "accueil") setTimeout(proposerIdentification, 0);   // identification, puis invitation à ouvrir l'espace de démonstration
   }
 
@@ -1801,9 +1803,9 @@ ${sites.map(s => `    ├── ${s.code || "?"}/  (werbsmsi.site.json, ${DOSSIE
      le verrou le reçoivent. Il préremplit aussi « Réalisée par » (sauvegarde) et « Publiée par » (listes de choix). Gardé en mémoire
      seulement (rien dans le navigateur, §1) : redemandé au rechargement du portail. Identification déclarative, comme le verrou :
      l'accès aux données reste celui des dossiers du drive (P3) ; les comptes propres à un module (WerbMap) ne sont pas concernés. */
-  let identProposee = false;
   function proposerIdentification() {
-    if (!identProposee && !P.utilisateur && P.vue === "accueil") { identProposee = true; fenetreIdentification(); return; }
+    // 1.26.1 : plus de nom demandé au démarrage. Dans un espace (démonstration comprise), le compte connecté donne le nom ;
+    // sans espace, le bouton « 👤 S'identifier » du bandeau reste disponible (sinon chaque module demande le nom).
     if (!$("#ident-fen")) proposerDemo();
   }
   function fenetreIdentification() {
@@ -1932,7 +1934,7 @@ ${sites.map(s => `    ├── ${s.code || "?"}/  (werbsmsi.site.json, ${DOSSIE
   const libRole = r => CPT.LIBELLES[r] || "—";
   // Pages réservées une fois l'espace ouvert : condition d'accès
   const ACCES = { groupe: () => voitGroupe(), site: () => voitSite(P.site), grc: () => voitGroupe() || sitesAccessibles().length > 0,
-    assistant: () => adminEspace(), sauvegarde: () => adminEspace(), listes: () => adminEspace(), sources: () => adminEspace(), parametres: () => adminEspace(), comptes: () => adminEspace() };
+    assistant: () => adminEspace(), sauvegarde: () => adminEspace(), listes: () => adminEspace(), sources: () => adminEspace(), parametres: () => adminEspace(), comptes: () => adminEspace(), ia: () => adminEspace() };
   const autorise = vue => !E.ouvert || !ACCES[vue] || ACCES[vue]();
 
   async function ouvrirSession(c) {
@@ -2148,6 +2150,15 @@ ${sites.map(s => `    ├── ${s.code || "?"}/  (werbsmsi.site.json, ${DOSSIE
     const act = e.target.closest("[data-act]");
     if (act && ACTIONS[act.dataset.act]) ACTIONS[act.dataset.act](act, e);
   });
+
+  /* ===================================================== assistant IA optionnel (WerbSMSI.AI, assistant.js) : éteint sans déclaration */
+  if (window.WerbAssistant) {
+    WerbAssistant.init({ E, esc, toast, render, maintenant, docEspace, metaEspace, adminEspace, voitSite,
+      compte: () => (connecte() ? P.compte : null), ticket: () => P.ticket, groupe: () => P.groupe, vue: () => ({ vue: P.vue, site: P.site }),
+      publications: code => (P.sites[code] && P.sites[code].accessible && P.sites[code].pub) || null });   // phase 4 : outils en lecture seule
+    VUES.ia = () => WerbAssistant.vueAdmin();
+    Object.assign(ACTIONS, WerbAssistant.actions);
+  }
 
   WerbSocle.theme.surChangement(() => render());   // liens vers les modules : thème choisi (charte §7.5)
   render();

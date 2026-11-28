@@ -2,7 +2,7 @@
   "charte": "1.0",
   "id": "werbassets",
   "produit": "WerbAssets",
-  "version": "1.25.0",
+  "version": "1.26.0",
   "dateVersion": "2026-11",
   "auteur": "@WerbHat",
   "signature": "Développé par @WerbHat",
@@ -14,7 +14,7 @@
   "entree": "application/WerbAssets.html",
   "empreinte": {
     "algo": "SHA-256",
-    "valeur": "5f58503e42f1ae9ee16053a97885923d236f2bee8aabbb3619b6ad412feca0f3"
+    "valeur": "8340f2dfb1a899c8dc6a124d5f1b53b3e8cd7b8efbff5eafcf80f8fa25736ea0"
   },
   "donnees": {
     "format": "WERBASSETS",

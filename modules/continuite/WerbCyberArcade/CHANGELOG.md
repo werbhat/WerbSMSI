@@ -3,6 +3,14 @@
 Toutes les évolutions notables de WerbCyberArcade sont consignées ici.
 Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/), numérotation [SemVer](https://semver.org/lang/fr/).
 
+## [1.10.0] — 2026-11
+
+### Ajouts
+- **Assistant IA optionnel** (socle 1.15.0, charte §5.12) : bouton « 🤖 Demander à l'assistant » quand l'assistant WerbSMSI.AI est déclaré dans l'espace et que sa passerelle prouve son identité ; questions suggérées et démarche guidée selon l'écran, réponse citée affichée en texte, sources, 👍/👎. Contexte transmis limité au module, à l'écran et au site de la base (aucune donnée de la base). **Sans déclaration, rien n'est affiché et aucune requête n'est émise.**
+
+### Développement
+- Socle 1.15.0 ; CSP : `connect-src` limité aux deux adresses de l'assistant (charte §1, §7).
+
 ## [1.9.0] — 2026-11
 
 ### Modifications

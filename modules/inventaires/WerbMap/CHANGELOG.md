@@ -5,6 +5,28 @@ Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/), num
 
 
 
+## [1.44.0] — 2026-11
+
+### Ajouts
+- **Assistant IA optionnel** (socle 1.15.0, charte §5.12) : bouton « 🤖 Demander à l'assistant » quand l'assistant WerbSMSI.AI est déclaré dans l'espace et que sa passerelle prouve son identité ; questions suggérées et démarche guidée selon l'écran, réponse citée affichée en texte, sources, 👍/👎. Contexte transmis limité au module, à l'écran et au site de la base (aucune donnée de la base). **Sans déclaration, rien n'est affiché et aucune requête n'est émise.**
+
+### Développement
+- Socle 1.15.0 ; CSP : `connect-src` limité aux deux adresses de l'assistant (charte §1, §7).
+
+## [1.43.0] — 2026-11
+
+### Ajouts — actifs redondants
+- **Groupe de redondance** dans les actifs réseau, les machines physiques et les machines virtuelles : les actifs qui se secourent (paire de pare-feu, switchs empilés, hyperviseurs en grappe, VM répliquée) portent le même groupe, quelle que soit leur table ; **mode** (actif-passif, actif-actif, grappe, secours à froid) et **rôle** (principal, secondaire, membre). Liste déroulante des groupes existants ; casse ignorée.
+- Colonne calculée **Redondé avec** : autres membres du groupe, **⚠ seul membre du groupe**, **⚠ modes différents**.
+- **Procédure par défaut dans la note PCR** : chaque membre reçoit en tête de sa note un paragraphe **⇄ Redondance** (vérifier que le redondant fonctionne et assure le service avant toute intervention ; un seul membre à la fois ; contrôler le retour à la redondance après). Tenu à jour à chaque changement du groupe, du mode ou d'un TAG, après un import de lignes et après une note proposée depuis WerbPCR ; retiré quand l'actif quitte son groupe ; le texte saisi en dessous n'est jamais modifié ; tracé au journal.
+- **Fiche SI** (écran et Word, section 6) : actifs redondants du SI et actifs critiques du SI sans redondance déclarée.
+- **Publication `site:actifs`** : `redondance: { groupe, mode, role }` (charte : schéma `publication_site`).
+- Saisie de masse et classeur Excel : colonnes *Groupe redondance*, *Mode redondance*, *Rôle redondance*.
+
+### Développement
+- `tests/test_redondance.py`.
+- Sources 1.42.0 reconstituées le 2026-11-27 depuis la version publiée (build identique octet pour octet), tests adaptés à la 1.42.0 (identification par le nom, espace de démonstration copié sans ses comptes, socle 1.14.0, trois risques EBIOS à LYON dans `test_si_liens.py`).
+
 ## [1.42.0] — 2026-11
 
 ### Modifications — plus de gestion des utilisateurs dans WerbMap

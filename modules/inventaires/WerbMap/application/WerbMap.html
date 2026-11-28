@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- WerbMap v1.42.0 – Développé par @WerbHat – build novembre 2026 -->
+<!-- WerbMap v1.44.0 – Développé par @WerbHat – build novembre 2026 -->
 <!--
   WerbMap – Cartographie VLAN / Adressage IP / Actifs / Flux
   Module « Inventaires ICS » de WerbSMSI (niveau site). Version : sources/src/signature.js.
@@ -16,12 +16,12 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data: blob:; font-src data:; connect-src blob: data:; worker-src blob:; form-action 'none'; base-uri 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data: blob:; font-src data:; connect-src blob: data: https://127.0.0.1:8443 https://werbsmsi-ai.interne:8443; worker-src blob:; form-action 'none'; base-uri 'none'">
 <meta name="referrer" content="no-referrer">
 <title>WerbMap</title>
 <meta name="application-name" content="WerbMap">
 <meta name="author" content="@WerbHat">
-<meta name="generator" content="WerbMap v1.42.0 – Développé par @WerbHat">
+<meta name="generator" content="WerbMap v1.44.0 – Développé par @WerbHat">
 <meta name="description" content="Cartographie VLAN, adressage IP, actifs et flux d'un site">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22%3E%3Crect width=%2232%22 height=%2232%22 rx=%226%22 fill=%22%230d2238%22/%3E%3Cpath d=%22M6 9h20M6 16h20M6 23h20M11 6v20M21 6v20%22 stroke=%22%23ffd27a%22 stroke-width=%222%22/%3E%3Ccircle cx=%2221%22 cy=%2216%22 r=%223.5%22 fill=%22%238fd16a%22/%3E%3C/svg%3E">
 <style>
@@ -36701,7 +36701,7 @@ const WERB = Object.freeze((() => {
   const bytes = [68, 195, 169, 118, 101, 108, 111, 112, 112, 195, 169, 32, 112, 97, 114, 32, 64, 87, 101, 114, 98, 72, 97, 116];
   const signature = new TextDecoder("utf-8").decode(new Uint8Array(bytes));
   const produit = "WerbMap";
-  const version = "1.42.0";
+  const version = "1.44.0";
   return {
     id: "werbmap",
     produit, version, auteur: "@WerbHat", signature,
@@ -36720,13 +36720,13 @@ const WERB = Object.freeze((() => {
 window.WERB = WERB;
 console.info(`%c${WERB.produit}%c v${WERB.version} — ${WERB.signature}`, "font-weight:bold;color:#0d2238", "color:#595959");
 
-/*! WerbSMSI socle 1.14.0 – Développé par @WerbHat */
+/*! WerbSMSI socle 1.15.0 – Développé par @WerbHat */
 /* Fonctions communes à tous les modules WerbSMSI (charte 1.0).
    Copier ce fichier tel quel dans sources/src/ : ne pas le modifier dans un module,
    faire évoluer la version de la charte à la place.
    Prérequis : signature.js chargé avant (objet global WERB). */
 const WerbSocle = Object.freeze((() => {
-  const VERSION = "1.14.0";
+  const VERSION = "1.15.0";
   const FAMILLE = "WERBSMSI";
   const TAILLE_MAX = 20 * 1024 * 1024;
   const prefixe = () => `werb.${WERB.id}.`;
@@ -37170,6 +37170,7 @@ const WerbSocle = Object.freeze((() => {
       groupe = g.data;
       try { await comptes.exiger(); }   // 1.14.0 : espace avec comptes → ticket du portail ou connexion
       catch (e) { racine = avant; groupe = groupeAvant; throw e; }
+      ia.charger().catch(() => {});     // 1.15.0 : assistant IA optionnel (rien si le module ne l'a pas activé ou sans déclaration)
       return groupe;
     }
 
@@ -37306,7 +37307,7 @@ const WerbSocle = Object.freeze((() => {
       // Relit werbsmsi.groupe.json après une modification (site ajouté, base déclarée)
       async relire() { const g = await lire("werbsmsi.groupe.json"); if (g && g.format === "WERBSMSI-GROUPE" && g.data) groupe = g.data; return groupe; },
       site: code => lire(`${prefixeNiveau("site", code)}werbsmsi.site.json`).then(j => (j && j.format === "WERBSMSI-SITE" ? j.data : null)),
-      fermer() { racine = null; groupe = null; },
+      fermer() { racine = null; groupe = null; ia.charger().catch(() => {}); },
     });
   })();
 
@@ -37517,6 +37518,179 @@ const WerbSocle = Object.freeze((() => {
       surConnexion(fn) { if (typeof fn === "function") rappels.push(fn); },
       gereParLePortail() { parPortail = true; },
       fermerSession() { session = null; } });
+  })();
+
+  /* ---------- Assistant IA optionnel dans un module (socle 1.15.0, charte §5.12) ----------
+     Inerte tant que le module n'appelle pas WerbSocle.ia.activer({ contexte }) ; ensuite, rien sans déclaration dans l'espace.
+     Trois verrous, comme le portail : CSP limitée aux deux ADRESSES ; werbsmsi.ia.json à la racine de l'espace (écrit par un
+     administrateur du groupe depuis le portail) ; /sante, contrat d'API et défi signé vérifié avec la clé DÉCLARÉE.
+     Les questions partent avec un ticket du compte connecté dans le module (comptes.ticket) : sans compte, rien n'est proposé.
+     Les réponses s'affichent par textContent : jamais interprétées comme HTML. */
+  const ia = (() => {
+    const FICHIER = "werbsmsi.ia.json", FORMAT = "WERBSMSI-IA";
+    const ADRESSES = Object.freeze(["https://127.0.0.1:8443", "https://werbsmsi-ai.interne:8443"]);   // = CSP connect-src du module
+    const CONTRATS = ["1"], DOMAINE = "WERBSMSI-IA/identite/v1:";
+    const MENTION = "Réponse générée par une IA locale, à vérifier.";
+    const ETATS = { verification: "Vérification…", actif: "Assistant", indisponible: "Indisponible", refuse: "Identité refusée" };
+    const STYLE = `#werb-ia{position:fixed;right:18px;bottom:18px;z-index:40;display:flex;flex-direction:column;align-items:flex-end;gap:8px;font:14px/1.45 system-ui,"Segoe UI",Arial,sans-serif}
+#werb-ia button{font:inherit;padding:4px 10px;border:1px solid var(--line,#c4cad4);border-radius:5px;background:var(--card,#fff);color:var(--ink,#1d2330);cursor:pointer}
+#werb-ia .ia-lanceur{background:var(--navy-fond,#1f3864);border-color:var(--navy-fond,#1f3864);color:#fff;border-radius:20px;padding:7px 16px;box-shadow:0 2px 8px rgba(0,0,0,.25)}
+#werb-ia .ia-lanceur.inactif{background:var(--card,#fff);color:var(--muted,#5b6474)}
+#werb-ia .ia-panneau{order:-1;width:min(460px,calc(100vw - 36px));height:min(640px,calc(100vh - 110px));background:var(--card,#fff);color:var(--ink,#1d2330);border:1px solid var(--line,#c4cad4);border-radius:10px;box-shadow:0 6px 24px rgba(0,0,0,.25);display:flex;flex-direction:column}
+#werb-ia header{display:flex;align-items:center;gap:8px;padding:9px 12px;border-bottom:1px solid var(--line,#c4cad4)}#werb-ia header b{flex:1}
+#werb-ia .ia-fil{flex:1;overflow-y:auto;padding:10px 12px;display:flex;flex-direction:column;gap:8px}
+#werb-ia .ia-q{align-self:flex-end;background:var(--info-bg,#e8eef9);border-radius:10px 10px 2px 10px;padding:6px 10px;max-width:85%;white-space:pre-wrap}
+#werb-ia .ia-r{background:var(--th,#f3f5f8);border-radius:10px 10px 10px 2px;padding:7px 10px;max-width:95%}
+#werb-ia .ia-txt{white-space:pre-wrap}#werb-ia .ia-src{margin-top:6px;font-size:12px}#werb-ia .ia-src ul{margin:4px 0 0;padding-left:18px}
+#werb-ia .ia-pied{display:flex;gap:6px;align-items:center;margin-top:6px;font-size:12px}#werb-ia .ia-pied span{flex:1;color:var(--muted,#5b6474)}
+#werb-ia .ia-sugg{display:flex;flex-wrap:wrap;gap:6px}#werb-ia .ia-sugg button{font-size:12px;text-align:left}#werb-ia .ia-sugg button.p{background:var(--navy-fond,#1f3864);color:#fff}
+#werb-ia .ia-err{color:#b3261e;font-size:12px;margin-top:4px}#werb-ia .ia-etape{font-size:12px;color:var(--muted,#5b6474)}
+#werb-ia footer{display:flex;gap:8px;padding:8px 12px;border-top:1px solid var(--line,#c4cad4);align-items:flex-end}
+#werb-ia textarea{flex:1;resize:none;font:inherit;background:var(--champ,#fff);color:var(--ink,#1d2330);border:1px solid var(--line,#c4cad4);border-radius:5px;padding:5px 8px}
+#werb-ia .ia-mention{margin:0;padding:0 12px 8px;font-size:12px;color:var(--muted,#5b6474)}
+@media print{#werb-ia{display:none!important}}`;
+    let fournisseur = null, racineIa = null;
+    const S = { decl: null, etat: "", detail: "", ouvert: false, conv: [], abandon: null, suggestions: null };
+    const b64u = o => btoa(String.fromCharCode(...new Uint8Array(o))).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+    const deb64u = s => Uint8Array.from(atob(String(s).replace(/-/g, "+").replace(/_/g, "/")), c => c.charCodeAt(0));
+    const jwkValide = j => j && j.kty === "EC" && j.crv === "P-256" && /^[A-Za-z0-9_-]{43}$/.test(j.x || "") && /^[A-Za-z0-9_-]{43}$/.test(j.y || "");
+    const delai = ms => AbortSignal.timeout(ms);
+    const ctx = () => { try { return { module: WERB.produit, ...(fournisseur.contexte() || {}) }; } catch (e) { return { module: WERB.produit }; } };
+    // Compte connecté autorisé par la déclaration (sites pilotes : droit sur l'un d'eux, ou sur le groupe)
+    function pourCompte() {
+      const c = comptes.session;
+      if (!c || !S.decl) return false;
+      const sites = Array.isArray(S.decl.sites) ? S.decl.sites : [];
+      return !sites.length || sites.some(x => comptes.peut(c, x) || comptes.peut(c, comptes.GROUPE));
+    }
+
+    function activer(options = {}) {
+      if (fournisseur) return;
+      fournisseur = { contexte: typeof options.contexte === "function" ? options.contexte : () => ({}) };
+      if (espace.ouvert) charger();
+    }
+    async function charger() {
+      if (!fournisseur || typeof document === "undefined") return;
+      if (S.abandon) S.abandon.abort();
+      Object.assign(S, { decl: null, etat: "", detail: "", ouvert: false, conv: [], abandon: null, suggestions: null });
+      let j = null;
+      if (espace.ouvert) { try { j = await espace.lire(FICHIER); } catch (e) { j = null; } }
+      const d = j && j.data;
+      if (!d || j.format !== FORMAT || !d.actif || !ADRESSES.includes(d.adresse) || !jwkValide(d.cle_publique)) { afficher(); return; }   // rien, aucune requête
+      S.decl = d;
+      if (!pourCompte()) { afficher(); return; }
+      S.etat = "verification"; afficher();
+      try {
+        const sante = await fetch(`${d.adresse}/sante`, { signal: delai(2500), cache: "no-store" });
+        const v = sante.ok ? await (await fetch(`${d.adresse}/version`, { signal: delai(2500), cache: "no-store" })).json() : null;
+        if (!v) { S.etat = "indisponible"; S.detail = "la passerelle signale un état dégradé"; }
+        else if (!CONTRATS.includes(String(v.contrat_api))) { S.etat = "indisponible"; S.detail = `contrat d'API ${v.contrat_api} non pris en charge`; }
+        else {
+          const defi = b64u(crypto.getRandomValues(new Uint8Array(32)));
+          const r = await fetch(`${d.adresse}/identite`, { method: "POST", signal: delai(2500), headers: { "Content-Type": "application/json" }, body: JSON.stringify({ defi }) });
+          const rep = r.ok ? await r.json() : {};
+          const cle = await crypto.subtle.importKey("jwk", { kty: "EC", crv: "P-256", x: d.cle_publique.x, y: d.cle_publique.y }, { name: "ECDSA", namedCurve: "P-256" }, false, ["verify"]);
+          const ok = !!rep.signature && await crypto.subtle.verify({ name: "ECDSA", hash: "SHA-256" }, cle, deb64u(rep.signature), new TextEncoder().encode(DOMAINE + defi));
+          S.etat = ok ? "actif" : "refuse"; S.detail = ok ? "identité vérifiée" : "la passerelle ne détient pas la clé déclarée : aucune question ne lui sera envoyée";
+        }
+      } catch (e) { S.etat = "indisponible"; S.detail = "passerelle injoignable"; }
+      afficher();
+    }
+
+    function afficher() {
+      if (typeof document === "undefined" || !fournisseur) return;
+      if (!racineIa) {
+        if (!document.getElementById("werb-ia-style")) document.head.appendChild(Object.assign(document.createElement("style"), { id: "werb-ia-style", textContent: STYLE }));
+        racineIa = Object.assign(document.createElement("div"), { id: "werb-ia", hidden: true });
+        document.body.appendChild(racineIa);
+        racineIa.addEventListener("click", clic);
+        racineIa.addEventListener("keydown", e => { if (e.target.id === "iaQuestion" && e.key === "Enter" && !e.shiftKey) { e.preventDefault(); envoyer(e.target.value); } });
+      }
+      if (!S.decl || !S.etat || !pourCompte()) { racineIa.hidden = true; racineIa.innerHTML = ""; return; }
+      racineIa.hidden = false;
+      const actif = S.etat === "actif";
+      const bouton = `<button class="ia-lanceur${actif ? "" : " inactif"}" data-ia="bascule" title="${esc(actif ? "Demander à l'assistant IA local" : `Assistant IA : ${S.detail}`)}">🤖 ${esc(actif ? "Demander à l'assistant" : ETATS[S.etat] || S.etat)}</button>`;
+      if (!S.ouvert || !actif) { racineIa.innerHTML = bouton; return; }
+      const c = ctx();
+      const msgs = S.conv.map((m, i) => m.role === "user" ? `<div class="ia-q">${esc(m.texte)}</div>`
+        : `<div class="ia-r" data-ia-msg="${i}"><div class="ia-txt"></div>
+          ${m.sources && m.sources.length ? `<details class="ia-src"><summary>${m.sources.length} source(s)</summary><ul>${m.sources.map(s => `<li><b>${esc(s.etiquette)}</b>${s.version ? ` v${esc(s.version)}` : ""}</li>`).join("")}</ul></details>` : ""}
+          ${m.fin ? `<div class="ia-pied"><span>${esc(MENTION)}</span>${m.note ? "Merci." : `<button data-ia="retour" data-note="+" data-i="${i}">👍</button><button data-ia="retour" data-note="-" data-i="${i}">👎</button>`}</div>` : ""}
+          ${m.erreur ? `<div class="ia-err">${esc(m.erreur)}</div>` : ""}</div>`).join("");
+      const sugg = !S.conv.length && S.suggestions ? `<div class="ia-sugg">${S.suggestions.questions.map(q => `<button data-ia="question" data-q="${esc(q)}">${esc(q)}</button>`).join("")}${S.suggestions.skills.map(s => `<button class="p" data-ia="skill" data-skill="${esc(s.nom)}" title="${esc(s.description)}">M'accompagner : ${esc(s.nom)}</button>`).join("")}</div>` : "";
+      racineIa.innerHTML = `${bouton}<section class="ia-panneau" role="dialog" aria-label="Assistant IA">
+        <header><b>🤖 Assistant IA local</b><span class="ia-etape">${esc(c.module)} · ${esc(c.ecran || "")}</span><button data-ia="nouveau" title="Nouvelle conversation">↺</button><button data-ia="bascule" title="Fermer">✕</button></header>
+        <div class="ia-fil">${sugg}${msgs}${S.abandon ? `<div class="ia-etape">⏳ …</div>` : ""}</div>
+        <footer><textarea id="iaQuestion" rows="2" maxlength="2000" placeholder="Votre question sur ce module, la démarche ou les référentiels…"${S.abandon ? " disabled" : ""}></textarea>
+          ${S.abandon ? `<button data-ia="stop">■ Arrêter</button>` : `<button data-ia="envoyer">Envoyer</button>`}</footer>
+        <p class="ia-mention">${esc(MENTION)} Aucune donnée ne quitte l'organisation.</p></section>`;
+      S.conv.forEach((m, i) => { if (m.role === "assistant") { const n = racineIa.querySelector(`[data-ia-msg="${i}"] .ia-txt`); if (n) n.textContent = m.texte; } });
+      const fil = racineIa.querySelector(".ia-fil"); if (fil) fil.scrollTop = fil.scrollHeight;
+    }
+
+    async function entetes() {
+      const t = await comptes.ticket(comptes.session);       // ticket du compte connecté, signé avec la clé de l'espace
+      return { "Content-Type": "application/json", Authorization: `WerbTicket ${t}` };
+    }
+    async function suggestions() {
+      const c = ctx();
+      try {
+        const r = await fetch(`${S.decl.adresse}/suggestions?module=${encodeURIComponent(c.module)}&ecran=${encodeURIComponent(c.ecran || "")}`, { headers: await entetes(), signal: delai(4000) });
+        S.suggestions = r.ok ? await r.json() : { questions: [], skills: [] };
+      } catch (e) { S.suggestions = { questions: [], skills: [] }; }
+      afficher();
+    }
+    async function envoyer(question, skill = null) {
+      question = String(question || "").trim();
+      if (!question || S.abandon || S.etat !== "actif") return;
+      const historique = S.conv.filter(m => !m.erreur).slice(-6).map(m => ({ role: m.role, content: m.texte.slice(0, 4000) }));
+      S.conv.push({ role: "user", texte: question });
+      const rep = { role: "assistant", texte: "", sources: [], fin: false, question };
+      S.conv.push(rep);
+      S.abandon = new AbortController(); afficher();
+      const c = ctx();
+      try {
+        const r = await fetch(`${S.decl.adresse}/question`, { method: "POST", headers: await entetes(), signal: S.abandon.signal,
+          body: JSON.stringify({ question, historique, contexte_page: c, skill, site: /^[A-Z0-9_-]{1,40}$/.test(c.site || "") ? c.site : "", flux: true }) });
+        if (!r.ok) rep.erreur = { 401: "Session expirée : reconnectez-vous.", 429: "Trop de questions : patientez une minute.", 503: "Assistant indisponible." }[r.status] || `Erreur ${r.status}.`;
+        else {
+          const lecteur = r.body.getReader(), dec = new TextDecoder();
+          let tampon = "";
+          for (;;) {
+            const { value, done } = await lecteur.read();
+            if (done) break;
+            tampon += dec.decode(value, { stream: true });
+            let k;
+            while ((k = tampon.indexOf("\n\n")) >= 0) {
+              const ligne = tampon.slice(0, k).split("\n").find(l => l.startsWith("data: ")); tampon = tampon.slice(k + 2);
+              if (!ligne) continue;
+              const ev = JSON.parse(ligne.slice(6));
+              if (ev.type === "texte") { rep.texte += ev.texte; const n = racineIa.querySelector(`[data-ia-msg="${S.conv.indexOf(rep)}"] .ia-txt`); if (n) n.textContent = rep.texte; }
+              else if (ev.type === "sources") rep.sources = ev.sources || [];
+              else if (ev.type === "fin") { rep.fin = true; rep.trace = ev.trace; }
+              else if (ev.type === "erreur") rep.erreur = ev.message;
+            }
+          }
+        }
+      } catch (e) { rep.erreur = e.name === "AbortError" ? "Réponse arrêtée." : "Assistant injoignable."; }
+      S.abandon = null; afficher();
+    }
+    async function clic(e) {
+      const b = e.target.closest("[data-ia]"); if (!b) return;
+      const a = b.dataset.ia;
+      if (a === "bascule") { S.ouvert = !S.ouvert; afficher(); if (S.ouvert && !S.suggestions && S.etat === "actif") suggestions(); }
+      else if (a === "nouveau" && !S.abandon) { S.conv = []; afficher(); }
+      else if (a === "envoyer") { const t = racineIa.querySelector("#iaQuestion"); if (t) envoyer(t.value); }
+      else if (a === "stop" && S.abandon) S.abandon.abort();
+      else if (a === "question") envoyer(b.dataset.q);
+      else if (a === "skill") envoyer("Accompagne-moi pas à pas.", b.dataset.skill);
+      else if (a === "retour") {
+        const m = S.conv[Number(b.dataset.i)]; if (!m || !m.trace || m.note) return;
+        m.note = b.dataset.note; afficher();
+        try { await fetch(`${S.decl.adresse}/retour`, { method: "POST", headers: await entetes(), signal: delai(4000), body: JSON.stringify({ trace: m.trace, note: m.note, question: m.question.slice(0, 2000) }) }); } catch (x) { /* avis perdu */ }
+      }
+    }
+    return Object.freeze({ ADRESSES, FICHIER, activer, charger, get etat() { return { etat: S.etat, detail: S.detail, declare: !!S.decl }; } });
   })();
 
   /* ---------- Listes de choix du groupe (charte §5.9) ---------- */
@@ -38156,7 +38330,7 @@ body.wt-glisse{cursor:col-resize!important;user-select:none!important}
     if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", poser); else bandeau.menuBouton();
   }
 
-  return Object.freeze({ VERSION, FAMILLE, LOGO, afficherLogo, purger, preference, activerPurgeAutomatique, esc, enveloppe, lireEnveloppe, qualifier, decomposer, sha256, accesDirect, ouvrir, enregistrer, telecharger, espace, lien, nommage, menu, bandeau, tables, TEINTES, teinteCss, verrou, listes, theme, comptes });
+  return Object.freeze({ VERSION, FAMILLE, LOGO, afficherLogo, purger, preference, activerPurgeAutomatique, esc, enveloppe, lireEnveloppe, qualifier, decomposer, sha256, accesDirect, ouvrir, enregistrer, telecharger, espace, lien, nommage, menu, bandeau, tables, TEINTES, teinteCss, verrou, listes, theme, comptes, ia });
 })());
 window.WerbSocle = WerbSocle;
 
@@ -39248,6 +39422,7 @@ function renommerTag(key,id){
   log(T.obj,r.id,T.label(r),'TAG (renommage)',old,nv);r.tag=nv;
   const E=S.etiquettes||{};if(E[upT(old)]){E[upT(nv)]=Object.assign({},E[upT(old)],{empreinte:''});delete E[upT(old)];}   // étiquette : à réimprimer sous le nouveau TAG
   refs.forEach(({k,f,x})=>{const c=TBL[k].cols.find(y=>y.f===f);log(TBL[k].obj,x.id,TBL[k].label(x),c?c.l:f,x[f],nv);x[f]=nv;});
+  redSyncPcr();   // 1.43.0 : paragraphe « ⇄ Redondance » des autres membres
   render();setStatus(`TAG « ${old} » renommé en « ${nv} » : ${refs.length} référence(s) mise(s) à jour. Publiez l'inventaire après l'enregistrement.`);}
 const MT2A={Server:'Serveur',Workstation:'Station de travail',Hypervisor:'Hyperviseur',Laptop:'Ordinateur portable'};
 const isoBadge=v=>`<span class="badge ${v?'b-oui':'b-non'}">${v?'Isolé':'Non isolé'}</span>`;
@@ -39285,13 +39460,13 @@ const TBL={
  coffrets:{title:'Coffrets et baies informatiques',sheet:'Lst_Coffret',hk:'TAG',obj:'Coffret',label:r=>r.tag||r.libelle||'(nouveau)',
   cols:[{f:'crit',l:'Critique',x:'Coffret Critique',t:B},{f:'tag',l:'TAG',x:'TAG',cls:'b'},{f:'libelle',l:'Libellé',x:'Libellé',cls:'lg'},{f:'niveau',l:'Niveau',x:'Niveau'},{f:'pcr',l:'Note PCR',x:'Note PCR',t:TA},{f:'comment',l:'Commentaire',x:'Commentaire',cls:'lg'}]},
  rsx:{title:'Actifs informatiques (hors PC et serveurs)',sheet:'Lst_Actifs_RSX',hk:'TAG equipement',obj:'Actif réseau',label:r=>r.tag||r.libelle||'(nouveau)',
-  cols:[{f:'crit',l:'Critique',x:'Actif Critique',t:B},{f:'tag',l:'TAG équipement',x:'TAG equipement',cls:'b'},{f:'libelle',l:'Libellé',x:'Libellé',cls:'lg'},{f:'_ips',l:'IP (ID VLAN)',t:C,fn:r=>ipsOfTag(r.tag)},{f:'_dif',l:'Difficulté MAJ',t:C,fn:r=>difCol(r.tag)},
+  cols:[{f:'crit',l:'Critique',x:'Actif Critique',t:B},{f:'tag',l:'TAG équipement',x:'TAG equipement',cls:'b'},{f:'libelle',l:'Libellé',x:'Libellé',cls:'lg'},{f:'_ips',l:'IP (ID VLAN)',t:C,fn:r=>ipsOfTag(r.tag)},{f:'_dif',l:'Difficulté MAJ',t:C,fn:r=>difCol(r.tag)},{f:'redGrp',l:'Groupe de redondance',x:'Groupe redondance',t:L,dl:'dlRed'},{f:'redMode',l:'Mode de redondance',x:'Mode redondance',t:SEL,opts:()=>RED_MODES},{f:'redRole',l:'Rôle (redondance)',x:'Rôle redondance',t:SEL,opts:()=>RED_ROLES},{f:'_red',l:'Redondé avec',t:C,fn:r=>redCol(r)},
    {f:'zone',l:'Zone',x:'Zone',t:SEL,opts:()=>S.refs.zones},{f:'_zv',l:'Zone (VLAN)',t:C,fn:r=>{const zs=zonesVlanTag(r.tag);return zs.join(', ')+(zoneConflit(r)?' ⚠ conflit':'');}},
    {f:'emplacement',l:'Emplacement',x:'Emplacement'},
    {f:'coffret',l:'Coffret',x:'Coffret',t:L,dl:'dlCof'},{f:'type',l:'Type actif',x:'Type Actif',t:SEL,opts:()=>S.refs.typesActif},{f:'marque',l:'Marque',x:'Marque'},{f:'reference',l:'Modèle',x:'Modèle',xa:['Référence']},
    {f:'serie',l:'N° série',x:'N°Série',cls:'mono'},{f:'fw',l:'Version firmware',x:'Version firmware'},{f:'lienFw',l:'Lien site MAJ FW',x:'Lien Site MAJ FW',t:U},{f:'lienSuivi',l:'Lien fichier suivi gestion',x:'Lien Fichier Suivi gestion',t:U},{f:'pcr',l:'Note PCR',x:'Note PCR',t:TA},{f:'comment',l:'Commentaire',x:'commentaire',cls:'lg'}]},
  machines:{title:'Machines physiques',sheet:'Lst_MachinePhysique',hk:'TAG equipement',obj:'Machine physique',label:r=>r.tag||r.libelle||'(nouvelle)',
-  cols:[{f:'crit',l:'Critique',x:'Machine\nCritique',t:B},{f:'tag',l:'TAG équipement',x:'TAG equipement',cls:'b'},{f:'libelle',l:'Libellé',x:'Libellé',cls:'lg'},{f:'_ips',l:'IP (ID VLAN)',t:C,fn:r=>ipsOfTag(r.tag)},{f:'_rn',l:'Routes / NAT',t:C,fn:r=>linksOf(r.tag)},{f:'_inv',l:'Inventaire',t:C,fn:r=>invCol(r.tag)},{f:'_dif',l:'Difficulté MAJ',t:C,fn:r=>difCol(r.tag)},{f:'emplacement',l:'Emplacement',x:'Emplacement'},
+  cols:[{f:'crit',l:'Critique',x:'Machine\nCritique',t:B},{f:'tag',l:'TAG équipement',x:'TAG equipement',cls:'b'},{f:'libelle',l:'Libellé',x:'Libellé',cls:'lg'},{f:'_ips',l:'IP (ID VLAN)',t:C,fn:r=>ipsOfTag(r.tag)},{f:'_rn',l:'Routes / NAT',t:C,fn:r=>linksOf(r.tag)},{f:'_inv',l:'Inventaire',t:C,fn:r=>invCol(r.tag)},{f:'_dif',l:'Difficulté MAJ',t:C,fn:r=>difCol(r.tag)},{f:'redGrp',l:'Groupe de redondance',x:'Groupe redondance',t:L,dl:'dlRed'},{f:'redMode',l:'Mode de redondance',x:'Mode redondance',t:SEL,opts:()=>RED_MODES},{f:'redRole',l:'Rôle (redondance)',x:'Rôle redondance',t:SEL,opts:()=>RED_ROLES},{f:'_red',l:'Redondé avec',t:C,fn:r=>redCol(r)},{f:'emplacement',l:'Emplacement',x:'Emplacement'},
    {f:'coffret',l:'Coffret',x:'Coffret',t:L,dl:'dlCof'},{f:'fonction',l:'Fonction du poste',x:'Fonction du Poste'},{f:'type',l:'Type machine',x:'Type Machine',t:SEL,opts:()=>S.refs.typesMachine},
    {f:'os',l:'Système OS',x:'Système OS'},{f:'licences',l:'Licences',x:'Licences'},{f:'vos',l:'Version OS',x:'Version OS'},{f:'condMaj',l:'Condition MAJ',x:'Condition MAJ'},
    {f:'marque',l:'Marque',x:'Marque'},{f:'modele',l:'Modèle',x:'Modèle'},{f:'serie',l:'N° série',x:'N°Série',cls:'mono'},{f:'mes',l:'Date mise en service',x:'Date Mise en service',t:D},
@@ -39299,7 +39474,7 @@ const TBL={
    {f:'disques',l:'Disques durs',x:'Disques durs'},{f:'raid',l:'Description RAID',x:'Description RAID'},{f:'infoVm',l:'Information VM',x:'Information VM'},{f:'alim',l:"Type d'alimentation",x:"Type d'alimentation"},
    {f:'specs',l:'Spécificités matériels',x:'Spécificités Materiels'},{f:'pcr',l:'Note PCR',x:'Note PCR',t:TA},{f:'comment',l:'Commentaires',x:'Commentaires',cls:'lg'}]},
  vms:{title:'Machines virtuelles',sheet:'Lst_MachineVirtuelle',hk:'TAG equipement',obj:'Machine virtuelle',label:r=>r.tag||r.libelle||'(nouvelle)',
-  cols:[{f:'crit',l:'Critique',x:'Actif Critique',t:B},{f:'tag',l:'TAG équipement',x:'TAG equipement',cls:'b'},{f:'libelle',l:'Libellé',x:'Libellé',cls:'lg'},{f:'_ips',l:'IP (ID VLAN)',t:C,fn:r=>ipsOfTag(r.tag)},{f:'_rn',l:'Routes / NAT',t:C,fn:r=>linksOf(r.tag)},{f:'_inv',l:'Inventaire',t:C,fn:r=>invCol(r.tag)},{f:'_dif',l:'Difficulté MAJ',t:C,fn:r=>difCol(r.tag)},{f:'hyperv',l:'Hyperviseur',x:'Hyperviseur',t:L,dl:'dlHyp'},
+  cols:[{f:'crit',l:'Critique',x:'Actif Critique',t:B},{f:'tag',l:'TAG équipement',x:'TAG equipement',cls:'b'},{f:'libelle',l:'Libellé',x:'Libellé',cls:'lg'},{f:'_ips',l:'IP (ID VLAN)',t:C,fn:r=>ipsOfTag(r.tag)},{f:'_rn',l:'Routes / NAT',t:C,fn:r=>linksOf(r.tag)},{f:'_inv',l:'Inventaire',t:C,fn:r=>invCol(r.tag)},{f:'_dif',l:'Difficulté MAJ',t:C,fn:r=>difCol(r.tag)},{f:'redGrp',l:'Groupe de redondance',x:'Groupe redondance',t:L,dl:'dlRed'},{f:'redMode',l:'Mode de redondance',x:'Mode redondance',t:SEL,opts:()=>RED_MODES},{f:'redRole',l:'Rôle (redondance)',x:'Rôle redondance',t:SEL,opts:()=>RED_ROLES},{f:'_red',l:'Redondé avec',t:C,fn:r=>redCol(r)},{f:'hyperv',l:'Hyperviseur',x:'Hyperviseur',t:L,dl:'dlHyp'},
    {f:'fonction',l:'Fonction du poste',x:'Fonction du Poste'},{f:'type',l:'Type machine',x:'Type Machine',t:SEL,opts:()=>S.refs.typesMachine},{f:'os',l:'Système OS',x:'Système OS'},{f:'licences',l:'Licences',x:'Licences'},
    {f:'vos',l:'Version OS',x:'Version OS'},{f:'cpu',l:'CPU+threads',x:'CPU+threads',cls:'sm'},{f:'ram',l:'RAM (Go)',x:'RAM \nen Go',cls:'sm'},{f:'dd1',l:'Volume DD 1 (Go)',x:'Volume DD 1 en Go',cls:'sm'},{f:'dd2',l:'Volume DD 2 (Go)',x:'Volume DD 2 en Go',cls:'sm'},
    {f:'eth',l:'Config interface Eth',x:'Config Interface Eth'},{f:'specs',l:'Spécificités matériels',x:'Spécificités Materiels'},{f:'arret',l:'Précaution arrêt',x:'Précaution Arrêt'},{f:'lienDoc',l:'Lien framework ou doc',x:'Lien Framework ou doc',t:U},{f:'pcr',l:'Note PCR',x:'Note PCR',t:TA},{f:'comment',l:'Commentaires',x:'Commentaires',cls:'lg'}]},
@@ -39429,6 +39604,7 @@ const MENU=[{g:'pilot',i:'📊',l:'Pilotage',c:'bleu',t:[['dash','Tableau de bor
 /* Guides d'accompagnement (charte §7.4) : guides/*.md intégrés par le build, lus par guides.js ; vue « guide:… » dans la section s-guide */
 const lienGuide=id=>`data-gnav="${WerbSocle.esc(id)}"`,estGuide=k=>String(k).startsWith('guide:');
 const MENU_LAT=WerbSocle.menu($('#tabs'),MENU,{surNav:k=>{cur=k;render();}});
+WerbSocle.ia.activer({ contexte: () => ({ ecran: cur, site: (S && S.meta && S.meta.werbsmsi && S.meta.werbsmsi.site) || "", niveau: S && S.meta && S.meta.werbsmsi && S.meta.werbsmsi.site ? "site" : "" }) });   // assistant IA optionnel (socle 1.15.0, charte §5.12) : rien sans déclaration dans l'espace
 /* Pied du menu latéral : produit, signature, version et date de build (comme les autres modules) */
 const MENU_SIG=`<footer class="sig"><b>${esc(WERB.produit)}</b><br>${esc(WERB.signature)}<br>v${esc(WERB.version)} · ${esc(window.BUILD_DATE)}</footer>`;
 (function build(){MENU_LAT.rendre({actif:'dash',pied:MENU_SIG});
@@ -39682,6 +39858,7 @@ function renderHist(){const hv=DATA.hist();
 function datalists(){const tags=[...allTags().values()],o=(id,arr)=>`<datalist id="${id}">${arr.map(x=>typeof x==='object'?`<option value="${esc(x.v)}">${esc(x.t)}</option>`:`<option value="${esc(x)}"></option>`).join('')}</datalist>`;
   const vl=vlanList();
   $('#dls').innerHTML=o('dlTags',tags.map(t=>({v:t.tag,t:t.lib+' – '+t.src})))+o('dlCof',S.coffrets.filter(c=>c.tag).map(c=>({v:c.tag,t:c.libelle||''})))
+   +o('dlRed',[...redGroupes().values()].map(g=>({v:g.nom,t:g.membres.map(m=>m.tag).join(', ')})))
    +o('dlHyp',S.machines.filter(m=>m.tag).sort((a,b)=>(b.type==='Hypervisor')-(a.type==='Hypervisor')).map(m=>({v:m.tag,t:(m.libelle||'')+(m.type?' – '+m.type:'')})))
    +o('dlNet',[...vl.map(v=>({v:v.nom,t:'VLAN '+v.id+(v.sn?' – '+v.sn.cidr:'')})),...vl.map(v=>({v:v.vname,t:'VLAN '+v.id})),...tags.map(t=>({v:t.tag,t:t.lib})),{v:'any',t:'tous'}])
    +o('dlSw',S.refs.couches)+o('dlZone',S.refs.zones)+o('dlRole',S.refs.roles)
@@ -39708,6 +39885,7 @@ function smsiActifs(){const zd=smsiZoneDe(),vus=new Set(),out=[];
     const a={id:g,type:ty(r),libelle:r.libelle||'',famille:fam};const z=zd.get(upT(g));if(z)a.zone=z;if(r.crit)a.criticite='critique';
     const os=[r.os,r.vos].map(x=>String(x||'').trim()).filter(Boolean).join(' ');if(os)a.os=os;
     [['emplacement','emplacement'],['coffret','coffret'],['hyperv','hote'],['fonction','fonction'],['marque','marque'],['comment','commentaire']].forEach(([c,o])=>{const v=String(r[c]||'').trim();if(v)a[o]=v;});
+    const rg=String(r.redGrp||'').trim();if(rg){a.redondance={groupe:rg};if(r.redMode)a.redondance.mode=r.redMode;if(r.redRole)a.redondance.role=r.redRole;}   // 1.43.0
     const mo=String((k==='rsx'?r.reference:r.modele)||'').trim(),fw=String(k==='rsx'?r.fw||'':'').trim();if(mo)a.modele=mo;if(fw)a.firmware=fw;   // modèle et firmware pour WerbAssets (MAP-6)
     out.push(a);}));return out;}
 // VLAN du plan (matrice et réseaux isolés) pour WerbAssets (fiches pare-feu et switch) : ID, nom, réseau, zone, statut, couche ;
@@ -39823,6 +40001,7 @@ function renderAide(){const P=(e,t,c)=>`<div class="panel"><h3>${e} ${t}</h3>${c
   ${P('🚀','Démarrer','<ul><li><b>📂 Ouvrir une base…</b> ou <b>➕ Créer une nouvelle base…</b> (votre nom est demandé ensuite).</li><li><b>🧪 Base de démonstration</b> : données fictives ; saisir <code>admin.demo</code> (administrateur), <code>tech.demo</code> (éditeur) ou <code>audit.demo</code> (lecteur), sans mot de passe.</li><li>Depuis le portail WerbSMSI : cliquer la puce 📍 du site sous WerbMap, puis <b>📂 Ouvrir la base demandée</b>.</li></ul>')}
   ${P('💾','Enregistrer','<ul><li><b>💾 Enregistrer</b> crée une nouvelle <b>version</b> (commentaire obligatoire), tracée dans l\'historique avec une chaîne d\'intégrité.</li><li><b>📑 Enregistrer sous…</b> écrit la version dans un autre fichier (copie, autre emplacement) : la base ouverte devient ce fichier, l\'ancien n\'est pas modifié.</li><li>Dans WerbSMSI, ranger la base dans <code>SMSI_&lt;SIGLE&gt;\\sites\\&lt;CODE&gt;\\inventaires\\</code> avec un nom qui finit par <code>.werbmap.json</code> : le portail affiche alors sa puce.</li><li>Si un collègue a enregistré entre-temps, tes modifications sont téléchargées en brouillon et la dernière version est rechargée.</li></ul>')}
   ${P('🔗','Publier vers WerbSMSI (IEC 62443, WerbExploitation)','<ol><li><b>Administration › Intégration WerbSMSI</b> : <b>Choisir l\'espace…</b> (dossier <code>SMSI_&lt;SIGLE&gt;</code>), choisir le site, <b>Rattacher</b>, puis enregistrer une version.</li><li>Renseigner le <b>SL-T</b> de chaque zone (sans SL-T, la zone est ignorée par IEC 62443).</li><li><b>Publier</b> : écrit <code>sites/&lt;CODE&gt;/publications/werbmap.json</code> (zones, conduits, actifs avec famille, emplacement, OS). WerbExploitation le lit avec <b>⟳ Actualiser depuis l\'espace</b>, IEC 62443 avec <b>Importer dans le projet</b>.</li><li>Sans espace : <b>⬇ Exporter la publication</b> produit le même fichier, à importer dans WerbExploitation (<b>Parc & cycle de vie › Actifs du site (WerbMap) › Importer une publication WerbMap…</b>).</li></ol><p class="hint">Ni adresse IP, ni VLAN, ni numéro de série, ni matrice de flux ne sont publiés.</p>')}
+  ${P('⇄','Actifs redondants','<p>Deux actifs (ou plus) qui se secourent — paire de pare-feu, switchs empilés, hyperviseurs en grappe, VM répliquée — portent le <b>même « Groupe de redondance »</b> (ex. <code>HA-FW-PROCESS</code>), quelle que soit leur table, avec le <b>mode</b> (actif-passif, actif-actif, grappe, secours à froid) et le <b>rôle</b>. La colonne <b>Redondé avec</b> liste les autres membres (⚠ seul membre, ⚠ modes différents).</p><p>La <b>note PCR</b> de chaque membre reçoit en tête un paragraphe <b>⇄ Redondance</b> : <i>avant toute intervention, vérifier que le redondant fonctionne et assure le service ; un seul membre à la fois ; contrôler le retour à la redondance après</i>. WerbMap le tient à jour (membres, mode, renommage) et le retire quand l\'actif quitte son groupe ; le texte saisi en dessous n\'est jamais modifié. La fiche SI liste les actifs redondants du SI et signale les actifs critiques sans redondance. Le groupe, le mode et le rôle sont publiés dans <code>site:actifs</code>.</p>')}
   ${P('👥','Comptes et rôles','<p>Depuis WerbMap 1.42.0, la base n\'a plus de comptes propres. <b>Dans un espace WerbSMSI qui a des comptes</b> (base ouverte depuis le portail, ou espace choisi), le compte de l\'espace s\'applique, avec son rôle sur le site de la base : <b>Lecteur</b> (consulte et exporte, base en lecture seule), <b>Éditeur</b> (modifie et enregistre), <b>Administrateur</b> (aussi les référentiels). Comptes, mots de passe et droits se gèrent dans le portail (Comptes et droits). <b>Hors espace</b>, votre nom suffit. Une base d\'une version antérieure qui contient encore des comptes propose de les importer dans l\'espace (Intégration WerbSMSI). Les comptes tracent qui fait quoi ; la protection réelle est celle du dossier.</p>')}
   ${P('🏷️','Étiquettes (WerbTagDroid)','<p><b>Inventaires › Étiquettes</b> imprime les étiquettes des équipements, coffrets et baies : en clair le TAG, le libellé et la classification ; dans le QR, chiffrés et signés, la zone, l’emplacement, le coffret et la <b>note PCR</b>, lus sur le terrain par l’application Android WerbTagDroid. La classification découle de la zone et de l’indicateur <i>Critique</i>. Ouvrir d’abord le fichier de clés de l’émetteur (gardé au coffre-fort) ; une étiquette n’est à réimprimer que si une donnée qu’elle porte change.</p>')}
   ${P('📥','Excel','<p><b>📥 Import Excel</b> reprend un classeur Base_Inventaires_actifs (.xlsx / .xlsm). <b>📊 Export Excel</b> remplit le modèle (couleurs, listes, macros conservées) ou produit un classeur simple avec anomalies, versions et journal.</p>')}
@@ -40046,6 +40225,30 @@ const DIF_ALERTE=['N4','N5'];
 const difNorm=x=>({id:String(x.id||'DIF-'+x.tag),tag:String(x.tag),niveau:String(x.niveau),libelleNiveau:String(x.libelleNiveau||DIF_LIB[x.niveau]||''),score:Math.round(+x.score||0),releve:x.releve===true,evalueLe:String(x.evalueLe||''),
   evaluations:(Array.isArray(x.evaluations)?x.evaluations:[]).filter(e=>e&&typeof e==='object').map(e=>({registre:String(e.registre||''),objet:String(e.objet||''),niveau:String(e.niveau||''),score:Math.round(+e.score||0),notes:String(e.notes||''),evalueLe:String(e.evalueLe||'')}))});
 function difDe(t){const k=upT(t);return k?((((recus('difficultes')||{}).items)||[]).find(x=>upT(x.tag)===k)||null):null;}
+/* Redondance (1.43.0) : actifs redondants entre eux, quelle que soit leur table (actif réseau, machine physique ou virtuelle), déclarés par
+   un même « Groupe de redondance » (comparaison sans casse), avec un mode et un rôle. La note PCR de chaque membre porte par défaut, en tête,
+   un paragraphe « ⇄ Redondance » : vérifier le fonctionnement du ou des redondants AVANT toute intervention, un membre à la fois, contrôler le
+   retour à la redondance après. Ce paragraphe est tenu à jour par WerbMap (membres, mode, renommage d'un TAG) et retiré quand l'actif quitte
+   son groupe ; le texte saisi en dessous n'est jamais modifié. Chaque changement est tracé au journal. */
+const RED_TABLES=['rsx','machines','vms'],RED_MODES=['Actif-passif','Actif-actif','Grappe (cluster)','Secours à froid'],RED_ROLES=['Principal','Secondaire','Membre'],RED_MARQUE='⇄ Redondance';
+function redGroupes(){const m=new Map();RED_TABLES.forEach(k=>S[k].forEach(r=>{const g=String(r.redGrp||'').trim(),t=String(r.tag||'').trim();if(!g||!t)return;
+  const c=upT(g);if(!m.has(c))m.set(c,{nom:g,membres:[]});m.get(c).membres.push({key:k,r,tag:t});}));return m;}
+function redAutres(r,G){const g=upT(String(r.redGrp||'').trim());if(!g)return [];const e=(G||redGroupes()).get(g);return e?e.membres.filter(x=>x.r!==r).map(x=>x.tag):[];}
+function redCol(r){if(!String(r.redGrp||'').trim())return '';const G=redGroupes(),a=redAutres(r,G),e=G.get(upT(String(r.redGrp).trim()));
+  const modes=new Set(e?e.membres.map(x=>x.r.redMode||'').filter(Boolean):[]);
+  return (a.length?a.join(', '):'⚠ seul membre du groupe')+(modes.size>1?' · ⚠ modes différents':'');}
+function redParagraphe(r,G){const g=String(r.redGrp||'').trim(),a=redAutres(r,G);if(!g||!a.length)return '';const qui=a.join(', '),pl=a.length>1;
+  return `${RED_MARQUE} (${g}${r.redMode?', '+String(r.redMode).toLowerCase():''}) avec ${qui}.\n`
+    +`Avant toute intervention : vérifier que ${qui} ${pl?'fonctionnent et assurent':'fonctionne et assure'} le service (état de la redondance, synchronisation, bascule possible).\n`
+    +`Intervenir sur un seul membre à la fois ; après intervention, contrôler le retour à la redondance complète.`;}
+const redPcrSans=p=>{p=String(p||'');if(!p.startsWith(RED_MARQUE))return p;const i=p.indexOf('\n\n');return i<0?'':p.slice(i+2);};
+function redSyncPcr(){const G=redGroupes();let n=0;RED_TABLES.forEach(k=>S[k].forEach(r=>{const avant=String(r.pcr||''),reste=redPcrSans(avant),para=redParagraphe(r,G);
+  const nv=para?(reste?para+'\n\n'+reste:para):reste;if(nv!==avant){log(TBL[k].obj,r.id,TBL[k].label(r),'Note PCR',avant,nv);r.pcr=nv;n++;}}));return n;}
+const redRow=t=>{const g=upT(t);for(const k of RED_TABLES){const r=S[k].find(x=>upT(x.tag)===g);if(r)return r;}return null;};
+// Fiche SI : actifs du SI dans un groupe de redondance, et actifs critiques du SI sans redondance déclarée
+function siRedondance(c){const G=redGroupes(),red=[],seuls=[];c.actifs.forEach(a=>{const r=redRow(a.tag);
+  if(r&&String(r.redGrp||'').trim())red.push({tag:a.tag,groupe:String(r.redGrp).trim(),mode:r.redMode||'',role:r.redRole||'',avec:redAutres(r,G).join(', ')||'⚠ seul membre'});
+  else if(a.crit)seuls.push(a.tag);});return {red,seuls};}
 function difCol(t){const d=difDe(t);return d?d.niveau+' · '+d.libelleNiveau+(d.score?' ('+d.score+')':''):'';}
 const difSev=n=>n==='N5'||n==='N4'?'sev-err':n==='N3'?'sev-warn':'sev-info';
 // Risque « élevé » : niveau (résiduel s'il est coté, sinon brut) parmi les deux plus hauts de l'échelle reçue (4 niveaux par défaut)
@@ -40139,6 +40342,10 @@ function siListe(){const m=S.modeles&&S.modeles.word,E=WerbSocle.espace,q=SIQ.tr
    <p class="hint">Données reçues des autres modules ${recu('risques','risques WerbEBIOS')} : relues à l'ouverture de l'espace WerbSMSI. <button class="small" data-siact="recevoir"${E.ouvert&&liaison().site&&can('edit')?'':' disabled title="Ouvrez l\'espace WerbSMSI et rattachez la base à son site (Administration › Intégration WerbSMSI)"'}>⟳ Actualiser</button></p>
    <p class="hint">Échelle D / I / C : gravité d'EBIOS RM ${S.echelleDIC&&S.echelleDIC.majLe?`reçue du groupe (${esc(S.echelleDIC.source||'groupe:echelles')}, ${esc(S.echelleDIC.majLe)})`:'(échelle par défaut ; reprise du groupe à l\'ouverture de l\'espace)'} : ${echelleDIC().map(e=>esc(e.niveau+' '+e.libelle)).join(' · ')}.</p></div>`;
   return h;}
+function siRedHtml(c){if(!c.actifs.length)return '';const R=siRedondance(c);
+  return `<p class="hint" style="margin-top:10px"><b>Actifs redondants du SI</b> (inventaire : colonne « Groupe de redondance » des actifs)</p>`
+   +(R.red.length?`<table class="grid" data-sired><thead><tr><th>Actif</th><th>Groupe</th><th>Mode</th><th>Rôle</th><th>Redondé avec</th></tr></thead><tbody>${R.red.map(x=>`<tr><td>${esc(x.tag)}</td><td>${esc(x.groupe)}</td><td>${esc(x.mode)}</td><td>${esc(x.role)}</td><td>${esc(x.avec)}</td></tr>`).join('')}</tbody></table>`:'<p class="hint">Aucun actif du SI dans un groupe de redondance.</p>')
+   +(R.seuls.length?`<p class="sev-warn" data-sispof>⚠ Actif(s) critique(s) du SI sans redondance déclarée : ${R.seuls.map(esc).join(', ')}</p>`:'');}
 function siFiche(s){const c=siCalc(s),vl=vlanList(),roles=S.refs.roles||[],K=echelleDIC().length,al=raciAlertes(s);
   const lignes=(l,cols,vide)=>{const L=l==='taches'?s.raci.taches:s[l];return L.map(r=>`<tr>${cols.map(([f,type,o])=>`<td>${type==='sel'?siSel(f,r[f],o,f==='n'?'niv':f==='p'?'prio':'',` data-l="${l}" data-r="${r.id}"`):siIn(f,r[f],` data-l="${l}" data-r="${r.id}"`)}</td>`).join('')}<td class="ctr"><button class="icon" data-siact="delrow" data-l="${l}" data-r="${r.id}" title="Retirer la ligne">✕</button></td></tr>`).join('')||`<tr><td colspan="${cols.length+1}" class="hint">${vide}</td></tr>`;};
   const ajout=(l,t)=>`<button class="small" data-siact="addrow" data-l="${l}">➕ ${t}</button>`;
@@ -40171,7 +40378,7 @@ function siFiche(s){const c=siCalc(s),vl=vlanList(),roles=S.refs.roles||[],K=ech
     <div class="bar" style="margin:8px 0 0">${ajout('taches','Tâche')}<select id="si-acteur" aria-label="Acteur à ajouter"><option value="">Ajouter un acteur (Référentiels › Rôles)…</option>${roles.filter(r=>!s.raci.acteurs.includes(r)).map(r=>`<option>${esc(r)}</option>`).join('')}</select><button data-siact="acteuradd">➕ Acteur</button></div>
     ${al.length?`<p class="sev-warn">⚠ ${al.map(x=>esc(x.t.l+' : '+x.m)).join(' · ')}</p>`:''}</div>
    <div class="si-2"><div class="panel si-cadre"><h3>Sauvegardes</h3><table class="grid"><thead>${tete(['Critère','Valeur'])}</thead><tbody>${lignes('sauv',[['c'],['v']],'Aucun critère.')}</tbody></table>${ajout('sauv','Critère')}</div>
-    <div class="panel si-cadre"><h3>Redondance et continuité</h3><table class="grid"><thead>${tete(['Élément','Redondance'])}</thead><tbody>${lignes('redon',[['e'],['v','sel',['Oui','Non','Partielle']]],'Aucun élément.')}</tbody></table>${ajout('redon','Élément')}</div></div>
+    <div class="panel si-cadre"><h3>Redondance et continuité</h3><table class="grid"><thead>${tete(['Élément','Redondance'])}</thead><tbody>${lignes('redon',[['e'],['v','sel',['Oui','Non','Partielle']]],'Aucun élément.')}</tbody></table>${ajout('redon','Élément')}${siRedHtml(c)}</div></div>
    <div class="panel si-cadre"><h3>Registre de sauvegardes ${recu('sauvegardes','WerbExploitation')}</h3><p class="hint">Sauvegardes du registre de WerbExploitation dont la source est un actif du SI.</p>
     ${c.bck.length?`<p class="legend"><span>${c.bckR.horsLigne?'✅':'⚠'} Sauvegarde hors ligne (BCK_3) active : ${c.bckR.horsLigne?'oui':'non'}</span><span>${c.bckR.tests===null?'—':c.bckR.tests?'✅':'⚠'} Tests de restauration à jour : ${c.bckR.tests===null?'aucune sauvegarde active':c.bckR.tests?'oui':'non'}</span></p>`:''}
     <table class="grid"><thead><tr><th>Réf.</th><th>Données</th><th>Catégorie</th><th>État</th><th>Source</th><th>Destination</th><th>Périodicité</th><th>Dernier test</th><th>Statut</th></tr></thead><tbody>${c.bck.map(b=>`<tr><td class="mono">${esc(b.id)}</td><td>${esc(b.donnees)}${b.typeDonnees?` <span class="hint">${esc(b.typeDonnees)}</span>`:''}</td><td>${esc(b.categorie)}</td><td>${esc(b.etat)}</td>
@@ -40296,6 +40503,9 @@ async function siWordBlob(s){const d=window.docx;if(!d)throw new Error('Biblioth
     p(`Registre de sauvegardes (WerbExploitation)${recus('sauvegardes')?' reçu le '+fmtD(recus('sauvegardes').majLe):' : aucune donnée reçue'}${c.bck.length?' — hors ligne (BCK_3) actif : '+(c.bckR.horsLigne?'oui':'non')+' ; tests de restauration à jour : '+(c.bckR.tests===null?'—':c.bckR.tests?'oui':'non'):''}`,{bold:true,color:NAVY,before:160}),
     table(['Réf.','Données','Catégorie','État','Source','Destination','Périodicité','Dernier test','Statut'],c.bck.map(b=>[b.id,b.donnees,b.categorie,b.etat,b.actifSource,b.actifDestination,b.periodicite,fmtDay(b.dernierTest),bckTest(b)]),[1.4,2.6,1.8,1,1.4,1.4,1.3,1.3,1.1]),
     h('6. Redondance et continuité'),table(['Élément','Redondance'],s.redon.map(r=>[r.e,r.v]),[3,2]),
+    ...(()=>{const R=siRedondance(c);return [p('Actifs redondants du SI (inventaire)',{bold:true,color:NAVY,before:160}),
+      ...(R.red.length?[table(['Actif','Groupe','Mode','Rôle','Redondé avec'],R.red.map(x=>[x.tag,x.groupe,x.mode,x.role,x.avec]),[1.6,1.8,1.4,1.2,2.4])]:[p('Aucun actif du SI dans un groupe de redondance.',{italic:true,color:GREY})]),
+      ...(R.seuls.length?[p('Actif(s) critique(s) sans redondance déclarée : '+R.seuls.join(', '),{color:GREY})]:[])];})(),
     h('7. Synthèse des risques'),table(['Domaine','Niveau'],s.risques.map(r=>[r.d,fort(r.n)]),[3,2]),
     p(`Risques EBIOS du site rattachés au SI${recus('risques')?' (reçus le '+fmtD(recus('risques').majLe)+')':' : aucune donnée reçue'}`,{bold:true,color:NAVY,before:160}),
     table(['Réf.','Risque','G','V','Brut','Résiduel','Traitement'],c.risques.map(r=>[r.id,r.libelle,{t:String(r.gravite||''),center:true},{t:String(r.vraisemblance||''),center:true},
@@ -40456,7 +40666,7 @@ function renderEtiq(){const ed=can('edit'),adm=can('admin'),A=etqActifs(),zones=
   document.querySelectorAll('#s-etiq [data-etqedit]').forEach(b=>b.onclick=()=>{ETQ.edit=b.dataset.etqedit;renderEtiq();$('#s-etiq').scrollIntoView();});
   if($('#etqPropPcr'))$('#etqPropPcr').onclick=async()=>{const pr=await etqPropositionPcr(cible);if(!pr||!can('edit'))return;const r=cible.r;
     if(String(r.pcr||'').trim()&&!confirm('Remplacer la note PCR actuelle par celle proposée depuis le plan de reprise de WerbPCR ?'))return;
-    log(TBL[cible.key].obj,r.id,TBL[cible.key].label(r),'Note PCR',r.pcr||'',pr.texte);r.pcr=pr.texte;
+    log(TBL[cible.key].obj,r.id,TBL[cible.key].label(r),'Note PCR',r.pcr||'',pr.texte);r.pcr=pr.texte;redSyncPcr();
     setStatus(`Note PCR proposée depuis WerbPCR (${pr.sis.join(', ')})${pr.tronque?' — raccourcie pour tenir dans le QR':''} : relis-la avant d'imprimer.`);render();};
   if($('#etqFermer'))$('#etqFermer').onclick=()=>{ETQ.edit='';renderEtiq();};
   $('#etqAfaire').onclick=()=>{A.forEach(a=>{if(etqEtat(a)!=='ajour')ETQ.sel.add(a.tag);});renderEtiq();};
@@ -40738,6 +40948,7 @@ document.addEventListener('change',e=>{const el=e.target,t=el.dataset.t;if(!t||!
   else if(t==='row'){const key=el.dataset.tb,T=TBL[key],r=S[key].find(x=>x.id===el.dataset.id);if(!r)return;const c=T.cols.find(x=>x.f===f);
     if(f==='tag'&&tagVerrouille(key,r)){el.value=r.tag;return;}   // MAP-5 : renommage par l'administrateur seulement (✎)
     const old=r[f];log(T.obj,r.id,T.label(r),c?c.l:f,old,val);r[f]=val;
+    if(RED_TABLES.includes(key)&&['redGrp','redMode','redRole','tag'].includes(f)){const n=redSyncPcr();if(n)setTimeout(()=>setStatus(`Redondance : ${n} note(s) PCR mise(s) à jour (procédure « vérifier le redondant avant d'intervenir »).`),0);}
     /* Renommage d'une machine : les routes et règles NAT rattachées suivent */
     if((key==='machines'||key==='vms')&&f==='tag'&&old&&val)['routes','nat'].forEach(k=>S[k].forEach(x=>{if(upT(x.actif)===upT(old)){log(TBL[k].obj,x.id,TBL[k].label(x),'Actif (machine)',x.actif,val);x.actif=val;}}));
     if(key==='ips'&&f==='tag'&&val){const g=allTags().get(val.toUpperCase());if(g){const ty=S.refs.typesActif.includes(g.type)?g.type:(MT2A[g.type]||(g.src==='Machine virtuelle'?'Serveur':''));
@@ -41193,7 +41404,7 @@ function massValeurs(k,c){if(k==='ips'&&c.f==='vlan')return vlanList().map(v=>v.
   if(c.dl==='dlTags')return EQUIP.flatMap(([t])=>S[t].map(x=>x.tag));return null;}
 function massFormat(k,c){if(c.t===B)return 'Oui / Non';if(c.t===D)return 'Date : AAAA-MM-JJ ou JJ/MM/AAAA';if(c.t===U)return 'Lien (http…, chemin réseau)';
   if(k==='ips'&&c.f==='vlan')return 'Nom du réseau (feuille Listes)';if(c.f==='ip')return 'IPv4, ex. 10.1.15.20';if(c.f==='mac')return 'ex. 00:1A:2B:3C:4D:5E';
-  if(c.t===SEL)return 'Liste de la base (feuille Listes)';if(c.dl)return 'TAG existant (feuille Listes)';return 'Texte';}
+  if(c.t===SEL)return 'Liste de la base (feuille Listes)';if(c.dl==='dlRed')return 'Nom du groupe, identique pour tous ses membres';if(c.dl)return 'TAG existant (feuille Listes)';return 'Texte';}
 function massNote(k,c){if(c.f===massCle(k))return k==='ips'?'Clé : une adresse déjà présente dans la base est mise à jour':'Clé, obligatoire : un TAG déjà présent dans la base est mis à jour';
   if(k==='ips'&&c.f==='vlan')return 'Tel qu\'il figure dans la matrice VLAN';if(c.dl==='dlCof')return 'TAG d\'un coffret';if(c.dl==='dlHyp')return 'TAG d\'une machine physique';
   if(c.dl==='dlTags')return 'TAG d\'un équipement de la base';return '';}
@@ -41281,6 +41492,7 @@ function massAppliquer(k,res,mode,fichier){const T=TBL[k];
   if(mode==='remplacer'){log(T.obj,'import',fichier,'Remplacement de la table',S[k].length+' ligne(s)','');S[k].splice(0);DB.data[k]=S[k];}
   res.ajouts.forEach(({r})=>{S[k].push(r);log(T.obj,r.id,T.label(r),'Création','','import '+fichier);});
   res.majs.forEach(({cible,ch})=>Object.entries(ch).forEach(([f,[a,b]])=>{const c=T.cols.find(x=>x.f===f);log(T.obj,cible.id,T.label(cible),c?c.l:f,a,b);cible[f]=b;}));
+  if(RED_TABLES.includes(k))redSyncPcr();   // 1.43.0
   log('Base','import',fichier,'Import de lignes – '+T.title,'',`${res.ajouts.length} ajout(s), ${res.majs.length} mise(s) à jour, ${res.rejets.length} rejet(s)`);
   render();setStatus(`${T.title} : ${res.ajouts.length} ligne(s) ajoutée(s), ${res.majs.length} mise(s) à jour${res.rejets.length?`, ${res.rejets.length} rejetée(s)`:''} — vérifie puis enregistre une version.`);}
 function massRapport(k,lu,fichier,mode){const T=TBL[k],res=massAnalyse(k,lu.lignes,mode),cle=massCle(k)==='ip'?'Adresse IP':'TAG',MAX=200;
