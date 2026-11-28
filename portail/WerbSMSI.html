@@ -1,5 +1,5 @@
 <!doctype html>
-<!-- WerbSMSI v1.26.1 – Développé par @WerbHat – build novembre 2026 -->
+<!-- WerbSMSI v1.26.2 – Développé par @WerbHat – build novembre 2026 -->
 <html lang="fr">
 <head>
 <meta charset="utf-8">
@@ -9,7 +9,7 @@
 <title>WerbSMSI</title>
 <meta name="application-name" content="WerbSMSI">
 <meta name="author" content="@WerbHat">
-<meta name="generator" content="WerbSMSI v1.26.1 – Développé par @WerbHat">
+<meta name="generator" content="WerbSMSI v1.26.2 – Développé par @WerbHat">
 <meta name="description" content="Portail de l'environnement SMSI : rubriques, modules, espaces groupe et sites, mise en place guidée">
 <style>/*! WerbSMSI – Développé par @WerbHat */
 :root {
@@ -270,7 +270,7 @@ const WERB = Object.freeze((() => {
   const bytes = [68, 195, 169, 118, 101, 108, 111, 112, 112, 195, 169, 32, 112, 97, 114, 32, 64, 87, 101, 114, 98, 72, 97, 116];
   const signature = new TextDecoder("utf-8").decode(new Uint8Array(bytes));
   const produit = "WerbSMSI";
-  const version = "1.26.1";
+  const version = "1.26.2";
   return {
     id: "werbsmsi",
     produit, version, auteur: "@WerbHat", signature,
@@ -2530,6 +2530,9 @@ window.WerbAssistant = (() => {
       if (!cle) { S.test = { etat: "invalide", detail: "clé publique absente ou invalide" }; C.render(); return; }
       S.test = { etat: "verification", detail: b.adresse }; C.render();
       try { S.test = await sonder(b.adresse, cle); } catch (e) { S.test = { etat: "indisponible", detail: "passerelle injoignable (démarrée ? certificat de l'autorité interne approuvé sur ce poste ?)" }; }
+      // L'état affiché (bloc « État », bouton 🤖) ne doit pas rester sur un constat périmé : si la déclaration enregistrée est
+      // active mais n'est pas (ou plus) vérifiée, on la revérifie maintenant (la passerelle a pu être démarrée depuis l'ouverture).
+      if (S.decl && S.decl.actif && !["actif", "invalide", "verification"].includes(S.etat)) { S.etat = "verification"; afficher(); await verifier(); afficher(); }
       C.render();
     },
     iaEnregistrer: () => enregistrer(),

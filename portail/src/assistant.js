@@ -287,6 +287,9 @@ window.WerbAssistant = (() => {
       if (!cle) { S.test = { etat: "invalide", detail: "clé publique absente ou invalide" }; C.render(); return; }
       S.test = { etat: "verification", detail: b.adresse }; C.render();
       try { S.test = await sonder(b.adresse, cle); } catch (e) { S.test = { etat: "indisponible", detail: "passerelle injoignable (démarrée ? certificat de l'autorité interne approuvé sur ce poste ?)" }; }
+      // L'état affiché (bloc « État », bouton 🤖) ne doit pas rester sur un constat périmé : si la déclaration enregistrée est
+      // active mais n'est pas (ou plus) vérifiée, on la revérifie maintenant (la passerelle a pu être démarrée depuis l'ouverture).
+      if (S.decl && S.decl.actif && !["actif", "invalide", "verification"].includes(S.etat)) { S.etat = "verification"; afficher(); await verifier(); afficher(); }
       C.render();
     },
     iaEnregistrer: () => enregistrer(),

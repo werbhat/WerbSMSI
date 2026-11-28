@@ -236,6 +236,18 @@ def main() -> int:
         pg.screenshot(path=str(CAPTURES / "4_indisponible.png"))
         aller("groupe")
         ok("Groupe Démo Industrie" in pg.inner_text("#main h1"), "portail intact quand l'assistant est indisponible")
+        # Passerelle démarrée APRÈS l'ouverture de l'espace : « Tester la passerelle » doit aussi corriger l'état affiché
+        kit = subprocess.Popen([str(PY_KIT), str(KIT / "outils" / "passerelle.py"), "--config", prep["config"]], stdout=journal_kit, stderr=journal_kit)
+        for _ in range(60):
+            if sante_ok():
+                break
+            time.sleep(0.5)
+        aller("ia")
+        ok("Indisponible" in pg.inner_text("#main .card"), "état affiché : toujours « Indisponible » avant le test")
+        pg.click("[data-act=iaTester]")
+        ok(attendre("document.querySelector('#werb-ia .ia-lanceur') && document.querySelector('#werb-ia .ia-lanceur').textContent.includes('Assistant') && !document.querySelector('#werb-ia .ia-lanceur').textContent.includes('Indisponible')"),
+           f"après un test réussi, le bouton passe à « Assistant » sans rouvrir l'espace ({lanceur()!r})")
+        ok(attendre("document.querySelector('#main .card') && document.querySelector('#main .card').textContent.includes('Actif')"), "après un test réussi, le bloc « État » indique « Actif »")
         ok(not erreurs, f"aucune erreur JavaScript ({erreurs[:3]})")
         nav.close()
     if kit:
